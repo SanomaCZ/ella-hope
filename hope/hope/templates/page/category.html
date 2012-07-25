@@ -1,0 +1,9 @@
+<h1>Welcome to category {{ category.title }}</h1>
+<p>{{ category.description }}</p>
+
+{% for listing in listings %}
+    <p>
+        <a href="{{ listing.get_absolute_url }}">{{ listing.target.title }}</a>
+        {{ listing.target.description|safe }}
+    </p>
+{% endfor %}
