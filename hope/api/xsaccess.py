@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from collections import Iterable
 from django.conf import settings
 
 
@@ -27,7 +26,7 @@ class CrossDomainAccess(object):
     def process_response(self, request, response):
         for header, settins_var, default_val in CrossDomainAccess.__OPTIONS:
             header = "Access-Control-Allow-" + header
-            if isinstance(default_val, Iterable):
+            if isinstance(default_val, (tuple, list)):
                 default_val = ",".join(default_val)
 
             response[header] = getattr(settings, settins_var, default_val)
