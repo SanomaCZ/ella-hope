@@ -1,0 +1,27 @@
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th><%= $.t('Name') %></th>
+			<th><%= $.t('Actions') %></th>
+		</tr>
+	</thead>
+	<tbody>
+		<% list(this.articles, function( article ) { %>
+			<% console.log(article)%>
+			<%
+			var editUrl = can.route.url({ page: 'articles', action: 'edit', id: article.id });
+			var deleteUrl = can.route.url({ page: 'articles', action: 'delete', id: article.id });
+			%>
+			<tr>
+				<td><a href="<%== editUrl %>"><%= article.title %></a></td>
+				<td>
+					<!-- Edit -->
+					<a href="<%= editUrl %>" class="btn btn-mini"><%= $.t('Edit');%> <i class="icon-pencil"></i></a>
+
+					<!-- Delete -->
+					<a href="<%= deleteUrl %>" class="btn btn-mini btn-danger" data-confirm="Are you sure?" data-method="delete" rel="nofollow"><%= $.t('Delete');%> <i class="icon-trash icon-white"></i></a>
+				</td>
+			</tr>
+		<% } ) %>
+	</tbody>
+</table>

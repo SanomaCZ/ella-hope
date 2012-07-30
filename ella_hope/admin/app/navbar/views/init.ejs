@@ -1,0 +1,25 @@
+<div class="navbar-inner">
+	<div class="container">
+		<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</a>
+		<a class="brand" href="<%== can.route.url({ page: 'dashboard' }); %>">D&Z</a>
+		<div class="nav-collapse">
+			<ul class="nav">
+				<li class="active"><%== can.route.link( $.t('Home'), { page: 'dashboard' }); %></li>
+
+				<% if (ALLOWED_MODULES.articles) { %>
+					<li><%== can.route.link( $.t('Articles'), { page: 'articles' }); %></li>
+				<% } %>
+
+				<% if (ALLOWED_MODULES.gallery) { %>
+					<li><%== can.route.link( $.t('Gallery'), { page: 'gallery' }); %></li>
+				<% } %>
+
+				<li><%== can.route.link( $.t('More...'), { page: '' }); %></li>
+			</ul>
+		</div><!--/.nav-collapse -->
+	</div>
+</div>

@@ -1,0 +1,30 @@
+<div class="hero-unit">
+	<form class="article">
+		<div class="row">
+			<div>
+				<label for="title"><%= $.t('Title')%></label>
+			</div>
+			<input type="text" name="title" id="title" placeholder="<%= $.t('Add Title')%>" 
+				<%= article.attr('title') ? "value='" + article.title + "'" : "class='empty'" %>>
+			<select name="category">
+				<% $.each(categories, function(i, category){ %>
+					<option value="<%= category.data %>" <%= article.category === category.data ? "selected" : "" %>>
+						<%= category.name %>
+					</option>
+				<% }) %>
+			</select>
+
+			<div>
+				<label for="content"><%= $.t('Content')%></label>
+			</div>
+			<textarea name="content" id="content" placeholder="<%= $.t('Add Content')%>" <%= article.attr('content') ? "" : "class='empty'" %>><%= article.content %></textarea>
+		</div>
+	</form>
+
+	<div class="row">
+		<div class="buttons">
+			<a href="javascript://" class="btn btn-primary save"><%= $.t('Save')%></a>
+			<a href="javascript://" class="btn cancel"><%= $.t('Cancel')%></a>
+		</div>
+	</div>
+</div>

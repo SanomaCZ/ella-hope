@@ -1,0 +1,13 @@
+{
+	"meta": {
+		"limit": 20, 
+		"next": null, 
+		"offset": 0, 
+		"previous": null, 
+		"total_count": 2
+	}, 
+	"objects": [
+		{"announced": false, "app_data": "{}", "authors": [{"description": "", "email": "", "id": "1", "name": "Seocity", "resource_uri": "/api/resources/author/1/", "slug": "seocity", "text": ""}, {"description": "", "email": "", "id": "2", "name": "Mr. Pohodi\u010dka", "resource_uri": "/api/resources/author/2/", "slug": "mr-pohodicka", "text": ""}], "category": {"app_data": "{}", "content": "", "description": "", "id": "1", "resource_uri": "/api/resources/category/1/", "slug": "test-category", "template": "category.html", "title": "Test category", "tree_path": ""}, "content": "????????????", "description": "", "id": "1", "last_updated": "2012-07-19T19:21:55+00:00", "listings": [], "photo": null, "publish_from": "2012-07-19T19:21:55+00:00", "publish_to": null, "published": true, "resource_uri": "/api/resources/article/1/", "slug": "article-title", "static": false, "title": "Article title", "url": "http://example.com/2012/7/19/article-title/"},
+		{"announced": false, "app_data": "{}", "authors": [{"description": "", "email": "", "id": "1", "name": "Seocity", "resource_uri": "/api/resources/author/1/", "slug": "seocity", "text": ""}, {"description": "", "email": "", "id": "2", "name": "Mr. Pohodi\u010dka", "resource_uri": "/api/resources/author/2/", "slug": "mr-pohodicka", "text": ""}, {"description": "This will probably be my last post.", "email": "mail@mail.com", "id": "3", "name": "Franklyn", "resource_uri": "/api/resources/author/3/", "slug": "franklyn", "text": "dasdasd"}], "category": {"app_data": "{}", "content": "", "description": "", "id": "2", "resource_uri": "/api/resources/category/2/", "slug": "hmmm", "template": "category.html", "title": "hmmm", "tree_path": "hmmm"}, "content": "Testable test", "description": "", "id": "2", "last_updated": "2012-07-19T19:24:38+00:00", "listings": [], "photo": null, "publish_from": "2012-07-19T19:24:38+00:00", "publish_to": null, "published": true, "resource_uri": "/api/resources/article/2/", "slug": "art-ticle", "static": false, "title": "Art ticle", "url": "http://example.com/hmmm/2012/7/19/art-ticle/"}
+	]
+}
