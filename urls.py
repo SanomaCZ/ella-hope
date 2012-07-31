@@ -1,3 +1,5 @@
+import os.path
+
 from django.contrib import admin
 from django.conf.urls.defaults import patterns, include, url, handler404, handler500
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
@@ -21,7 +23,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     (r'^admin-hope/(?P<path>.*)$', 'django.views.static.serve', {
-        'document_root': settings.PROJECT_ROOT + '/ella_hope/admin/',
+        'document_root': os.path.join(settings.PROJECT_ROOT, 'ella_hope/admin/'),
         'show_indexes': True,
     }),
 
