@@ -22,11 +22,11 @@ urlpatterns = patterns('',
     # enable admin
     url(r'^admin/', include(admin.site.urls)),
 
-    (r'^admin-hope/(?P<path>.*)$', 'django.views.static.serve', {
+    url(r'^admin-hope/(?P<path>.*)$', 'django.views.static.serve', {
         'document_root': os.path.join(settings.PROJECT_ROOT, 'ella_hope/admin/'),
         'show_indexes': True,
     }),
 
-    (r'^', include(admin_api.urls)),
-    #(r'^', include('ella.core.urls')),
+    url(r'^', include(admin_api.urls)),
+    url(r'^', include('ella.core.urls')),
 ) + staticfiles_urlpatterns()
