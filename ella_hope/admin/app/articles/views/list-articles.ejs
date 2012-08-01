@@ -7,7 +7,6 @@
 	</thead>
 	<tbody>
 		<% list(this.articles, function( article ) { %>
-			<% console.log(article)%>
 			<%
 			var editUrl = can.route.url({ page: 'articles', action: 'edit', id: article.id });
 			var deleteUrl = can.route.url({ page: 'articles', action: 'delete', id: article.id });
@@ -16,10 +15,12 @@
 				<td><a href="<%== editUrl %>"><%= article.title %></a></td>
 				<td>
 					<!-- Edit -->
-					<a href="<%= editUrl %>" class="btn btn-mini"><%= $.t('Edit');%> <i class="icon-pencil"></i></a>
+					<a <%= (el) -> el.data( 'article', article ) %> href="<%= editUrl %>" class="btn btn-mini edit-article">
+						<%= $.t('Edit');%> <i class="icon-pencil"></i>
+					</a>
 
 					<!-- Delete -->
-					<a href="<%= deleteUrl %>" class="btn btn-mini btn-danger" data-confirm="Are you sure?" data-method="delete" rel="nofollow"><%= $.t('Delete');%> <i class="icon-trash icon-white"></i></a>
+					<a <%= (el) -> el.data( 'article', article ) %> href="javascript://" class="btn btn-mini btn-danger delete" data-confirm="<%= $.t('Are you sure you want to delete the article?') %>"><%= $.t('Delete');%> <i class="icon-trash icon-white"></i></a>
 				</td>
 			</tr>
 		<% } ) %>

@@ -1,0 +1,22 @@
+<div class="row" id="login">
+
+	<div class="alert alert-error" id="login-error">
+		<a class="close" data-dismiss="alert">×</a>
+		<strong><%= $.t('Error') %>: </strong><%= $.t('Wrong username or password.') %>
+	</div>
+
+	<div class="login-form">
+		<h2>Login</h2>
+		<form>
+			<fieldset>
+				<div class="clearfix">
+					<input type="text" placeholder="Username" name="username" required="required">
+				</div>
+				<div class="clearfix">
+					<input type="password" placeholder="Password" name="password" required="required">
+				</div>
+				<button class="btn btn-primary" type="submit" id="submit">Sign in</button>
+			</fieldset>
+		</form>
+	</div>
+</div>

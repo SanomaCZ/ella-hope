@@ -1,6 +1,7 @@
 steal(
 	//'./default.css'					// application CSS file
 	'can/control/route'					// enable routing
+	, './login/login.js'				// login module
 )
 .then(
 	'./models/models.js'				// steals all your models
@@ -8,9 +9,12 @@ steal(
 	, './dashboard/dashboard.js'		// dasbboard module
 	, './articles/articles.js'			// articles module
 	, './resources/js/jquery.jsperanto.js'	// translation library
+	, './resources/js/jquery.cookie.js'	// cookies library
 )
 .then(
 	function(){							// configure your application
+
+
 
 		// disables all fixtures
 		//can.fixture.on = false;
@@ -44,13 +48,12 @@ steal(
 		lang = 'en';
 
 		// jsperanto initialization - translations
-		// when translations are ready, we can initialize modules which may be translated
+		// when translations are ready, we can initialize modules which then may be translated
 		$.jsperanto.init(
 			function(t){
 				//console.log($.t('france'));
-
-				// navigation bar - works also as a router
-				var navbar = new Navbar($("#navbar"), {});
+				
+				$('body').trigger('show-login');
 			},
 			{
 				"dicoPath":BASE_URL+"/app/resources/locales",
@@ -61,7 +64,7 @@ steal(
 		var options = {};
 
 		// when everything important is initialized, update the route so that 
-		//controls waiting for route change can set the right state
+		// controls waiting for route change can set the right state
 		$('body').on('navbar-ready', function(){
 			var data = can.route.attr();	// current route data
 			data.load = 1;	// we add new attribute
@@ -70,6 +73,34 @@ steal(
 			delete data.load;	// delete newly added attribute to return to base state
 			can.route.attr(data, true);	// set new route -> another change event
 			$('body').off('navbar-ready');	// cancel listening
+		});
+
+		// after login is successful, launch the application
+		$('body').on('login-success', function(){
+			var navbar = new Navbar($("#navbar"), {});
+		});
+
+		$('body').on('show-login', function(){
+			$("#navbar").empty();
+
+			// login controller
+			var login = new Login($("#content"), {});
+		});
+
+		// we send Authorization header with every ajax request
+		// to ensure that user has the right privileges
+		// only request where this header is not required is during login
+		$.ajaxSetup({
+		    dataType: "json",
+		    contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+		    beforeSend: function(jqXHR, settings) {
+		    	//console.log($.cookie('api_key'));
+		    	//console.log($.cookie('username'));
+		    	if ($.cookie('api_key')) {
+		        	jqXHR.setRequestHeader("Authorization", "ApiKey " + $.cookie('username') + ":" + $.cookie('api_key'));
+		        }
+		        return true;
+		    }
 		});
 	}
 )

@@ -1,6 +1,15 @@
 Create = can.Control({
-	show: function(){
-		this.article = new Article();
+	/**
+	 * displays form for creating/updating article
+	 * @param  {can.Model.Article} article If article is provided -> edit
+	 * @return {[type]}         [description]
+	 */
+	show: function(article){
+		this.article = article;
+		if (!this.article) {
+			// we want to create a new article
+			this.article = new Article();
+		}
 		this.element.html(can.view('//app/articles/views/create-article.ejs', {
 			article: this.article,
 			categories: this.options.categories
@@ -13,22 +22,31 @@ Create = can.Control({
 	'{document} #new-article click': function(){
 		this.show();
 	},
+
+	'{document} .edit-article click': function(el, ev){
+		//this.show(el.data('article'));
+	},
+
 	createArticle: function() {
 		console.log('create');
 		var form = this.element.find('form');
 			values = can.deparam(form.serialize());
 			
 		console.log(values);
-		if(values.name !== "") {
-			this.article.attr(values).save();
-			this.hide();
+		// validation
+		if(1) {
+			//this.article.attr(values).save();
+			delete values['id'];
+			var a = new Article();
+			a.attr(values).save();
+			console.log(a.attr());
+			//this.hide();
+			can.route.attr({page:'articles'}, true);
 		}
 	},
 	'.article input keyup': function(el, ev) {
-		console.log(ev.keyCode);
 		if(ev.keyCode == 13){
 			this.createArticle(el);
-			//ev.preventDefault;
 		}
 	},
 	'.save click' : function(el){

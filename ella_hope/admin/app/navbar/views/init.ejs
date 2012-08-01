@@ -19,6 +19,15 @@
 				<% } %>
 
 				<li><%== can.route.link( $.t('More...'), { page: '' }); %></li>
+
+				<li class="dropdown" id="accountmenu">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#"><%= $.t('Account Settings') %><b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						<li><a href="#"><%= $.t('Profile') %></a></li>
+						<li class="divider"></li>
+						<li><%== can.route.link( $.t('Logout'), { page: 'user', action: 'logout' }); %></li>
+					</ul>
+				</li>
 			</ul>
 		</div><!--/.nav-collapse -->
 	</div>

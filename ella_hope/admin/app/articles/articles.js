@@ -1,7 +1,8 @@
 steal(
 	//'./css/search_result.css'
 	'./create-article.js'
-	//, '//can/can.fixture.js'
+	, '//app/resources/js/bootstrap.min.js'
+	, '//app/resources/js/bootbox.min.js'
 )
 .then(
 
@@ -35,8 +36,45 @@ steal(
 			this.listArticles();
 
 			// create form for new article
-			new Create('#create', {
+			var create = new Create('#create', {
 				categories: {}
+			});
+
+			this.element.trigger('articles-ready');
+		},
+
+		':page/:action/:id route': function( data ) {
+			console.log(data);
+			if (data.page == 'articles') {
+				if (data.action == 'edit') {
+					if (data.id > 0) {
+						Article.findOne({id: data.id}, function(article){
+							$('#create').data('controls')[0].show(article);
+							//create.show(article);
+						})
+					}
+				}
+			}
+   // 			if (newVal == "dashboard") {
+			//  	this.element.html(can.view(this.options.initView, this.options));
+			// }
+        },
+
+		/**
+		 * delete article
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'.delete click': function(el, ev){
+
+			ev.preventDefault();
+
+			bootbox.confirm(el.data('confirm'), function(confirmed) {
+				if (confirmed) {
+					//el.data('article').destroy();
+					el.closest('tr').slideUp(200);
+				}
 			});
 		},
 

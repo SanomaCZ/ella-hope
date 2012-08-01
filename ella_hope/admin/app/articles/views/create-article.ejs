@@ -1,24 +1,73 @@
+<% console.log(article); %>
+
 <div class="hero-unit">
 	<form class="article">
+
+		<input type="hidden" name="id" id="id" <%= article.id ? "value=" + article.id : "" %> />
+
 		<div class="row">
 			<div>
 				<label for="title"><%= $.t('Title')%></label>
 			</div>
 			<input type="text" name="title" id="title" placeholder="<%= $.t('Add Title')%>" 
 				<%= article.attr('title') ? "value='" + article.title + "'" : "class='empty'" %>>
+		</div>
+
+		<div class="row">
 			<select name="category">
-				<% $.each(categories, function(i, category){ %>
-					<option value="<%= category.data %>" <%= article.category === category.data ? "selected" : "" %>>
-						<%= category.name %>
+				<% $.each(article.category, function(i, category){ %>
+					<option value="<%= category.id %>" <%= article.category === category.id ? "selected" : "" %>>
+						<%= category.title %>
 					</option>
 				<% }) %>
 			</select>
+		</div>
 
+		<div class="row">
+			<select name="authors">
+				<% $.each(article.authors, function(i, author){ %>
+					<option value="<%= author.id %>" <%= article.author === author.id ? "selected" : "" %>>
+						<%= author.name %>
+					</option>
+				<% }) %>
+			</select>
+		</div>
+
+		<div class="row">
 			<div>
 				<label for="content"><%= $.t('Content')%></label>
 			</div>
 			<textarea name="content" id="content" placeholder="<%= $.t('Add Content')%>" <%= article.attr('content') ? "" : "class='empty'" %>><%= article.content %></textarea>
 		</div>
+
+		<div class="row">
+			<div>
+				<label for="content"><%= $.t('Description')%></label>
+			</div>
+			<textarea name="description" id="description" placeholder="<%= $.t('Add Description')%>" <%= article.attr('description') ? "" : "class='empty'" %>><%= article.description %></textarea>
+		</div>
+
+		<div class="row">
+			<div>
+				<label for="publish_from"><%= $.t('Publish From')%></label>
+			</div>
+			<input type="datetime-local" name="publish_from" id="publish_from" value="<%= article.publish_from %>" />
+		</div>
+
+		<div class="row">
+			<div>
+				<label for="publish_to"><%= $.t('Publish To')%></label>
+			</div>
+			<input type="datetime-local" name="publish_to" id="publish_to" value="<%= article.publish_to %>" />
+		</div>
+
+		<div class="row">
+			<div>
+				<label for="published"><%= $.t('Published')%></label>
+			</div>
+			<input type="checkbox" name="published" id="published" checked="<%= article.published ? 'true' : 'false' %>" value="true" />
+		</div>
+
 	</form>
 
 	<div class="row">

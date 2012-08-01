@@ -27,34 +27,39 @@ steal(
 			//findOne: 'http://admin.snowhit.com/skicentres/index/skicentres-detail/id/{id}'
 			findOne : function(params){
     			return $.ajax({
-      				url: BASE_URL+'/articles/index/articles-detail/id/' + params.id,
+      				url: BASE_URL+'/article/' + params.id + '/',
       				type: 'get',
       				async: false,
       				dataType: 'json'})
   			},
-  			create: 'POST /articles/create'
+
+  			create: 'PUT ' + BASE_URL + '/article/1/',
+  			
+  			update: 'PATCH ' + BASE_URL + '/article/1/',
+
+  			destroy: 'DELETE ' + BASE_URL + '/article/{id}/'
 		}, {});
 
 		// get articles
 		//can.fixture('GET ' + BASE_URL + '/article/', '//app/models/fixtures/articles.json');
 		
 		// create
-		var id= 4;
-		can.fixture("POST /articles/create", function(){
-			// just need to send back a new id
-			return {id: (id++)}
-		});
+		// var id= 4;
+		// can.fixture("POST /articles/create", function(){
+		// 	// just need to send back a new id
+		// 	return {id: (id++)}
+		// });
 
-		// update
-		can.fixture("PUT /contacts/{id}", function(){
-			// just send back success
-			return {};
-		});
+		// // update
+		// can.fixture("PUT /contacts/{id}", function(){
+		// 	// just send back success
+		// 	return {};
+		// });
 
-		// destroy
-		can.fixture("DELETE /contacts/{id}", function(){
-			// just send back success
-			return {};
-		});
+		// // destroy
+		// can.fixture("DELETE /contacts/{id}", function(){
+		// 	// just send back success
+		// 	return {};
+		// });
 	}
 );

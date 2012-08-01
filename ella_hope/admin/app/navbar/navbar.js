@@ -22,11 +22,14 @@ steal(
 		 */
 		init : function(el, options){
 
-			this.element.append(can.view('//app/navbar/views/init.ejs', this.options));
+			this.element.html(can.view('//app/navbar/views/init.ejs', this.options));
 
 			// let the main app.js know that this control is ready
 			// necessary for init route listening
 			this.element.trigger('navbar-ready');
+
+			// dropdown in menu
+			$('.dropdown-toggle').dropdown();
 		},
 
 		/**
@@ -37,25 +40,33 @@ steal(
 		':page route': function( data ) {
 
 			//console.log(data);
+			
+			// remove all binded events and all child nodes
+			$("#content").unbind().empty();
 
-    		switch(data.page) {
-      			case 'dashborad':
-      				var dashboard = new Dashboard($("#content"), {});
-      				break;
-      			case 'articles':
-      				var articles = new Articles($("#content"), {});
-      				break;
-      			default:
-      				var dashboard = new Dashboard($("#content"), {});
-      				break;
-      		}
+			if (this.checkLogin()) {
+
+	    		switch(data.page) {
+	      			case 'dashborad':
+	      				var dashboard = new Dashboard($("#content"), {});
+	      				break;
+	      			case 'articles':
+	      				var articles = new Articles($("#content"), {});
+	      				break;
+	      			default:
+	      				var dashboard = new Dashboard($("#content"), {});
+	      				break;
+	      		}
+	      	}
   		},
 
   		/**
   		 * will cache hash: #
   		 * @type {[type]}
   		 */
-  		'route': function(data) {
+  		'route': function(data) {this.checkLogin();
+
+
   			//console.log(data);
       	},
 
@@ -70,6 +81,19 @@ steal(
       		el.parent().find('li.active').removeClass('active');
       		// add class to newly clicked element
       		el.addClass('active');
+      	},
+
+      	/**
+      	 * if user is not logged in, redirect to login screen
+      	 * @return {[type]} [description]
+      	 */
+      	'checkLogin' : function() {
+
+      		if ($.cookie('api_key')) {
+      			return true;
+      		}
+      		$('body').trigger('show-login');
+      		return false;
       	}
 
 	})
