@@ -137,6 +137,7 @@ INSTALLED_APPS = (
     'ella.articles',
 
     'tastypie',
+    'ella_hub',
     'ella_hope',
 )
 
