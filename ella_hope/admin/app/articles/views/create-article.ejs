@@ -15,21 +15,25 @@
 
 		<div class="row">
 			<select name="category">
-				<% $.each(article.category, function(i, category){ %>
-					<option value="<%= category.id %>" <%= article.category === category.id ? "selected" : "" %>>
-						<%= category.title %>
-					</option>
-				<% }) %>
+				<% if (article.category) { %>
+					<% $.each(article.category, function(i, category){ %>
+						<option value="<%= category.id %>" <%= article.category === category.id ? "selected" : "" %>>
+							<%= category.title %>
+						</option>
+					<% }) %>
+				<% } %>
 			</select>
 		</div>
 
 		<div class="row">
 			<select name="authors">
-				<% $.each(article.authors, function(i, author){ %>
-					<option value="<%= author.id %>" <%= article.author === author.id ? "selected" : "" %>>
-						<%= author.name %>
-					</option>
-				<% }) %>
+				<% if (article.category) { %>
+					<% $.each(article.authors, function(i, author){ %>
+						<option value="<%= author.id %>" <%= article.author === author.id ? "selected" : "" %>>
+							<%= author.name %>
+						</option>
+					<% }) %>
+				<% } %>
 			</select>
 		</div>
 
