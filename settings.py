@@ -102,6 +102,9 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
+    'ella_hub.utils.middleware.APIKeyRefresherMiddleware',
+    'ella_hub.utils.middleware.CrossDomainAccessMiddleware',
 )
 
 ROOT_URLCONF = 'urls'
@@ -123,6 +126,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.redirects',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
@@ -132,14 +136,24 @@ INSTALLED_APPS = (
     'ella.photos',
     'ella.articles',
 
+    'guardian',
     'tastypie',
+    'ella_hub',
     'ella_hope',
 )
- 
+
 RESOURCE_MODULES = (
     'ella_hub.ella_resources',
 )
 
+# django-guardian auth. backends
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'guardian.backends.ObjectPermissionBackend',
+)
+
+# django-guardian anonym. user
+ANONYMOUS_USER_ID = -1
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

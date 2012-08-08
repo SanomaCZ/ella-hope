@@ -1,9 +1,15 @@
+# Python
 __pycache__
 *.py[co]
-*.db
-_[^_] # ignore files with "_" prefix except for '__init__.py', ...
 
+# project files
+/media
+/static
+
+# files created by server
+*.db
 nohup.out
 
+# IDE files
 .project
 .pydevproject
