@@ -1,8 +1,14 @@
 steal(
 	//'./css/search_result.css'
 	'./create-article.js'
+	, './article.css'
 	, '//app/resources/js/bootstrap.min.js'
-	, '//app/resources/js/bootbox.min.js'
+	, '//app/resources/js/bootbox.min.js',	// alert, confirm, flexible dialogs
+	'//app/resources/js/date.js',	// date parse
+	'//app/resources/js/bootstrap-datepicker.js',	// datepicker js
+	'//app/resources/css/bootstrap-datepicker.css',	// datepicker css
+	'//app/resources/js/bootstrap-timepicker.js',	// timepicker js
+	'//app/resources/css/bootstrap-timepicker.css'	// timepicker css
 )
 .then(
 
@@ -44,7 +50,7 @@ steal(
 		},
 
 		':page/:action/:id route': function( data ) {
-			console.log(data);
+			//console.log(data);
 			if (data.page == 'articles') {
 				if (data.action == 'edit') {
 					if (data.id > 0) {
