@@ -3,6 +3,7 @@
   font-size: 13px;
   position: relative;
   display: inline-block;
+  margin-bottom: 9px;
   zoom: 1;
   *display: inline;
 }

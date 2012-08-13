@@ -80,7 +80,7 @@ steal(
 
 			bootbox.confirm(el.data('confirm'), function(confirmed) {
 				if (confirmed) {
-					//el.data('article').destroy();
+					el.data('article').destroy();
 					el.closest('tr').slideUp(200);
 				}
 			});

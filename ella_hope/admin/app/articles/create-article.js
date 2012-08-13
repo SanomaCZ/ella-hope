@@ -33,7 +33,8 @@ Create = can.Control({
 		// render article form
 		can.view( '//app/articles/views/create-article.ejs', {
   			article: this.article,
-			user: User.findAll()
+			user: User.findAll(),
+			category: Category.findAll()
 		} ).then(function( frag ){
 			self.element.html(frag);
 
@@ -95,18 +96,11 @@ Create = can.Control({
 		var form = this.element.find('form');
 		var values = form.serialize();
 		var values = can.deparam(values);
-		
-		//delete values['authors'];
-		delete values['category'];
-		delete values['publish_to'];
 
 		values['announced'] = false;
 		values['app_data'] =  "{}";
-		//values['authors'] =  [{"description": "", "email": "", "id": 1, "name": "Seocity", "resource_uri": "/admin-api/author/1/", "slug": "seocity", "text": ""}];/values['authors'] =  [{"description": "", "email": "", "id": 1, "name": "Seocity", "resource_uri": "/admin-api/author/1/", "slug": "seocity", "text": ""}];
-		//values['authors'] =  ['/admin-api/user/1/', '/admin-api/user/6/']; //[{"id":5}, {"id":6}];//[{"id": 5}];
-		values['category'] =  "/admin-api/category/2/"; //Constructor;
-		values['last_updated'] =  "2012-08-07T09:47:44";
-		values['listings'] =  [];//Constructor[0];
+		//values['last_updated'] =  "2012-08-07T09:47:44";
+		//values['listings'] =  [];//Constructor[0];
 		values['photo'] =  null;
 		
 		// merge date and time of publish_from
@@ -118,7 +112,9 @@ Create = can.Control({
 			values['publish_to'] = values['publish_to_date']+'T'+values['publish_to_time'];
 		}
 
-		values['published'] = true;
+		// if published is not present, set to false
+		if (!values['published']) values['published'] = false;
+
 		values['resource_uri'] =  "/admin-api/article/6/";
 		values['slug'] =  "dfgja";
 		values['static'] =  true;

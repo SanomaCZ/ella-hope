@@ -10,16 +10,27 @@
 			<div>
 				<label for="title"><%= $.t('Title')%></label>
 			</div>
-			<input type="text" name="title" id="title" placeholder="<%= $.t('Add Title')%>" 
-				<%= article.attr('title') ? "value='" + article.title + "'" : "class='empty'" %>>
+			<input class="span4" type="text" name="title" id="title" placeholder="<%= $.t('Add Title')%>" 
+				value="<%= article.title %>" <%= article.title ? "" : "class=empty" %>>
 		</div>
 
 		<div class="row">
-			<select name="category">
-				<% if (article.category) { %>
-					<% $.each(article.category, function(i, category){ %>
-						<option value="<%= category.id %>" <%= article.category === category.id ? "selected" : "" %>>
-							<%= category.title %>
+			<div>
+				<label for="category"><%= $.t('Category')%></label>
+			</div>
+			<select name="category" id="category" data-placeholder="<%= $.t('Choose category')%>" class="chzn-select">
+				<% if (user) { %>
+					<% $.each(category, function(i, cat){ %>
+					<%
+						var selected = false;
+						if (article.category) {
+							if (article.category.id == cat.id) {
+								selected = true;
+							}
+						}
+					%>
+						<option value="<%= cat.resource_uri %>" <%= selected ? "selected=selected" : "" %>>
+							<%= cat.title %>
 						</option>
 					<% }) %>
 				<% } %>
@@ -30,8 +41,7 @@
 			<div>
 				<label for="authors"><%= $.t('Author(s)')%></label>
 			</div>
-			<select name="authors[]" id="authors" data-placeholder="<%= $.t('Choose authors')%>" class="chzn-select" multiple>
-				<option value=""></option>
+			<select name="authors[]" id="authors" data-placeholder="<%= $.t('Choose authors')%>" class="chzn-select span4" multiple>
 				<% if (user) { %>
 					<% $.each(user, function(i, author){ %>
 					<%
@@ -57,14 +67,14 @@
 			<div>
 				<label for="content"><%= $.t('Content')%></label>
 			</div>
-			<textarea name="content" id="content" placeholder="<%= $.t('Add Content')%>" <%= article.attr('content') ? "" : "class='empty'" %>><%= article.content %></textarea>
+			<textarea class="span4" rows="10" name="content" id="content" placeholder="<%= $.t('Add Content')%>" <%= article.attr('content') ? "" : "class='empty'" %>><%= article.content %></textarea>
 		</div>
 
 		<div class="row">
 			<div>
 				<label for="content"><%= $.t('Description')%></label>
 			</div>
-			<textarea name="description" id="description" placeholder="<%= $.t('Add Description')%>" <%= article.attr('description') ? "" : "class='empty'" %>><%= article.description %></textarea>
+			<textarea class="span4" name="description" id="description" placeholder="<%= $.t('Add Description')%>" <%= article.attr('description') ? "" : "class='empty'" %>><%= article.description %></textarea>
 		</div>
 
 		<div class="row">
@@ -77,25 +87,25 @@
 			<div>
 				<label for="publish_from"><%= $.t('Publish From')%></label>
 			</div>
-			<input type="datetime-local" name="publish_from_date" id="publish_from_date" value="<%= article.publish_from_date %>" />
+			<input class="span2" type="datetime-local" name="publish_from_date" id="publish_from_date" value="<%= article.publish_from_date %>" />
 
-			<input type="text" class="timepicker-default input-small" name="publish_from_time" id="publish_from_time" value="<%= article.publish_from_time %>" />
+			<input type="text" class="timepicker-default span1" name="publish_from_time" id="publish_from_time" value="<%= article.publish_from_time %>" />
 		</div>
 
 		<div class="row">
 			<div>
 				<label for="publish_to"><%= $.t('Publish To')%></label>
 			</div>
-			<input type="datetime-local" name="publish_to_date" id="publish_to_date" value="<%= article.publish_to_date %>" />
+			<input class="span2" type="datetime-local" name="publish_to_date" id="publish_to_date" value="<%= article.publish_to_date %>" />
 
-			<input type="text" class="timepicker-default input-small" name="publish_to_time" id="publish_to_time" value="<%= article.publish_to_time %>" />
+			<input type="text" class="timepicker-default span1" name="publish_to_time" id="publish_to_time" value="<%= article.publish_to_time %>" />
 		</div>
 
 		<div class="row">
 			<div>
 				<label for="published"><%= $.t('Published')%></label>
 			</div>
-			<input type="checkbox" name="published" id="published" checked="<%= article.published ? 'true' : 'false' %>" value="true" />
+			<input type="checkbox" name="published" id="published" <%= article.published ? 'checked' : '' %> value="true" />
 		</div>
 
 	</form>
