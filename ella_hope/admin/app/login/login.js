@@ -62,7 +62,7 @@ steal(
 
 			$.ajax({
 				type: 'POST',
-				url: 'http://crawler.bfhost.cz:12345/admin-api/login/',
+				url: BASE_URL + '/login/',
 				data: {
 					"username": user,
 					"password": pass

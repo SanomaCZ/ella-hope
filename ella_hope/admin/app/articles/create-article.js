@@ -6,6 +6,8 @@ Create = can.Control({
 	 */
 	show: function(article){
 
+		var self = this;
+
 		//console.log(article);
 
 		this.article = article;
@@ -29,45 +31,53 @@ Create = can.Control({
 		}
 
 		// render article form
-		this.element.html(can.view('//app/articles/views/create-article.ejs', {
-			article: this.article,
-			categories: this.options.categories
-		}));
+		can.view( '//app/articles/views/create-article.ejs', {
+  			article: this.article,
+			user: User.findAll()
+		} ).then(function( frag ){
+			self.element.html(frag);
+
+			// enable chosen select for authors
+			// http://harvesthq.github.com/chosen/
+			$('.chzn-select').chosen();
+
+			// enable datepicker for publishFrom and publishTo
+			// https://github.com/eternicode/bootstrap-datepicker
+			var dateOptions = {
+				format: 'yyyy-mm-dd',
+				weekStart: 1,
+				autoclose: true
+			};
+			$("#publish_from_date").datepicker(dateOptions)
+				.on('changeDate', function(ev){
+					if ($("#publish_to_date").val() && $("#publish_from_date").val() > $("#publish_to_date").val()){
+						$('#date-alert').show();
+					} else {
+						$('#date-alert').hide();
+					}
+				});
+			$("#publish_to_date").datepicker(dateOptions)
+				.on('changeDate', function(ev){
+					if ($("#publish_from_date").val() && $("#publish_from_date").val() > $("#publish_to_date").val()){
+						$('#date-alert').show();
+					} else {
+						$('#date-alert').hide();
+					}
+				});
+
+			// enable timepicker for publishFrom and publishTo
+			var timeOptions = {
+				minuteStep: 1,
+				showSeconds: false,
+				defaultTime: false, // 'value',
+				showMeridian: false // enable 24 hours mode
+			};
+			$("#publish_from_time").timepicker(timeOptions);
+			$("#publish_to_time").timepicker(timeOptions);
+
+		});
+
 		this.element.slideDown(200);
-
-		// enable datepicker for publishFrom and publishTo
-		// https://github.com/eternicode/bootstrap-datepicker
-		var dateOptions = {
-			format: 'yyyy-mm-dd',
-			weekStart: 1,
-			autoclose: true
-		};
-		$("#publish_from_date").datepicker(dateOptions)
-			.on('changeDate', function(ev){
-				if ($("#publish_to_date").val() && $("#publish_from_date").val() > $("#publish_to_date").val()){
-					$('#date-alert').show();
-				} else {
-					$('#date-alert').hide();
-				}
-			});
-		$("#publish_to_date").datepicker(dateOptions)
-			.on('changeDate', function(ev){
-				if ($("#publish_from_date").val() && $("#publish_from_date").val() > $("#publish_to_date").val()){
-					$('#date-alert').show();
-				} else {
-					$('#date-alert').hide();
-				}
-			});
-
-		// enable timepicker for publishFrom and publishTo
-		var timeOptions = {
-			minuteStep: 1,
-			showSeconds: false,
-			defaultTime: false, // 'value',
-			showMeridian: false // enable 24 hours mode
-		};
-		$("#publish_from_time").timepicker(timeOptions);
-		$("#publish_to_time").timepicker(timeOptions);
 	},
 	hide: function(){
 		this.element.slideUp(200);
@@ -86,20 +96,23 @@ Create = can.Control({
 		var values = form.serialize();
 		var values = can.deparam(values);
 		
-		delete values['authors'];
+		//delete values['authors'];
 		delete values['category'];
 		delete values['publish_to'];
 
 		values['announced'] = false;
 		values['app_data'] =  "{}";
-		values['authors'] =  [{"description": "", "email": "", "id": 1, "name": "Seocity", "resource_uri": "/admin-api/author/1/", "slug": "seocity", "text": ""}];
+		//values['authors'] =  [{"description": "", "email": "", "id": 1, "name": "Seocity", "resource_uri": "/admin-api/author/1/", "slug": "seocity", "text": ""}];/values['authors'] =  [{"description": "", "email": "", "id": 1, "name": "Seocity", "resource_uri": "/admin-api/author/1/", "slug": "seocity", "text": ""}];
+		//values['authors'] =  ['/admin-api/user/1/', '/admin-api/user/6/']; //[{"id":5}, {"id":6}];//[{"id": 5}];
 		values['category'] =  "/admin-api/category/2/"; //Constructor;
 		values['last_updated'] =  "2012-08-07T09:47:44";
 		values['listings'] =  [];//Constructor[0];
 		values['photo'] =  null;
 		
+		// merge date and time of publish_from
 		values['publish_from'] = values['publish_from_date']+'T'+values['publish_from_time']; //"2012-08-07T09:47:44";
 		
+		// merge date and time of publish_to
 		values['publish_to'] = null;
 		if (values['publish_to_date']) {
 			values['publish_to'] = values['publish_to_date']+'T'+values['publish_to_time'];

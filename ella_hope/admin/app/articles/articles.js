@@ -8,7 +8,9 @@ steal(
 	'//app/resources/js/bootstrap-datepicker.js',	// datepicker js
 	'//app/resources/css/bootstrap-datepicker.css',	// datepicker css
 	'//app/resources/js/bootstrap-timepicker.js',	// timepicker js
-	'//app/resources/css/bootstrap-timepicker.css'	// timepicker css
+	'//app/resources/css/bootstrap-timepicker.css',	// timepicker css
+	'//app/resources/js/jquery.chosen.js',	// select list js
+	'//app/resources/css/jquery.chosen.css'	// select list css
 )
 .then(
 

@@ -50,9 +50,6 @@ steal(
   			destroy: 'DELETE ' + BASE_URL + '/article/{id}/'
 		}, {});
 
-		// login - for authorization
-		// curl --dump-header - -H "Content-Type: application/json" -X POST --data 'username=mrpohoda&password=mrpohoda' http://crawler.bfhost.cz:12345/admin-api/login/
-
 		// article schema (when authorized)
 		// curl --dump-header - -H "Content-Type: application/json" -H "Authorization: ApiKey mrpohoda:9ae83bcf3b11d6995d636acc6b87d82ec344e688" -X GET http://crawler.bfhost.cz:12345/admin-api/article/schema/?format=json
 
