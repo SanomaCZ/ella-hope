@@ -36,10 +36,12 @@
 					<% $.each(user, function(i, author){ %>
 					<%
 						var selected = false;
-						for (var i = 0; i < article.authors.length; i++) {
-							if (article.authors[i]['id'] == author.id) {
-								selected = true;
-								break;
+						if (article.authors) {
+							for (var i = 0; i < article.authors.length; i++) {
+								if (article.authors[i]['id'] == author.id) {
+									selected = true;
+									break;
+								}
 							}
 						}
 					%>
