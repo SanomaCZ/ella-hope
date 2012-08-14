@@ -1,7 +1,5 @@
 import os.path
 
-from tempfile import gettempdir
-
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -142,6 +140,7 @@ INSTALLED_APPS = (
     'ella_hope',
 )
 
+# API resources
 RESOURCE_MODULES = (
     'ella_hub.ella_resources',
 )
