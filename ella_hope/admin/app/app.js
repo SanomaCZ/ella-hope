@@ -93,9 +93,11 @@ steal(
 		$.ajaxSetup({
 		    dataType: "json",
 		    contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+		    crossDomain: true,
 		    beforeSend: function(jqXHR, settings) {
 		    	//console.log($.cookie('api_key'));
 		    	//console.log($.cookie('username'));
+		    	jqXHR.withCredentials = true;
 		    	if ($.cookie('api_key')) {
 		        	jqXHR.setRequestHeader("Authorization", "ApiKey " + $.cookie('username') + ":" + $.cookie('api_key'));
 		        }

@@ -1,4 +1,16 @@
-Create = can.Control({
+Create = can.Control(
+	/* @static */
+	{
+		defaults: {
+			autosaveInterval: 30 * 1000	// how ofter is draft automatically saved
+		}
+	},
+	/* @prototype */
+	{
+	draft: null,			// current draft object
+	previousDraftValues: null,	// use this for comparison old and new draft values
+	autosaveTimer: null,	// timer for autosave, we need this to stop timer
+
 	/**
 	 * displays form for creating/updating article
 	 * @param  {can.Model.Article} article If article is provided -> edit
@@ -7,6 +19,9 @@ Create = can.Control({
 	show: function(article){
 
 		var self = this;
+
+		// initialize autosave
+		this.initAutosave(this.options.autosaveInterval);
 
 		//console.log(article);
 
@@ -80,6 +95,17 @@ Create = can.Control({
 
 		this.element.slideDown(200);
 	},
+
+	/**
+	 * show draft for editing
+	 * @param  {[type]} draft [description]
+	 * @return {[type]}       [description]
+	 */
+	showDraft: function(draft) {
+		this.draft = draft;
+		this.show(draft.data);
+	},
+
 	hide: function(){
 		this.element.slideUp(200);
 	},
@@ -89,6 +115,28 @@ Create = can.Control({
 
 	'{document} .edit-article click': function(el, ev){
 		//this.show(el.data('article'));
+	},
+
+	/**
+	 * initialize autosave timer
+	 * @param  {[type]} interval [description]
+	 * @return {[type]}          [description]
+	 */
+	initAutosave: function(interval) {
+
+		var self = this;
+
+		this.autosaveTimer = setInterval(function(){
+			self.saveDraft();
+		}, interval);
+	},
+
+	/**
+	 * stop autosave timer
+	 * @return {[type]} [description]
+	 */
+	stopAutosave: function() {
+		clearInterval(this.autosaveTimer);
 	},
 
 	createArticle: function() {
@@ -133,8 +181,56 @@ Create = can.Control({
 			//console.log(a);
 			a.save();
 			//this.hide();
+			
+			// delete draft when article is saved
+			if (this.draft) {
+				this.draft.destroy();
+			}
+			
 			can.route.attr({page:'articles'}, true);
 		}
+	},
+
+	/**
+	 * save the article as a draft
+	 * @param  {[type]} el [description]
+	 * @return {[type]}    [description]
+	 */
+	saveDraft : function(el) {
+
+		var self = this;
+
+		var form = this.element.find('form');
+		var values = form.serialize();
+		var values = can.deparam(values);
+
+		// first autosave - previousDraftValues is null so there is nothing to compare
+		if (this.previousDraftValues != null) {
+			// if current and previous values are equal, do not update the draft
+			// it would be better to properly compare two objects, but in this case
+			// it's enough to compare stringified values
+			if (JSON.stringify(values) == JSON.stringify(this.previousDraftValues)) {
+				// values are the same - there is no update
+				return;
+			}
+		}
+
+		this.previousDraftValues = values;
+
+		// this is how draft should look like
+		var obj = {
+			"user": "/admin-api/user/6/",
+			"content_type": 'article',
+			"data" : values
+		}
+
+		if (!this.draft) {
+			this.draft = new Draft();
+		}
+		
+		this.draft.attr(obj);
+		this.draft.save();
+
 	},
 	'.article input keyup': function(el, ev) {
 		if(ev.keyCode == 13){
@@ -142,9 +238,22 @@ Create = can.Control({
 		}
 	},
 	'.save click' : function(el){
+		this.stopAutosave();
 		this.createArticle(el);
 	},
+	'.autosave click' : function(el) {
+		this.saveDraft(el);
+	},
 	'.cancel click' : function(){
+
+		this.stopAutosave();
+
+		// if there is automaticaly saved draft, delete it
+		if (this.draft) {
+			this.draft.destroy();
+		}
+
+		// hide article form
 		this.hide();
 	}
 });

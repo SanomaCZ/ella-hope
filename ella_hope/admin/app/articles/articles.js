@@ -63,6 +63,16 @@ steal(
 					}
 				}
 			}
+			else if (data.page == 'drafts') {
+				if (data.action == 'edit') {
+					if (data.id > 0) {
+						Draft.findOne({id: data.id}, function(draft){
+							$('#create').data('controls')[0].showDraft(draft);
+							//create.show(article);
+						})
+					}
+				}
+			}
    // 			if (newVal == "dashboard") {
 			//  	this.element.html(can.view(this.options.initView, this.options));
 			// }
@@ -100,7 +110,8 @@ steal(
 			// })
 
 			can.view('//app/articles/views/list-articles.ejs', {
-				articles: Article.findAll()
+				articles: Article.findAll(),
+				drafts: Draft.findAll()
 			}).then(function( frag ){
 				$("#inner-content").html( frag )
 			});
