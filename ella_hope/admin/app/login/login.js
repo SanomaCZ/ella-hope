@@ -13,7 +13,7 @@ steal(
 	{
 		defaults: {
 			initView : "//app/login/views/init.ejs",
-			bodyClass: "login-page"
+			loginPageClass: "login-page"
 		}
 	},
 	/* @prototype */
@@ -23,15 +23,16 @@ steal(
 		 */
 		init : function(el, options){
 
-			if ($.cookie('api_key')) {
-				$('body').trigger('login-success');
+			// if user is already logged in, skip login page
+			if (User.checkLogin()) {
+				console.log('login success');
 			}
 			else {
-
+				// show login page
 				this.element.html(can.view(this.options.initView, this.options));
 
 				// temporary class to enable different css for login page
-				$('body').addClass(this.options.bodyClass);
+				$('body').addClass(this.options.loginPageClass);
 			}
 
 		},
@@ -49,6 +50,7 @@ steal(
 			var self = this,
 				data = new Object();
 			
+			// get username and password
 			$.each($('#login form').serializeArray(), function(i, field) {
     			data[field.name] = field.value;
 			});
@@ -57,39 +59,29 @@ steal(
 				return;
 			}
 
-			var user = data.username;
-			var pass = data.password;
+			// authentication data
+			var userData = {
+				username: data.username,
+				password: data.password
+			};
 
-			$.ajax({
-				type: 'POST',
-				url: BASE_URL + '/login/',
-				data: {
-					"username": user,
-					"password": pass
-				},
-				dataType: 'json',
-				success : function(data, textStatus, xmLHttpRequest){
-			  		// console.log('success');
-			  		// console.log(data);
-			  		// console.log(textStatus);
-			  		// console.log(xmLHttpRequest);
-			  		$.cookie('api_key', data.api_key);
-			  		$.cookie('username', user);
+			// user login
+			var loginResult = User.login(userData);
 
-					$('body')
-						.removeClass(self.options.bodyClass)
-						.trigger('login-success')
-						;
-			  	},
-			  	error : function(xhr, ajaxOptions, thrownError) {
-			  		if (console && console.log) {
-				    	console.log('error');
-				    	console.log(xhr);
-				    	console.log(ajaxOptions);
-				    	console.log(thrownError);
-				    }
-			  	}
-			});
+			// if login is not successful
+			if (loginResult && loginResult.error) {
+				$("#login-error").show();
+			}
+			
+		},
+
+		"{USER} loggedIn": function() {
+			var self = this;
+			// console.log(this.options.user);
+			if (USER.attr('loggedIn')) {
+				console.log('USER logged in ;-)');
+				$('body').removeClass(self.options.loginPageClass);
+			}
 		},
 
 		':page/:action route': function( data ) {
@@ -99,12 +91,23 @@ steal(
 						$('body').trigger('show-login');
 						break;
 					case 'logout' :
-						$.cookie('api_key', null);
-						$.cookie('username', null);
-						setTimeout(function(){
-							can.route.attr({page: 'user', action: 'login'});
-						}, 500);
-						//$('body').trigger('show-login');
+						//$.cookie('api_key', null);
+						//$.cookie('username', null);
+
+						if (User.logout()) {
+							USER.attr({
+								loggedIn: false
+							});
+							setTimeout(function(){
+								can.route.attr({page: 'user', action: 'login'});
+							}, 500);
+							//$('body').trigger('show-login');
+						}
+						else {
+							if (console && console.log) {
+								console.log('ERROR - user logout');
+							}
+						}
 						break;
 				}
 			}

@@ -14,7 +14,10 @@ steal(
 .then(
 	function(){							// configure your application
 
-
+		// current user
+		USER = new User({
+			loggedIn: false
+		});
 
 		// disables all fixtures
 		//can.fixture.on = false;
@@ -34,8 +37,8 @@ steal(
 
 		// language settings
 		var lang,
-			supportedLangs = ['cs', 'de', 'en', 'es', 'fr', 'gb', 'it']
-			;
+			supportedLangs = ['cs', 'de', 'en', 'es', 'fr', 'gb', 'it'];
+
 		if (urlParams['lang'])	// if language is in url
 			lang = urlParams['lang'];
 		else	// we take the language from browser
@@ -52,7 +55,6 @@ steal(
 		$.jsperanto.init(
 			function(t){
 				//console.log($.t('france'));
-				
 				$('body').trigger('show-login');
 			},
 			{
@@ -60,8 +62,6 @@ steal(
 				"lang":lang // language is determined from browser settings by default
 			}
 		);
-
-		var options = {};
 
 		// when everything important is initialized, update the route so that 
 		// controls waiting for route change can set the right state
@@ -75,22 +75,24 @@ steal(
 			$('body').off('navbar-ready');	// cancel listening
 		});
 
-		// after login is successful, launch the application
-		$('body').on('login-success', function(){
-			var navbar = new Navbar($("#navbar"), {});
+		USER.bind( 'loggedIn', function( ev, newVal, oldVal ) {
+			console.log( 'loggedIn changed to', newVal );
+			// when login is successful, launch the application
+			var navbar = new Navbar($("#navbar"));
 		});
 
 		$('body').on('show-login', function(){
+			console.log('show-login');
 			$("#navbar").empty();
 
 			// login controller
-			var login = new Login($("#content"), {});
+			var login = new Login($("#content"));
 		});
 
 		// we send Authorization header with every ajax request
 		// to ensure that user has the right privileges
 		// only request where this header is not required is during login
-		$.ajaxSetup({
+		var request = $.ajaxSetup({
 		    dataType: "json",
 		    contentType: "application/x-www-form-urlencoded; charset=UTF-8",
 		    crossDomain: true,
@@ -98,11 +100,22 @@ steal(
 		    	//console.log($.cookie('api_key'));
 		    	//console.log($.cookie('username'));
 		    	jqXHR.withCredentials = true;
-		    	if ($.cookie('api_key')) {
-		        	jqXHR.setRequestHeader("Authorization", "ApiKey " + $.cookie('username') + ":" + $.cookie('api_key'));
+		    	if (USER.attr('api_key')) {
+		        	jqXHR.setRequestHeader("Authorization", "ApiKey " + USER.attr('username') + ":" + USER.attr('api_key'));
 		        }
 		        return true;
 		    }
 		});
+
+		// global error handling
+		$(document).ajaxError(function(e, xhr, settings, exception) {
+			if (xhr.status == 401) {
+				console.log('ERROR - login needed');
+				$('body').trigger('show-login');
+			}
+			else {
+				console.log('ajax error ' + xhr.status);
+			}
+		}); 
 	}
 )

@@ -44,7 +44,7 @@ steal(
 			// remove all binded events and all child nodes
 			$("#content").unbind().empty();
 
-			if (this.checkLogin()) {
+			//if (this.checkLogin()) {
 
 	    		switch(data.page) {
 	      			case 'dashborad':
@@ -57,14 +57,14 @@ steal(
 	      				var dashboard = new Dashboard($("#content"), {});
 	      				break;
 	      		}
-	      	}
+	      	//}
   		},
 
   		/**
   		 * will cache hash: #
   		 * @type {[type]}
   		 */
-  		'route': function(data) {this.checkLogin();
+  		'route': function(data) {
 
 
   			//console.log(data);
@@ -81,19 +81,6 @@ steal(
       		el.parent().find('li.active').removeClass('active');
       		// add class to newly clicked element
       		el.addClass('active');
-      	},
-
-      	/**
-      	 * if user is not logged in, redirect to login screen
-      	 * @return {[type]} [description]
-      	 */
-      	'checkLogin' : function() {
-
-      		if ($.cookie('api_key')) {
-      			return true;
-      		}
-      		$('body').trigger('show-login');
-      		return false;
       	}
 
 	})

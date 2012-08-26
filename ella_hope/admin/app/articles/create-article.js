@@ -21,7 +21,13 @@ Create = can.Control(
 		var self = this;
 
 		// initialize autosave
-		this.initAutosave(this.options.autosaveInterval);
+		// autosave is only used for new articles or when editing drafts
+		// hopefuly we don't need to autosave already existing article
+		// if we do, how to deal with already saved article and then we remove some
+		// required attribute - destroy the article and save only as a draft?
+		if (typeof article == 'undefined' || this.draft) {
+			this.initAutosave(this.options.autosaveInterval);
+		}
 
 		//console.log(article);
 
@@ -123,6 +129,9 @@ Create = can.Control(
 	 * @return {[type]}          [description]
 	 */
 	initAutosave: function(interval) {
+
+
+		console.log('init autosave');
 
 		var self = this;
 
