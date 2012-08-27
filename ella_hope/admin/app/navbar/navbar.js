@@ -1,10 +1,11 @@
 steal(
 	'./navbar.css'
 	, 'can/view/ejs'
+	, 'can/observe/delegate'	// enables listening for specific property in route change
 )
 .then(
 	/**
-	 * Creates a Navbar controller.
+	 * Creates a Navbar controller. Also used for routing.
 	 *
 	 * @tag controllers
 	 */
@@ -37,51 +38,30 @@ steal(
 		 * @param  {[type]} data [description]
 		 * @return {[type]}      [description]
 		 */
-		':page route': function( data ) {
+		"{can.route} page set": function( selector, event, newVal, oldVal ) {
 
-			//console.log(data);
+			console.log('page set ' + newVal);
 			
 			// remove all binded events and all child nodes
 			$("#content").unbind().empty();
 
-			//if (this.checkLogin()) {
-
-	    		switch(data.page) {
-	      			case 'dashborad':
-	      				var dashboard = new Dashboard($("#content"), {});
-	      				break;
-	      			case 'articles':
-	      				var articles = new Articles($("#content"), {});
-	      				break;
-	      			default:
-	      				var dashboard = new Dashboard($("#content"), {});
-	      				break;
-	      		}
-	      	//}
-  		},
-
-  		/**
-  		 * will cache hash: #
-  		 * @type {[type]}
-  		 */
-  		'route': function(data) {
-
-
-  			//console.log(data);
-      	},
-
-      	/**
-      	 * setting active/inactive menu items
-      	 * @param  {[type]} el [description]
-      	 * @param  {[type]} ev [description]
-      	 * @return {[type]}    [description]
-      	 */
-      	'li click': function(el, ev) {
-      		// remove active class from old active element
-      		el.parent().find('li.active').removeClass('active');
-      		// add class to newly clicked element
-      		el.addClass('active');
-      	}
-
+			// remove active class from old active element
+      		$('.nav').find('li.active').removeClass('active');
+	
+			switch (newVal) {
+				case 'articles':
+					var articles = new Articles($("#content"), {});
+					$('.nav .articles').addClass('active');
+					break;
+				case 'dashboard':
+					var dashboard = new Dashboard($("#content"), {});
+					$('.nav .dashboard').addClass('active');
+					break;
+				default:
+					var dashboard = new Dashboard($("#content"), {});
+					$('.nav .dashboard').addClass('active');
+					break;
+			}
+  		}
 	})
 )

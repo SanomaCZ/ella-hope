@@ -8,14 +8,14 @@
 		<a class="brand" href="<%== can.route.url({ page: 'dashboard' }); %>">D&Z</a>
 		<div class="nav-collapse">
 			<ul class="nav">
-				<li class="active"><%== can.route.link( $.t('Home'), { page: 'dashboard' }); %></li>
+				<li class="dashboard"><%== can.route.link( $.t('Home'), { page: 'dashboard' }); %></li>
 
 				<% if (ALLOWED_MODULES.articles) { %>
-					<li><%== can.route.link( $.t('Articles'), { page: 'articles' }); %></li>
+					<li class="articles"><%== can.route.link( $.t('Articles'), { page: 'articles' }); %></li>
 				<% } %>
 
 				<% if (ALLOWED_MODULES.gallery) { %>
-					<li><%== can.route.link( $.t('Gallery'), { page: 'gallery' }); %></li>
+					<li class="gallery"><%== can.route.link( $.t('Gallery'), { page: 'gallery' }); %></li>
 				<% } %>
 
 				<li><%== can.route.link( $.t('More...'), { page: '' }); %></li>

@@ -28,18 +28,15 @@ steal(
 		can.route( ":page/:action" );
 		can.route( ":page/:action/:id" );
 
-		// we need to call this in order to get url params
-		can.route.ready(true);
+		// we need to set can.route.ready to true in order to get url params
+		// with false we suspend route init
+		can.route.ready(false);
 		
-		// get url params
-		var urlParams = can.route.attr();
-		//console.log(can.route.attr());
-
 		// language settings
 		var lang,
 			supportedLangs = ['cs', 'de', 'en', 'es', 'fr', 'gb', 'it'];
 
-		if (urlParams['lang'])	// if language is in url
+		if ( 0 && urlParams['lang'])	// #TODO if language is in localStorage
 			lang = urlParams['lang'];
 		else	// we take the language from browser
 			lang = (navigator.language) ? navigator.language : navigator.userLanguage;
@@ -66,6 +63,7 @@ steal(
 		// when everything important is initialized, update the route so that 
 		// controls waiting for route change can set the right state
 		$('body').on('navbar-ready', function(){
+			can.route.ready(true);
 			var data = can.route.attr();	// current route data
 			data.load = 1;	// we add new attribute
 			can.route.attr(data);	// set the "new" route -> change event
@@ -76,13 +74,15 @@ steal(
 		});
 
 		USER.bind( 'loggedIn', function( ev, newVal, oldVal ) {
-			console.log( 'loggedIn changed to', newVal );
+			//console.log( 'loggedIn changed to', newVal );
 			// when login is successful, launch the application
-			var navbar = new Navbar($("#navbar"));
+			if (newVal == true) {
+				var navbar = new Navbar($("#navbar"));
+			}
 		});
 
 		$('body').on('show-login', function(){
-			console.log('show-login');
+			//console.log('show-login');
 			$("#navbar").empty();
 
 			// login controller

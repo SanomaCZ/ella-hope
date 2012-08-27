@@ -16,7 +16,7 @@ steal(
 				}
 
 				USER.attr(retrievedObject);
-				console.log(USER);
+				//console.log(USER);
 
 				$.ajax({
 					type: 'POST',

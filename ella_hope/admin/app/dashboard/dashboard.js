@@ -23,17 +23,6 @@ steal(
 		init: function(element, options){
 
 			this.element.html(can.view(this.options.initView, this.options));
-		},
-
-		'{can.route} page': function(route, ev, newVal, oldVal){
-   			if (newVal == "dashboard") {
-			 	this.element.html(can.view(this.options.initView, this.options));
-			}
-        },
-
-		'route': function(data) {
-      		// will catch hash: #
-      	}
-
+		}
 	})
 )

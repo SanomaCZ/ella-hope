@@ -25,7 +25,7 @@ steal(
 
 			// if user is already logged in, skip login page
 			if (User.checkLogin()) {
-				console.log('login success');
+				//console.log('login success');
 			}
 			else {
 				// show login page
@@ -77,9 +77,9 @@ steal(
 
 		"{USER} loggedIn": function() {
 			var self = this;
-			// console.log(this.options.user);
+			
 			if (USER.attr('loggedIn')) {
-				console.log('USER logged in ;-)');
+				//console.log('USER logged in ;-)');
 				$('body').removeClass(self.options.loginPageClass);
 			}
 		},
