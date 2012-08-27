@@ -132,8 +132,8 @@ INSTALLED_APPS = (
 
     'ella.core',
     'ella.photos',
-    'ella.articles',
 
+    'object_permissions',
     'tastypie',
     'ella_hub',
     'ella_hope',
@@ -144,6 +144,11 @@ RESOURCE_MODULES = (
     'ella_hub.ella_resources',
 )
 
+# Needed by object_permissions app (django-object-permissions)
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'object_permissions.backend.ObjectPermBackend',
+)
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

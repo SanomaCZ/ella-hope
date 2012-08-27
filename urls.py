@@ -16,7 +16,7 @@ admin.autodiscover()
 admin_api = EllaHubApi("admin-api")
 resource_modules = admin_api.collect_resources()
 admin_api.register_resources(resource_modules)
-
+admin_api.register_view_model_permission()
 
 
 urlpatterns = patterns('',
