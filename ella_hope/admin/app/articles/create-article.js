@@ -1,15 +1,25 @@
-Create = can.Control(
-	/* @static */
-	{
-		defaults: {
-			autosaveInterval: 30 * 1000	// how ofter is draft automatically saved
-		}
-	},
-	/* @prototype */
-	{
+ArticleCreate = can.Control(
+/* @static */
+{
+	defaults: {
+		autosaveInterval: 30 * 1000	// how ofter is draft automatically saved
+	}
+},
+/* @prototype */
+{
 	draft: null,			// current draft object
 	previousDraftValues: null,	// use this for comparison old and new draft values
 	autosaveTimer: null,	// timer for autosave, we need this to stop timer
+
+	init: function() {
+
+		if (this.options.type == 'draft') {
+			this.showDraft(this.options.article);
+		}
+		else {
+			this.show(this.options.article);
+		}
+	},
 
 	/**
 	 * displays form for creating/updating article
@@ -97,6 +107,26 @@ Create = can.Control(
 			$("#publish_from_time").timepicker(timeOptions);
 			$("#publish_to_time").timepicker(timeOptions);
 
+			// test settings - setting some attributes to read-only or disabled
+			USER.auth_tree.article.fields.title._data.readonly = true;
+			USER.auth_tree.article.fields.publish_to._data.disabled = true;
+
+			// here we check for user privileges
+			// users have different roles and they can edit different form fields
+			// some fields are disabled for some roles, some fields are read-only
+			// privileged are save after user logs in and are stored on localStorage
+			$.each(USER.auth_tree.article.fields, function(name, value){
+				if (value._data) {
+					if (value._data.readonly == true) {
+						$('.'+name).attr('readonly', true);
+						//console.log('setting ' + name + ' to readonly');
+					}
+					if (value._data.disabled == true) {
+						$('.'+name).parent('.row').remove();
+						//console.log('hiding ' + name);
+					}
+				}
+			});
 		});
 
 		this.element.slideDown(200);
@@ -110,17 +140,6 @@ Create = can.Control(
 	showDraft: function(draft) {
 		this.draft = draft;
 		this.show(draft.data);
-	},
-
-	hide: function(){
-		this.element.slideUp(200);
-	},
-	'{document} #new-article click': function(){
-		this.show();
-	},
-
-	'{document} .edit-article click': function(el, ev){
-		//this.show(el.data('article'));
 	},
 
 	/**
@@ -241,14 +260,24 @@ Create = can.Control(
 		this.draft.save();
 
 	},
+	saveArticle: function() {
+
+		this.stopAutosave();
+		this.createArticle();
+	},
 	'.article input keyup': function(el, ev) {
+
+		ev.preventDefault();
+
 		if(ev.keyCode == 13){
-			this.createArticle(el);
+			this.saveArticle();
 		}
 	},
-	'.save click' : function(el){
-		this.stopAutosave();
-		this.createArticle(el);
+	'.save click' : function(el, ev){
+
+		ev.stopPropagation();
+
+		this.saveArticle();
 	},
 	'.autosave click' : function(el) {
 		this.saveDraft(el);
@@ -262,7 +291,6 @@ Create = can.Control(
 			this.draft.destroy();
 		}
 
-		// hide article form
-		this.hide();
+		can.route.attr({page:'articles'}, true);
 	}
 });

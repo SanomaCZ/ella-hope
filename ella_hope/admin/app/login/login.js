@@ -24,10 +24,8 @@ steal(
 		init : function(el, options){
 
 			// if user is already logged in, skip login page
-			if (User.checkLogin()) {
-				//console.log('login success');
-			}
-			else {
+			if (!User.checkLogin()) {
+				// console.log('show login page');
 				// show login page
 				this.element.html(can.view(this.options.initView, this.options));
 
@@ -36,6 +34,8 @@ steal(
 			}
 
 		},
+
+		// curl --dump-header - -H "Content-Type: application/json" -X POST --data 'username=mrpohoda&password=mrpohoda' http://crawler.bfhost.cz:33333/admin-api/login/
 
 		/**
 		 * login button clicked
@@ -99,7 +99,8 @@ steal(
 								loggedIn: false
 							});
 							setTimeout(function(){
-								can.route.attr({page: 'user', action: 'login'});
+								can.route.attr({page: 'user', action: 'login'}, true);
+								//$('body').trigger('show-login');
 							}, 500);
 							//$('body').trigger('show-login');
 						}

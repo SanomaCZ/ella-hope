@@ -11,9 +11,9 @@ steal(
 				// Retrieve the object from storage
 				var retrievedObject = localStorage.getItem('currentUserStorage');
 
-				if (this.validateApiKey()) {
-					console.log('api key valid');
-				}
+				// if (this.validateApiKey()) {
+				// 	console.log('api key valid');
+				// }
 
 				USER.attr(retrievedObject);
 				//console.log(USER);
@@ -35,7 +35,8 @@ steal(
 						USER.attr({
 							loggedIn: true,
 							api_key: data.api_key,
-							username: userData.username
+							username: userData.username,
+							auth_tree: data.auth_tree
 						});
 
 						// Put the object into storage

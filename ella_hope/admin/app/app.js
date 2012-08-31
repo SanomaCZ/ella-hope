@@ -52,6 +52,9 @@ steal(
 		$.jsperanto.init(
 			function(t){
 				//console.log($.t('france'));
+				
+				// show login page
+				// if user is already logged in, login page is skipped
 				$('body').trigger('show-login');
 			},
 			{
@@ -64,25 +67,22 @@ steal(
 		// controls waiting for route change can set the right state
 		$('body').on('navbar-ready', function(){
 			can.route.ready(true);
-			var data = can.route.attr();	// current route data
-			data.load = 1;	// we add new attribute
-			can.route.attr(data);	// set the "new" route -> change event
-			data = can.route.attr();	// current route data
-			delete data.load;	// delete newly added attribute to return to base state
-			can.route.attr(data, true);	// set new route -> another change event
 			$('body').off('navbar-ready');	// cancel listening
 		});
 
+		// when login is successful, launch the application
 		USER.bind( 'loggedIn', function( ev, newVal, oldVal ) {
 			//console.log( 'loggedIn changed to', newVal );
-			// when login is successful, launch the application
 			if (newVal == true) {
 				var navbar = new Navbar($("#navbar"));
 			}
 		});
 
+		// show login screen if user is not logged in
 		$('body').on('show-login', function(){
 			//console.log('show-login');
+			
+			// hide navbar
 			$("#navbar").empty();
 
 			// login controller
@@ -114,7 +114,7 @@ steal(
 				$('body').trigger('show-login');
 			}
 			else {
-				console.log('ajax error ' + xhr.status);
+				//console.log('ajax error ' + xhr.status);
 			}
 		}); 
 	}

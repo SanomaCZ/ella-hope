@@ -39,43 +39,45 @@ steal(
 		init: function(element, options){
 
 			this.element.html(can.view(this.options.initView, this.options));
-
-			// show the list of articles
 			this.listArticles();
+		},
 
-			// create form for new article
-			var create = new Create('#create', {
-				categories: {}
-			});
-
-			this.element.trigger('articles-ready');
+		':page route': function( data ) {
+			if (data.page == 'articles') {
+				this.init();
+			}
+		},
+		
+		':page/:action route': function( data ) {
+			if (data.action == 'new') {
+				var articleCreate = new ArticleCreate(this.element, {});
+			}
 		},
 
 		':page/:action/:id route': function( data ) {
-			//console.log(data);
-			if (data.page == 'articles') {
-				if (data.action == 'edit') {
-					if (data.id > 0) {
-						Article.findOne({id: data.id}, function(article){
-							$('#create').data('controls')[0].show(article);
-							//create.show(article);
-						})
-					}
+
+			var self = this;
+
+			if (data.action == 'edit') {
+				if (data.id > 0) {
+					Article.findOne({id: data.id}, function(article){
+						new ArticleCreate(self.element, {
+							type: article,
+							article: article
+						});
+					})
 				}
 			}
-			else if (data.page == 'drafts') {
-				if (data.action == 'edit') {
-					if (data.id > 0) {
-						Draft.findOne({id: data.id}, function(draft){
-							$('#create').data('controls')[0].showDraft(draft);
-							//create.show(article);
-						})
-					}
+			else if (data.action == 'edit-draft') {
+				if (data.id > 0) {
+					Draft.findOne({id: data.id}, function(draft){
+						new ArticleCreate(self.element, {
+							type: 'draft',
+							article: draft
+						});
+					})
 				}
 			}
-   // 			if (newVal == "dashboard") {
-			//  	this.element.html(can.view(this.options.initView, this.options));
-			// }
         },
 
 		/**

@@ -18,6 +18,8 @@ steal(
 	},
 	/* @prototype */
 	{
+		currentControl: null,
+
 		/**
 		 * Initialize a new instance of the Navbar controller.
 		 */
@@ -40,25 +42,32 @@ steal(
 		 */
 		"{can.route} page set": function( selector, event, newVal, oldVal ) {
 
-			console.log('page set ' + newVal);
+			//console.log('page set ' + newVal);
 			
-			// remove all binded events and all child nodes
-			$("#content").unbind().empty();
+			// remove all binded events of the current control
+			if (this.currentControl) {
+				this.currentControl.destroy();
+			}
+			
+			// remove all child nodes
+			$("#content").empty();
 
-			// remove active class from old active element
-      		$('.nav').find('li.active').removeClass('active');
+			// remove highlight (active class) from currently highlighted element
+			$('.nav').find('li.active').removeClass('active');
 	
+			// create new Control based on hash
 			switch (newVal) {
 				case 'articles':
-					var articles = new Articles($("#content"), {});
+					this.currentControl = new Articles($("#content"), {});
 					$('.nav .articles').addClass('active');
 					break;
 				case 'dashboard':
-					var dashboard = new Dashboard($("#content"), {});
+					this.currentControl = new Dashboard($("#content"), {});
 					$('.nav .dashboard').addClass('active');
 					break;
+				case 'user':
 				default:
-					var dashboard = new Dashboard($("#content"), {});
+					this.currentControl = new Dashboard($("#content"), {});
 					$('.nav .dashboard').addClass('active');
 					break;
 			}

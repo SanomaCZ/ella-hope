@@ -14,8 +14,8 @@
 				var draftDate = timestamp.toString('yyyy-MM-dd');
 				var draftTime = timestamp.toString('HH:mm');
 
-				var editUrl = can.route.url({ page: 'drafts', action: 'edit', id: draft.id });
-				var deleteUrl = can.route.url({ page: 'drafts', action: 'delete', id: draft.id });
+				var editUrl = can.route.url({ page: 'articles', action: 'edit-draft', id: draft.id });
+				var deleteUrl = can.route.url({ page: 'articles', action: 'delete-draft', id: draft.id });
 				%>
 				<tr>
 					<td><a href="<%== editUrl %>"><%= draft.data.title %></a></td>
@@ -57,9 +57,7 @@
 					</a>
 
 					<!-- Delete -->
-					<!--
 					<a <%= (el) -> el.data( 'article', article ) %> href="javascript://" class="btn btn-mini btn-danger delete" data-confirm="<%= $.t('Are you sure you want to delete the article?') %>"><%= $.t('Delete');%> <i class="icon-trash icon-white"></i></a>
-					-->
 				</td>
 			</tr>
 		<% } ) %>

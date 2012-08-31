@@ -18,7 +18,19 @@
 					<li class="gallery"><%== can.route.link( $.t('Gallery'), { page: 'gallery' }); %></li>
 				<% } %>
 
-				<li><%== can.route.link( $.t('More...'), { page: '' }); %></li>
+				<li class="photos"><%== can.route.link( $.t('Photos/videos'), { page: 'photos' }); %></li>
+
+				<li class="gallery"><%== can.route.link( $.t('Photogallery'), { page: 'gallery' }); %></li>
+
+				<li class="contest"><%== can.route.link( $.t('Contests'), { page: 'contest' }); %></li>
+
+				<li class="quiz"><%== can.route.link( $.t('Quiz'), { page: 'quiz' }); %></li>
+
+				<li class="poll"><%== can.route.link( $.t('Polls'), { page: 'poll' }); %></li>
+
+				<li class="user"><%== can.route.link( $.t('Users'), { page: 'user' }); %></li>
+
+				<li class="admin"><%== can.route.link( $.t('Admin'), { page: 'admin' }); %></li>
 
 				<li class="dropdown" id="accountmenu">
 					<a class="dropdown-toggle" data-toggle="dropdown" href="#"><%= $.t('Account Settings') %><b class="caret"></b></a>

@@ -2,8 +2,7 @@
 	<h1><%= $.t('Articles') %></h1>
 </div>
 
-<a id="new-article" class="btn btn-primary"><%= $.t('New article') %></a>
-<div id="create"></div>
+<a href="<%= can.route.url({ page: 'articles', action: 'new' })%>" class="btn btn-primary"><%= $.t('New article') %></a>
 
 <hr>
 

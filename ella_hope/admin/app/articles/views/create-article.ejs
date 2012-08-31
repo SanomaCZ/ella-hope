@@ -1,6 +1,10 @@
 <%#  console.log(article); %>
 <%#  console.log(user); %>
 
+<div class="page-header">
+	<h1><%= $.t('Articles - Edit') %></h1>
+</div>
+
 <div class="hero-unit">
 	<form class="article">
 
@@ -10,7 +14,7 @@
 			<div>
 				<label for="title"><%= $.t('Title')%></label>
 			</div>
-			<input class="span4" type="text" name="title" id="title" placeholder="<%= $.t('Add Title')%>" 
+			<input class="span4 title" type="text" name="title" id="title" placeholder="<%= $.t('Add Title')%>" 
 				value="<%= article.title %>" <%= article.title ? "" : "class=empty" %>>
 		</div>
 
@@ -72,7 +76,7 @@
 
 		<div class="row">
 			<div>
-				<label for="content"><%= $.t('Description')%></label>
+				<label for="description"><%= $.t('Description')%></label>
 			</div>
 			<textarea class="span4" name="description" id="description" placeholder="<%= $.t('Add Description')%>" <%= article.attr('description') ? "" : "class='empty'" %>><%= article.description %></textarea>
 		</div>
@@ -87,16 +91,16 @@
 			<div>
 				<label for="publish_from"><%= $.t('Publish From')%></label>
 			</div>
-			<input class="span2" type="datetime-local" name="publish_from_date" id="publish_from_date" value="<%= article.publish_from_date %>" />
+			<input class="span2 publish_from" type="datetime-local" name="publish_from_date" id="publish_from_date" value="<%= article.publish_from_date %>" />
 
-			<input type="text" class="timepicker-default span1" name="publish_from_time" id="publish_from_time" value="<%= article.publish_from_time %>" />
+			<input type="text" class="timepicker-default span1 publish_from" name="publish_from_time" id="publish_from_time" value="<%= article.publish_from_time %>" />
 		</div>
 
 		<div class="row">
 			<div>
 				<label for="publish_to"><%= $.t('Publish To')%></label>
 			</div>
-			<input class="span2" type="datetime-local" name="publish_to_date" id="publish_to_date" value="<%= article.publish_to_date %>" />
+			<input class="span2 publish_to" type="datetime-local" name="publish_to_date" id="publish_to_date" value="<%= article.publish_to_date %>" />
 
 			<input type="text" class="timepicker-default span1" name="publish_to_time" id="publish_to_time" value="<%= article.publish_to_time %>" />
 		</div>
