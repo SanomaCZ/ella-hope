@@ -1,3 +1,25 @@
 #date-alert {
 	display: none;
 }
+
+.article-state {
+	width: 20px;
+}
+.article-state.added {
+	background-color: #fff !important;
+}
+.article-state.ready {
+	background-color: yellow !important;
+}
+.article-state.approved {
+	background-color: orange !important;
+}
+.article-state.published {
+	background-color: green !important;
+}
+.article-state.postponed {
+	background-color: blue !important;
+}
+.article-state.deleted {
+	background-color: red !important;
+}

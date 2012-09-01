@@ -38,6 +38,7 @@
 <table class="table table-striped">
 	<thead>
 		<tr>
+			<th>&nbsp;</th>
 			<th><%= $.t('Title') %></th>
 			<th><%= $.t('Actions') %></th>
 		</tr>
@@ -49,6 +50,7 @@
 			var deleteUrl = can.route.url({ page: 'articles', action: 'delete', id: article.id });
 			%>
 			<tr>
+				<td class="article-state <%= article.state %>">&nbsp;</td>
 				<td><a href="<%== editUrl %>"><%= article.title %></a></td>
 				<td>
 					<!-- Edit -->

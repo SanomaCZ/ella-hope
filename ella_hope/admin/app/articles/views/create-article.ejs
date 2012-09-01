@@ -107,6 +107,27 @@
 
 		<div class="row">
 			<div>
+				<label for="state"><%= $.t('State')%></label>
+			</div>
+			<select name="state" id="state" data-placeholder="<%= $.t('Choose state')%>" class="chzn-select">
+				<% if (states) { %>
+					<% $.each(states, function(i, state){ %>
+					<%
+						var selected = false;
+						if (article.state == state) {
+							selected = true;
+						}
+					%>
+						<option value="<%= state %>" <%= selected ? "selected=selected" : "" %>>
+							<%= state %>
+						</option>
+					<% }) %>
+				<% } %>
+			</select>
+		</div>
+
+		<div class="row">
+			<div>
 				<label for="published"><%= $.t('Published')%></label>
 			</div>
 			<input type="checkbox" name="published" id="published" <%= article.published ? 'checked' : '' %> value="true" />

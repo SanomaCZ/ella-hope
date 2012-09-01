@@ -2,7 +2,8 @@ ArticleCreate = can.Control(
 /* @static */
 {
 	defaults: {
-		autosaveInterval: 30 * 1000	// how ofter is draft automatically saved
+		autosaveInterval: 30 * 1000,	// how ofter is draft automatically saved
+		articleStates: ["added", "ready", "approved", "published", "postponed",	"deleted"]
 	}
 },
 /* @prototype */
@@ -65,7 +66,8 @@ ArticleCreate = can.Control(
 		can.view( '//app/articles/views/create-article.ejs', {
   			article: this.article,
 			user: User.findAll(),
-			category: Category.findAll()
+			category: Category.findAll(),
+			states: this.options.articleStates
 		} ).then(function( frag ){
 			self.element.html(frag);
 
@@ -108,14 +110,14 @@ ArticleCreate = can.Control(
 			$("#publish_to_time").timepicker(timeOptions);
 
 			// test settings - setting some attributes to read-only or disabled
-			USER.auth_tree.article.fields.title._data.readonly = true;
-			USER.auth_tree.article.fields.publish_to._data.disabled = true;
+			USER.auth_tree.articles.article.fields.title._data.readonly = true;
+			USER.auth_tree.articles.article.fields.publish_to._data.disabled = true;
 
 			// here we check for user privileges
 			// users have different roles and they can edit different form fields
 			// some fields are disabled for some roles, some fields are read-only
 			// privileged are save after user logs in and are stored on localStorage
-			$.each(USER.auth_tree.article.fields, function(name, value){
+			$.each(USER.auth_tree.articles.article.fields, function(name, value){
 				if (value._data) {
 					if (value._data.readonly == true) {
 						$('.'+name).attr('readonly', true);
