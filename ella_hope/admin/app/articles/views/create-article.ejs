@@ -23,7 +23,7 @@
 				<label for="category"><%= $.t('Category')%></label>
 			</div>
 			<select name="category" id="category" data-placeholder="<%= $.t('Choose category')%>" class="chzn-select category">
-				<% if (user) { %>
+				<% if (category) { %>
 					<% $.each(category, function(i, cat){ %>
 					<%
 						var selected = false;
@@ -46,21 +46,21 @@
 				<label for="authors"><%= $.t('Author(s)')%></label>
 			</div>
 			<select name="authors[]" id="authors" data-placeholder="<%= $.t('Choose authors')%>" class="chzn-select span4 authors" multiple>
-				<% if (user) { %>
-					<% $.each(user, function(i, author){ %>
+				<% if (author) { %>
+					<% $.each(author, function(i, a){ %>
 					<%
 						var selected = false;
 						if (article.authors) {
 							for (var i = 0; i < article.authors.length; i++) {
-								if (article.authors[i]['id'] == author.id) {
+								if (article.authors[i]['id'] == a.id) {
 									selected = true;
 									break;
 								}
 							}
 						}
 					%>
-						<option value="<%= author.resource_uri %>" <%= selected ? "selected=selected" : "" %>>
-							<%= author.username %>
+						<option value="<%= a.resource_uri %>" <%= selected ? "selected=selected" : "" %>>
+							<%= a.name %>
 						</option>
 					<% }) %>
 				<% } %>

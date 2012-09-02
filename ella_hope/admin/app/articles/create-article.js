@@ -65,7 +65,7 @@ ArticleCreate = can.Control(
 		// render article form
 		can.view( '//app/articles/views/create-article.ejs', {
   			article: this.article,
-			user: User.findAll(),
+			author: Author.findAll(),
 			category: Category.findAll(),
 			states: this.options.articleStates
 		} ).then(function( frag ){
@@ -260,7 +260,7 @@ ArticleCreate = can.Control(
 
 		// this is how draft should look like
 		var obj = {
-			"user": "/admin-api/user/6/",
+			//"user": "/admin-api/user/6/",
 			"content_type": 'article',
 			"data" : values
 		}
