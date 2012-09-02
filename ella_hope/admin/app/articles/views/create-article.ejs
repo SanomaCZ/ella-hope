@@ -15,14 +15,14 @@
 				<label for="title"><%= $.t('Title')%></label>
 			</div>
 			<input class="span4 title" type="text" name="title" id="title" placeholder="<%= $.t('Add Title')%>" 
-				value="<%= article.title %>" <%= article.title ? "" : "class=empty" %>>
+				value="<%= article.title %>" <%= article.title ? "" : "" %>>
 		</div>
 
 		<div class="row">
 			<div>
 				<label for="category"><%= $.t('Category')%></label>
 			</div>
-			<select name="category" id="category" data-placeholder="<%= $.t('Choose category')%>" class="chzn-select">
+			<select name="category" id="category" data-placeholder="<%= $.t('Choose category')%>" class="chzn-select category">
 				<% if (user) { %>
 					<% $.each(category, function(i, cat){ %>
 					<%
@@ -45,7 +45,7 @@
 			<div>
 				<label for="authors"><%= $.t('Author(s)')%></label>
 			</div>
-			<select name="authors[]" id="authors" data-placeholder="<%= $.t('Choose authors')%>" class="chzn-select span4" multiple>
+			<select name="authors[]" id="authors" data-placeholder="<%= $.t('Choose authors')%>" class="chzn-select span4 authors" multiple>
 				<% if (user) { %>
 					<% $.each(user, function(i, author){ %>
 					<%
@@ -71,14 +71,14 @@
 			<div>
 				<label for="content"><%= $.t('Content')%></label>
 			</div>
-			<textarea class="span4" rows="10" name="content" id="content" placeholder="<%= $.t('Add Content')%>" <%= article.attr('content') ? "" : "class='empty'" %>><%= article.content %></textarea>
+			<textarea class="span4 content" rows="10" name="content" id="content" placeholder="<%= $.t('Add Content')%>" <%= article.attr('content') ? "" : "class='empty'" %>><%= article.content %></textarea>
 		</div>
 
 		<div class="row">
 			<div>
 				<label for="description"><%= $.t('Description')%></label>
 			</div>
-			<textarea class="span4" name="description" id="description" placeholder="<%= $.t('Add Description')%>" <%= article.attr('description') ? "" : "class='empty'" %>><%= article.description %></textarea>
+			<textarea class="span4 description" name="description" id="description" placeholder="<%= $.t('Add Description')%>" <%= article.attr('description') ? "" : "class='empty'" %>><%= article.description %></textarea>
 		</div>
 
 		<div class="row">
@@ -109,7 +109,7 @@
 			<div>
 				<label for="state"><%= $.t('State')%></label>
 			</div>
-			<select name="state" id="state" data-placeholder="<%= $.t('Choose state')%>" class="chzn-select">
+			<select name="state" id="state" data-placeholder="<%= $.t('Choose state')%>" class="chzn-select state">
 				<% if (states) { %>
 					<% $.each(states, function(i, state){ %>
 					<%
@@ -130,7 +130,7 @@
 			<div>
 				<label for="published"><%= $.t('Published')%></label>
 			</div>
-			<input type="checkbox" name="published" id="published" <%= article.published ? 'checked' : '' %> value="true" />
+			<input class="published" type="checkbox" name="published" id="published" <%= article.published ? 'checked' : '' %> value="true" />
 		</div>
 
 	</form>

@@ -110,8 +110,8 @@ ArticleCreate = can.Control(
 			$("#publish_to_time").timepicker(timeOptions);
 
 			// test settings - setting some attributes to read-only or disabled
-			USER.auth_tree.articles.article.fields.title._data.readonly = true;
-			USER.auth_tree.articles.article.fields.publish_to._data.disabled = true;
+			// USER.auth_tree.articles.article.fields.title._data.readonly = true;
+			// USER.auth_tree.articles.article.fields.publish_to._data.disabled = true;
 
 			// here we check for user privileges
 			// users have different roles and they can edit different form fields
