@@ -5,5 +5,6 @@ steal(
 	, "./draft.js"
 	, "./category.js"
 	, "./listing.js"
+	, "./photo.js"
 	, "./user.js"
 );

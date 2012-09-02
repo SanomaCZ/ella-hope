@@ -1,0 +1,11 @@
+<div class="page-header">
+	<h1><%= $.t('Photos/videos') %></h1>
+</div>
+
+<a href="<%= can.route.url({ page: 'photo', action: 'new-photo' })%>" class="btn btn-primary"><%= $.t('New photo') %></a>
+<a href="<%= can.route.url({ page: 'photo', action: 'new-video' })%>" class="btn btn-primary"><%= $.t('New video') %></a>
+
+
+<hr>
+
+<div id="inner-content"></div>

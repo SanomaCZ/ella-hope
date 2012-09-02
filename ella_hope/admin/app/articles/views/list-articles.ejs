@@ -50,7 +50,7 @@
 			var deleteUrl = can.route.url({ page: 'articles', action: 'delete', id: article.id });
 			%>
 			<tr>
-				<td class="article-state <%= article.state %>">&nbsp;</td>
+				<td class="article-state <%= article.state %>" title="<%= article.state %>">&nbsp;</td>
 				<td><a href="<%== editUrl %>"><%= article.title %></a></td>
 				<td>
 					<!-- Edit -->

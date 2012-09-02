@@ -8,6 +8,7 @@ steal(
 	, './navbar/navbar.js'				// navigation bar
 	, './dashboard/dashboard.js'		// dasbboard module
 	, './articles/articles.js'			// articles module
+	, './photos/photos.js'				// photos module
 	, './resources/js/jquery.jsperanto.js'	// translation library
 	, './resources/js/jquery.cookie.js'	// cookies library
 )
