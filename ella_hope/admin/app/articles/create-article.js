@@ -120,7 +120,18 @@ ArticleCreate = can.Control(
 			$.each(USER.auth_tree.articles.article.fields, function(name, value){
 				if (value._data) {
 					if (value._data.readonly == true) {
-						$('.'+name).attr('readonly', true);
+						// if element's type is select, there is no attribute readonly
+						// for these kind of elements we need to use disabled
+						// elements won't be sent to the server, but it does not matter
+						$el = $('.'+name);
+						if ($el.is('select')) {
+							$el.attr('disabled', true);
+							// let chosen select know that there was a change
+							$el.trigger("liszt:updated");
+						}
+						else {
+							$el.attr('readonly', true);
+						}
 						//console.log('setting ' + name + ' to readonly');
 					}
 					if (value._data.disabled == true) {

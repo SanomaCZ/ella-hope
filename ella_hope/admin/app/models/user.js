@@ -26,7 +26,7 @@ steal(
 					async: false,
 					success : function(data, textStatus, xmlHttpRequest){
 						// console.log('success');
-						console.log(data);
+						//console.log(data);
 						// console.log(textStatus);
 						// console.log(xmLHttpRequest);
 						// $.cookie('api_key', data.api_key);
