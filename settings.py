@@ -136,12 +136,14 @@ INSTALLED_APPS = (
     'object_permissions',
     'tastypie',
     'ella_hub',
+    'ella_galleries',
     'ella_hope',
 )
 
 # API resources
 RESOURCE_MODULES = (
     'ella_hub.ella_resources',
+    'ella_hub.extern_resources',
 )
 
 # Needed by object_permissions app (django-object-permissions)
