@@ -14,8 +14,8 @@ admin.autodiscover()
 
 # admin API setup
 admin_api = EllaHubApi("admin-api")
-resource_modules = admin_api.collect_resources()
-admin_api.register_resources(resource_modules)
+resources = admin_api.collect_resources()
+admin_api.register_resources(resources)
 admin_api.register_view_model_permission()
 
 

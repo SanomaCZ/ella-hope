@@ -135,8 +135,9 @@ INSTALLED_APPS = (
 
     'object_permissions',
     'tastypie',
-    'ella_hub',
     'ella_galleries',
+    'ella_wikipages',
+    'ella_hub',
     'ella_hope',
 )
 
