@@ -40,6 +40,7 @@
 		<tr>
 			<th>&nbsp;</th>
 			<th><%= $.t('Title') %></th>
+			<th><%= $.t('Publish from') %></th>
 			<th><%= $.t('Actions') %></th>
 		</tr>
 	</thead>
@@ -52,6 +53,7 @@
 			<tr>
 				<td class="article-state <%= article.state %>" title="<%= article.state %>">&nbsp;</td>
 				<td><a href="<%== editUrl %>"><%= article.title %></a></td>
+				<td><%= article.publish_from %></td>
 				<td>
 					<!-- Edit -->
 					<a <%= (el) -> el.data( 'article', article ) %> href="<%= editUrl %>" class="btn btn-mini edit-article">

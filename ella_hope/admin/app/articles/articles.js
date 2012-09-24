@@ -50,7 +50,7 @@ steal(
 		
 		':page/:action route': function( data ) {
 			if (data.action == 'new') {
-				var articleCreate = new ArticleCreate(this.element, {});
+				new ArticleCreate(this.element, {});
 			}
 		},
 

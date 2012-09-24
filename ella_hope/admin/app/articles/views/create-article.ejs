@@ -67,11 +67,35 @@
 			</select>
 		</div>
 
+		<div id="photosModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              <h3 id="myModalLabel"><%= $.t('Insert image') %></h3>
+            </div>
+            <div class="modal-body">
+            	<table class="table">
+				<% list(photos, function(photo, index) { %>
+					<tr <%= (el) -> el.data( 'photo', photo) %>>
+						<td><input type="radio" name="photo" /></td>
+						<td><img src="<%= photo.public_url %>" height="50" /></td>
+						<td><%= photo.title %></td>
+					</tr>
+				<% }); %>
+				</table>
+            </div>
+            <div class="modal-footer">
+              <button class="btn" data-dismiss="modal"><%= $.t('Close') %></button>
+              <button class="btn btn-primary"><%= $.t('Insert') %></button>
+            </div>
+          </div>
+
 		<div class="row">
 			<div>
 				<label for="content"><%= $.t('Content')%></label>
 			</div>
 			<textarea class="span4 content" rows="10" name="content" id="content" placeholder="<%= $.t('Add Content')%>" <%= article.attr('content') ? "" : "class='empty'" %>><%= article.content %></textarea>
+
+			<a data-target="#photosModal" role="button" class="btn btn-mini" data-toggle="modal"><%= $.t('Insert image')%></a>
 		</div>
 
 		<div class="row">

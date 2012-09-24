@@ -67,7 +67,8 @@ ArticleCreate = can.Control(
   			article: this.article,
 			author: Author.findAll(),
 			category: Category.findAll(),
-			states: this.options.articleStates
+			states: this.options.articleStates,
+			photos: Photo.findAll()
 		} ).then(function( frag ){
 			self.element.html(frag);
 
@@ -163,7 +164,7 @@ ArticleCreate = can.Control(
 	initAutosave: function(interval) {
 
 
-		console.log('init autosave');
+		//console.log('init autosave');
 
 		var self = this;
 
@@ -182,9 +183,11 @@ ArticleCreate = can.Control(
 
 	createArticle: function() {
 
-		var form = this.element.find('form');
-		var values = form.serialize();
-		values = can.deparam(values);
+		console.log('create');
+
+		var form = this.element.find('form'),
+			values = form.serialize(),
+			values = can.deparam(values);
 
 		values['announced'] = false;
 		values['app_data'] =  "{}";
@@ -227,7 +230,7 @@ ArticleCreate = can.Control(
 			if (this.draft) {
 				this.draft.destroy();
 			}
-			
+
 			can.route.attr({page:'articles'}, true);
 		}
 	},
@@ -279,7 +282,7 @@ ArticleCreate = can.Control(
 		this.createArticle();
 	},
 	'.article input keyup': function(el, ev) {
-
+		console.log('keyup');
 		ev.preventDefault();
 
 		if(ev.keyCode == 13){
@@ -292,7 +295,7 @@ ArticleCreate = can.Control(
 
 		this.saveArticle();
 	},
-	'.autosave click' : function(el) {
+	'.autosave click' : function(el, ev) {
 		this.saveDraft(el);
 	},
 	'.cancel click' : function(){
@@ -305,5 +308,33 @@ ArticleCreate = can.Control(
 		}
 
 		can.route.attr({page:'articles'}, true);
+	},
+
+	/**
+	 * when user clicks on table row, checked the radio button on that row
+	 * @param  {[type]} el [description]
+	 * @param  {[type]} ev [description]
+	 * @return {[type]}    [description]
+	 */
+	'#photosModal tr click':function(el, ev) {
+		$(el).find('input').attr('checked', 'checked');
+	},
+
+	/**
+	 * hide dialog where user can choose photo and insert it into article
+	 * @param  {[type]} el [description]
+	 * @param  {[type]} ev [description]
+	 * @return {[type]}    [description]
+	 */
+	'#photosModal .btn-primary click':function(el, ev) {
+		ev.preventDefault();
+
+		// get checked radio button, it's tr parent and photo from data attribute
+		var photo = $('input[name=photo]:checked', '#photosModal').parents('tr').data('photo');
+
+		$('.article #content').val($('.article #content').val()+' '+photo.resource_uri); 
+		//console.log(photo);
+
+		$('#photosModal').modal('hide');
 	}
 });
