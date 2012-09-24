@@ -184,7 +184,7 @@ ArticleCreate = can.Control(
 
 		var form = this.element.find('form');
 		var values = form.serialize();
-		var values = can.deparam(values);
+		values = can.deparam(values);
 
 		values['announced'] = false;
 		values['app_data'] =  "{}";

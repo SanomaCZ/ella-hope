@@ -1,6 +1,7 @@
 steal(
 	//'./css/search_result.css'
-	'./photos.css'
+	'./upload-photos.js'
+	, './photos.css'
 	, '//app/resources/js/bootstrap.min.js'
 	, '//app/resources/js/bootbox.min.js'	// alert, confirm, flexible dialogs
 	, '//app/resources/js/date.js'	// date parse
@@ -38,18 +39,22 @@ steal(
 		init: function(element, options){
 
 			this.element.html(can.view(this.options.initView, this.options));
-			this.listPhotos();
+
+			if (!can.route.attr('action')) {
+				this.listPhotos();
+			}
 		},
 
 		':page route': function( data ) {
 			if (data.page == 'photos') {
 				this.init();
+				this.listPhotos();
 			}
 		},
 		
 		':page/:action route': function( data ) {
-			if (data.action == 'new') {
-				var articleCreate = new ArticleCreate(this.element, {});
+			if (data.action == 'new-photos') {
+				var photosUpload = new PhotosUpload(this.element, {});
 			}
 		},
 
@@ -59,20 +64,9 @@ steal(
 
 			if (data.action == 'edit') {
 				if (data.id > 0) {
-					Article.findOne({id: data.id}, function(article){
-						new ArticleCreate(self.element, {
-							type: article,
-							article: article
-						});
-					})
-				}
-			}
-			else if (data.action == 'edit-draft') {
-				if (data.id > 0) {
-					Draft.findOne({id: data.id}, function(draft){
-						new ArticleCreate(self.element, {
-							type: 'draft',
-							article: draft
+					Photo.findOne({id: data.id}, function(photo){
+						new PhotosUpload(self.element, {
+							photo: photo
 						});
 					})
 				}
@@ -91,7 +85,7 @@ steal(
 
 			bootbox.confirm(el.data('confirm'), function(confirmed) {
 				if (confirmed) {
-					el.data('article').destroy();
+					el.data('photo').destroy();
 					el.closest('tr').slideUp(200);
 				}
 			});
@@ -104,16 +98,11 @@ steal(
 		'listPhotos': function() {
 
 			var self = this;
-			//this.element.html(can.view(this.options.initView, this.options));
-
-			// Article.findAll().each(function(data){
-			// 	console.log(data);
-			// })
 
 			can.view('//app/photos/views/list-photos.ejs', {
-				articles: Photo.findAll()
+				photos: Photo.findAll()
 			}).then(function( frag ){
-				$("#inner-content").html( frag )
+				$("#inner-content").html( frag );
 			});
 		}
 	})

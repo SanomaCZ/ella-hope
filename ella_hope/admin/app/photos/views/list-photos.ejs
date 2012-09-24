@@ -1,18 +1,21 @@
 <table class="table table-striped">
 	<thead>
 		<tr>
+			<th><%= $.t('Image') %></th>
 			<th><%= $.t('Title') %></th>
+			<th><%= $.t('Description') %></th>
 			<th><%= $.t('Actions') %></th>
 		</tr>
 	</thead>
 	<tbody>
-		<% list(this.photo, function( photo ) { %>
+		<% list(this.photos, function( photo ) { %>
 			<%
-			var editUrl = can.route.url({ page: 'articles', action: 'edit', id: photo.id });
-			var deleteUrl = can.route.url({ page: 'articles', action: 'delete', id: photo.id });
+			var editUrl = can.route.url({ page: 'photos', action: 'edit', id: photo.id });
 			%>
 			<tr>
+				<td><a href="<%== editUrl %>"><img height="60" src="<%= photo.public_url %>" /></a></td>
 				<td><a href="<%== editUrl %>"><%= photo.title %></a></td>
+				<td><%= photo.description %></td>
 				<td>
 					<!-- Edit -->
 					<a <%= (el) -> el.data( 'photo', photo ) %> href="<%= editUrl %>" class="btn btn-mini edit-photo">

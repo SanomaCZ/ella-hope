@@ -1,0 +1,72 @@
+<%#  console.log(article); %>
+<%#  console.log(user); %>
+
+<div class="page-header">
+	<h1><%= $.t('Photos - Upload') %></h1>
+</div>
+
+<div class="hero-unit">
+
+<form class="uploadForm" method="POST" enctype="multipart/form-data">
+
+    <input type="hidden" name="MAX_FILE_SIZE" value="100000" />
+    <input type="hidden" name="id" id="id" <%= photo.id ? "value=" + photo.id : "" %> />
+
+<% if (this.photo.attr('id')) { %>
+    <%== can.view.render( '//app/photos/views/photo.ejs', {
+        photo: photo,
+        author: author
+    }) %>
+
+    <div class="row">
+        <div class="buttons">
+            <a href="javascript://" class="btn btn-primary save"><%= $.t('Save')%></a>
+            <a href="javascript://" class="btn cancel"><%= $.t('Cancel')%></a>
+        </div>
+    </div>
+
+<% } else { %>
+
+        <div class="row">
+            <div>
+                <label for="image"><%= $.t('File')%></label>
+            </div>
+            <input type="file" id="file" name="image" />
+        </div>
+
+        <hr>
+
+        <% list(filelist.files, function(file, index){ %>
+            <div class="upload-image">            
+                <%== can.view.render( '//app/photos/views/photo.ejs', {
+                    photo: photo,
+                    author: author,
+                    file: file,
+                    index: index
+                }) %>
+
+                <div class="row">
+                    <div class="buttons">
+                        <input type="submit" class="btn btn-primary" value="<%= $.t('Upload')%>" name="uploadSubmitter1" />
+                        <a href="javascript://" class="btn cancel"><%= $.t('Cancel')%></a>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="progress progress-striped active">
+                        <div class="bar" style="width: 0%;"></div>
+                    </div>
+                </div>
+
+                <hr>
+            </div>
+        <% }) %>
+
+        <div class="alert response_msg" style="display:none">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <span></span>
+        </div>
+
+<% } %>
+</form>
+</div>

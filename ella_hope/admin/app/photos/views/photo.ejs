@@ -1,0 +1,64 @@
+     <div class="form">
+
+                    <div class="row">
+                        <div>
+                            <label for="title"><%= $.t('Title')%></label>
+                        </div>
+                        <input class="span4 title" type="text" name="title" id="title" placeholder="<%= $.t('Add Title')%>" 
+                            value="<%= photo.title %>" <%= photo.title ? "" : "" %>>
+                    </div>
+
+                    <div class="row">
+                        <div>
+                            <label for="authors"><%= $.t('Author(s)')%></label>
+                        </div>
+                        <select name="authors[]" id="authors" data-placeholder="<%= $.t('Choose authors')%>" class="chzn-select span4 authors" multiple>
+                            <% if (author) { %>
+                                <% $.each(author, function(i, a){ %>
+                                <%
+                                    var selected = false;
+                                    if (photo.authors) {
+                                        for (var i = 0; i < photo.authors.length; i++) {
+                                            if (photo.authors[i]['id'] == a.id) {
+                                                selected = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                %>
+                                    <option value="<%= a.resource_uri %>" <%= selected ? "selected=selected" : "" %>>
+                                        <%= a.name %>
+                                    </option>
+                                <% }) %>
+                            <% } %>
+                        </select>
+                    </div>
+
+                    <div class="row">
+                        <div>
+                            <label for="description"><%= $.t('Description')%></label>
+                        </div>
+                        <textarea class="span4 description" name="description" id="description" placeholder="<%= $.t('Add Description')%>" <%= photo.attr('description') ? "" : "class='empty'" %>><%= photo.description %></textarea>
+                    </div>
+                </div>
+
+                <%
+                var index = index || 0;
+                var file = file || '';
+                %>
+
+                <%# when uploading files, there is going to be a preview before upload %>
+                <% if (file) { %>
+                    <div id="preview-<%=index%>">
+                        <%= file.attr('name') %>
+                        (<%= file.attr('size')/1000+"kB" %>)
+                        <br>
+                    </div>
+                <% } %>
+
+                <%# when editing files, there is going to be an uploaded image %>
+                <% if (photo.attr('public_url')) { %>
+                    <img src="<%= photo.attr('public_url') %>" />
+                <% } %>
+
+                <div class="clear"></div>

@@ -1,6 +1,6 @@
 steal(
-	//'./default.css'					// application CSS file
-	'can/control/route'					// enable routing
+	'./app.css'					// application CSS file
+	, 'can/control/route'					// enable routing
 	, './login/login.js'				// login module
 )
 .then(
@@ -98,8 +98,7 @@ steal(
 		    contentType: "application/x-www-form-urlencoded; charset=UTF-8",
 		    crossDomain: true,
 		    beforeSend: function(jqXHR, settings) {
-		    	//console.log($.cookie('api_key'));
-		    	//console.log($.cookie('username'));
+		    	//console.log(USER.attr('username'));
 		    	jqXHR.withCredentials = true;
 		    	if (USER.attr('api_key')) {
 		        	jqXHR.setRequestHeader("Authorization", "ApiKey " + USER.attr('username') + ":" + USER.attr('api_key'));
