@@ -1,10 +1,10 @@
      <div class="form">
-
+        <input type="hidden" name="filename" class="filename" value="<%= file.attr('name') %>" />
                     <div class="row">
                         <div>
                             <label for="title"><%= $.t('Title')%></label>
                         </div>
-                        <input class="span4 title" type="text" name="title" id="title" placeholder="<%= $.t('Add Title')%>" 
+                        <input class="span4 title" type="text" name="title" placeholder="<%= $.t('Add Title')%>"
                             value="<%= photo.title %>" <%= photo.title ? "" : "" %>>
                     </div>
 
@@ -12,7 +12,7 @@
                         <div>
                             <label for="authors"><%= $.t('Author(s)')%></label>
                         </div>
-                        <select name="authors[]" id="authors" data-placeholder="<%= $.t('Choose authors')%>" class="chzn-select span4 authors" multiple>
+                        <select name="authors[]"  data-placeholder="<%= $.t('Choose authors')%>" class="chzn-select span4 authors" multiple>
                             <% if (author) { %>
                                 <% $.each(author, function(i, a){ %>
                                 <%
@@ -38,7 +38,7 @@
                         <div>
                             <label for="description"><%= $.t('Description')%></label>
                         </div>
-                        <textarea class="span4 description" name="description" id="description" placeholder="<%= $.t('Add Description')%>" <%= photo.attr('description') ? "" : "class='empty'" %>><%= photo.description %></textarea>
+                        <textarea class="span4 description" name="description" placeholder="<%= $.t('Add Description')%>" <%= photo.attr('description') ? "" : "class='empty'" %>><%= photo.description %></textarea>
                     </div>
                 </div>
 

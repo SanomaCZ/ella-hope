@@ -326,13 +326,16 @@ ArticleCreate = can.Control(
 	 * @param  {[type]} ev [description]
 	 * @return {[type]}    [description]
 	 */
-	'#photosModal .btn-primary click':function(el, ev) {
+	'#photosModal .insert-photo click':function(el, ev) {
 		ev.preventDefault();
 
 		// get checked radio button, it's tr parent and photo from data attribute
 		var photo = $('input[name=photo]:checked', '#photosModal').parents('tr').data('photo');
 
-		$('.article #content').val($('.article #content').val()+' '+photo.resource_uri); 
+		console.log(photo);
+		$('.article #content').val($('.article #content').val()+' '+photo.resource_uri);
+		$('#photos-preview').append('<img src="'+photo.public_url+'" height="50" />');
+
 		//console.log(photo);
 
 		$('#photosModal').modal('hide');

@@ -62,85 +62,96 @@ steal(
 		 * @return {[type]} [description]
 		 */
 		'#file change': function(){
-			
+
 			var files = document.getElementById("file").files,
-      		nFiles = files.length;
+			nFiles = files.length;
 
-      		// hide message box from previous upload
-      		$('.response_msg').hide();
+			// hide message box from previous upload
+			$('.response_msg').hide();
 
-      		// add selected files to observe se that it can be rendered
-      		for (var i = 0; i < files.length; i++) {
-      			this.filelist.files.push(files[i]);
-      		}
+			// add selected files to observe se that it can be rendered
+			for (var i = 0; i < files.length; i++) {
+				this.filelist.files.push(files[i]);
+			}
 
-      		// wait till html elements are rendered
-      		// show image thumbnails
-      		// needs to be done here, because when added to observe,
-      		// type is converted from File to Construct and previews are impossible
-      		setTimeout(function(){
-      			for (var i = 0; i < files.length; i++) {
-	      			var file = files[i];
-				    var imageType = /image.*/;
-				     
-				    if (!file.type.match(imageType)) {
-				      continue;
-				    }
-				     
-				    var img = document.createElement("img");
-				    img.classList.add("obj");
-				    img.file = file;
-				    document.getElementById("preview-"+i).appendChild(img);
-				     
-				    var reader = new FileReader();
-				    reader.onload = (function(aImg) { return function(e) { aImg.src = e.target.result; }; })(img);
-				    reader.readAsDataURL(file);
+			// wait till html elements are rendered
+			// show image thumbnails
+			// needs to be done here, because when added to observe,
+			// type is converted from File to Construct and previews are impossible
+			setTimeout(function(){
+				for (var i = 0; i < files.length; i++) {
+					var file = files[i];
+					var imageType = /image.*/;
+
+					if (!file.type.match(imageType)) {
+						continue;
+					}
+
+					var img = document.createElement("img");
+					img.classList.add("obj");
+					img.file = file;
+					document.getElementById("preview-"+i).appendChild(img);
+
+					var reader = new FileReader();
+					reader.onload = (function(aImg) { return function(e) { aImg.src = e.target.result; }; })(img);
+					reader.readAsDataURL(file);
 				}
-      		}, 200);
+			}, 200);
 
-      		// wait till all images a rendered so we can apply chosen select
-      		setTimeout(function(){
-      			// enable chosen select for authors
+			// wait till all images a rendered so we can apply chosen select
+			setTimeout(function(){
+				// enable chosen select for authors
 				// http://harvesthq.github.com/chosen/
 				$('.chzn-select').chosen();
-      		}, 1000);
+			}, 1000);
 
 		},
 
-		// bind to the form's submit event 
-	    '.uploadForm submit': function(el, ev) {
+		// bind to the form's submit event
+		'.uploadForm submit': function(el, ev) {
 
-	    	el.find('.progress').show();
-	    	el.find('.progress .bar').css('width', '0px');
+			el.find('.progress').show();
+			el.find('.progress .bar').css('width', '0px');
 
-	    	var form = el,//.parent('form'),
-				values = form.serialize(),
-				values = can.deparam(values);
+			var form = el,//.parent('form'),
+				values = form.serialize();
 
-	    	// prepare Options Object 
+			values = can.deparam(values);
+
+			var objects = [];
+
+			// compose resource_data object from all selected files
+			$('.uploadForm').find('.upload-image').each(function(){
+				objects[objects.length] = {
+					"app_data": "{}",
+					"created": new Date().toISOString(),
+					"description": $(this).find('.description').val(),
+					"image": 'attached_object_id:'+$(this).find('.filename').val(),
+					"height": 256,
+					"authors" : ["/admin-api/author/101/"],
+					"important_bottom": null,
+					"important_left": null,
+					"important_right": null,
+					"important_top": null,
+					"title": $(this).find('.title').val(),
+					"slug": $(this).find('.title').val(),
+					"width": 256
+				};
+			});
+
+			// prepare Options Object
 			var options = {
-			    url: BASE_URL + '/photo/?username='+USER.attr('username')+'&api_key='+USER.attr('api_key'), 
-			    //url: 'http://localhost/test.php',
-			    data: {
-			    	photo: JSON.stringify({
-			    		"app_data": "{}", 
-			    		"created": new Date().toISOString(),
-			    		"description": values.description, 
-			    		"image": null, 
-			    		"height": 256, 
-			    		"authors" : ["/admin-api/author/101/"],
-			    		"important_bottom": null, 
-			    		"important_left": null, 
-			    		"important_right": null, 
-			    		"important_top": null, 
-			    		"title": values.title, 
-			    		"width": 256
-			    	})
-			    },
-			    clearForm: true,
-			    beforeSubmit: function(arr, $form, options) { 
-    				// return false to cancel submit
-    				return true;
+				url: BASE_URL + '/photo/?username='+USER.attr('username')+'&api_key='+USER.attr('api_key'),
+				//url: 'http://localhost/test.php',
+				data: {
+					resource_data: JSON.stringify({
+						objects: objects
+					})
+				},
+				clearForm: true,
+				beforeSubmit: function(arr, $form, options) {
+					// return false to cancel submit
+					return true;
 				},
 				uploadProgress: function(ev, position, total, percentComplete) {
 					// console.log(ev);
@@ -149,38 +160,39 @@ steal(
 					// console.log(percentComplete);
 					el.find('.progress .bar').css('width', percentComplete+'%');
 				},
-			    success: function() {
-			    	setTimeout(function(){
-			    		$('#file').val('');
-			    		$('.upload-image').remove();
-			    	}, 500);
-			    	$('.response_msg')
+				success: function() {
+					setTimeout(function(){
+						$('#file').val('');
+						$('.upload-image').remove();
+					}, 500);
+					$('.response_msg')
 						.show()
 						.addClass('alert-success')
 						.find('span').html($.t('<strong>Well done!</strong> Photo uploaded.'));
-			    },
-			    error: function() {
-			    	$('.response_msg')
+				},
+				error: function() {
+					$('.response_msg')
 						.show()
 						.addClass('alert-error')
 						.find('span').html($.t('<strong>Stop!</strong> Something went wrong.'));
-			    }
+				}
 			};
 
-	        // inside event callbacks 'this' is the DOM element so we first 
-	        // wrap it in a jQuery object and then invoke ajaxSubmit 
-	        el.ajaxSubmit(options);
-	 
-	        // !!! Important !!! 
-	        // always return false to prevent standard browser submit and page navigation 
-	        return false; 
-	    },
+			// inside event callbacks 'this' is the DOM element so we first
+			// wrap it in a jQuery object and then invoke ajaxSubmit
+			el.ajaxSubmit(options);
 
-	    '.save click': function(el, ev) {
+			// !!! Important !!!
+			// always return false to prevent standard browser submit and page navigation
+			return false;
+		},
+
+		'.save click': function(el, ev) {
 
 			var form = this.element.find('form'),
-				values = form.serialize(),
-				values = can.deparam(values);
+				values = form.serialize();
+
+			values = can.deparam(values);
 
 			var p = new Photo();
 			//a.attr(values).save();

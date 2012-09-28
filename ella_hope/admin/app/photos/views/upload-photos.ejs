@@ -31,13 +31,13 @@
             <div>
                 <label for="image"><%= $.t('File')%></label>
             </div>
-            <input type="file" id="file" name="image" />
+            <input type="file" id="file" name="image" multiple />
         </div>
 
         <hr>
 
         <% list(filelist.files, function(file, index){ %>
-            <div class="upload-image">            
+            <div class="upload-image">
                 <%== can.view.render( '//app/photos/views/photo.ejs', {
                     photo: photo,
                     author: author,
