@@ -32,7 +32,7 @@ steal(
 		// we need to set can.route.ready to true in order to get url params
 		// with false we suspend route init
 		can.route.ready(false);
-		
+
 		// language settings
 		var lang,
 			supportedLangs = ['cs', 'de', 'en', 'es', 'fr', 'gb', 'it'];
@@ -53,7 +53,7 @@ steal(
 		$.jsperanto.init(
 			function(t){
 				//console.log($.t('france'));
-				
+
 				// show login page
 				// if user is already logged in, login page is skipped
 				$('body').trigger('show-login');
@@ -64,7 +64,7 @@ steal(
 			}
 		);
 
-		// when everything important is initialized, update the route so that 
+		// when everything important is initialized, update the route so that
 		// controls waiting for route change can set the right state
 		$('body').on('navbar-ready', function(){
 			can.route.ready(true);
@@ -82,7 +82,7 @@ steal(
 		// show login screen if user is not logged in
 		$('body').on('show-login', function(){
 			//console.log('show-login');
-			
+
 			// hide navbar
 			$("#navbar").empty();
 
@@ -116,6 +116,6 @@ steal(
 			else {
 				//console.log('ajax error ' + xhr.status);
 			}
-		}); 
+		});
 	}
 )

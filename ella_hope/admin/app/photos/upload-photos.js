@@ -123,19 +123,20 @@ steal(
 			// compose resource_data object from all selected files
 			$('.uploadForm').find('.upload-image').each(function(){
 				objects[objects.length] = {
-					"app_data": "{}",
-					"created": new Date().toISOString(),
+					"title": $(this).find('.title').val(),
+					"slug": $(this).find('.title').val(),
 					"description": $(this).find('.description').val(),
-					"image": 'attached_object_id:'+$(this).find('.filename').val(),
+					"width": 256,
 					"height": 256,
+					"created": new Date().toISOString(),
 					"authors" : ["/admin-api/author/101/"],
+					"app_data": "{}",
+					//"image": "attached_object_id:'"+$(this).find('.filename').val()+"'",
+					"image": "attached_object_id:P2030021.jpg",
 					"important_bottom": null,
 					"important_left": null,
 					"important_right": null,
-					"important_top": null,
-					"title": $(this).find('.title').val(),
-					"slug": $(this).find('.title').val(),
-					"width": 256
+					"important_top": null
 				};
 			});
 
