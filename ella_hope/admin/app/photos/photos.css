@@ -6,3 +6,13 @@
 	float: left;
 	margin-right: 20px;
 }
+.upload-buttons, .progress {
+	display: none;
+	margin-bottom: 10px;
+}
+.important-part {
+	float: left;
+}
+.important-part td {
+	text-align: center;
+}

@@ -1,64 +1,79 @@
-     <div class="form">
-        <input type="hidden" name="filename" class="filename" value="<%= file.attr('name') %>" />
-                    <div class="row">
-                        <div>
-                            <label for="title"><%= $.t('Title')%></label>
-                        </div>
-                        <input class="span4 title" type="text" name="title" placeholder="<%= $.t('Add Title')%>"
-                            value="<%= photo.title %>" <%= photo.title ? "" : "" %>>
-                    </div>
+<%# console.log(file);%>
+<div class="upload-image">
+    <div class="form">
+        <input type="hidden" name="filename" class="filename" value="<%= file ? file.name : '' %>" />
+        <div class="row">
+            <label for="title"><%= $.t('Title')%></label>
+            <input class="span4 title" type="text" id="title" name="title" placeholder="<%= $.t('Add Title')%>"
+                value="<%= photo.title %>" <%= photo.title ? "" : "" %>>
+        </div>
 
-                    <div class="row">
-                        <div>
-                            <label for="authors"><%= $.t('Author(s)')%></label>
-                        </div>
-                        <select name="authors[]"  data-placeholder="<%= $.t('Choose authors')%>" class="chzn-select span4 authors" multiple>
-                            <% if (author) { %>
-                                <% $.each(author, function(i, a){ %>
-                                <%
-                                    var selected = false;
-                                    if (photo.authors) {
-                                        for (var i = 0; i < photo.authors.length; i++) {
-                                            if (photo.authors[i]['id'] == a.id) {
-                                                selected = true;
-                                                break;
-                                            }
-                                        }
-                                    }
-                                %>
-                                    <option value="<%= a.resource_uri %>" <%= selected ? "selected=selected" : "" %>>
-                                        <%= a.name %>
-                                    </option>
-                                <% }) %>
-                            <% } %>
-                        </select>
-                    </div>
+        <div class="row">
+            <label for="authors"><%= $.t('Author(s)')%></label>
+            <select name="authors[]"  data-placeholder="<%= $.t('Choose authors')%>" class="chzn-select span4 authors" multiple>
+            <% if (author) { %>
+                <% $.each(author, function(i, a){ %>
+                    <%
+                        var selected = false;
+                        if (photo.authors) {
+                            for (var i = 0; i < photo.authors.length; i++) {
+                                if (photo.authors[i]['id'] == a.id) {
+                                    selected = true;
+                                    break;
+                                }
+                            }
+                        }
+                    %>
+                    <option value="<%= a.resource_uri %>" <%= selected ? "selected=selected" : "" %>>
+                        <%= a.name %>
+                    </option>
+                <% }) %>
+            <% } %>
+            </select>
+        </div>
 
-                    <div class="row">
-                        <div>
-                            <label for="description"><%= $.t('Description')%></label>
-                        </div>
-                        <textarea class="span4 description" name="description" placeholder="<%= $.t('Add Description')%>" <%= photo.attr('description') ? "" : "class='empty'" %>><%= photo.description %></textarea>
-                    </div>
-                </div>
+        <div class="row">
+            <label for="description"><%= $.t('Description')%></label>
+            <textarea class="span4 description" name="description" placeholder="<%= $.t('Add Description')%>" <%= photo.description ? "" : "class='empty'" %>><%= photo.description %></textarea>
+        </div>
 
-                <%
-                var index = index || 0;
-                var file = file || '';
-                %>
+        <%
+            var file = file || '';
+        %>
+    </div>
 
-                <%# when uploading files, there is going to be a preview before upload %>
-                <% if (file) { %>
-                    <div id="preview-<%=index%>">
-                        <%= file.attr('name') %>
-                        (<%= file.attr('size')/1000+"kB" %>)
-                        <br>
-                    </div>
-                <% } %>
+    <div class="important-part">
+        <table>
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <%= file.name %>
+                    (<%= file.size/1000+"kB" %>)
+                    <br>
+                    <input type="radio" name="important-part" value="top" title="<%= $.t('important part - top') %>" /></td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td><input type="radio" name="important-part" value="left" title="<%= $.t('important part - left') %>" /></td>
+                <td>
+                    <%# when uploading files, there is going to be a preview before upload %>
+                    <div id="preview-<%=file.size%>"></div>
+                </td>
+                <td><input type="radio" name="important-part" value="right" title="<%= $.t('important part - right') %>" /></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td><input type="radio" name="important-part" value="bottom" title="<%= $.t('important part - bottom') %>" /></td>
+                <td>&nbsp;</td>
+            </tr>
+        </table>
+    </div>
 
-                <%# when editing files, there is going to be an uploaded image %>
-                <% if (photo.attr('public_url')) { %>
-                    <img src="<%= photo.attr('public_url') %>" />
-                <% } %>
+    <%# when editing files, there is going to be an uploaded image %>
+    <% if (photo.public_url) { %>
+        <img src="<%= photo.public_url %>" />
+    <% } %>
 
-                <div class="clear"></div>
+    <div class="clear"></div>
+    <hr>
+</div>

@@ -63,40 +63,35 @@ steal(
 		 */
 		'#file change': function(){
 
-			var files = document.getElementById("file").files,
-			nFiles = files.length;
+			var self = this,
+				files = document.getElementById("file").files,
+				nFiles = files.length;
+
+			//console.log(files);
 
 			// hide message box from previous upload
 			$('.response_msg').hide();
 
+			// show upload button
+			$('.upload-buttons').show();
+
+			// show progress bar
+			$('.progress').show().find('.bar').css('width', '0px');
+
 			// add selected files to observe se that it can be rendered
 			for (var i = 0; i < files.length; i++) {
-				this.filelist.files.push(files[i]);
+				//this.filelist.files.push(files[i]);
+
+				can.view( '//app/photos/views/photo.ejs', {
+					file: files[i],
+					photo: {},
+					author: Author.findAll()
+				} ).then(function( frag ){
+					$('#images').append(frag);
+				});
+
+				self.showImagePreview(files[i]);
 			}
-
-			// wait till html elements are rendered
-			// show image thumbnails
-			// needs to be done here, because when added to observe,
-			// type is converted from File to Construct and previews are impossible
-			setTimeout(function(){
-				for (var i = 0; i < files.length; i++) {
-					var file = files[i];
-					var imageType = /image.*/;
-
-					if (!file.type.match(imageType)) {
-						continue;
-					}
-
-					var img = document.createElement("img");
-					img.classList.add("obj");
-					img.file = file;
-					document.getElementById("preview-"+i).appendChild(img);
-
-					var reader = new FileReader();
-					reader.onload = (function(aImg) { return function(e) { aImg.src = e.target.result; }; })(img);
-					reader.readAsDataURL(file);
-				}
-			}, 200);
 
 			// wait till all images a rendered so we can apply chosen select
 			setTimeout(function(){
@@ -107,11 +102,36 @@ steal(
 
 		},
 
+		/**
+		 * show image preview before download
+		 * @param  {[type]} file [description]
+		 * @return {[type]}      [description]
+		 */
+		showImagePreview: function(file) {
+
+			// we need to set timeout here otherwise it was too soon and preview elements
+			// were not already created
+			setTimeout(function(){
+
+				var imageType = /image.*/;
+
+				if (!file.type.match(imageType)) {
+					//continue;
+				}
+
+				var img = document.createElement("img");
+				img.classList.add("obj");
+				img.file = file;
+				document.getElementById("preview-"+file.size).appendChild(img);
+
+				var reader = new FileReader();
+				reader.onload = (function(aImg) { return function(e) { aImg.src = e.target.result; }; })(img);
+				reader.readAsDataURL(file);
+			}, 1000);
+		},
+
 		// bind to the form's submit event
 		'.uploadForm submit': function(el, ev) {
-
-			el.find('.progress').show();
-			el.find('.progress .bar').css('width', '0px');
 
 			var form = el,//.parent('form'),
 				values = form.serialize();
@@ -131,17 +151,20 @@ steal(
 					"created": new Date().toISOString(),
 					"authors" : ["/admin-api/author/101/"],
 					"app_data": "{}",
-					//"image": "attached_object_id:'"+$(this).find('.filename').val()+"'",
-					"image": "attached_object_id:P2030021.jpg",
-					"important_bottom": null,
-					"important_left": null,
-					"important_right": null,
-					"important_top": null
+					"image": "attached_object_id:"+$(this).find('.filename').val()
 				};
+
+				// if important part is checked, add it to the object
+				var importantVal = $(this).find('input[name=important-part]:checked').val();
+				if (importantVal) {
+					objects[objects.length-1]["important_"+importantVal] = true;
+				}
 			});
 
 			// prepare Options Object
 			var options = {
+				type: "PATCH",
+				method: "PATCH",
 				url: BASE_URL + '/photo/?username='+USER.attr('username')+'&api_key='+USER.attr('api_key'),
 				//url: 'http://localhost/test.php',
 				data: {
@@ -163,8 +186,14 @@ steal(
 				},
 				success: function() {
 					setTimeout(function(){
+						// empty file input so that new files can be chosen
 						$('#file').val('');
+						// hide all uploaded images
 						$('.upload-image').remove();
+						// show upload button
+						$('.upload-buttons').hide();
+						// show progress bar
+						$('.progress').hide();
 					}, 500);
 					$('.response_msg')
 						.show()
