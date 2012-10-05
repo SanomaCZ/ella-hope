@@ -26,7 +26,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     url(r'^admin-hope/(?P<path>.*)$', 'django.views.static.serve', {
-        'document_root': os.path.join(settings.PROJECT_ROOT, 'ella_hope/admin/'),
+        'document_root': os.path.join(settings.PROJECT_ROOT, 'admin/'),
         'show_indexes': True,
     }),
 
