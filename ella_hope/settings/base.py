@@ -138,6 +138,7 @@ INSTALLED_APPS = (
     'tastypie',
     'ella_galleries',
     'ella_wikipages',
+    'ella_taggit',
     'ella_hub',
     'ella_hope',
 )
