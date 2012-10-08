@@ -47,8 +47,8 @@
             <tr>
                 <td>&nbsp;</td>
                 <td>
-                    <%= file.name %>
-                    (<%= file.size/1000+"kB" %>)
+                    <%= file.name ? file.name : '' %>
+                    <%= file.size ? '('+file.size/1000+"kB"+')' : '' %>
                     <br>
                     <input type="radio" name="important-part" value="top" title="<%= $.t('important part - top') %>" /></td>
                 <td>&nbsp;</td>
@@ -56,8 +56,13 @@
             <tr>
                 <td><input type="radio" name="important-part" value="left" title="<%= $.t('important part - left') %>" /></td>
                 <td>
-                    <%# when uploading files, there is going to be a preview before upload %>
-                    <div id="preview-<%=file.size%>"></div>
+                    <%# when editing files, there is going to be an uploaded image %>
+                    <% if (photo.public_url) { %>
+                        <img class="photo-preview" src="<%= photo.public_url %>" />
+                    <% } else { %>
+                        <%# when uploading files, there is going to be a preview before upload %>
+                        <div class="photo-preview" id="preview-<%=file.size%>"></div>
+                    <% } %>
                 </td>
                 <td><input type="radio" name="important-part" value="right" title="<%= $.t('important part - right') %>" /></td>
             </tr>
@@ -68,11 +73,6 @@
             </tr>
         </table>
     </div>
-
-    <%# when editing files, there is going to be an uploaded image %>
-    <% if (photo.public_url) { %>
-        <img src="<%= photo.public_url %>" />
-    <% } %>
 
     <div class="clear"></div>
     <hr>

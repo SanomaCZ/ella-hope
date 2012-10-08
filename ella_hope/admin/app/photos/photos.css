@@ -16,3 +16,7 @@
 .important-part td {
 	text-align: center;
 }
+.photo-preview img {
+	max-height: 160px;
+	max-width: 600px;
+}

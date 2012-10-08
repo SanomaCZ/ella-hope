@@ -7,31 +7,63 @@
 
 <div class="hero-unit">
 
-<form class="uploadForm" method="PATCH" enctype="multipart/form-data">
+    <form class="uploadForm" method="PATCH" enctype="multipart/form-data">
 
-    <input type="hidden" name="MAX_FILE_SIZE" value="100000" />
-    <input type="hidden" name="id" id="id" <%= photo.id ? "value=" + photo.id : "" %> />
+        <input type="hidden" name="MAX_FILE_SIZE" value="100000" />
+        <input type="hidden" name="id" id="id" <%= photo.id ? "value=" + photo.id : "" %> />
 
-<% if (this.photo && this.photo.attr('id')) { %>
-    <%== can.view.render( '//app/photos/views/photo.ejs', {
-        photo: photo,
-        author: author
-    }) %>
+    <% if (this.photo && this.photo.attr('id')) { %>
+        <%== can.view.render( '//app/photos/views/photo.ejs', {
+            photo: photo,
+            author: author
+        }) %>
 
-    <div class="row">
-        <div class="buttons">
-            <a href="javascript://" class="btn btn-primary save"><%= $.t('Save')%></a>
-            <a href="javascript://" class="btn cancel"><%= $.t('Cancel')%></a>
+        <div class="row">
+            <div class="buttons">
+                <a href="javascript://" class="btn btn-primary save"><%= $.t('Save')%></a>
+                <a href="javascript://" class="btn cancel"><%= $.t('Cancel')%></a>
+            </div>
         </div>
-    </div>
 
-<% } else { %>
+    <% } else { %>
 
         <div class="row">
             <div>
                 <label for="image"><%= $.t('File')%></label>
             </div>
             <input type="file" id="file" name="attached_object" multiple />
+        </div>
+
+        <br>
+
+        <div class="row defaults">
+            <%= $.t('Default values')%>
+            <br>
+            <div class="pull-left">
+                <select name="filename_default">
+                    <option value=""><%= $.t('Use filename as...')%></option>
+                    <option value="title"><%= $.t('Title');%></option>
+                    <option value="description"><%= $.t('Description');%></option>
+                </select>
+            </div>
+            <div class="pull-left">
+                &nbsp;&nbsp;
+                <%= $.t('Title') %>: <input class="span2" type="text" name="default_title" />
+            </div>
+            <div class="pull-left">
+                &nbsp;&nbsp;
+                <%= $.t('Author') %>:
+                <select name="default_author">
+                    <option value=""><%= $.t('Select author...') %></option>
+                    <% $.each(author, function(i, a){ %>
+                        <option value="<%= a.resource_uri %>"><%= a.name %></option>
+                    <% }) %>
+                </select>
+            </div>
+            <div class="pull-left">
+                &nbsp;&nbsp;
+                <%= $.t('Description') %>: <input type="text" name="default_description" />
+            </div>
         </div>
 
         <hr>
@@ -60,6 +92,6 @@
             <span></span>
         </div>
 
-<% } %>
-</form>
+    <% } %>
+    </form>
 </div>

@@ -93,8 +93,38 @@ steal(
 				self.showImagePreview(files[i]);
 			}
 
-			// wait till all images a rendered so we can apply chosen select
+			// wait till all images a rendered so we can apply chosen select and default values
 			setTimeout(function(){
+
+				var $defaults = $('.defaults'),
+					$images = $('#images');
+
+				// get default values
+				defaultTitle = $defaults.find('input[name=default_title]').val();
+				defaultDescription = $defaults.find('input[name=default_description]').val();
+				defaultAuthor = $defaults.find('select[name=default_author]').val();
+
+				// set default values
+				if (defaultTitle) {
+					$images.find('input[name=title]').val(defaultTitle);
+				}
+				if (defaultDescription) {
+					$images.find('textarea[name=description]').val(defaultDescription);
+				}
+				if (defaultAuthor) {
+					$images.find('.authors').find("option[value='"+defaultAuthor+"']").attr("selected", "selected");
+				}
+
+				// if filename should be used as default value for any field
+				filenameDefault = $defaults.find('select[name=filename_default]').val();
+				if (filenameDefault) {
+					$images.find('.upload-image').each(function(i, v){
+						var filename = $(v).find('input[name=filename]').val();
+						filename = filename.substr(0, filename.lastIndexOf('.')) || filename;
+						$(v).find('.'+filenameDefault).val(filename);
+					});
+				}
+
 				// enable chosen select for authors
 				// http://harvesthq.github.com/chosen/
 				$('.chzn-select').chosen();
