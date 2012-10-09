@@ -14,7 +14,7 @@
 			<div>
 				<label for="title"><%= $.t('Title')%></label>
 			</div>
-			<input class="span4 title" type="text" name="title" id="title" placeholder="<%= $.t('Add Title')%>" 
+			<input class="span4 title" type="text" name="title" id="title" placeholder="<%= $.t('Add Title')%>"
 				value="<%= article.title %>" <%= article.title ? "" : "" %>>
 		</div>
 
@@ -93,7 +93,7 @@
 			<div>
 				<label for="content"><%= $.t('Content')%></label>
 			</div>
-			<textarea class="span4 content" rows="10" name="content" id="content" placeholder="<%= $.t('Add Content')%>" <%= article.attr('content') ? "" : "class='empty'" %>><%= article.content %></textarea>
+			<textarea class="content" rows="10" name="content" id="content" placeholder="<%= $.t('Add Content')%>" <%= article.attr('content') ? "" : "class='empty'" %>><%= article.content %></textarea>
 
 			<a data-target="#photosModal" role="button" class="btn btn-mini" data-toggle="modal"><%= $.t('Insert image')%></a>
 		</div>
@@ -104,7 +104,7 @@
 			<div>
 				<label for="description"><%= $.t('Description')%></label>
 			</div>
-			<textarea class="span4 description" name="description" id="description" placeholder="<%= $.t('Add Description')%>" <%= article.attr('description') ? "" : "class='empty'" %>><%= article.description %></textarea>
+			<textarea class="description" name="description" id="description" placeholder="<%= $.t('Add Description')%>" <%= article.attr('description') ? "" : "class='empty'" %>><%= article.description %></textarea>
 		</div>
 
 		<div class="row">

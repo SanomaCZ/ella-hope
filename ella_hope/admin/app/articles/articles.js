@@ -47,7 +47,7 @@ steal(
 				this.init();
 			}
 		},
-		
+
 		':page/:action route': function( data ) {
 			if (data.action == 'new') {
 				new ArticleCreate(this.element, {});
@@ -65,7 +65,7 @@ steal(
 							type: article,
 							article: article
 						});
-					})
+					});
 				}
 			}
 			else if (data.action == 'edit-draft') {
@@ -75,7 +75,7 @@ steal(
 							type: 'draft',
 							article: draft
 						});
-					})
+					});
 				}
 			}
         },
@@ -115,8 +115,8 @@ steal(
 				articles: Article.findAll(),
 				drafts: Draft.findAll()
 			}).then(function( frag ){
-				$("#inner-content").html( frag )
+				$("#inner-content").html( frag );
 			});
 		}
 	})
-)
+);

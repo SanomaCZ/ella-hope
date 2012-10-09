@@ -23,3 +23,9 @@
 .article-state.deleted {
 	background-color: red !important;
 }
+
+.markItUpEditor {
+	background: #fff !important;
+	border: none !important;
+	padding: 5px !important;
+}
