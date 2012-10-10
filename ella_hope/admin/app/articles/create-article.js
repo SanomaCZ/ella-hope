@@ -81,6 +81,7 @@ steal(
 
 			this.article = article;
 			if (!this.article) {
+				//console.log('new article');
 				// we want to create a new article
 				this.article = new Article();
 			}
@@ -102,6 +103,7 @@ steal(
 			// render article form
 			can.view( '//app/articles/views/create-article.ejs', {
 				article: this.article,
+				drafts: Draft.findAll(),
 				author: Author.findAll(),
 				category: Category.findAll(),
 				states: this.options.articleStates,
@@ -223,7 +225,7 @@ steal(
 
 		createArticle: function() {
 
-			console.log('create');
+			//console.log('create');
 
 			var form = this.element.find('form'),
 				values = form.serialize();
@@ -309,6 +311,7 @@ steal(
 			};
 
 			if (!this.draft) {
+				console.log('new draft');
 				this.draft = new Draft();
 			}
 
@@ -322,14 +325,13 @@ steal(
 			this.createArticle();
 		},
 		'.article input keyup': function(el, ev) {
-			console.log('keyup');
 			ev.preventDefault();
 
 			if(ev.keyCode == 13){
 				this.saveArticle();
 			}
 		},
-		'.save click' : function(el, ev){
+		'.article-save click' : function(el, ev){
 
 			ev.stopPropagation();
 
@@ -348,6 +350,16 @@ steal(
 			}
 
 			can.route.attr({page:'articles'}, true);
+		},
+
+		'select[name=drafts] change': function(el, ev) {
+			var draft = $(el.find('option:selected')).data('article');
+			//console.log(this.article.attr());
+			//console.log(draft);
+			//this.article.attr({title: 'hehe'});
+			this.article.attr(draft.data._data);
+			//console.log(this.article.attr());
+
 		},
 
 		/**
@@ -373,7 +385,7 @@ steal(
 			var photo = $('input[name=photo]:checked', '#photosModal').parents('tr').data('photo');
 
 			//console.log(photo);
-			//$('.article #content').val($('.article #content').val()+' '+photo.resource_uri);
+			//$('.article .content').val($('.article .content').val()+' '+photo.resource_uri);
 			//$('#photos-preview').append('<img src="'+photo.public_url+'" height="50" />');
 
 			$.markItUp( { replaceWith:'<img src="'+photo.public_url+'" alt="'+photo.title+'" />' } );

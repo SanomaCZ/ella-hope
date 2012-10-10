@@ -17,12 +17,6 @@ steal(
 		filelist: null,			// list of selected files for upload
 
 		init: function() {
-
-			this.filelist = new can.Observe({
-				count: 0,
-				files: []
-			});
-
 			this.show(this.options.photo);
 		},
 
@@ -43,7 +37,6 @@ steal(
 
 			// render article form
 			can.view( '//app/photos/views/upload-photos.ejs', {
-				filelist: this.filelist,
 				photo: this.photo,
 				author: Author.findAll()
 			} ).then(function( frag ){
@@ -68,6 +61,7 @@ steal(
 				nFiles = files.length;
 
 			//console.log(files);
+			//console.log(files.length);
 
 			// hide message box from previous upload
 			$('.response_msg').hide();
@@ -80,6 +74,7 @@ steal(
 
 			// add selected files to observe se that it can be rendered
 			for (var i = 0; i < files.length; i++) {
+
 				//this.filelist.files.push(files[i]);
 
 				can.view( '//app/photos/views/photo.ejs', {
@@ -164,7 +159,8 @@ steal(
 		'.uploadForm submit': function(el, ev) {
 
 			var form = el,//.parent('form'),
-				values = form.serialize();
+				values = form.serialize(),
+				self = this;
 
 			values = can.deparam(values);
 
@@ -217,7 +213,7 @@ steal(
 				success: function() {
 					setTimeout(function(){
 						// empty file input so that new files can be chosen
-						$('#file').val('');
+						self.clearFileInput();
 						// hide all uploaded images
 						$('.upload-image').remove();
 						// show upload button
@@ -231,6 +227,7 @@ steal(
 						.find('span').html($.t('<strong>Well done!</strong> Photo uploaded.'));
 				},
 				error: function() {
+					self.clearFileInput();
 					$('.response_msg')
 						.show()
 						.addClass('alert-error')
@@ -247,7 +244,7 @@ steal(
 			return false;
 		},
 
-		'.save click': function(el, ev) {
+		'.photo-save click': function(el, ev) {
 
 			var form = this.element.find('form'),
 				values = form.serialize();
@@ -267,7 +264,12 @@ steal(
 
 		'.cancel click' : function(){
 
+			this.clearFileInput();
 			can.route.attr({page:'photos'}, true);
+		},
+
+		clearFileInput: function() {
+			$('#file').replaceWith('<input type="file" id="file" name="attached_object" multiple />');
 		}
 	})
-)
+);

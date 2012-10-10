@@ -27,6 +27,7 @@ steal(
 	},
 	/* @prototype */
 	{
+		articleCreate: null,
 		/**
 		 * Initializes a new instance of Articles container.
 		 * @codestart
@@ -50,7 +51,8 @@ steal(
 
 		':page/:action route': function( data ) {
 			if (data.action == 'new') {
-				new ArticleCreate(this.element, {});
+				if (this.articleCreate) this.articleCreate.destroy();
+				this.articleCreate = new ArticleCreate(this.element, {});
 			}
 		},
 
@@ -61,8 +63,9 @@ steal(
 			if (data.action == 'edit') {
 				if (data.id > 0) {
 					Article.findOne({id: data.id}, function(article){
-						new ArticleCreate(self.element, {
-							type: article,
+						if (self.articleCreate) self.articleCreate.destroy();
+						self.articleCreate = new ArticleCreate(self.element, {
+							type: 'article',
 							article: article
 						});
 					});
@@ -71,7 +74,8 @@ steal(
 			else if (data.action == 'edit-draft') {
 				if (data.id > 0) {
 					Draft.findOne({id: data.id}, function(draft){
-						new ArticleCreate(self.element, {
+						if (self.articleCreate) self.articleCreate.destroy();
+						self.articleCreate = new ArticleCreate(self.element, {
 							type: 'draft',
 							article: draft
 						});
@@ -112,8 +116,7 @@ steal(
 			// })
 
 			can.view('//app/articles/views/list-articles.ejs', {
-				articles: Article.findAll(),
-				drafts: Draft.findAll()
+				articles: Article.findAll()
 			}).then(function( frag ){
 				$("#inner-content").html( frag );
 			});

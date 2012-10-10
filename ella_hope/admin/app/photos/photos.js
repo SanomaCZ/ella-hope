@@ -27,6 +27,7 @@ steal(
 	},
 	/* @prototype */
 	{
+		photosUpload: null,
 		/**
 		 * Initializes a new instance of Articles container.
 		 * @codestart
@@ -51,10 +52,11 @@ steal(
 				this.listPhotos();
 			}
 		},
-		
+
 		':page/:action route': function( data ) {
 			if (data.action == 'new-photos') {
-				var photosUpload = new PhotosUpload(this.element, {});
+				if (this.photosUpload) this.photosUpload.destroy();
+				this.photosUpload = new PhotosUpload(this.element, {});
 			}
 		},
 
@@ -65,10 +67,11 @@ steal(
 			if (data.action == 'edit') {
 				if (data.id > 0) {
 					Photo.findOne({id: data.id}, function(photo){
-						new PhotosUpload(self.element, {
+						if (this.photosUpload) this.photosUpload.destroy();
+						this.photosUpload = new PhotosUpload(self.element, {
 							photo: photo
 						});
-					})
+					});
 				}
 			}
         },
@@ -106,4 +109,4 @@ steal(
 			});
 		}
 	})
-)
+);

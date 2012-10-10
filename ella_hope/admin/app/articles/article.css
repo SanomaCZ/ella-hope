@@ -27,5 +27,6 @@
 .markItUpEditor {
 	background: #fff !important;
 	border: none !important;
+	font: 13px "Helvetica Neue", Helvetica, Arial !important;
 	padding: 5px !important;
 }

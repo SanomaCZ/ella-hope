@@ -1,5 +1,5 @@
 <%#  console.log(article); %>
-<%#  console.log(user); %>
+<%#  console.log(drafts); %>
 
 <div class="page-header">
 	<h1><%= $.t('Articles - Edit') %></h1>
@@ -10,12 +10,34 @@
 
 		<input type="hidden" name="id" id="id" <%= article.id ? "value=" + article.id : "" %> />
 
+		<% if (drafts.length) { %>
+			<div class="row pull-right">
+				<div>
+					<label for="drafts"><%= $.t('Drafts / Templates')%></label>
+				</div>
+				<select name="drafts">
+					<option></option>
+					<% $.each(drafts, function(i, draft){ %>
+						<%
+						var timestamp = Date.parse(draft.timestamp);
+						var draftDate = timestamp.toString('yyyy-MM-dd');
+						var draftTime = timestamp.toString('HH:mm');
+
+						var editUrl = can.route.url({ page: 'articles', action: 'edit-draft', id: draft.id });
+						var deleteUrl = can.route.url({ page: 'articles', action: 'delete-draft', id: draft.id });
+						%>
+						<option <%= (el) -> el.data( 'article', draft ) %> value="<%= draft.id %>"><%= draft.data.title %> (<%= draftDate+' '+draftTime %>)</options>
+					<% }) %>
+				</select>
+			</div>
+		<% } %>
+
 		<div class="row">
 			<div>
 				<label for="title"><%= $.t('Title')%></label>
 			</div>
 			<input class="span4 title" type="text" name="title" id="title" placeholder="<%= $.t('Add Title')%>"
-				value="<%= article.title %>" <%= article.title ? "" : "" %>>
+				value="<%= article.attr('title') %>" >
 		</div>
 
 		<div class="row">
@@ -87,15 +109,13 @@
               <button class="btn" data-dismiss="modal"><%= $.t('Close') %></button>
               <button class="btn btn-primary insert-photo"><%= $.t('Insert') %></button>
             </div>
-          </div>
+		</div>
 
 		<div class="row">
 			<div>
 				<label for="content"><%= $.t('Content')%></label>
 			</div>
-			<textarea class="content" rows="10" name="content" id="content" placeholder="<%= $.t('Add Content')%>" <%= article.attr('content') ? "" : "class='empty'" %>><%= article.content %></textarea>
-
-			<a data-target="#photosModal" role="button" class="btn btn-mini" data-toggle="modal"><%= $.t('Insert image')%></a>
+			<textarea class="content" rows="10" name="content" placeholder="<%= $.t('Add Content')%>" <%= article.attr('content') ? "" : "class='empty'" %>><%= article.content %></textarea>
 		</div>
 
 		<div class="row" id="photos-preview"></div>
@@ -163,7 +183,7 @@
 
 	<div class="row">
 		<div class="buttons">
-			<a href="javascript://" class="btn btn-primary save"><%= $.t('Save')%></a>
+			<a href="javascript://" class="btn btn-primary article-save"><%= $.t('Save')%></a>
 			<a href="javascript://" class="btn btn-primary autosave"><%= $.t('Autosave')%></a>
 			<a href="javascript://" class="btn cancel"><%= $.t('Cancel')%></a>
 		</div>
