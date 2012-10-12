@@ -2,6 +2,11 @@
 <div class="upload-image">
     <div class="form">
         <input type="hidden" name="filename" class="filename" value="<%= file ? file.name : '' %>" />
+        <input type="hidden" name="important_top"  value="<%= photo ? photo.important_top : '' %>" />
+        <input type="hidden" name="important_right"  value="<%= photo ? photo.important_right : '' %>" />
+        <input type="hidden" name="important_bottom"  value="<%= photo ? photo.important_bottom : '' %>" />
+        <input type="hidden" name="important_left"  value="<%= photo ? photo.important_left : '' %>" />
+
         <div class="row">
             <label for="title"><%= $.t('Title')%></label>
             <input class="span4 title" type="text" id="title" name="title" placeholder="<%= $.t('Add Title')%>"
@@ -43,35 +48,16 @@
     </div>
 
     <div class="important-part">
-        <table>
-            <tr>
-                <td>&nbsp;</td>
-                <td>
-                    <%= file.name ? file.name : '' %>
-                    <%= file.size ? '('+file.size/1000+"kB"+')' : '' %>
-                    <br>
-                    <input type="radio" name="important-part" value="top" title="<%= $.t('important part - top') %>" /></td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td><input type="radio" name="important-part" value="left" title="<%= $.t('important part - left') %>" /></td>
-                <td>
-                    <%# when editing files, there is going to be an uploaded image %>
-                    <% if (photo.public_url) { %>
-                        <img class="photo-preview" src="<%= photo.public_url %>" />
-                    <% } else { %>
-                        <%# when uploading files, there is going to be a preview before upload %>
-                        <div class="photo-preview" id="preview-<%=file.size%>"></div>
-                    <% } %>
-                </td>
-                <td><input type="radio" name="important-part" value="right" title="<%= $.t('important part - right') %>" /></td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-                <td><input type="radio" name="important-part" value="bottom" title="<%= $.t('important part - bottom') %>" /></td>
-                <td>&nbsp;</td>
-            </tr>
-        </table>
+        <%= file.name ? file.name : '' %>
+        <%= file.size ? '('+file.size/1000+"kB"+')' : '' %>
+
+        <%# when editing files, there is going to be an uploaded image %>
+        <% if (photo.public_url) { %>
+            <img class="photo-preview" src="<%= photo.public_url %>" />
+        <% } else { %>
+            <%# when uploading files, there is going to be a preview before upload %>
+            <div class="photo-preview" id="preview-<%=file.size%>"></div>
+        <% } %>
     </div>
 
     <div class="clear"></div>
