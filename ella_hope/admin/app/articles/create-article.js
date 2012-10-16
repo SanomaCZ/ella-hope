@@ -107,7 +107,8 @@ steal(
 				author: Author.findAll(),
 				category: Category.findAll(),
 				states: this.options.articleStates,
-				photos: Photo.findAll()
+				photos: Photo.findAll(),
+				photoFormat: PhotoFormat.findAll()
 			} ).then(function( frag ){
 				self.element.html(frag);
 
@@ -363,40 +364,56 @@ steal(
 		},
 
 		/**
-		 * when user clicks on table row, checked the radio button on that row
+		 * when user clicks on table row (radio, image), check the radio button on that row
+		 * show form with additional parameter
 		 * @param  {[type]} el [description]
 		 * @param  {[type]} ev [description]
 		 * @return {[type]}    [description]
 		 */
-		'#photosModal tr click':function(el, ev) {
-			$(el).find('input').attr('checked', 'checked');
+		'#photos-modal tr .pick click':function(el, ev) {
+			$(el).parents('tr').find('input').attr('checked', 'checked');
+			// hide previously showed form params
+			$('.snippet-params').slideUp(200);
+			// show current form params
+			$(el).parents('tr').find('.snippet-params').slideDown(500);
 		},
 
 		/**
-		 * hide dialog where user can choose photo and insert it into article
+		 * hide dialog when user picks the photo and insert it into article
+		 * photo is inserted as python snippet with required and optional attributes
 		 * @param  {[type]} el [description]
 		 * @param  {[type]} ev [description]
 		 * @return {[type]}    [description]
 		 */
-		'#photosModal .insert-photo click':function(el, ev) {
+		'#photos-modal .insert-photo click':function(el, ev) {
 			ev.preventDefault();
 
 			// get checked radio button, it's tr parent and photo from data attribute
-			var photo = $('input[name=photo]:checked', '#photosModal').parents('tr').data('photo');
+			var tr = $('input[name=photo]:checked', '#photos-modal').parents('tr'),
+				photo = tr.data('photo'),
+				params = tr.find('.snippet-params'),
+				format = can.deparam(params.serialize());
 
+			var snippet =
+				["{% box inline[_"+format.size+"_"+format.format+"] for photos.photo with pk "+photo.id+" %}",
+					"align:"+format.align,
+					format.title ? 'show_title:1' : 'show_title:0',
+					format.description ? 'show_description:1' : 'show_description:0',
+					format.authors ? 'show_authors:1' : 'show_authors:0',
+					format.source ? 'show_source:1' : 'show_source:0',
+					format.detail ? 'show_detail:1' : 'show_detail:0',
+					"{% endbox %}"
+				].join('\n');
+
+			$.markItUp( { replaceWith: snippet } );
 			//console.log(photo);
-			//$('.article .content').val($('.article .content').val()+' '+photo.resource_uri);
-			//$('#photos-preview').append('<img src="'+photo.public_url+'" height="50" />');
 
-			$.markItUp( { replaceWith:'<img src="'+photo.public_url+'" alt="'+photo.title+'" />' } );
-			//console.log(photo);
-
-			$('#photosModal').modal('hide');
+			$('#photos-modal').modal('hide');
 		},
 
 		insertPhoto: function() {
 
-			$('#photosModal').modal('show');
+			$('#photos-modal').modal('show');
 		}
 	})
 );
