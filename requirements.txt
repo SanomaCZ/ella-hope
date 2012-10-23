@@ -1,5 +1,1 @@
-ella>=3.0
-PIL
-git+git://github.com/toastdriven/django-tastypie.git
-git+git://github.com/SanomaCZ/ella-hub.git
-django-object-permissions
+django>=1.4.1

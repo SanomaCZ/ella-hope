@@ -1,7 +1,3 @@
 -r requirements.txt
 
 sphinx
-pysqlite
-nose
-coverage
-git+git://github.com/ella/ella-galleries.git
