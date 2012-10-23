@@ -7,5 +7,6 @@ steal(
 	, "./category.js"
 	, "./listing.js"
 	, "./photo.js"
+	, "./photo-format.js"
 	, "./user.js"
 );

@@ -1,6 +1,8 @@
 // file upload - http://jquery.malsup.com/form/
 steal(
 	'//app/resources/js/file-upload/jquery.form.js'
+	, '//app/resources/plugins/jcrop/js/jquery.Jcrop.js'
+	, '//app/resources/plugins/jcrop/css/jquery.Jcrop.css'
 )
 .then(
 
@@ -15,6 +17,7 @@ steal(
 	/* @prototype */
 	{
 		filelist: null,			// list of selected files for upload
+		//ratio: null,			// photo preview size vs original size
 
 		init: function() {
 			this.show(this.options.photo);
@@ -45,9 +48,76 @@ steal(
 				// enable chosen select for authors
 				// http://harvesthq.github.com/chosen/
 				$('.chzn-select').chosen();
+
+				// settings for Jcrop
+				// boxWidth and boxHeight automaticaly scale the image and return coordinates
+				// according to original image sizes
+				var jcropOptions = {
+					onSelect: function(coords){self.updateCoords('.photo-preview', coords);},
+					boxWidth: 600,
+					boxHeight: 600
+				};
+
+				// important part of image, based on uploader's crop
+				if (jQuery.isNumeric(self.photo.important_top) && jQuery.isNumeric(self.photo.important_left) &&
+					jQuery.isNumeric(self.photo.important_bottom) && jQuery.isNumeric(self.photo.important_bottom)) {
+					var x = self.photo.important_left,
+						y = self.photo.important_top,
+						x2 = self.photo.important_right,
+						y2 = self.photo.important_bottom
+						;
+
+					// we need to wait till image is loaded so we can get real dimensions
+					// EDIT: we don't need real dimensions, Jcrop can handle this for us
+					//$('.photo-preview').load(function(){
+
+						// // x, y, x2, y2 are coordinates on full-size image
+						// // image is usually displayed in smaller size
+						// // we need to convert these numbers to current image size
+						// var previewImageSize = {
+						// 	width: $('.photo-preview').width(),
+						// 	height: $('.photo-preview').height()
+						// };
+
+						// // create temporary image to get original dimensions
+						// var img = new Image();
+						// img.src = $('.photo-preview').attr('src');
+						// var originalImageSize = {
+						// 	width: img.width,
+						// 	height: img.height
+						// };
+						// img = null;
+
+						// self.ratio = previewImageSize.width / originalImageSize.width;
+
+						// x = Math.round(x * self.ratio);
+						// y = Math.round(y * self.ratio);
+						// x2 = Math.round(x2 * self.ratio);
+						// y2 = Math.round(y2 * self.ratio);
+
+						jcropOptions.setSelect = [ x, y, x2, y2 ];
+					//});
+				}
+				// enable crop
+				$('.photo-preview').Jcrop(jcropOptions);
 			});
 
 			this.element.slideDown(200);
+		},
+
+		/**
+		 * get coordinates from Jcrop and update form fields
+		 * @param  {[type]} id [description]
+		 * @param  {[type]} c  [description]
+		 * @return {[type]}    [description]
+		 */
+		updateCoords: function(element, c) {
+
+			var el = $(element).parents('.upload-image');
+			el.find('input[name=important_left]').val(c.x);
+			el.find('input[name=important_top]').val(c.y);
+			el.find('input[name=important_right]').val(c.x2);
+			el.find('input[name=important_bottom]').val(c.y2);
 		},
 
 		/**
@@ -85,6 +155,7 @@ steal(
 					$('#images').append(frag);
 				});
 
+				// show image next to form
 				self.showImagePreview(files[i]);
 			}
 
@@ -128,11 +199,14 @@ steal(
 		},
 
 		/**
-		 * show image preview before download
+		 * show image preview before upload
+		 * enables crop
 		 * @param  {[type]} file [description]
 		 * @return {[type]}      [description]
 		 */
 		showImagePreview: function(file) {
+
+			var self = this;
 
 			// we need to set timeout here otherwise it was too soon and preview elements
 			// were not already created
@@ -152,6 +226,15 @@ steal(
 				var reader = new FileReader();
 				reader.onload = (function(aImg) { return function(e) { aImg.src = e.target.result; }; })(img);
 				reader.readAsDataURL(file);
+
+				setTimeout(function(){
+					var id = "#preview-" + file.size;
+					$(id + " img").Jcrop({
+						onSelect: function(coords){self.updateCoords(id, coords);},
+						boxWidth: 600,
+						boxHeight: 600
+					});
+				}, 10);
 			}, 1000);
 		},
 
@@ -172,19 +255,15 @@ steal(
 					"title": $(this).find('.title').val(),
 					"slug": $(this).find('.title').val(),
 					"description": $(this).find('.description').val(),
-					"width": 256,
-					"height": 256,
 					"created": new Date().toISOString(),
 					"authors" : ["/admin-api/author/101/"],
 					"app_data": "{}",
-					"image": "attached_object_id:"+$(this).find('.filename').val()
+					"image": "attached_object_id:"+$(this).find('.filename').val(),
+					"important_top": $(this).find('input[name=important_top]').val(),
+					"important_left": $(this).find('input[name=important_left]').val(),
+					"important_bottom": $(this).find('input[name=important_bottom]').val(),
+					"important_right": $(this).find('input[name=important_right]').val()
 				};
-
-				// if important part is checked, add it to the object
-				var importantVal = $(this).find('input[name=important-part]:checked').val();
-				if (importantVal) {
-					objects[objects.length-1]["important_"+importantVal] = true;
-				}
 			});
 
 			// prepare Options Object
@@ -244,12 +323,26 @@ steal(
 			return false;
 		},
 
+		/**
+		 * update photo
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
 		'.photo-save click': function(el, ev) {
 
 			var form = this.element.find('form'),
 				values = form.serialize();
 
 			values = can.deparam(values);
+
+			// convert crop coordinates from preview image size to original image size
+			if (values.important_top) {
+				values.important_top = Math.round(values.important_top);
+				values.important_left = Math.round(values.important_left);
+				values.important_bottom = Math.round(values.important_bottom);
+				values.important_right = Math.round(values.important_right);
+			}
 
 			var p = new Photo();
 			//a.attr(values).save();

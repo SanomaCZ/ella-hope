@@ -89,7 +89,7 @@
 			</select>
 		</div>
 
-		<div id="photosModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
+		<div id="photos-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
               <h3 id="myModalLabel"><%= $.t('Insert image') %></h3>
@@ -98,9 +98,50 @@
             	<table class="table">
 				<% list(photos, function(photo, index) { %>
 					<tr <%= (el) -> el.data( 'photo', photo) %>>
-						<td><input type="radio" name="photo" /></td>
-						<td><img src="<%= photo.public_url %>" height="50" /></td>
+						<td><input class="pick" type="radio" name="photo" /></td>
+						<td><img class="pick" src="<%= photo.public_url %>" height="50" /></td>
 						<td><%= photo.title %></td>
+						<td>
+							<form class="snippet-params">
+								<select class="span2" name="size">
+									<option value="mala"><%= $.t('Small')%></option>
+									<option value="standard"><%= $.t('Medium')%></option>
+									<option value="velka"><%= $.t('Large')%></option>
+								</select>
+								<select class="span2" name="format">
+									<% for (var i = 0; i < photoFormat.length; i++) { %>
+										<%# console.log(format)%>
+										<option value="<%= photoFormat[i].name %>"><%= photoFormat[i].name %></option>
+									<% } %>
+								</select>
+
+								<table>
+									<tr>
+										<td><label for="resizable"><input type="checkbox" name="resizable" value="1" />&nbsp;<%= $.t('Resizable') %></label></td>
+										<td><label for="author"><input type="checkbox" name="authors" value="1" />&nbsp;<%= $.t('Authors') %></label></td>
+									</tr>
+									<tr>
+										<td><label for="description"><input type="checkbox" name="description" value="1" />&nbsp;<%= $.t('Description') %></label></td>
+										<td><label for="source"><input type="checkbox" name="source" value="1" />&nbsp;<%= $.t('Source') %></label></td>
+									</tr>
+								</table>
+
+								<label for="align">
+									<%= $.t('Align')%>:&nbsp;
+									<select class="span2" name="align">
+										<option value="right"><%= $.t('Right')%></option>
+										<option value="left"><%= $.t('Left')%></option>
+										<option value="center"><%= $.t('Center')%></option>
+									</select>
+								</label>
+
+								<label for="align">
+									<%= $.t('External url')%>:&nbsp;
+									<input class="span2" type="text" name="url" />
+								</label>
+
+							</form>
+						</td>
 					</tr>
 				<% }); %>
 				</table>

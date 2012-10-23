@@ -30,3 +30,17 @@
 	font: 13px "Helvetica Neue", Helvetica, Arial !important;
 	padding: 5px !important;
 }
+
+#photos-modal {
+	width: 600px;
+}
+#photos-modal .pick {
+	cursor: pointer;
+}
+#photos-modal .snippet-params {
+	display: none;
+}
+#photos-modal .snippet-params table td {
+	border: 0;
+	padding: 0 20px 0 0;
+}
