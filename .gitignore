@@ -4,7 +4,6 @@ __pycache__
 
 # project files
 media/
-static/
 ella_hope/settings/local.py
 
 # files created by server
