@@ -45,6 +45,10 @@ steal(
 			} ).then(function( frag ){
 				self.element.html(frag);
 
+				$('#file').on('change', function(){
+					self.fileChange();
+				});
+
 				// enable chosen select for authors
 				// http://harvesthq.github.com/chosen/
 				$('.chzn-select').chosen();
@@ -114,17 +118,17 @@ steal(
 		updateCoords: function(element, c) {
 
 			var el = $(element).parents('.upload-image');
-			el.find('input[name=important_left]').val(c.x);
-			el.find('input[name=important_top]').val(c.y);
-			el.find('input[name=important_right]').val(c.x2);
-			el.find('input[name=important_bottom]').val(c.y2);
+			el.find('input[name=important_left]').val(Math.round(c.x));
+			el.find('input[name=important_top]').val(Math.round(c.y));
+			el.find('input[name=important_right]').val(Math.round(c.x2));
+			el.find('input[name=important_bottom]').val(Math.round(c.y2));
 		},
 
 		/**
 		 * when user selects file(s) to upload
 		 * @return {[type]} [description]
 		 */
-		'#file change': function(){
+		'fileChange': function(){
 
 			var self = this,
 				files = document.getElementById("file").files,
@@ -229,11 +233,13 @@ steal(
 
 				setTimeout(function(){
 					var id = "#preview-" + file.size;
-					$(id + " img").Jcrop({
-						onSelect: function(coords){self.updateCoords(id, coords);},
-						boxWidth: 600,
-						boxHeight: 600
-					});
+					if ($(id + " img").length) {
+						$(id + " img").Jcrop({
+							onSelect: function(coords){self.updateCoords(id, coords);},
+							boxWidth: 600,
+							boxHeight: 600
+						});
+					}
 				}, 10);
 			}, 1000);
 		},
@@ -257,7 +263,7 @@ steal(
 					"description": $(this).find('.description').val(),
 					"created": new Date().toISOString(),
 					"authors" : ["/admin-api/author/101/"],
-					"app_data": "{}",
+					"app_data": null,
 					"image": "attached_object_id:"+$(this).find('.filename').val(),
 					"important_top": $(this).find('input[name=important_top]').val(),
 					"important_left": $(this).find('input[name=important_left]').val(),

@@ -254,6 +254,7 @@ steal(
 			values['slug'] =  "dfgja";
 			values['static'] =  true;
 			values['url'] =  "http://example.com/sub/6-dfgj/";
+			values['app_data'] = null;
 
 			if (!values['id']) delete values['id'];
 
