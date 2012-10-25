@@ -13,7 +13,7 @@ steal(
 	/* @static */
 	{
 		defaults: {
-			
+
 		}
 	},
 	/* @prototype */
@@ -29,7 +29,7 @@ steal(
 
 			// let the main app.js know that this control is ready
 			// necessary for init route listening
-			this.element.trigger('navbar-ready');
+			$('body').trigger('navbar-ready');
 
 			// dropdown in menu
 			$('.dropdown-toggle').dropdown();
@@ -43,18 +43,18 @@ steal(
 		"{can.route} page set": function( selector, event, newVal, oldVal ) {
 
 			//console.log('page set ' + newVal);
-			
+
 			// remove all binded events of the current control
 			if (this.currentControl) {
 				this.currentControl.destroy();
 			}
-			
+
 			// remove all child nodes
 			$("#content").empty();
 
 			// remove highlight (active class) from currently highlighted element
 			$('.nav').find('li.active').removeClass('active');
-	
+
 			// create new Control based on hash
 			switch (newVal) {
 				case 'articles':

@@ -4,7 +4,7 @@
 
 body.login-page {
 	background-color: #eee;
-	padding-top: 40px; 
+	padding-top: 40px;
 }
 body.login-page .container {
 	width: 350px;
@@ -14,7 +14,7 @@ body.login-page .container {
 body.login-page .container > .content {
 	background-color: #fff;
 	padding: 20px;
-	margin: 0 -20px; 
+	margin: 0 -20px;
 	-webkit-border-radius: 10px 10px 10px 10px;
 	-moz-border-radius: 10px 10px 10px 10px;
 	border-radius: 10px 10px 10px 10px;
@@ -22,7 +22,7 @@ body.login-page .container > .content {
 	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
 	box-shadow: 0 1px 2px rgba(0,0,0,.15);
 }
-  
+
 body.login-page legend {
 	margin-right: -50px;
 	font-weight: bold;
@@ -30,5 +30,9 @@ body.login-page legend {
 }
 
 #login-error {
+	display: none;
+}
+
+#api_url_custom {
 	display: none;
 }

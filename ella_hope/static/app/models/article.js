@@ -2,9 +2,8 @@ steal(
 	'can/model',
 	function($) {
 		Article = can.Model({
-
 			findAll: 'GET ' + BASE_URL + '/article/',
-			
+
 			// this worked if returned json was not ideal for findAll
 			// ideal means there should be an array of items in the first level of json
 			// or in _data attribute
@@ -61,7 +60,7 @@ steal(
 
 		// get articles
 		//can.fixture('GET ' + BASE_URL + '/article/', '//app/models/fixtures/articles.json');
-		
+
 		// create
 		// var id= 4;
 		// can.fixture("POST /articles/create", function(){

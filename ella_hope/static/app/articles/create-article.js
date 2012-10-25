@@ -395,7 +395,7 @@ steal(
 				format = can.deparam(params.serialize());
 
 			var snippet =
-				["{% box inline[_"+format.size+"_"+format.format+"] for photos.photo with pk "+photo.id+" %}",
+				["{% box inline_"+format.size+"_"+format.format+" for photos.photo with pk "+photo.id+" %}",
 					"align:"+format.align,
 					format.title ? 'show_title:1' : 'show_title:0',
 					format.description ? 'show_description:1' : 'show_description:0',

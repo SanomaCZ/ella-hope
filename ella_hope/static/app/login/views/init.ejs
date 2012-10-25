@@ -1,5 +1,4 @@
 <div class="row" id="login">
-
 	<div class="alert alert-error" id="login-error">
 		<a class="close" data-dismiss="alert">×</a>
 		<strong><%= $.t('Error') %>: </strong><%= $.t('Wrong username or password.') %>
@@ -10,10 +9,19 @@
 		<form>
 			<fieldset>
 				<div class="clearfix">
-					<input type="text" placeholder="Username" name="username" required="required">
+					<input type="text" placeholder="<%= $.t('Username')%>" name="username" required="required">
 				</div>
 				<div class="clearfix">
-					<input type="password" placeholder="Password" name="password" required="required">
+					<input type="password" placeholder="<%= $.t('Password')%>" name="password" required="required">
+				</div>
+				<div class="clearfix">
+					<select id="api_url" name="api_url" required="required">
+						<% list(this.api_url, function(data) { %>
+							<option value="<%= data.url %>"><%= data.name %></option>
+						<% }) %>
+						<option value="0"><%= $.t('Other...') %></option>
+					</select>
+					<input type="text" name="api_url_custom" id="api_url_custom" placeholder="<%= $.t('Enter url without ending /')%>" disabled="disabled" />
 				</div>
 				<button class="btn btn-primary" type="submit" id="submit">Sign in</button>
 			</fieldset>

@@ -11,10 +11,6 @@ steal(
 				// Retrieve the object from storage
 				var retrievedObject = localStorage.getItem('currentUserStorage');
 
-				// if (this.validateApiKey()) {
-				// 	console.log('api key valid');
-				// }
-
 				USER.attr(retrievedObject);
 				//console.log(USER);
 
@@ -36,7 +32,8 @@ steal(
 							loggedIn: true,
 							api_key: data.api_key,
 							username: userData.username,
-							auth_tree: data.auth_tree
+							auth_tree: data.auth_tree,
+							base_url: BASE_URL
 						});
 
 						// Put the object into storage
@@ -84,62 +81,6 @@ steal(
 				//return result;
 				// temporary, because of some network Error exception
 				return true;
-			},
-
-			// if user is not logged in, check local storage
-			// @return {[type]} [description]
-			checkLogin : function() {
-
-				var user = this.getUserFromLocalStorage();
-
-				if (user && user['api_key']) {
-
-					// set global variable USER - we need this because validateApiKey uses
-					// POST request with credential header, which should be stored
-					// in USER variable
-					USER.attr(user);
-
-					// check if api_key is valid
-					if (this.validateApiKey()) {
-						// key is valid, let's start the application
-						return true;
-					}
-					else {
-						// key is not valid, empty localStorage
-						localStorage.setItem('currentUserStorage', null);
-						return false;
-					}
-				}
-				return false;
-			},
-
-			// get user from local storage
-			getUserFromLocalStorage : function() {
-
-				// Retrieve the object from storage
-				return JSON.parse(localStorage.getItem('currentUserStorage'));
-			},
-
-			// validate api key to check if the user is still logged in
-			validateApiKey : function() {
-				var isValid = false;
-				$.ajax({
-					type: 'POST',
-					url: BASE_URL + '/validate-api-key/',
-					async: false,
-					success : function(data, textStatus, xmlHttpRequest) {
-						// if api key is valid, return true
-						if (data.api_key_validity) {
-							isValid = true;
-						}
-					},
-					error : function(xhr, ajaxOptions, thrownError) {
-						if (console && console.log) {
-							console.log('error validating api key');
-						}
-					}
-				});
-				return isValid;
 			}
 		}, {});
 	}
