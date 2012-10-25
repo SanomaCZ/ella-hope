@@ -55,7 +55,10 @@ steal(
 
 		':page/:action route': function( data ) {
 			if (data.action == 'new-photos') {
-				if (this.photosUpload) this.photosUpload.destroy();
+				if (this.photosUpload) {
+					this.photosUpload.destroy();
+					this.photosUpload = null;
+				}
 				this.photosUpload = new PhotosUpload(this.element, {});
 			}
 		},
@@ -67,7 +70,10 @@ steal(
 			if (data.action == 'edit') {
 				if (data.id > 0) {
 					Photo.findOne({id: data.id}, function(photo){
-						if (this.photosUpload) this.photosUpload.destroy();
+						if (this.photosUpload) {
+							this.photosUpload.destroy();
+							this.photosUpload = null;
+						}
 						this.photosUpload = new PhotosUpload(self.element, {
 							photo: photo
 						});

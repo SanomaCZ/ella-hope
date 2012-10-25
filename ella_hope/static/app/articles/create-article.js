@@ -107,8 +107,8 @@ steal(
 				author: Author.findAll(),
 				category: Category.findAll(),
 				states: this.options.articleStates,
-				photos: Photo.findAll(),
-				photoFormat: PhotoFormat.findAll()
+				photos: Photo.findAll()
+				//photoFormat: PhotoFormat.findAll()
 			} ).then(function( frag ){
 				self.element.html(frag);
 

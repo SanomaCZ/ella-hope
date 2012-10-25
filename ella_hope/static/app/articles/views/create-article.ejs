@@ -109,10 +109,14 @@
 									<option value="velka"><%= $.t('Large')%></option>
 								</select>
 								<select class="span2" name="format">
-									<% for (var i = 0; i < photoFormat.length; i++) { %>
-										<%# console.log(format)%>
-										<option value="<%= photoFormat[i].name %>"><%= photoFormat[i].name %></option>
-									<% } %>
+									<option value="ctverec">ctverec</option>
+									<option value="nudle_sirka">nudle_sirka</option>
+									<option value="nudle_vyska">nudle_vyska</option>
+									<option value="obdelnik_sirka">obdelnik_sirka</option>
+									<option value="obdelnik_vyska">obdelnik_vyska</option>
+									<%# for (var i = 0; i < photoFormat.length; i++) { %>
+										<!--<option value="<%= photoFormat[i].name %>"><%= photoFormat[i].name %></option>-->
+									<%# } %>
 								</select>
 
 								<table>

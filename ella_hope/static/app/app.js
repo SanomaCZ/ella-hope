@@ -33,8 +33,7 @@ steal(
 			function(t){
 				//console.log($.t('france'));
 
-				// show login page
-				// if user is already logged in, login page is skipped
+				// performs login
 				$('body').trigger('show-login');
 			},
 			{
