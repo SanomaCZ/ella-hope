@@ -37,8 +37,9 @@ steal(
 					{name:'Quotes', openWith:'> '},
 					{name:'Code Block / Code', openWith:'(!(\t|!|`)!)', closeWith:'(!(`)!)'},
 					{separator:'---------------'},
-					{name:'Preview', call:'preview', className:"preview"},
-					{name:'Test', key:'1', placeHolder:'Your title here...', closeWith:function(markItUp) { return alert('ano'); } }
+					//{name:'Preview', call:'preview', className:"preview"},
+					{name:'Preview', key:'P', className:"preview", closeWith:function(markItUp) { return ArticleCreate.prototype.showPreview(); }},
+					//{name:'Test', key:'1', placeHolder:'Your title here...', closeWith:function(markItUp) { return alert('ano'); } }
 				]
 			}
 		}
@@ -415,6 +416,14 @@ steal(
 		insertPhoto: function() {
 
 			$('#photos-modal').modal('show');
+		},
+
+		showPreview: function() {
+
+			// TODO
+			var id = $('#id').val();
+
+			window.open('http://crawler.bfhost.cz:12345/preview/'+id+'/');
 		}
 	})
 );
