@@ -257,12 +257,13 @@ steal(
 
 			// compose resource_data object from all selected files
 			$('.uploadForm').find('.upload-image').each(function(){
+
 				objects[objects.length] = {
 					"title": $(this).find('.title').val(),
 					"slug": $(this).find('.title').val(),
 					"description": $(this).find('.description').val(),
 					"created": new Date().toISOString(),
-					"authors" : ["/admin-api/author/101/"],
+					"authors" : ["/admin-api/author/1/", "/admin-api/author/2/"], //$(this).find('.authors').val(),
 					"app_data": null,
 					"image": "attached_object_id:"+$(this).find('.filename').val(),
 					"important_top": $(this).find('input[name=important_top]').val(),
