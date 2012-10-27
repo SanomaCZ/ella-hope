@@ -3,13 +3,14 @@ steal(
 	, '//app/resources/plugins/markitup/sets/markdown/set.js'
 	, '//app/resources/plugins/markitup/skins/markitup/style.css'
 	, '//app/resources/plugins/markitup/sets/markdown/style.css'
+	, '//app/resources/js/slug.js'
 )
 .then(
 	ArticleCreate = can.Control(
 	/* @static */
 	{
 		defaults: {
-			autosaveInterval: 30 * 1000,	// how ofter is draft automatically saved
+			autosaveInterval: 5 * 1000,	// how ofter is draft automatically saved
 			articleStates: ["added", "ready", "approved", "published", "postponed",	"deleted"],
 			markitupSettings: {
 				previewParserPath:	'',
@@ -251,10 +252,10 @@ steal(
 			// if published is not present, set to false
 			if (!values['published']) values['published'] = false;
 
-			values['resource_uri'] =  "/admin-api/article/6/";
-			values['slug'] =  "dfgja";
-			values['static'] =  true;
-			values['url'] =  "http://example.com/sub/6-dfgj/";
+			// if static is not present, set to false
+			if (!values['static']) values['static'] = false;
+
+			// app_data is required to be sent, althougt it's empty now
 			values['app_data'] = null;
 
 			if (!values['id']) delete values['id'];
@@ -314,7 +315,6 @@ steal(
 			};
 
 			if (!this.draft) {
-				console.log('new draft');
 				this.draft = new Draft();
 			}
 
@@ -353,6 +353,20 @@ steal(
 			}
 
 			can.route.attr({page:'articles'}, true);
+		},
+
+		/**
+		 * generates slug from title
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'.slug-from-title click' : function(el, ev) {
+
+			ev.preventDefault();
+
+			var title = $('input[name=title]').val();
+			el.siblings('input[name=slug]').val(slug(title));
 		},
 
 		'select[name=drafts] change': function(el, ev) {

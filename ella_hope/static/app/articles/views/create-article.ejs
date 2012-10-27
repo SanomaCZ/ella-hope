@@ -42,6 +42,15 @@
 
 		<div class="row">
 			<div>
+				<label for="slug"><%= $.t('Slug')%></label>
+			</div>
+			<input class="span4 slug" type="text" name="slug" id="slug" placeholder="<%= $.t('Press "slug" button to generate slug from title')%>"
+				value="<%= article.attr('slug') %>" >
+			<button class="btn btn-mini slug-from-title"><%= $.t('slug from title')%></button>
+		</div>
+
+		<div class="row">
+			<div>
 				<label for="category"><%= $.t('Category')%></label>
 			</div>
 			<select name="category" id="category" data-placeholder="<%= $.t('Choose category')%>" class="chzn-select category">
@@ -87,6 +96,7 @@
 					<% }) %>
 				<% } %>
 			</select>
+			<button class="btn btn-mini add-author"><%= $.t('add author')%></button>
 		</div>
 
 		<div id="photos-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
@@ -215,10 +225,13 @@
 		</div>
 
 		<div class="row">
-			<div>
-				<label for="published"><%= $.t('Published')%></label>
-			</div>
-			<input class="published" type="checkbox" name="published" id="published" <%= article.published ? 'checked' : '' %> value="true" />
+			<label for="published"><%= $.t('Published')%>
+				<input class="published" type="checkbox" name="published" id="published" <%= article.published ? 'checked' : '' %> value="true" />
+			</label>
+
+			<label for="static"><%= $.t('Static')%>
+				<input class="static" type="checkbox" name="static" id="static" <%= article.static ? 'checked' : '' %> value="true" />
+			</label>
 		</div>
 
 	</form>
@@ -226,8 +239,8 @@
 	<div class="row">
 		<div class="buttons">
 			<a href="javascript://" class="btn btn-primary article-save"><%= $.t('Save')%></a>
-			<a href="javascript://" class="btn btn-primary autosave"><%= $.t('Autosave')%></a>
-			<a href="javascript://" class="btn cancel"><%= $.t('Cancel')%></a>
+			<a href="javascript://" class="btn btn-info autosave"><%= $.t('Autosave')%></a>
+			<a href="javascript://" class="btn cancel"><%= $.t('Cancel without saving')%></a>
 		</div>
 	</div>
 </div>

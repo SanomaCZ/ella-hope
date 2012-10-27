@@ -260,6 +260,16 @@ steal(
 			// compose resource_data object from all selected files
 			$('.uploadForm').find('.upload-image').each(function(){
 
+				var important_top = $(this).find('input[name=important_top]').val(),
+					important_left = $(this).find('input[name=important_left]').val(),
+					important_bottom = $(this).find('input[name=important_bottom]').val(),
+					important_right = $(this).find('input[name=important_right]').val();
+
+				important_top = important_top ? parseInt(important_top) : null;
+				important_left = important_left ? parseInt(important_left) : null;
+				important_bottom = important_bottom ? parseInt(important_bottom) : null;
+				important_right = important_right ? parseInt(important_right) : null;
+
 				objects[objects.length] = {
 					"title": $(this).find('.title').val(),
 					"slug": $(this).find('.title').val(),
@@ -268,13 +278,16 @@ steal(
 					"authors" : ["/admin-api/author/1/", "/admin-api/author/2/"], //$(this).find('.authors').val(),
 					"app_data": null,
 					"image": "attached_object_id:"+$(this).find('.filename').val(),
-					"important_top": $(this).find('input[name=important_top]').val(),
-					"important_left": $(this).find('input[name=important_left]').val(),
-					"important_bottom": $(this).find('input[name=important_bottom]').val(),
-					"important_right": $(this).find('input[name=important_right]').val(),
-					"rotate": $(this).find('input[name=rotate]').val()
+					"important_top": important_top,
+					"important_left": important_left,
+					"important_bottom": important_bottom,
+					"important_right": important_right,
+					"rotate": parseInt($(this).find('input[name=rotate]').val())
 				};
 			});
+
+			console.log(objects);
+			return false;
 
 			// prepare Options Object
 			var options = {
@@ -350,7 +363,8 @@ steal(
 			values.app_data = null;
 
 			// convert crop coordinates from preview image size to original image size
-			if (values.important_top) {
+			if (values.important_top && values.important_left &&
+				values.important_bottom && values.important_right) {
 				values.important_top = Math.round(values.important_top);
 				values.important_left = Math.round(values.important_left);
 				values.important_bottom = Math.round(values.important_bottom);
@@ -394,18 +408,21 @@ steal(
 				.css('-moz-transform', 'rotate('+rotation+'deg)'); // rotation for mozilla
 
 			if (rotation == 0 || rotation == 180) {
-				// enable Jcrop, because image has same dimensions as before rotation
-				$img.Jcrop(this.options.jcropOptions)
-					.siblings('.jcrop-holder')
-					.find('img')
-						// also rotate Jcrop elements, otherwise image remained unrotated
-						.css('-webkit-transform', 'rotate('+rotation+'deg)')
-						.css('-moz-transform', 'rotate('+rotation+'deg)');
 
 				$img.parent().css('width', $img.css('width')).css('height', $img.css('height'));
 
 				// adjust position
 				$img.css('top', '0px').css('left', '0px');
+
+				// enable Jcrop, because image has same dimensions as before rotation
+				$img
+					.Jcrop(this.options.jcropOptions)
+					.siblings('.jcrop-holder')
+					.find('img')
+					// also rotate Jcrop elements, otherwise image remained unrotated
+					.css('-webkit-transform', 'rotate('+rotation+'deg)')
+					.css('-moz-transform', 'rotate('+rotation+'deg)')
+						;
 			}
 			else {
 				// do not enable Jcrop, width and height are different and Jcrop can't handle this
