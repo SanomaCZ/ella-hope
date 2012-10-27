@@ -366,9 +366,15 @@ steal(
 			ev.preventDefault();
 
 			var title = $('input[name=title]').val();
-			el.siblings('input[name=slug]').val(slug(title));
+			$('#slug').val(slug(title));
 		},
 
+		/**
+		 * prefill article form with draft/template values
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
 		'select[name=drafts] change': function(el, ev) {
 			var draft = $(el.find('option:selected')).data('article');
 			//console.log(this.article.attr());
@@ -376,7 +382,64 @@ steal(
 			//this.article.attr({title: 'hehe'});
 			this.article.attr(draft.data._data);
 			//console.log(this.article.attr());
+		},
 
+		/**
+		 * open a dialog where new author can be added
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'.add-author click' : function(el, ev) {
+
+			ev.preventDefault();
+			$('#author-modal').modal('show');
+		},
+
+		/**
+		 * generate slug from author name
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'#author-modal .slug-from-name click' : function(el, ev) {
+
+			ev.preventDefault();
+
+			var name = el.siblings('input[name=author-name]').val();
+			$('#author-modal').find('input[name=author-slug]').val(slug(name));
+		},
+
+		/**
+		 * create new author and insert it into author's select
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'#author-modal .insert-author click' : function(el, ev) {
+
+			ev.preventDefault();
+
+			// form values
+			var values = $('#author-modal').find('form').serialize();
+			values = can.deparam(values);
+
+			values['name'] = values['author-name'];
+			values['slug'] = values['author-slug'];
+
+			// create new author
+			var author = new Author();
+			author.attr(values);
+			author.save(function(data){
+				$('#authors')
+					// append new author to authors list and make it selected
+					.append('<option value="'+data.resource_uri+'" selected="selected">'+data.name+'</option>')
+					// update chosen select
+					.trigger('liszt:updated')
+					;
+			});
+
+			$('#author-modal').modal('hide');
 		},
 
 		/**
@@ -427,11 +490,19 @@ steal(
 			$('#photos-modal').modal('hide');
 		},
 
+		/**
+		 * opens dialog where user can choose picture and insert it into an article
+		 * @return {[type]} [description]
+		 */
 		insertPhoto: function() {
 
 			$('#photos-modal').modal('show');
 		},
 
+		/**
+		 * shows article preview
+		 * @return {[type]} [description]
+		 */
 		showPreview: function() {
 
 			// TODO

@@ -96,7 +96,7 @@
 					<% }) %>
 				<% } %>
 			</select>
-			<button class="btn btn-mini add-author"><%= $.t('add author')%></button>
+			<button class="btn btn-mini add-author"><%= $.t('add new author')%></button>
 		</div>
 
 		<div id="photos-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
@@ -242,5 +242,27 @@
 			<a href="javascript://" class="btn btn-info autosave"><%= $.t('Autosave')%></a>
 			<a href="javascript://" class="btn cancel"><%= $.t('Cancel without saving')%></a>
 		</div>
+	</div>
+</div>
+
+<div id="author-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3 id="myModalLabel"><%= $.t('Add new author') %></h3>
+	</div>
+	<div class="modal-body">
+		<form>
+			<label for="name">Name</label>
+			<input type="text" name="author-name" />
+
+			<label for="author-slug">Slug</label>
+			<input type="text" name="author-slug" />
+
+			<button class="btn btn-mini slug-from-name"><%= $.t('slug from name')%></button>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal"><%= $.t('Close') %></button>
+		<button class="btn btn-primary insert-author"><%= $.t('Insert') %></button>
 	</div>
 </div>
