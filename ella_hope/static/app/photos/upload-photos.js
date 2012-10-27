@@ -286,9 +286,6 @@ steal(
 				};
 			});
 
-			console.log(objects);
-			return false;
-
 			// prepare Options Object
 			var options = {
 				type: "PATCH",
