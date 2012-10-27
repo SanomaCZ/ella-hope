@@ -11,7 +11,15 @@ steal(
 	{
 		defaults: {
 			autosaveInterval: 30 * 1000,	// how ofter is draft automatically saved
-			articleStates: ["added", "ready", "approved", "published", "postponed",	"deleted"]
+			articleStates: ["added", "ready", "approved", "published", "postponed",	"deleted"],
+			// settings for Jcrop
+			// boxWidth and boxHeight automaticaly scale the image and return coordinates
+			// according to original image sizes
+			jcropOptions: {
+				onSelect: function(coords){PhotosUpload.prototype.updateCoords('.photo-preview img', coords);},
+				boxWidth: 600,
+				boxHeight: 600
+			}
 		}
 	},
 	/* @prototype */
@@ -49,18 +57,11 @@ steal(
 					self.fileChange();
 				});
 
+				var jcropOptions = self.options.jcropOptions;
+
 				// enable chosen select for authors
 				// http://harvesthq.github.com/chosen/
 				$('.chzn-select').chosen();
-
-				// settings for Jcrop
-				// boxWidth and boxHeight automaticaly scale the image and return coordinates
-				// according to original image sizes
-				var jcropOptions = {
-					onSelect: function(coords){self.updateCoords('.photo-preview', coords);},
-					boxWidth: 600,
-					boxHeight: 600
-				};
 
 				// important part of image, based on uploader's crop
 				if (jQuery.isNumeric(self.photo.important_top) && jQuery.isNumeric(self.photo.important_left) &&
@@ -102,8 +103,9 @@ steal(
 						jcropOptions.setSelect = [ x, y, x2, y2 ];
 					//});
 				}
+
 				// enable crop
-				$('.photo-preview').Jcrop(jcropOptions);
+				$('.photo-preview img').Jcrop(jcropOptions);
 			});
 
 			this.element.slideDown(200);
@@ -269,7 +271,8 @@ steal(
 					"important_top": $(this).find('input[name=important_top]').val(),
 					"important_left": $(this).find('input[name=important_left]').val(),
 					"important_bottom": $(this).find('input[name=important_bottom]').val(),
-					"important_right": $(this).find('input[name=important_right]').val()
+					"important_right": $(this).find('input[name=important_right]').val(),
+					"rotate": $(this).find('input[name=rotate]').val()
 				};
 			});
 
@@ -343,6 +346,9 @@ steal(
 
 			values = can.deparam(values);
 
+			// app_data is required for django, can be set to null but must be there
+			values.app_data = null;
+
 			// convert crop coordinates from preview image size to original image size
 			if (values.important_top) {
 				values.important_top = Math.round(values.important_top);
@@ -360,6 +366,62 @@ steal(
 			//console.log(values);
 
 			can.route.attr({page:'photos'}, true);
+		},
+
+		/**
+		 * image rotation
+		 * Jcrop is enabled by default - we need to disable it before rotation
+		 * TODO: when specification is better - http://hacks.mozilla.org/2011/01/how-to-develop-a-html5-image-uploader/
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'.rotate-image click' : function(el, ev) {
+
+			var $img = el.closest('.important-part').children('.photo-preview').children('img'),
+				rotation = el.data('rotation') || 0;
+
+			// set input value
+			el.closest('form').find('input[name=rotate]').val(rotation);
+
+			// we need to destroy Jcrop to be able to rotate image
+			JcropAPI = $img.data('Jcrop');
+			if (JcropAPI) JcropAPI.destroy();
+
+			$img
+				.css('visibility', 'visible')	// image may be hidden because of Jcrop
+				.css('-webkit-transform', 'rotate('+rotation+'deg)') // rotation for webkit
+				.css('-moz-transform', 'rotate('+rotation+'deg)'); // rotation for mozilla
+
+			if (rotation == 0 || rotation == 180) {
+				// enable Jcrop, because image has same dimensions as before rotation
+				$img.Jcrop(this.options.jcropOptions)
+					.siblings('.jcrop-holder')
+					.find('img')
+						// also rotate Jcrop elements, otherwise image remained unrotated
+						.css('-webkit-transform', 'rotate('+rotation+'deg)')
+						.css('-moz-transform', 'rotate('+rotation+'deg)');
+
+				$img.parent().css('width', $img.css('width')).css('height', $img.css('height'));
+
+				// adjust position
+				$img.css('top', '0px').css('left', '0px');
+			}
+			else {
+				// do not enable Jcrop, width and height are different and Jcrop can't handle this
+
+				// set parent div to have current image dimensions
+				$img.parent().css('width', $img.css('height')).css('height', $img.css('width'));
+
+				// adjust position
+				var positionTop = '31px',
+					positionLeft = '-31px';
+				if ($img.css('width') < $img.css('height')) {
+					positionTop = '-31px';
+					positionLeft = '31px';
+				}
+				$img.css('top', positionTop).css('left', positionLeft);
+			}
 		},
 
 		'.cancel click' : function(){

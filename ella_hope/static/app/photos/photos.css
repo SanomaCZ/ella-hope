@@ -19,8 +19,10 @@
 .photo-preview {
 	max-height: 600px;
 	max-width: 600px;
+	position: relative;
 }
 .photo-preview img {
 	max-height: 600px;
 	max-width: 600px;
+	position: absolute;
 }

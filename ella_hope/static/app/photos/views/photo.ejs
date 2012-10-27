@@ -6,6 +6,7 @@
         <input type="hidden" name="important_right"  value="<%= photo ? photo.important_right : '' %>" />
         <input type="hidden" name="important_bottom"  value="<%= photo ? photo.important_bottom : '' %>" />
         <input type="hidden" name="important_left"  value="<%= photo ? photo.important_left : '' %>" />
+        <input type="hidden" name="rotate" value="0" />
 
         <div class="row">
             <label for="title"><%= $.t('Title')%></label>
@@ -51,13 +52,24 @@
         <%= file.name ? file.name : '' %>
         <%= file.size ? '('+file.size/1000+"kB"+')' : '' %>
 
+        <br>
+
+        <%= $.t('Rotate') %>
+        <button class="btn btn-small rotate-image" type="button" data-rotation="0">0°</button>
+        <button class="btn btn-small rotate-image" type="button" data-rotation="90">90°</button>
+        <button class="btn btn-small rotate-image" type="button" data-rotation="180">180°</button>
+        <button class="btn btn-small rotate-image" type="button" data-rotation="270">270°</button>
+
+        <br><br>
+
         <%# when editing files, there is going to be an uploaded image %>
         <% if (photo.public_url) { %>
-            <img class="photo-preview" src="<%= photo.public_url %>" />
+            <div class="photo-preview"><img src="<%= photo.public_url %>" /></div>
         <% } else { %>
             <%# when uploading files, there is going to be a preview before upload %>
             <div class="photo-preview" id="preview-<%=file.size%>"></div>
         <% } %>
+
     </div>
 
     <div class="clear"></div>
