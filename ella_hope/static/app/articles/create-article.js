@@ -109,7 +109,8 @@ steal(
 				author: Author.findAll(),
 				category: Category.findAll(),
 				states: this.options.articleStates,
-				photos: Photo.findAll()
+				photos: Photo.findAll(),
+				tag: Tag.findAll()
 				//photoFormat: PhotoFormat.findAll()
 			} ).then(function( frag ){
 				self.element.html(frag);
@@ -440,6 +441,64 @@ steal(
 			});
 
 			$('#author-modal').modal('hide');
+		},
+
+		/**
+		 * open a dialog where new tag can be added
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'.add-tag click' : function(el, ev) {
+
+			ev.preventDefault();
+			$('#tag-modal').modal('show');
+		},
+
+		/**
+		 * generate slug from tag name
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'#tag-modal .slug-from-name click' : function(el, ev) {
+
+			ev.preventDefault();
+
+			var name = el.siblings('input[name=tag-name]').val();
+			$('#tag-modal').find('input[name=tag-slug]').val(slug(name));
+		},
+
+		/**
+		 * create new tag and insert it into tag's select
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'#tag-modal .insert-tag click' : function(el, ev) {
+
+			ev.preventDefault();
+
+			// form values
+			var values = $('#tag-modal').find('form').serialize();
+			values = can.deparam(values);
+
+			values['name'] = values['tag-name'];
+			values['slug'] = values['tag-slug'];
+
+			// create new tag
+			var tag = new Tag();
+			tag.attr(values);
+			tag.save(function(data){
+				$('#tags')
+					// append new tag to tags list and make it selected
+					.append('<option value="'+data.resource_uri+'" selected="selected">'+data.name+'</option>')
+					// update chosen select
+					.trigger('liszt:updated')
+					;
+			});
+
+			$('#tag-modal').modal('hide');
 		},
 
 		/**

@@ -8,5 +8,6 @@ steal(
 	, "./listing.js"
 	, "./photo.js"
 	, "./photo-format.js"
+	, "./tag.js"
 	, "./user.js"
 );
