@@ -27,7 +27,8 @@ steal(
 	},
 	/* @prototype */
 	{
-		articleCreate: null,
+		articleCreate: null,	// control for creating/editing an article
+
 		/**
 		 * Initializes a new instance of Articles container.
 		 * @codestart
@@ -38,6 +39,13 @@ steal(
 		 * @codeend
 		 */
 		init: function(element, options){
+
+			// destroy articleCreate control if it was created
+			// this is useful is we i.e. edit an article and without saving or canceling
+			// we go to article list... timer etc. needs to be destroyed
+			if (this.articleCreate) {
+				this.articleCreate.destroy();
+			}
 
 			this.element.html(can.view(this.options.initView, this.options));
 			this.listArticles();
@@ -51,7 +59,6 @@ steal(
 
 		':page/:action route': function( data ) {
 			if (data.action == 'new') {
-				if (this.articleCreate) this.articleCreate.destroy();
 				this.articleCreate = new ArticleCreate(this.element, {});
 			}
 		},
@@ -63,10 +70,10 @@ steal(
 			if (data.action == 'edit') {
 				if (data.id > 0) {
 					Article.findOne({id: data.id}, function(article){
-						if (self.articleCreate) self.articleCreate.destroy();
 						self.articleCreate = new ArticleCreate(self.element, {
 							type: 'article',
-							article: article
+							article: article,
+							timer: self.autosaveTimer
 						});
 					});
 				}
@@ -74,10 +81,10 @@ steal(
 			else if (data.action == 'edit-draft') {
 				if (data.id > 0) {
 					Draft.findOne({id: data.id}, function(draft){
-						if (self.articleCreate) self.articleCreate.destroy();
 						self.articleCreate = new ArticleCreate(self.element, {
 							type: 'draft',
-							article: draft
+							article: draft,
+							timer: self.autosaveTimer
 						});
 					});
 				}
@@ -109,17 +116,16 @@ steal(
 		'listArticles': function() {
 
 			var self = this;
-			//this.element.html(can.view(this.options.initView, this.options));
-
-			// Article.findAll().each(function(data){
-			// 	console.log(data);
-			// })
 
 			can.view('//app/articles/views/list-articles.ejs', {
 				articles: Article.findAll()
 			}).then(function( frag ){
 				$("#inner-content").html( frag );
 			});
+		},
+
+		destroy: function() {
+			can.Control.prototype.destroy.call( this );
 		}
 	})
 );

@@ -51,7 +51,7 @@
 	right: 150px;
 }
 
-button.add-author {
+button.add-author, button.add-tag {
 	position: relative;
 	top: -16px;
 }

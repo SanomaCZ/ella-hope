@@ -209,11 +209,9 @@ steal(
 		 */
 		initAutosave: function(interval) {
 
-
-			//console.log('init autosave');
-
 			var self = this;
 
+			//if (this.autosaveTimer) this.stopAutosave();
 			this.autosaveTimer = setInterval(function(){
 				self.saveDraft();
 			}, interval);
@@ -225,20 +223,19 @@ steal(
 		 */
 		stopAutosave: function() {
 			clearInterval(this.autosaveTimer);
+			this.autosaveTimer = null;
 		},
 
 		createArticle: function() {
 
 			//console.log('create');
 
-			var form = this.element.find('form'),
+			var form = $('form.article'),
 				values = form.serialize();
 			values = can.deparam(values);
 
 			values['announced'] = false;
 			values['app_data'] =  "{}";
-			//values['last_updated'] =  "2012-08-07T09:47:44";
-			//values['listings'] =  [];//Constructor[0];
 			values['photo'] =  null;
 
 			// merge date and time of publish_from
@@ -261,35 +258,37 @@ steal(
 
 			if (!values['id']) delete values['id'];
 
-			//console.log(values);
 			// validation
 			if(1) {
-				//this.article.attr(values).save();
-				//delete values['id'];
+
+				//console.log(values);return false;
+
 				var a = new Article();
-				//a.attr(values).save();
 				a.attr(values);
-				//console.log(a);
 				a.save();
-				//this.hide();
 
 				// delete draft when article is saved
 				if (this.draft) {
 					this.draft.destroy();
 				}
 
+				// redirect to articles list
 				can.route.attr({page:'articles'}, true);
 			}
 		},
 
 		/**
-		 * save the article as a draft
+		 * save the article as a draft or saves article (with timer or autosave button)
 		 * @param  {[type]} el [description]
 		 * @return {[type]}    [description]
 		 */
 		saveDraft : function(el) {
 
-			var self = this;
+			var self = this,
+				buttonNormalText = $('a.autosave').data('normal'),
+				buttonSavingText = $('a.autosave').data('saving'),
+				buttonNormalCss = 'btn-info',
+				buttonSavingCss = 'btn-warning';
 
 			var form = this.element.find('form');
 			var values = form.serialize();
@@ -305,6 +304,12 @@ steal(
 					return;
 				}
 			}
+
+			// set different text and class on button while saving
+			$('a.autosave')
+				.removeClass(buttonNormalCss)
+				.addClass(buttonSavingCss)
+				.html(buttonSavingText);
 
 			this.previousDraftValues = values;
 
@@ -322,6 +327,13 @@ steal(
 			this.draft.attr(obj);
 			this.draft.save();
 
+			setTimeout(function(){
+				// restore text and class on button while saving
+				$('a.autosave')
+					.removeClass(buttonSavingCss)
+					.addClass(buttonNormalCss)
+					.html(buttonNormalText);
+			}, 2000);
 		},
 		saveArticle: function() {
 
@@ -366,7 +378,7 @@ steal(
 
 			ev.preventDefault();
 
-			var title = $('input[name=title]').val();
+			var title = $('.article').find($('input[name=title]')).val();
 			$('#slug').val(slug(title));
 		},
 
@@ -377,12 +389,50 @@ steal(
 		 * @return {[type]}    [description]
 		 */
 		'select[name=drafts] change': function(el, ev) {
-			var draft = $(el.find('option:selected')).data('article');
+			var $selected = $(el.find('option:selected')),
+				draft = $selected.data('article'),
+				label = $selected.data('label'),
+				urlDelete = $selected.data('url-delete');
+
+			el.siblings('.selected-draft')
+				.append(label)
+				.append('<a href="'+urlDelete+'">x</a>');
+
 			//console.log(this.article.attr());
 			//console.log(draft);
 			//this.article.attr({title: 'hehe'});
-			this.article.attr(draft.data._data);
+
+			//this.article.attr(draft.data._data);
+
 			//console.log(this.article.attr());
+		},
+
+		/**
+		 * show drafts and templates
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'.draft-select click' : function(el, ev) {
+
+			// disable default click event
+			ev.preventDefault();
+
+			// stop autosave, maybe there will be a redirect
+			this.stopAutosave();
+
+			// show dialog
+			$('#draft-modal').modal('show');
+		},
+
+		/**
+		 * hide modal dialog before editing
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'#draft-modal .edit-draft click' : function(el, ev) {
+			$('#draft-modal').modal('hide');
 		},
 
 		/**
@@ -407,8 +457,8 @@ steal(
 
 			ev.preventDefault();
 
-			var name = el.siblings('input[name=author-name]').val();
-			$('#author-modal').find('input[name=author-slug]').val(slug(name));
+			var name = el.siblings('input[name=name]').val();
+			el.siblings('input[name=slug]').val(slug(name));
 		},
 
 		/**
@@ -424,9 +474,6 @@ steal(
 			// form values
 			var values = $('#author-modal').find('form').serialize();
 			values = can.deparam(values);
-
-			values['name'] = values['author-name'];
-			values['slug'] = values['author-slug'];
 
 			// create new author
 			var author = new Author();
@@ -465,8 +512,8 @@ steal(
 
 			ev.preventDefault();
 
-			var name = el.siblings('input[name=tag-name]').val();
-			$('#tag-modal').find('input[name=tag-slug]').val(slug(name));
+			var name = el.siblings('input[name=name]').val();
+			el.siblings('input[name=slug]').val(slug(name));
 		},
 
 		/**
@@ -482,9 +529,6 @@ steal(
 			// form values
 			var values = $('#tag-modal').find('form').serialize();
 			values = can.deparam(values);
-
-			values['name'] = values['tag-name'];
-			values['slug'] = values['tag-slug'];
 
 			// create new tag
 			var tag = new Tag();
@@ -568,6 +612,14 @@ steal(
 			var id = $('#id').val();
 
 			window.open('http://crawler.bfhost.cz:12345/preview/'+id+'/');
+		},
+
+		destroy: function() {
+
+			// clear timer
+			this.stopAutosave();
+
+			can.Control.prototype.destroy.call( this );
 		}
 	})
 );

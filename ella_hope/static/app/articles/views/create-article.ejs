@@ -12,23 +12,7 @@
 
 		<% if (drafts.length) { %>
 			<div class="row pull-right">
-				<div>
-					<label for="drafts"><%= $.t('Drafts / Templates')%></label>
-				</div>
-				<select name="drafts">
-					<option></option>
-					<% $.each(drafts, function(i, draft){ %>
-						<%
-						var timestamp = Date.parse(draft.timestamp);
-						var draftDate = timestamp.toString('yyyy-MM-dd');
-						var draftTime = timestamp.toString('HH:mm');
-
-						var editUrl = can.route.url({ page: 'articles', action: 'edit-draft', id: draft.id });
-						var deleteUrl = can.route.url({ page: 'articles', action: 'delete-draft', id: draft.id });
-						%>
-						<option <%= (el) -> el.data( 'article', draft ) %> value="<%= draft.id %>"><%= draft.data.title %> (<%= draftDate+' '+draftTime %>)</options>
-					<% }) %>
-				</select>
+				<button class="btn btn-normal draft-select"><%= $.t('Drafts / Templates')%></button>
 			</div>
 		<% } %>
 
@@ -44,7 +28,7 @@
 			<div>
 				<label for="slug"><%= $.t('Slug')%></label>
 			</div>
-			<input class="span4 slug" type="text" name="slug" id="slug" placeholder="<%= $.t('Press "slug" button to generate slug from title')%>"
+			<input class="span4 slug" type="text" name="slug" id="slug" placeholder="<%= $.t('Press "slug from title" button to generate slug')%>"
 				value="<%= article.attr('slug') %>" >
 			<button class="btn btn-mini slug-from-title"><%= $.t('slug from title')%></button>
 		</div>
@@ -97,70 +81,6 @@
 				<% } %>
 			</select>
 			<button class="btn btn-mini add-author"><%= $.t('add new author')%></button>
-		</div>
-
-		<div id="photos-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-              <h3 id="myModalLabel"><%= $.t('Insert image') %></h3>
-            </div>
-            <div class="modal-body">
-            	<table class="table">
-				<% list(photos, function(photo, index) { %>
-					<tr <%= (el) -> el.data( 'photo', photo) %>>
-						<td><input class="pick" type="radio" name="photo" /></td>
-						<td><img class="pick" src="<%= photo.public_url %>" height="50" /></td>
-						<td><%= photo.title %></td>
-						<td>
-							<form class="snippet-params">
-								<select class="span2" name="size">
-									<option value="mala"><%= $.t('Small')%></option>
-									<option value="standard"><%= $.t('Medium')%></option>
-									<option value="velka"><%= $.t('Large')%></option>
-								</select>
-								<select class="span2" name="format">
-									<option value="ctverec">ctverec</option>
-									<option value="nudle_sirka">nudle_sirka</option>
-									<option value="nudle_vyska">nudle_vyska</option>
-									<option value="obdelnik_sirka">obdelnik_sirka</option>
-									<option value="obdelnik_vyska">obdelnik_vyska</option>
-								</select>
-
-								<table>
-									<tr>
-										<td><label for="resizable"><input type="checkbox" name="resizable" value="1" />&nbsp;<%= $.t('Resizable') %></label></td>
-										<td><label for="author"><input type="checkbox" name="authors" value="1" />&nbsp;<%= $.t('Authors') %></label></td>
-									</tr>
-									<tr>
-										<td><label for="description"><input type="checkbox" name="description" value="1" />&nbsp;<%= $.t('Description') %></label></td>
-										<td><label for="source"><input type="checkbox" name="source" value="1" />&nbsp;<%= $.t('Source') %></label></td>
-									</tr>
-								</table>
-
-								<label for="align">
-									<%= $.t('Align')%>:&nbsp;
-									<select class="span2" name="align">
-										<option value="right"><%= $.t('Right')%></option>
-										<option value="left"><%= $.t('Left')%></option>
-										<option value="center"><%= $.t('Center')%></option>
-									</select>
-								</label>
-
-								<label for="align">
-									<%= $.t('External url')%>:&nbsp;
-									<input class="span2" type="text" name="url" />
-								</label>
-
-							</form>
-						</td>
-					</tr>
-				<% }); %>
-				</table>
-            </div>
-            <div class="modal-footer">
-              <button class="btn" data-dismiss="modal"><%= $.t('Close') %></button>
-              <button class="btn btn-primary insert-photo"><%= $.t('Insert') %></button>
-            </div>
 		</div>
 
 		<div class="row">
@@ -266,12 +186,16 @@
 	<div class="row">
 		<div class="buttons">
 			<a href="javascript://" class="btn btn-primary article-save"><%= $.t('Save')%></a>
-			<a href="javascript://" class="btn btn-info autosave"><%= $.t('Autosave')%></a>
+			<a href="javascript://" class="btn btn-info autosave"
+				data-normal="<%= $.t('Autosave')%>"
+				data-saving="<%= $.t('Saving...')%>">
+				<%= $.t('Autosave')%></a>
 			<a href="javascript://" class="btn cancel"><%= $.t('Cancel without saving')%></a>
 		</div>
 	</div>
 </div>
 
+<!-- modal dialogs -->
 <div id="author-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -280,10 +204,10 @@
 	<div class="modal-body">
 		<form>
 			<label for="name">Name</label>
-			<input type="text" name="author-name" />
+			<input type="text" name="name" />
 
-			<label for="author-slug">Slug</label>
-			<input type="text" name="author-slug" />
+			<label for="slug">Slug</label>
+			<input type="text" name="slug" />
 
 			<button class="btn btn-mini slug-from-name"><%= $.t('slug from name')%></button>
 		</form>
@@ -294,6 +218,69 @@
 	</div>
 </div>
 
+<div id="photos-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3 id="myModalLabel"><%= $.t('Insert image') %></h3>
+	</div>
+	<div class="modal-body">
+		<table class="table">
+			<% list(photos, function(photo, index) { %>
+				<tr <%= (el) -> el.data( 'photo', photo) %>>
+					<td><input class="pick" type="radio" name="photo" /></td>
+					<td><img class="pick" src="<%= photo.public_url %>" height="50" /></td>
+					<td><%= photo.title %></td>
+					<td>
+						<form class="snippet-params">
+							<select class="span2" name="size">
+								<option value="mala"><%= $.t('Small')%></option>
+								<option value="standard"><%= $.t('Medium')%></option>
+								<option value="velka"><%= $.t('Large')%></option>
+							</select>
+							<select class="span2" name="format">
+								<option value="ctverec">ctverec</option>
+								<option value="nudle_sirka">nudle_sirka</option>
+								<option value="nudle_vyska">nudle_vyska</option>
+								<option value="obdelnik_sirka">obdelnik_sirka</option>
+								<option value="obdelnik_vyska">obdelnik_vyska</option>
+							</select>
+
+							<table>
+								<tr>
+									<td><label for="resizable"><input type="checkbox" name="resizable" value="1" />&nbsp;<%= $.t('Resizable') %></label></td>
+									<td><label for="author"><input type="checkbox" name="authors" value="1" />&nbsp;<%= $.t('Authors') %></label></td>
+								</tr>
+								<tr>
+									<td><label for="description"><input type="checkbox" name="description" value="1" />&nbsp;<%= $.t('Description') %></label></td>
+									<td><label for="source"><input type="checkbox" name="source" value="1" />&nbsp;<%= $.t('Source') %></label></td>
+								</tr>
+							</table>
+
+							<label for="align">
+								<%= $.t('Align')%>:&nbsp;
+								<select class="span2" name="align">
+									<option value="right"><%= $.t('Right')%></option>
+									<option value="left"><%= $.t('Left')%></option>
+									<option value="center"><%= $.t('Center')%></option>
+								</select>
+							</label>
+
+							<label for="align">
+								<%= $.t('External url')%>:&nbsp;
+								<input class="span2" type="text" name="url" />
+							</label>
+						</form>
+					</td>
+				</tr>
+			<% }); %>
+		</table>
+	</div>
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal"><%= $.t('Close') %></button>
+		<button class="btn btn-primary insert-photo"><%= $.t('Insert') %></button>
+	</div>
+</div>
+
 <div id="tag-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -301,11 +288,11 @@
 	</div>
 	<div class="modal-body">
 		<form>
-			<label for="name">Name</label>
-			<input type="text" name="tag-name" />
+			<label for="name"><%= $.t('Name')%></label>
+			<input type="text" name="name" />
 
-			<label for="author-slug">Slug</label>
-			<input type="text" name="tag-slug" />
+			<label for="author-slug"><%= $.t('Slug')%></label>
+			<input type="text" name="slug" />
 
 			<button class="btn btn-mini slug-from-name"><%= $.t('slug from name')%></button>
 		</form>
@@ -313,5 +300,52 @@
 	<div class="modal-footer">
 		<button class="btn" data-dismiss="modal"><%= $.t('Close') %></button>
 		<button class="btn btn-primary insert-tag"><%= $.t('Insert') %></button>
+	</div>
+</div>
+
+<div id="draft-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3 id="myModalLabel"><%= $.t('Drafts / Templates') %></h3>
+	</div>
+	<div class="modal-body">
+		<% if (drafts.length) { %>
+			<table class="table">
+				<tr>
+					<th><%= $.t('ID')%></th>
+					<th><%= $.t('Title')%></th>
+					<th><%= $.t('Created')%></th>
+					<th><%= $.t('Action')%></th>
+				</tr>
+				<% $.each(drafts, function(i, draft){ %>
+					<tr>
+					<%
+					var timestamp = Date.parse(draft.timestamp);
+					var draftDate = timestamp.toString('yyyy-MM-dd');
+					var draftTime = timestamp.toString('HH:mm');
+					var label = draft.data.title + ' (' + draftDate + ' ' + draftTime + ')';
+
+					var editUrl = can.route.url({ page: 'articles', action: 'edit-draft', id: draft.id });
+					var deleteUrl = can.route.url({ page: 'articles', action: 'delete-draft', id: draft.id });
+					%>
+						<td><%= draft.id %></td>
+						<td><%= draft.data.title %></td>
+						<td><%= draftDate %> <%= draftTime %></td>
+						<td>
+							<!-- Edit -->
+							<a <%= (el) -> el.data( 'article', draft ) %> href="<%= editUrl %>" class="btn btn-mini edit-draft">
+								<%= $.t('Edit');%> <i class="icon-pencil"></i>
+							</a>
+
+							<!-- Delete -->
+							<a <%= (el) -> el.data( 'article', draft ) %> href="javascript://" class="btn btn-mini btn-danger delete" data-confirm="<%= $.t('Are you sure you want to delete the draft?') %>"><%= $.t('Delete');%> <i class="icon-trash icon-white"></i></a>
+						</td>
+					</tr>
+				<% }) %>
+			</table>
+		<% } %>
+	</div>
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal"><%= $.t('Close') %></button>
 	</div>
 </div>
