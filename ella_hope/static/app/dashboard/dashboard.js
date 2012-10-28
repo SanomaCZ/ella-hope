@@ -25,7 +25,10 @@ steal(
 			var self = this;
 
 			can.view("//app/dashboard/views/init.ejs", {
-				articles: Article.findAll()
+				articles: Article.findAll({
+					limit: 5
+					//order_by: '-id' // -<field> means we want descending order
+				})
 			}).then(function( frag ){
 				self.element.html( frag );
 			});

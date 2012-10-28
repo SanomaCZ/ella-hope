@@ -16,28 +16,29 @@
 			</div>
 		<% } %>
 
-		<div class="row">
-			<div>
-				<label for="title"><%= $.t('Title')%></label>
-			</div>
-			<input class="span4 title" type="text" name="title" id="title" placeholder="<%= $.t('Add Title')%>"
+		<div class="control-group row">
+			<label class="control-label" for="title"><%= $.t('Title')%></label>
+			<div class="controls">
+				<input class="title" type="text" name="title" id="title" placeholder="<%= $.t('Add Title')%>"
 				value="<%= article.attr('title') %>" >
+				<span class="help-inline"></span>
+			</div>
 		</div>
 
-		<div class="row">
-			<div>
-				<label for="slug"><%= $.t('Slug')%></label>
-			</div>
-			<input class="span4 slug" type="text" name="slug" id="slug" placeholder="<%= $.t('Press "slug from title" button to generate slug')%>"
+		<div class="control-group row">
+			<label class="control-label" for="slug"><%= $.t('Slug')%></label>
+			<div class="controls">
+				<input class="slug" type="text" name="slug" id="slug" placeholder="<%= $.t('Press "slug from title" button to generate slug')%>"
 				value="<%= article.attr('slug') %>" >
-			<button class="btn btn-mini slug-from-title"><%= $.t('slug from title')%></button>
+				<span class="help-inline"></span>
+				<button class="btn btn-mini slug-from-title"><%= $.t('slug from title')%></button>
+			</div>
 		</div>
 
-		<div class="row">
-			<div>
-				<label for="category"><%= $.t('Category')%></label>
-			</div>
-			<select name="category" id="category" data-placeholder="<%= $.t('Choose category')%>" class="chzn-select category">
+		<div class="control-group row">
+			<label class="control-label" for="category"><%= $.t('Category')%></label>
+			<div class="controls">
+				<select name="category" id="category" data-placeholder="<%= $.t('Choose category')%>" class="chzn-select category">
 				<% if (category) { %>
 					<% $.each(category, function(i, cat){ %>
 					<%
@@ -53,14 +54,15 @@
 						</option>
 					<% }) %>
 				<% } %>
-			</select>
+				</select>
+				<span class="help-inline"></span>
+			</div>
 		</div>
 
-		<div class="row">
-			<div>
-				<label for="authors"><%= $.t('Author(s)')%></label>
-			</div>
-			<select name="authors[]" id="authors" data-placeholder="<%= $.t('Choose authors')%>" class="chzn-select span4 authors" multiple>
+		<div class="control-group row">
+			<label class="control-label" for="authors"><%= $.t('Author(s)')%></label>
+			<div class="controls">
+				<select name="authors[]" id="authors" data-placeholder="<%= $.t('Choose authors')%>" class="chzn-select authors" multiple>
 				<% if (author) { %>
 					<% $.each(author, function(i, a){ %>
 					<%
@@ -79,55 +81,61 @@
 						</option>
 					<% }) %>
 				<% } %>
-			</select>
-			<button class="btn btn-mini add-author"><%= $.t('add new author')%></button>
-		</div>
-
-		<div class="row">
-			<div>
-				<label for="content"><%= $.t('Content')%></label>
+				</select>
+				<span class="help-inline"></span>
+				<button class="btn btn-mini add-author"><%= $.t('add new author')%></button>
 			</div>
-			<textarea class="content" rows="10" name="content" placeholder="<%= $.t('Add Content')%>" <%= article.attr('content') ? "" : "class='empty'" %>><%= article.content %></textarea>
 		</div>
 
-		<div class="row" id="photos-preview"></div>
-
-		<div class="row">
-			<div>
-				<label for="description"><%= $.t('Description')%></label>
+		<div class="control-group row">
+			<label class="control-label" for="content"><%= $.t('Content')%></label>
+			<div class="controls">
+				<textarea class="content" rows="10" name="content" placeholder="<%= $.t('Add Content')%>" <%= article.attr('content') ? "" : "class='empty'" %>><%= article.content %></textarea>
+				<span class="help-inline"></span>
 			</div>
-			<textarea class="description" name="description" id="description" placeholder="<%= $.t('Add Description')%>" <%= article.attr('description') ? "" : "class='empty'" %>><%= article.description %></textarea>
 		</div>
 
-		<div class="row">
+		<div class="control-group row" id="photos-preview"></div>
+
+		<div class="control-group row">
+			<label class="control-label" for="description"><%= $.t('Description')%></label>
+			<div class="controls">
+				<textarea class="description" name="description" id="description" placeholder="<%= $.t('Add Description')%>" <%= article.attr('description') ? "" : "class='empty'" %>><%= article.description %></textarea>
+				<span class="help-inline"></span>
+			</div>
+		</div>
+
+		<div class="control-group row">
 			<div class="alert alert-error" id="date-alert">
 				<strong><%= $.t('The end date can not be less then the start date') %></strong>
 			</div>
 		</div>
 
-		<div class="row">
-			<div>
-				<label for="publish_from"><%= $.t('Publish From')%></label>
-			</div>
-			<input class="span2 publish_from" type="datetime-local" name="publish_from_date" id="publish_from_date" value="<%= article.publish_from_date %>" />
+		<div class="control-group row">
+			<label class="control-label" for="publish_from"><%= $.t('Publish From')%></label>
+			<div class="controls">
+				<input class="span2 publish_from" type="datetime-local" name="publish_from_date" id="publish_from" value="<%= article.publish_from_date %>" />
 
-			<input type="text" class="timepicker-default span1 publish_from" name="publish_from_time" id="publish_from_time" value="<%= article.publish_from_time %>" />
+				<input type="text" class="timepicker-default span1 publish_from" name="publish_from_time" id="publish_from_time" value="<%= article.publish_from_time %>" />
+
+				<span class="help-inline"></span>
+			</div>
 		</div>
 
-		<div class="row">
-			<div>
-				<label for="publish_to"><%= $.t('Publish To')%></label>
-			</div>
-			<input class="span2 publish_to" type="datetime-local" name="publish_to_date" id="publish_to_date" value="<%= article.publish_to_date %>" />
+		<div class="control-group row">
+			<label class="control-label" for="publish_to"><%= $.t('Publish To')%></label>
+			<div class="controls">
+				<input class="span2 publish_to" type="datetime-local" name="publish_to_date" id="publish_to" value="<%= article.publish_to_date %>" />
 
-			<input type="text" class="timepicker-default span1" name="publish_to_time" id="publish_to_time" value="<%= article.publish_to_time %>" />
+				<input type="text" class="timepicker-default span1" name="publish_to_time" id="publish_to_time" value="<%= article.publish_to_time %>" />
+				<span class="help-inline"></span>
+			</div>
 		</div>
 
-		<div class="row">
-			<div>
-				<label for="tags"><%= $.t('Tag(s)')%></label>
-			</div>
-			<select name="tags[]" id="tags" data-placeholder="<%= $.t('Choose tags')%>" class="chzn-select span4 tags" multiple>
+		<div class="control-group row">
+			<label class="control-label" for="tags"><%= $.t('Tag(s)')%></label>
+			<div class="controls">
+				<select name="tags[]" id="tags" data-placeholder="<%= $.t('Choose tags')%>" class="chzn-select tags" multiple>
 				<% if (tag) { %>
 					<% $.each(tag, function(i, t){ %>
 					<%
@@ -146,15 +154,16 @@
 						</option>
 					<% }) %>
 				<% } %>
-			</select>
-			<button class="btn btn-mini add-tag"><%= $.t('add new tag')%></button>
+				</select>
+				<span class="help-inline"></span>
+				<button class="btn btn-mini add-tag"><%= $.t('add new tag')%></button>
+			</div>
 		</div>
 
-		<div class="row">
-			<div>
-				<label for="state"><%= $.t('State')%></label>
-			</div>
-			<select name="state" id="state" data-placeholder="<%= $.t('Choose state')%>" class="chzn-select state">
+		<div class="control-group row">
+			<label class="control-label" for="state"><%= $.t('State')%></label>
+			<div class="controls">
+				<select name="state" id="state" data-placeholder="<%= $.t('Choose state')%>" class="chzn-select state">
 				<% if (states) { %>
 					<% $.each(states, function(i, state){ %>
 					<%
@@ -168,22 +177,30 @@
 						</option>
 					<% }) %>
 				<% } %>
-			</select>
+				</select>
+				<span class="help-inline"></span>
+			</div>
 		</div>
 
-		<div class="row">
-			<label for="published"><%= $.t('Published')%>
+		<div class="control-group row">
+			<label class="control-label" for="published"><%= $.t('Published')%></label>
+			<div class="controls">
 				<input class="published" type="checkbox" name="published" id="published" <%= article.published ? 'checked' : '' %> value="true" />
-			</label>
+				<span class="help-inline"></span>
+			</div>
+		</div>
 
+		<div class="control-group row">
 			<label for="static"><%= $.t('Static')%>
+			<div class="controls">
 				<input class="static" type="checkbox" name="static" id="static" <%= article.static ? 'checked' : '' %> value="true" />
-			</label>
+				<span class="help-inline"></span>
+			</div>
 		</div>
 
 	</form>
 
-	<div class="row">
+	<div class="control-group row">
 		<div class="buttons">
 			<a href="javascript://" class="btn btn-primary article-save"><%= $.t('Save')%></a>
 			<a href="javascript://" class="btn btn-info autosave"

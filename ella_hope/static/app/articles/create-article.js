@@ -129,7 +129,7 @@ steal(
 					weekStart: 1,
 					autoclose: true
 				};
-				$("#publish_from_date").datepicker(dateOptions)
+				$("#publish_from").datepicker(dateOptions)
 					.on('changeDate', function(ev){
 						if ($("#publish_to_date").val() && $("#publish_from_date").val() > $("#publish_to_date").val()){
 							$('#date-alert').show();
@@ -137,7 +137,7 @@ steal(
 							$('#date-alert').hide();
 						}
 					});
-				$("#publish_to_date").datepicker(dateOptions)
+				$("#publish_to").datepicker(dateOptions)
 					.on('changeDate', function(ev){
 						if ($("#publish_from_date").val() && $("#publish_from_date").val() > $("#publish_to_date").val()){
 							$('#date-alert').show();
@@ -239,7 +239,10 @@ steal(
 			values['photo'] =  null;
 
 			// merge date and time of publish_from
-			values['publish_from'] = values['publish_from_date']+'T'+values['publish_from_time']; //"2012-08-07T09:47:44";
+			values['publish_from'] = null;
+			if (values['publish_from_date']) {
+				values['publish_from'] = values['publish_from_date']+'T'+values['publish_from_time']; //"2012-08-07T09:47:44";
+			}
 
 			// merge date and time of publish_to
 			values['publish_to'] = null;
@@ -258,13 +261,33 @@ steal(
 
 			if (!values['id']) delete values['id'];
 
-			// validation
-			if(1) {
+			// create new article model and validate it
+			var a = new Article(values);
 
-				//console.log(values);return false;
+			//console.log(values);
 
-				var a = new Article();
-				a.attr(values);
+			// remove all error markup
+			$('.control-group').removeClass('error');
+			$('.help-inline').empty();
+
+			//console.log(a.errors());
+
+			// validation - if there are errors
+			if (a.errors()) {
+				//console.log(a.errors());
+				$.each(a.errors(), function(e){
+					$('#'+e).closest('.control-group')
+						.addClass('error')
+						.find('.help-inline').html(a.errors(e)[e][0]);
+				});
+
+				// scroll to first error
+				$('html, body').animate({
+					scrollTop: $('.control-group.error').eq(0).offset().top - 50
+				}, 500);
+			}
+			else {
+				// save article
 				a.save();
 
 				// delete draft when article is saved

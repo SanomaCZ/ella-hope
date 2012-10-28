@@ -1,52 +1,86 @@
 steal(
 	'can/model',
+	'can/observe/validations',
 	function($) {
 		Article = can.Model({
+			init : function(){
+				this.validate("content", function (val){
+					if (val === null || val === '') {
+						return $.t('This field can not be empty');
+					}
+				});
+				this.validate("category", function (val){
+					if (val === null || val === '') {
+						return $.t('This field can not be empty');
+					}
+				});
+				this.validate("title", function (val){
+					if (val === null || val === '') {
+						return $.t('This field can not be empty');
+					}
+				});
+				this.validate("slug", function (val){
+					if (val === null || val === '') {
+						return $.t('This field can not be empty');
+					}
+				});
+				this.validate("authors", function (val){
+					if (val === null || val === '') {
+						return $.t('This field can not be empty');
+					}
+				});
+				this.validate("publish_from", function (val){
+					if (val === null || val === '') {
+						return $.t('This field can not be empty');
+					}
+				});
+			},
+
 			findAll: 'GET ' + BASE_URL + '/article/',
 
 			// this worked if returned json was not ideal for findAll
 			// ideal means there should be an array of items in the first level of json
 			// or in _data attribute
 			// findAll : function(params, success, error){
-			// 	var self= this;
-			// 	return can.ajax({
-			// 		url : "http://crawler.bfhost.cz:12345/api/resources/article/",
-			// 		data : params,
-			// 		dataType : "json"
-			// 	}).pipe(function(data){
-			// 		// returned json is not standardized for canJS
-			// 		// http://donejs.com/docs.html#!can.Model.static.findAll
-			// 		// therefore we need to return only the valid part
-			// 		//return self.models(data.objects);
-			// 		return self.models(data);
-			// 	});
-			// },
+			//	var self= this;
+			//	return can.ajax({
+			//		url : "http://crawler.bfhost.cz:12345/api/resources/article/",
+			//		data : params,
+			//		dataType : "json"
+			//	}).pipe(function(data){
+			//		// returned json is not standardized for canJS
+			//		// http://donejs.com/docs.html#!can.Model.static.findAll
+			//		// therefore we need to return only the valid part
+			//		//return self.models(data.objects);
+			//		return self.models(data);
+			//	});
+			//},
 
 			findOne: 'GET ' + BASE_URL + '/article/{id}/',
 
-  			create : function(attrs){
-    			return $.ajax({
-      				url: BASE_URL+'/article/',
-      				type: 'POST',
-      				async: false,
-      				dataType: 'json',
-      				contentType: 'application/json',	// this is necessary
-      				data: JSON.stringify(attrs)	// JSON.stringify is necessary, it also escapes newline chars
-      			})
-  			},
+			create : function(attrs){
+				return $.ajax({
+					url: BASE_URL+'/article/',
+					type: 'POST',
+					async: false,
+					dataType: 'json',
+					contentType: 'application/json',	// this is necessary
+					data: JSON.stringify(attrs)	// JSON.stringify is necessary, it also escapes newline chars
+				});
+			},
 
-  			update : function(id, attrs){
-    			return $.ajax({
-      				url: BASE_URL+'/article/'+id+'/',
-      				type: 'PATCH',
-      				async: false,
-      				dataType: 'json',
-      				contentType: 'application/json',
-      				data: JSON.stringify(attrs)
-      			})
-  			},
+			update : function(id, attrs){
+				return $.ajax({
+					url: BASE_URL+'/article/'+id+'/',
+					type: 'PATCH',
+					async: false,
+					dataType: 'json',
+					contentType: 'application/json',
+					data: JSON.stringify(attrs)
+				});
+			},
 
-  			destroy: 'DELETE ' + BASE_URL + '/article/{id}/'
+			destroy: 'DELETE ' + BASE_URL + '/article/{id}/'
 		}, {});
 
 		// article schema (when authorized)
