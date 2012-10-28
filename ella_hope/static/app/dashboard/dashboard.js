@@ -16,13 +16,19 @@ steal(
 	},
 	/* @prototype */
 	{
-		
+
 		/**
 		 * Initializes a new instance of Home container.
 		 */
 		init: function(element, options){
 
-			this.element.html(can.view(this.options.initView, this.options));
+			var self = this;
+
+			can.view("//app/dashboard/views/init.ejs", {
+				articles: Article.findAll()
+			}).then(function( frag ){
+				self.element.html( frag );
+			});
 		}
 	})
-)
+);

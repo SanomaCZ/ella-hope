@@ -1,22 +1,27 @@
 <!-- Main hero unit for a primary marketing message or call to action -->
-      <div class="hero-unit">
-        <h1>D&Z admin</h1>
-        <p>This is a template for an admin website. It includes a large callout called the hero unit and three supporting pieces of content.
-          <br>
-          There will be user-specific data.</p>
-        
-      </div>
+<div class="hero-unit">
+  <h1>D&Z admin</h1>
+  <p>This is a template for an admin website. It includes a large callout called the hero unit and three supporting pieces of content.
+
+  <br>
+
+  There will be user-specific data.</p>
+
+</div>
 
       <!-- Example row of columns -->
       <div class="row">
         <div class="span4">
           <h2>Recent articles</h2>
           <ul>
-            <li><a href="">Jaké ovocné stromy</a></li>
-            <li><a href="">Jak vybrat sekačku</a></li>
-            <li><a href="">Proč je důležité míti svářečku</a></li>
+            <% list(articles, function( article ) { %>
+              <% var editUrl = can.route.url({ page: 'articles', action: 'edit', id: article.id }); %>
+              <li><a href="<%= editUrl %>"><%= article.title %></a></li>
+            <% }) %>
           </ul>
-          <p><a class="btn" href="#">View all &raquo;</a></p>
+          <p>
+            <%== can.route.link( $.t('View all &raquo;'), { page: 'articles' }, {className : 'btn'}, false); %>
+          </p>
         </div>
         <div class="span4">
           <h2>Recent galeries</h2>
