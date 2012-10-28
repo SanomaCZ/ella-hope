@@ -41,14 +41,14 @@ steal(
 		init: function(element, options){
 
 			// destroy articleCreate control if it was created
-			// this is useful is we i.e. edit an article and without saving or canceling
+			// this is useful if we i.e. edit an article and without saving or canceling
 			// we go to article list... timer etc. needs to be destroyed
 			if (this.articleCreate) {
 				this.articleCreate.destroy();
 			}
 
 			this.element.html(can.view(this.options.initView, this.options));
-			this.listArticles();
+			this.listArticles({});
 		},
 
 		':page route': function( data ) {
@@ -113,14 +113,31 @@ steal(
 		 * list articles
 		 * @return {[type]} [description]
 		 */
-		'listArticles': function() {
+		'listArticles': function(data) {
 
 			var self = this;
 
 			can.view('//app/articles/views/list-articles.ejs', {
-				articles: Article.findAll()
+				articles: Article.findAll(data)
 			}).then(function( frag ){
 				$("#inner-content").html( frag );
+			});
+		},
+
+		/**
+		 * search articles based on title
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'.search-articles click' : function(el, ev) {
+
+			ev.preventDefault();
+
+			var search = el.siblings('input.search-query').val();
+
+			this.listArticles({
+				title__contains: search
 			});
 		},
 
