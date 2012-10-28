@@ -3,7 +3,10 @@
 		<tr>
 			<th>&nbsp;</th>
 			<th><%= $.t('Title') %></th>
+			<th><%= $.t('Photo') %></th>
+			<th><%= $.t('Category') %></th>
 			<th><%= $.t('Publish from') %></th>
+			<th><%= $.t('State') %></th>
 			<th><%= $.t('Actions') %></th>
 		</tr>
 	</thead>
@@ -12,11 +15,18 @@
 			<%
 			var editUrl = can.route.url({ page: 'articles', action: 'edit', id: article.id });
 			var deleteUrl = can.route.url({ page: 'articles', action: 'delete', id: article.id });
+
+			var timestamp = Date.parse(article.publish_from);
+			var articleDate = timestamp.toString('yyyy-MM-dd');
+			var articleTime = timestamp.toString('HH:mm');
 			%>
 			<tr>
 				<td class="article-state <%= article.state %>" title="<%= article.state %>">&nbsp;</td>
 				<td><a href="<%== editUrl %>"><%= article.title %></a></td>
-				<td><%= article.publish_from %></td>
+				<td><%= article.photo %></td>
+				<td><%= article.category.title %></td>
+				<td><%= articleDate %> <%= articleTime %></td>
+				<td><%= article.state %></td>
 				<td>
 					<!-- Edit -->
 					<a <%= (el) -> el.data( 'article', article ) %> href="<%= editUrl %>" class="btn btn-mini edit-article">

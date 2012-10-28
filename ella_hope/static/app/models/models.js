@@ -1,7 +1,10 @@
 // steal model files
 steal(
 	'//can/can.fixture.js'
-	, "./article.js"
+	, 'can/observe/validations' // validation
+)
+.then(
+	"./article.js"
 	, "./author.js"
 	, "./draft.js"
 	, "./category.js"

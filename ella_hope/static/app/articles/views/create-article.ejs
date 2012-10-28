@@ -106,12 +106,6 @@
 		</div>
 
 		<div class="control-group row">
-			<div class="alert alert-error" id="date-alert">
-				<strong><%= $.t('The end date can not be less then the start date') %></strong>
-			</div>
-		</div>
-
-		<div class="control-group row">
 			<label class="control-label" for="publish_from"><%= $.t('Publish From')%></label>
 			<div class="controls">
 				<input class="span2 publish_from" type="datetime-local" name="publish_from_date" id="publish_from" value="<%= article.publish_from_date %>" />

@@ -12,8 +12,28 @@
 </div>
 
 <div class="pull-right">
-	<button type="submit" class="btn"><%= $.t('Filter')%></button>
+	<button type="submit" class="btn filter-artucles"><%= $.t('Filter')%></button>
 	&nbsp;
+</div>
+
+<div class="filter-form">
+	<div class="clearfix"></div>
+	<form class="form-inline filter">
+
+		<select class="input-medium chzn-select" name="category" data-placeholder="<%= $.t('Choose category')%>">
+			<option></option>
+			<% if (category) { %>
+				<% $.each(category, function(i, cat){ %>
+					<option value="<%= cat.resource_uri %>"><%= cat.title %></option>
+				<% }) %>
+			<% } %>
+		</select>
+
+		<input class="input-small" name="publish_from" type="datetime-local" placeholder="<%= $.t('Publish from') %>" />
+
+		<input class="input-small" name="publish_to" type="datetime-local" placeholder="<%= $.t('Publish to') %>" />
+	</form>
+	<div class="clearfix"></div>
 </div>
 
 <hr>

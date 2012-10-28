@@ -1,6 +1,5 @@
 steal(
 	'can/model',
-	'can/observe/validations',
 	function($) {
 		Article = can.Model({
 			init : function(){
@@ -33,6 +32,8 @@ steal(
 					if (val === null || val === '') {
 						return $.t('This field can not be empty');
 					}
+					// TODO - compare dates se that publish_from is not later then publish_to
+					//<%= $.t('The end date can not be less then the start date') %>
 				});
 			},
 

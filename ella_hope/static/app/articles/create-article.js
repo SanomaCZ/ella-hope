@@ -11,7 +11,6 @@ steal(
 	{
 		defaults: {
 			autosaveInterval: 5 * 1000,	// how ofter is draft automatically saved
-			articleStates: ["added", "ready", "approved", "published", "postponed",	"deleted"],
 			markitupSettings: {
 				previewParserPath:	'',
 				onShiftEnter:		{keepDefault:false, openWith:'\n\n'},
