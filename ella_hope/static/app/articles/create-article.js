@@ -122,13 +122,7 @@ steal(
 				$("textarea").markItUp(self.options.markitupSettings);
 
 				// enable datepicker for publishFrom and publishTo
-				// https://github.com/eternicode/bootstrap-datepicker
-				var dateOptions = {
-					format: 'yyyy-mm-dd',
-					weekStart: 1,
-					autoclose: true
-				};
-				$("#publish_from").datepicker(dateOptions)
+				$("#publish_from").datepicker(self.options.dateOptions)
 					.on('changeDate', function(ev){
 						if ($("#publish_to_date").val() && $("#publish_from_date").val() > $("#publish_to_date").val()){
 							$('#date-alert').show();
@@ -136,7 +130,7 @@ steal(
 							$('#date-alert').hide();
 						}
 					});
-				$("#publish_to").datepicker(dateOptions)
+				$("#publish_to").datepicker(self.options.dateOptions)
 					.on('changeDate', function(ev){
 						if ($("#publish_from_date").val() && $("#publish_from_date").val() > $("#publish_to_date").val()){
 							$('#date-alert').show();

@@ -12,7 +12,7 @@
 </div>
 
 <div class="pull-right">
-	<button type="submit" class="btn filter-artucles"><%= $.t('Filter')%></button>
+	<button type="submit" class="btn filter-articles"><%= $.t('Filter')%></button>
 	&nbsp;
 </div>
 
@@ -20,7 +20,7 @@
 	<div class="clearfix"></div>
 	<form class="form-inline pull-right filter">
 
-		<select class="input-medium chzn-select" name="category" data-placeholder="<%= $.t('Choose category')%>">
+		<select class="input-medium chzn-select" name="category" data-placeholder="<%= $.t('Category')%>">
 			<option></option>
 			<% if (category) { %>
 				<% $.each(category, function(i, cat){ %>
@@ -32,6 +32,32 @@
 		<input class="input-small" name="publish_from" type="datetime-local" placeholder="<%= $.t('Publish from') %>" />
 
 		<input class="input-small" name="publish_to" type="datetime-local" placeholder="<%= $.t('Publish to') %>" />
+
+		<select class="input-small chzn-select" name="published" data-placeholder="<%= $.t('Published') %>">
+			<option></option>
+			<option value="today"><%= $.t('Today') %></option>
+			<option value="yesterday"><%= $.t('Yesterday') %></option>
+			<option value="week"><%= $.t('Week') %></option>
+			<option value="month"><%= $.t('Month') %></option>
+		</select>
+
+		<select class="input-small chzn-select" name="state" data-placeholder="<%= $.t('State')%>">
+			<option></option>
+			<% if (states) { %>
+				<% $.each(states, function(i, state){ %>
+					<option value="<%= state %>"><%= state %></option>
+				<% }) %>
+			<% } %>
+		</select>
+
+		<select class="input-medium chzn-select" name="author" data-placeholder="<%= $.t('Author')%>">
+			<option></option>
+			<% if (author) { %>
+				<% $.each(author, function(i, author){ %>
+					<option value="<%= author.resource_uri %>"><%= author.name %></option>
+				<% }) %>
+			<% } %>
+		</select>
 	</form>
 	<div class="clearfix"></div>
 </div>
