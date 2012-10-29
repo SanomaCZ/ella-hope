@@ -38,7 +38,7 @@ steal(
 					{name:'Code Block / Code', openWith:'(!(\t|!|`)!)', closeWith:'(!(`)!)'},
 					{separator:'---------------'},
 					//{name:'Preview', call:'preview', className:"preview"},
-					{name:'Preview', key:'P', className:"preview", closeWith:function(markItUp) { return ArticleCreate.prototype.showPreview(); }},
+					{name:'Preview', key:'R', className:"preview", closeWith:function(markItUp) { return ArticleCreate.prototype.showPreview(); }},
 					//{name:'Test', key:'1', placeHolder:'Your title here...', closeWith:function(markItUp) { return alert('ano'); } }
 				]
 			}
@@ -598,21 +598,23 @@ steal(
 				params = tr.find('.snippet-params'),
 				format = can.deparam(params.serialize());
 
-			var snippet =
-				["{% box inline_"+format.size+"_"+format.format+" for photos.photo with pk "+photo.id+" %}",
-					"align:"+format.align,
-					format.title ? 'show_title:1' : 'show_title:0',
-					format.description ? 'show_description:1' : 'show_description:0',
-					format.authors ? 'show_authors:1' : 'show_authors:0',
-					format.source ? 'show_source:1' : 'show_source:0',
-					format.detail ? 'show_detail:1' : 'show_detail:0',
-					"{% endbox %}"
-				].join('\n');
+			if (photo) {
+				var snippet =
+					["{% box inline_"+format.size+"_"+format.format+" for photos.photo with pk "+photo.id+" %}",
+						"align:"+format.align,
+						format.title ? 'show_title:1' : 'show_title:0',
+						format.description ? 'show_description:1' : 'show_description:0',
+						format.authors ? 'show_authors:1' : 'show_authors:0',
+						format.source ? 'show_source:1' : 'show_source:0',
+						format.detail ? 'show_detail:1' : 'show_detail:0',
+						"{% endbox %}"
+					].join('\n');
 
-			$.markItUp( { replaceWith: snippet } );
-			//console.log(photo);
+				$.markItUp( { replaceWith: snippet } );
+				//console.log(photo);
 
-			$('#photos-modal').modal('hide');
+				$('#photos-modal').modal('hide');
+			}
 		},
 
 		/**
@@ -621,7 +623,68 @@ steal(
 		 */
 		insertPhoto: function() {
 
+			// render photos list
+			this.renderPhotosList();
+
+			// show modal dialog
 			$('#photos-modal').modal('show');
+		},
+
+		/**
+		 * render photos in dialog so that user can choose photo
+		 * @return {[type]} [description]
+		 */
+		renderPhotosList: function() {
+
+			// render list
+			can.view( '//app/articles/views/list-photos.ejs', {
+				photos: Photo.findAll()
+			} ).then(function( frag ){
+				$('#photos-modal .photos-list').html(frag);
+			});
+		},
+
+		/**
+		 * allow user to upload new photos
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'#photos-modal .new-photo click' : function(el, ev) {
+
+			var self = this;
+
+			// hide list of photos
+			var photosTable = el.closest('.modal-body').find('table');
+			photosTable.hide();
+
+			// append new div and create PhotosUpload control in it
+			el.closest('.modal-body').append('<div class="upload"></div>');
+			var photosUpload = el.closest('.modal-body').find('.upload');
+			var photosUploadControl = new PhotosUpload(photosUpload, {});
+
+			// when photos are uploaded, dostroy PhotosUpload and restore photos list
+			photosUpload.on('photos-uploaded', function(ev){
+
+				// update photos list
+				self.renderPhotosList();
+
+				// remove upload form
+				photosUpload.remove();
+
+				// show list of photos
+				photosTable.show();
+			});
+		},
+
+		/**
+		 * when photos modal dialog is closed, clean... remove upload form if it was not removed
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'#photos-modal hide' : function(el, ev) {
+			$('#photos-modal').find('.upload').remove();
 		},
 
 		/**

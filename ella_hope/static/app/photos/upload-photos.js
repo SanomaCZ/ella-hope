@@ -319,6 +319,10 @@ steal(
 						$('.upload-buttons').hide();
 						// show progress bar
 						$('.progress').hide();
+
+						// maybe there is someone waiting for upload finish
+						// i.e. when user uploads photo directly from an article
+						self.element.trigger('photos-uploaded');
 					}, 500);
 					$('.response_msg')
 						.show()

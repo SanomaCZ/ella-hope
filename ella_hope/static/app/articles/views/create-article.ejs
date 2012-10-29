@@ -235,56 +235,12 @@
 		<h3 id="myModalLabel"><%= $.t('Insert image') %></h3>
 	</div>
 	<div class="modal-body">
-		<table class="table">
-			<% list(photos, function(photo, index) { %>
-				<tr <%= (el) -> el.data( 'photo', photo) %>>
-					<td><input class="pick" type="radio" name="photo" /></td>
-					<td><img class="pick" src="<%= photo.public_url %>" height="50" /></td>
-					<td><%= photo.title %></td>
-					<td>
-						<form class="snippet-params">
-							<select class="span2" name="size">
-								<option value="mala"><%= $.t('Small')%></option>
-								<option value="standard"><%= $.t('Medium')%></option>
-								<option value="velka"><%= $.t('Large')%></option>
-							</select>
-							<select class="span2" name="format">
-								<option value="ctverec">ctverec</option>
-								<option value="nudle_sirka">nudle_sirka</option>
-								<option value="nudle_vyska">nudle_vyska</option>
-								<option value="obdelnik_sirka">obdelnik_sirka</option>
-								<option value="obdelnik_vyska">obdelnik_vyska</option>
-							</select>
 
-							<table>
-								<tr>
-									<td><label for="resizable"><input type="checkbox" name="resizable" value="1" />&nbsp;<%= $.t('Resizable') %></label></td>
-									<td><label for="author"><input type="checkbox" name="authors" value="1" />&nbsp;<%= $.t('Authors') %></label></td>
-								</tr>
-								<tr>
-									<td><label for="description"><input type="checkbox" name="description" value="1" />&nbsp;<%= $.t('Description') %></label></td>
-									<td><label for="source"><input type="checkbox" name="source" value="1" />&nbsp;<%= $.t('Source') %></label></td>
-								</tr>
-							</table>
+		<div class="control-group">
+			<button class="btn btn-primary new-photo"><%= $.t('New photo') %></button>
+		</div>
 
-							<label for="align">
-								<%= $.t('Align')%>:&nbsp;
-								<select class="span2" name="align">
-									<option value="right"><%= $.t('Right')%></option>
-									<option value="left"><%= $.t('Left')%></option>
-									<option value="center"><%= $.t('Center')%></option>
-								</select>
-							</label>
-
-							<label for="align">
-								<%= $.t('External url')%>:&nbsp;
-								<input class="span2" type="text" name="url" />
-							</label>
-						</form>
-					</td>
-				</tr>
-			<% }); %>
-		</table>
+		<div class="photos-list"></div>
 	</div>
 	<div class="modal-footer">
 		<button class="btn" data-dismiss="modal"><%= $.t('Close') %></button>

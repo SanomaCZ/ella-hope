@@ -32,7 +32,14 @@
 }
 
 #photos-modal {
-	width: 600px;
+	width: 90%;
+	margin: 0 auto !important;
+	position: absolute;
+	left: 5%;
+	top: 20px;
+}
+#photos-modal .upload .page-header {
+	display: none;
 }
 #photos-modal .pick {
 	cursor: pointer;
