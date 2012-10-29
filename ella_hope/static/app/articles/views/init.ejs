@@ -24,7 +24,7 @@
 			<option></option>
 			<% if (category) { %>
 				<% $.each(category, function(i, cat){ %>
-					<option value="<%= cat.resource_uri %>"><%= cat.title %></option>
+					<option value="<%= cat.id %>"><%= cat.title %></option>
 				<% }) %>
 			<% } %>
 		</select>
@@ -54,7 +54,7 @@
 			<option></option>
 			<% if (author) { %>
 				<% $.each(author, function(i, author){ %>
-					<option value="<%= author.resource_uri %>"><%= author.name %></option>
+					<option value="<%= author.id %>"><%= author.name %></option>
 				<% }) %>
 			<% } %>
 		</select>

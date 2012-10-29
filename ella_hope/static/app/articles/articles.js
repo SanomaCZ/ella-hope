@@ -195,7 +195,7 @@ steal(
 
 			// category
 			if ($("select[name=category]").val()) {
-				data.category__resource_uri = $("select[name=category]").val();
+				data.category__id = $("select[name=category]").val();
 			}
 
 			// publish_from
@@ -248,7 +248,7 @@ steal(
 
 			// author
 			if ($("select[name=author]").val()) {
-				data.authors__resource_uri = $("select[name=author]").val();
+				data.authors__id = $("select[name=author]").val();
 			}
 
 
