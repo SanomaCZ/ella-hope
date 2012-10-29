@@ -692,11 +692,17 @@ steal(
 		 * @return {[type]} [description]
 		 */
 		showPreview: function() {
+			function getBaseUrl(url) {
+				var parser = document.createElement('a');
+				parser.href = url;
+
+				return parser.protocol + '//' + parser.host + '/';
+			}
 
 			// TODO
 			var id = $('#id').val();
 
-			window.open('http://crawler.bfhost.cz:12345/preview/'+id+'/');
+			window.open(getBaseUrl(BASE_URL) + 'preview/'+id+'/');
 		},
 
 		destroy: function() {

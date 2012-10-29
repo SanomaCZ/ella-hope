@@ -17,7 +17,7 @@ steal(
 			api_url: [
 				{
 					'name': "Crawler",
-					'url':'http://crawler.bfhost.cz:12345/admin-api'
+					'url':'http://crawler.bfhost.cz:1024/admin-api'
 				},
 				{
 					'name': "DEV Crawler",
