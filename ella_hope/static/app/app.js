@@ -37,7 +37,7 @@ steal(
 				$('body').trigger('show-login');
 			},
 			{
-				"dicoPath":location.path+"resources/locales",
+				"dicoPath":"resources/locales",
 				"lang":lang // language is determined from browser settings by default
 			}
 		);
@@ -66,6 +66,7 @@ steal(
 				, './dashboard/dashboard.js'		// dasbboard module
 				, './articles/articles.js'			// articles module
 				, './photos/photos.js'				// photos module
+				, './resources/js/jquery.own.js'	// own jquery extensions
 			)
 			.then(
 				// run the application

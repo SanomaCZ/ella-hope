@@ -89,10 +89,11 @@
 
 		<div class="control-group row">
 			<label class="control-label" for="content"><%= $.t('Content')%></label>
-			<div class="controls">
+			<div class="controls pull-left">
 				<textarea class="content" rows="10" name="content" placeholder="<%= $.t('Add Content')%>" <%= article.attr('content') ? "" : "class='empty'" %>><%= article.content %></textarea>
 				<span class="help-inline"></span>
 			</div>
+			<div class="box-snippet"></div>
 		</div>
 
 		<div class="control-group row" id="photos-preview"></div>

@@ -593,8 +593,26 @@ steal(
 				format = can.deparam(params.serialize());
 
 			if (photo) {
-				var snippet =
-					["{% box inline_"+format.size+"_"+format.format+" for photos.photo with pk "+photo.id+" %}",
+				var snippet = this.generateSnippet('photos.photo', photo, format);
+
+				// insert snippet into textarea
+				$.markItUp( { replaceWith: snippet } );
+				//console.log(photo);
+
+				$('#photos-modal').modal('hide');
+			}
+		},
+
+		/**
+		 * generates snippet
+		 * @param  {string} type   snippet type, i.e. photos.photo
+		 * @param  {object} object current object, i.e. photo
+		 * @param  {object} format additional params
+		 * @return {string}        generated snippet
+		 */
+		generateSnippet: function(type, object, format) {
+
+			return ["{% box inline_"+format.size+"_"+format.format+" for "+type+" with pk "+object.id+" %}",
 						"align:"+format.align,
 						format.title ? 'show_title:1' : 'show_title:0',
 						format.description ? 'show_description:1' : 'show_description:0',
@@ -603,12 +621,6 @@ steal(
 						format.detail ? 'show_detail:1' : 'show_detail:0',
 						"{% endbox %}"
 					].join('\n');
-
-				$.markItUp( { replaceWith: snippet } );
-				//console.log(photo);
-
-				$('#photos-modal').modal('hide');
-			}
 		},
 
 		/**
@@ -679,6 +691,184 @@ steal(
 		 */
 		'#photos-modal hide' : function(el, ev) {
 			$('#photos-modal').find('.upload').remove();
+		},
+
+		/**
+		 * find snippets in textarea so that images etc. can be handled comfortably
+		 *
+		 * snippet example:
+		 * {% box inline_standard_ctverec for photos.photo with pk 3 %}
+		 *	...
+		 * {% endbox %}
+		 *
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'textarea click' : function(el, ev) {
+
+			// get current cursor position
+			var position = el.getCursorPosition();
+			//console.log(position);
+
+			// current text in textarea
+			var str = el.val();
+
+			// get all positions where any snippet starts
+			var regexStart = /\{% box/gi, result, snippetStarts = [];
+			while ( (result = regexStart.exec(str)) ) {
+				snippetStarts.push(result.index);
+			}
+
+			// get all positions where any snippet ends
+			var regexEnd = /\{% endbox %\}/gi, snippetEnds = [];
+			while ( (result = regexEnd.exec(str)) ) {
+				snippetEnds.push(result.index + 12);	// 12 is the length of snippet end {% endbox %}
+			}
+
+			//console.log(snippetStarts);
+			//console.log(snippetEnds);
+
+			// check if cursor is inside any snippet
+			var foundIndex = null;
+			for (var i = 0; i < snippetStarts.length; i++) {
+				if (position >= snippetStarts[i] && position <= snippetEnds[i]) {
+					foundIndex = i;
+					break;
+				}
+			}
+
+			// container where snippet can be edited
+			var snippetBox = el.closest('.controls').siblings('.box-snippet');
+
+			if (foundIndex !== null) {
+
+				var foundSnippetPosition = {
+					start: snippetStarts[foundIndex],
+					end: snippetEnds[foundIndex]
+				};
+
+				// select the text surrounding the snippet
+				el.setInputSelection(foundSnippetPosition.start, foundSnippetPosition.end);
+
+				// get snippet text
+				var snippet = str.substring(foundSnippetPosition.start, foundSnippetPosition.end);
+
+				// parse snippet to get info about it
+				var snippetInfo = this.getSnippetInfo(snippet);
+
+				// snippet contains photos.photo resource
+				if (snippetInfo.type == 'photos.photo' && snippetInfo.id) {
+
+					// render photo form
+					can.view( '//app/articles/views/list-photos-item.ejs', {
+						photo: Photo.findOne( { id: snippetInfo.id } ),
+						data: snippetInfo,
+						insideArticle: true
+					} ).then(function( frag ){
+						snippetBox.empty()
+							.append('<table></table>')
+							.append('<button class="btn btn-primary snippet-update" data-snippet-start="'+foundSnippetPosition.start+'" data-snippet-end="'+foundSnippetPosition.end+'">'+$.t('Update photo')+'</button> ')
+							.append('<button class="btn snippet-cancel">'+$.t('Cancel')+'</button>')
+							.find('table').html(frag);
+					});
+				}
+				else {
+					snippetBox.empty();
+				}
+			}
+			else {
+				// clean...
+				snippetBox.empty();
+			}
+		},
+
+		/**
+		 * return info about snippet
+		 * @param  {string} snippet [description]
+		 * @return {type: string, id: int} object with snippet type and id
+		 */
+		getSnippetInfo: function(snippet) {
+
+			var snippetInfo = {};
+
+			// {% box inline_standard_ctverec for photos.photo with pk 3 %}
+
+			// size
+			var reSize = /inline_([a-z]*)_/;
+			var matchSize = snippet.match(reSize);
+			if (matchSize[1].length) snippetInfo.size = matchSize[1];
+
+			// format
+			var reFormat = /inline_[a-z]*_(\w+)/;
+			var matchFormat = snippet.match(reFormat);
+			if (matchFormat[1].length) snippetInfo.format = matchFormat[1];
+
+			// we need to get "photos.photo"
+			var reType = /([a-z]*[.][a-z]*)/g;
+			var matchType = snippet.match(reType);
+			if (matchType[0].length) snippetInfo.type = matchType[0];
+
+			// get primary key "3"
+			var reId = /pk\s(\d+)/;
+			var matchId = snippet.match(reId);
+			if (matchId[1]) snippetInfo.id = parseInt(matchId[1], 10);
+
+			// get photo's align
+			var reAlign = /align:(\w+)/;
+			var matchAlign = snippet.match(reAlign);
+			if (matchAlign[1]) snippetInfo.align = matchAlign[1];
+
+			// get photo's params (show_title, show_description, ...)
+			var reShow = /show_(\w+):(\w+)/g,
+				matchShow = snippet.match(reShow),
+				split;
+			for (var i = 0; i < matchShow.length; i++) {
+				split = matchShow[i].split(":");
+				snippetInfo[split[0]] = parseInt(split[1], 10);
+			}
+
+			return snippetInfo;
+		},
+
+		/**
+		 * update snippet in textarea
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'.snippet-update click' : function(el, ev) {
+
+			ev.preventDefault();
+
+			var snippetBox = el.closest('.box-snippet'),
+				photo = snippetBox.find('tr').eq(0).data('photo'),
+				oldSnippetStart = el.data('snippet-start'),
+				oldSnippetEnd = el.data('snippet-end'),
+				textarea = el.closest('.control-group').find('textarea'),
+				text = textarea.val(),
+				form = snippetBox.find('form'),
+				params = can.deparam(form.serialize());
+
+			// generate new snippet
+			var newSnippet = this.generateSnippet('photos.photo', photo, params);
+
+			// replace old snippet with new snippet in textarea
+			var oldSnippet = text.substr(oldSnippetStart, oldSnippetEnd - oldSnippetStart);
+			textarea.val(text.replace(oldSnippet, newSnippet));
+
+			// hide editing box
+			snippetBox.empty();
+		},
+
+		/**
+		 * hide editing box
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'.snippet-cancel click' : function(el, ev) {
+			el.closest('.box-snippet').empty();
 		},
 
 		/**
