@@ -38,7 +38,7 @@
 		<div class="control-group row">
 			<label class="control-label" for="category"><%= $.t('Category')%></label>
 			<div class="controls">
-				<select name="category" id="category" data-placeholder="<%= $.t('Choose category')%>" class="chzn-select category">
+				<select name="category" id="category" data-placeholder="<%= $.t('Choose category')%>" multiple class="chzn-select category">
 				<% if (category) { %>
 					<% $.each(category, function(i, cat){ %>
 					<%
@@ -90,7 +90,7 @@
 		<div class="control-group row">
 			<label class="control-label" for="content"><%= $.t('Content')%></label>
 			<div class="controls pull-left">
-				<textarea class="content" rows="10" name="content" placeholder="<%= $.t('Add Content')%>" <%= article.attr('content') ? "" : "class='empty'" %>><%= article.content %></textarea>
+				<textarea class="content" rows="10" name="content" placeholder="<%= $.t('Add Content')%>"><%= article.content %></textarea>
 				<span class="help-inline"></span>
 			</div>
 			<div class="box-snippet"></div>
@@ -197,12 +197,13 @@
 
 	<div class="control-group row">
 		<div class="buttons">
-			<a href="javascript://" class="btn btn-primary article-save"><%= $.t('Save')%></a>
+			<a href="javascript://" class="btn btn-primary article-save"><%= $.t('Save and leave')%></a>
 			<a href="javascript://" class="btn btn-info autosave"
 				data-normal="<%= $.t('Autosave')%>"
 				data-saving="<%= $.t('Saving...')%>">
 				<%= $.t('Autosave')%></a>
-			<a href="javascript://" class="btn cancel"><%= $.t('Cancel without saving')%></a>
+			<a href="javascript://" class="btn btn-info preview"><%= $.t('Preview')%></a>
+			<a href="javascript://" class="btn cancel"><%= $.t('Close without saving')%></a>
 		</div>
 	</div>
 </div>

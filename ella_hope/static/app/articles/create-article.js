@@ -32,13 +32,13 @@ steal(
 					{separator:'---------------' },
 					//{name:'Picture', key:'P', replaceWith:'![[![Alternative text]!]]([![Url:!:http://]!] "[![Title]!]")'},
 					{name:'Picture', key:'P', closeWith:function(markItUp) { return ArticleCreate.prototype.insertPhoto(); }},
-					{name:'Link', key:'L', openWith:'[', closeWith:']([![Url:!:http://]!] "[![Title]!]")', placeHolder:'Your text to link here...' },
-					{separator:'---------------'},
-					{name:'Quotes', openWith:'> '},
-					{name:'Code Block / Code', openWith:'(!(\t|!|`)!)', closeWith:'(!(`)!)'},
-					{separator:'---------------'},
+					{name:'Link', key:'L', openWith:'[', closeWith:']([![Url:!:http://]!] "[![Title]!]")', placeHolder:'Your text to link here...' }
+					//{separator:'---------------'},
+					//{name:'Quotes', openWith:'> '},
+					//{name:'Code Block / Code', openWith:'(!(\t|!|`)!)', closeWith:'(!(`)!)'},
+					//{separator:'---------------'},
 					//{name:'Preview', call:'preview', className:"preview"},
-					{name:'Preview', key:'R', className:"preview", closeWith:function(markItUp) { return ArticleCreate.prototype.showPreview(); }},
+					//{name:'Preview', key:'R', className:"preview", closeWith:function(markItUp) { return ArticleCreate.prototype.showPreview(); }},
 					//{name:'Test', key:'1', placeHolder:'Your title here...', closeWith:function(markItUp) { return alert('ano'); } }
 				]
 			}
@@ -46,18 +46,24 @@ steal(
 	},
 	/* @prototype */
 	{
+		article: null,			// current article
 		draft: null,			// current draft object
-		previousDraftValues: null,	// use this for comparison old and new draft values
+		previousDraftValues: null,	// use this for comparison of old and new draft values
 		autosaveTimer: null,	// timer for autosave, we need this to stop timer
 
 		init: function() {
 
 			if (this.options.type == 'draft') {
-				this.showDraft(this.options.article);
+				this.draft = this.options.article;
+				this.show(this.draft.data);
 			}
 			else {
-				this.show(this.options.article);
+				this.article = this.options.article;
+				this.show(this.article);
 			}
+
+			// initialize autosave
+			//this.initAutosave(this.options.autosaveInterval);
 		},
 
 		/**
@@ -68,15 +74,6 @@ steal(
 		show: function(article){
 
 			var self = this;
-
-			// initialize autosave
-			// autosave is only used for new articles or when editing drafts
-			// hopefuly we don't need to autosave already existing article
-			// if we do, how to deal with already saved article and then we remove some
-			// required attribute - destroy the article and save only as a draft?
-			if (typeof article == 'undefined' || this.draft) {
-				this.initAutosave(this.options.autosaveInterval);
-			}
 
 			//console.log(article);
 
@@ -186,16 +183,6 @@ steal(
 		},
 
 		/**
-		 * show draft for editing
-		 * @param  {[type]} draft [description]
-		 * @return {[type]}       [description]
-		 */
-		showDraft: function(draft) {
-			this.draft = draft;
-			this.show(draft.data);
-		},
-
-		/**
 		 * initialize autosave timer
 		 * @param  {[type]} interval [description]
 		 * @return {[type]}          [description]
@@ -206,7 +193,7 @@ steal(
 
 			//if (this.autosaveTimer) this.stopAutosave();
 			this.autosaveTimer = setInterval(function(){
-				self.saveDraft();
+				self.save();
 			}, interval);
 		},
 
@@ -219,6 +206,54 @@ steal(
 			this.autosaveTimer = null;
 		},
 
+		/**
+		 * (auto)saves an article as a draft or as an article, if all required fields
+		 * are filled correctly
+		 * @return {[type]} [description]
+		 */
+		save: function() {
+
+			var self = this,
+				autosaveLink = $('a.autosave'),
+				buttonNormalText = autosaveLink.data('normal'),
+				buttonSavingText = autosaveLink.data('saving'),
+				buttonNormalCss = 'btn-info',
+				buttonSavingCss = 'btn-warning';
+
+			// set different text and class on button while saving
+			autosaveLink
+				.removeClass(buttonNormalCss)
+				.addClass(buttonSavingCss)
+				.html(buttonSavingText);
+
+			// return button to normal state after a while
+			setTimeout(function(){
+				// restore text and class on button while saving
+				autosaveLink
+					.removeClass(buttonSavingCss)
+					.addClass(buttonNormalCss)
+					.html(buttonNormalText);
+			}, 2000);
+
+			// try to save the article and handle errors if there are any
+			var errors = this.createArticle();
+
+			if (errors === true) {
+				// there are no errors
+				this.deleteDraft();
+				return true;
+			}
+			else {
+				// there are some errors, save article as a draft and send errors back
+				this.saveDraft();
+				return errors;
+			}
+		},
+
+		/**
+		 * create article model from form values
+		 * @return {[type]} [description]
+		 */
 		createArticle: function() {
 
 			//console.log('create');
@@ -254,42 +289,51 @@ steal(
 
 			if (!values['id']) delete values['id'];
 
-			// create new article model and validate it
-			var a = new Article(values);
-
-			//console.log(values);
+			if (this.article) {
+				this.article.attr(values);
+			}
+			else {
+				// create new article model and validate it
+				this.article = new Article(values);
+			}
 
 			// remove all error markup
 			$('.control-group').removeClass('error');
 			$('.help-inline').empty();
 
-			//console.log(a.errors());
+			// check for errors
+			var errors = this.article.errors();
 
-			// validation - if there are errors
-			if (a.errors()) {
-				//console.log(a.errors());
-				$.each(a.errors(), function(e){
-					$('#'+e).closest('.control-group')
+			// no errors
+			if (errors === null) {
+				// save article
+				this.article.save();
+				return true;
+			}
+			else {
+				//this.article.destroy();
+				return errors;
+			}
+		},
+
+		/**
+		 * highlight inputs with error
+		 * @param  {[type]} errors [description]
+		 * @return {[type]}        [description]
+		 */
+		showErrors: function(errors) {
+
+			if (errors && errors !== true) {
+				$.each(errors, function(e){
+					$('.'+e).closest('.control-group')
 						.addClass('error')
-						.find('.help-inline').html(a.errors(e)[e][0]);
+						.find('.help-inline').html(errors[e][0]);
 				});
 
 				// scroll to first error
 				$('html, body').animate({
 					scrollTop: $('.control-group.error').eq(0).offset().top - 50
 				}, 500);
-			}
-			else {
-				// save article
-				a.save();
-
-				// delete draft when article is saved
-				if (this.draft) {
-					this.draft.destroy();
-				}
-
-				// redirect to articles list
-				can.route.attr({page:'articles'}, true);
 			}
 		},
 
@@ -301,13 +345,9 @@ steal(
 		saveDraft : function(el) {
 
 			var self = this,
-				buttonNormalText = $('a.autosave').data('normal'),
-				buttonSavingText = $('a.autosave').data('saving'),
-				buttonNormalCss = 'btn-info',
-				buttonSavingCss = 'btn-warning';
+				form = this.element.find('form.article');
+				values = form.serialize();
 
-			var form = this.element.find('form');
-			var values = form.serialize();
 			values = can.deparam(values);
 
 			// first autosave - previousDraftValues is null so there is nothing to compare
@@ -320,12 +360,6 @@ steal(
 					return;
 				}
 			}
-
-			// set different text and class on button while saving
-			$('a.autosave')
-				.removeClass(buttonNormalCss)
-				.addClass(buttonSavingCss)
-				.html(buttonSavingText);
 
 			this.previousDraftValues = values;
 
@@ -340,46 +374,65 @@ steal(
 				this.draft = new Draft();
 			}
 
-			this.draft.attr(obj);
+			var id;
+			if (this.draft) {
+				id = this.draft.id;
+			}
+
+			this.draft.attr(obj, true);
+
+			if (id) {
+				this.draft.attr('id', id);
+			}
+
 			this.draft.save();
-
-			setTimeout(function(){
-				// restore text and class on button while saving
-				$('a.autosave')
-					.removeClass(buttonSavingCss)
-					.addClass(buttonNormalCss)
-					.html(buttonNormalText);
-			}, 2000);
 		},
-		saveArticle: function() {
 
-			this.stopAutosave();
-			this.createArticle();
+		/**
+		 * if there is automaticaly saved draft, delete it
+		 * @return {[type]} [description]
+		 */
+		deleteDraft: function() {
+
+			if (this.draft) {
+				this.draft.destroy();
+			}
 		},
+
 		'.article input keyup': function(el, ev) {
 			ev.preventDefault();
 
 			if(ev.keyCode == 13){
-				this.saveArticle();
+				this.save();
 			}
 		},
 		'.article-save click' : function(el, ev){
 
+			ev.preventDefault();
+
 			ev.stopPropagation();
 
-			this.saveArticle();
+			var errors = this.save();
+
+			if (errors === true) {
+				// redirect to articles list
+				can.route.attr({page:'articles'}, true);
+			}
+			else {
+				this.showErrors(errors);
+			}
 		},
 		'.autosave click' : function(el, ev) {
-			this.saveDraft(el);
+			this.save();
+		},
+		'.preview click' : function(el, ev) {
+			this.showPreview();
 		},
 		'.cancel click' : function(){
 
 			this.stopAutosave();
 
-			// if there is automaticaly saved draft, delete it
-			if (this.draft) {
-				this.draft.destroy();
-			}
+			this.deleteDraft();
 
 			can.route.attr({page:'articles'}, true);
 		},
@@ -886,7 +939,15 @@ steal(
 			// TODO
 			var id = $('#id').val();
 
-			window.open(getBaseUrl(BASE_URL) + 'preview/'+id+'/');
+			// save article before it is previews
+			var errors = this.save();
+
+			if (errors === true) {
+				window.open(getBaseUrl(BASE_URL) + 'preview/'+id+'/');
+			}
+			else {
+				this.showErrors(errors);
+			}
 		},
 
 		destroy: function() {
