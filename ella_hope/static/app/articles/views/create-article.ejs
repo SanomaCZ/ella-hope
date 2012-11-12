@@ -76,14 +76,35 @@
 							}
 						}
 					%>
-						<option value="<%= a.resource_uri %>" <%= selected ? "selected=selected" : "" %>>
-							<%= a.name %>
-						</option>
+						<option value="<%= a.resource_uri %>" <%= selected ? "selected=selected" : "" %>><%= a.name %></option>
 					<% }) %>
 				<% } %>
 				</select>
 				<span class="help-inline"></span>
 				<button class="btn btn-mini add-author"><%= $.t('add new author')%></button>
+			</div>
+		</div>
+
+		<div class="control-group row">
+			<label class="control-label" for="source"><%= $.t('Source')%></label>
+			<div class="controls">
+				<select name="source" id="source" data-placeholder="<%= $.t('Choose source')%>" class="chzn-select source">
+				<% if (author) { %>
+					<% $.each(source, function(i, s){ %>
+					<%
+						var selected = false;
+						if (article.source) {
+							if (article.source['id'] == s.id) {
+								selected = true;
+							}
+						}
+					%>
+						<option value="<%= s.resource_uri %>" <%= selected ? "selected=selected" : "" %>><%= s.name %></option>
+					<% }) %>
+				<% } %>
+				</select>
+				<span class="help-inline"></span>
+				<button class="btn btn-mini add-source"><%= $.t('add new source')%></button>
 			</div>
 		</div>
 
@@ -107,30 +128,70 @@
 		</div>
 
 		<div class="control-group row">
-			<label class="control-label" for="publish_from"><%= $.t('Publish From')%></label>
+			<label class="control-label" for="photo"><%= $.t('Photo')%></label>
 			<div class="controls">
-				<input class="span2 publish_from" type="datetime-local" name="publish_from_date" id="publish_from" value="<%= article.publish_from_date %>" />
-
-				<input type="text" class="timepicker-default span1 publish_from" name="publish_from_time" id="publish_from_time" value="<%= article.publish_from_time %>" />
-
+				<% if (article.photo && article.photo.public_url) { %>
+					<div class="title-photo">
+						<img src="<%= article.photo.public_url %>" height="100" />
+					</div>
+				<% } else { %>
+					<div class="title-photo-empty" style="display:none">
+						<button class="btn btn-mini add-photo"><%= $.t('add photo')%></button>
+					</div>
+				<% } %>
+				<input type="hidden" name="photo" value="<%= article.photo ? article.photo.resource_uri : '' %>" />
 				<span class="help-inline"></span>
 			</div>
 		</div>
 
 		<div class="control-group row">
-			<label class="control-label" for="publish_to"><%= $.t('Publish To')%></label>
-			<div class="controls">
-				<input class="span2 publish_to" type="datetime-local" name="publish_to_date" id="publish_to" value="<%= article.publish_to_date %>" />
+			<div class="span4">
+				<ul id="sortable1" class="connectedSortable">
+				    <li>Item 1</li>
+				    <li>Item 2</li>
+				    <li>Item 3</li>
+				    <li>Item 4</li>
+				    <li>Item 5</li>
+				</ul>
+			</div>
 
-				<input type="text" class="timepicker-default span1" name="publish_to_time" id="publish_to_time" value="<%= article.publish_to_time %>" />
-				<span class="help-inline"></span>
+			<div class="span4">
+				<ul id="sortable2" class="connectedSortable">
+				    <li>Item 1</li>
+				    <li>Item 2</li>
+				    <li>Item 3</li>
+				    <li>Item 4</li>
+				    <li>Item 5</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="control-group row">
+			<div class="pull-left">
+				<label class="control-label" for="publish_from"><%= $.t('Publish From')%></label>
+				<div class="controls">
+					<input class="span2 publish_from" type="datetime-local" name="publish_from_date" id="publish_from" value="<%= article.publish_from_date %>" />
+
+					<input type="text" class="timepicker-default span1 publish_from" name="publish_from_time" id="publish_from_time" value="<%= article.publish_from_time %>" />
+
+					<span class="help-inline"></span>
+				</div>
+			</div>
+			<div class="pull-left">
+				<label class="control-label" for="publish_to"><%= $.t('Publish To')%></label>
+				<div class="controls">
+					<input class="span2 publish_to" type="datetime-local" name="publish_to_date" id="publish_to" value="<%= article.publish_to_date %>" />
+
+					<input type="text" class="timepicker-default span1" name="publish_to_time" id="publish_to_time" value="<%= article.publish_to_time %>" />
+					<span class="help-inline"></span>
+				</div>
 			</div>
 		</div>
 
 		<div class="control-group row">
 			<label class="control-label" for="tags"><%= $.t('Tag(s)')%></label>
 			<div class="controls">
-				<select name="tags[]" id="tags" data-placeholder="<%= $.t('Choose tags')%>" class="chzn-select tags" multiple>
+				<select name="tags[]" id="tags" data-placeholder="<%= $.t('Choose tags')%>" class="chzn-select tags span4" multiple>
 				<% if (tag) { %>
 					<% $.each(tag, function(i, t){ %>
 					<%
@@ -153,6 +214,30 @@
 				<span class="help-inline"></span>
 				<button class="btn btn-mini add-tag"><%= $.t('add new tag')%></button>
 			</div>
+		</div>
+
+		<div class="control-group row">
+			<label class="control-label" for="display-options"><%= $.t('Display options')%></label>
+
+			<label class="checkbox">
+				<input class="commercial" type="checkbox" name="commercial" <%= article.commercial ? 'checked' : '' %> value="true" /> <%= $.t('Commercial')%>
+				<span class="help-inline"></span>
+			</label>
+
+			<label class="checkbox">
+				<input class="photo-displayed" type="checkbox" name="photo_displayed" <%= article.photo_displayed === false ? 'checked' : '' %> value="false" /> <%= $.t('Article without photo')%>
+				<span class="help-inline"></span>
+			</label>
+
+			<label class="checkbox">
+				<input class="article-parameter" type="checkbox" name="article-parameter" <%= article.article_parameter ? 'checked' : '' %> value="true" /> <%= $.t('Article parameter')%>
+				<span class="help-inline"></span>
+			</label>
+
+			<label class="checkbox">
+				<input class="article-comments" type="checkbox" name="article-comments" <%= article.article_comments ? 'checked' : '' %> value="true" /> <%= $.t('Article comments')%>
+				<span class="help-inline"></span>
+			</label>
 		</div>
 
 		<div class="control-group row">
@@ -181,14 +266,6 @@
 			<label class="control-label" for="published"><%= $.t('Published')%></label>
 			<div class="controls">
 				<input class="published" type="checkbox" name="published" id="published" <%= article.published ? 'checked' : '' %> value="true" />
-				<span class="help-inline"></span>
-			</div>
-		</div>
-
-		<div class="control-group row">
-			<label for="static"><%= $.t('Static')%>
-			<div class="controls">
-				<input class="static" type="checkbox" name="static" id="static" <%= article.static ? 'checked' : '' %> value="true" />
 				<span class="help-inline"></span>
 			</div>
 		</div>
@@ -247,6 +324,27 @@
 	<div class="modal-footer">
 		<button class="btn" data-dismiss="modal"><%= $.t('Close') %></button>
 		<button class="btn btn-primary insert-photo"><%= $.t('Insert') %></button>
+	</div>
+</div>
+
+<div id="source-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3 id="myModalLabel"><%= $.t('Add new source') %></h3>
+	</div>
+	<div class="modal-body">
+		<form>
+			<label for="name"><%= $.t('Name')%>
+				<input type="text" name="name" />
+			</label>
+			<label for="url"><%= $.t('Url')%>
+				<input type="text" name="url" />
+			</label>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal"><%= $.t('Close') %></button>
+		<button class="btn btn-primary insert-source"><%= $.t('Insert') %></button>
 	</div>
 </div>
 

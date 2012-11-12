@@ -23,7 +23,11 @@
 			<tr>
 				<td class="article-state <%= article.state %>" title="<%= article.state %>">&nbsp;</td>
 				<td><a href="<%== editUrl %>"><%= article.title %></a></td>
-				<td><%= article.photo %></td>
+				<td>
+					<% if (article.photo && article.photo.public_url) { %>
+						<img src="<%= article.photo.public_url %>" height="40" />
+					<% } %>
+				</td>
 				<td><%= article.category.title %></td>
 				<td><%= articleDate %> <%= articleTime %></td>
 				<td><%= article.state %></td>

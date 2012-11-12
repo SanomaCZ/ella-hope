@@ -1,9 +1,12 @@
+<%
+var data = this.data || {};
+%>
 <table class="table">
 <% if (this.photos) { %>
 	<% list(this.photos, function(photo, index) { %>
 		<%== can.view.render('//app/articles/views/list-photos-item.ejs', {
 			photo: photo,
-			data: {}
+			data: data
 		}); %>
 	<% }); %>
 <% } %>

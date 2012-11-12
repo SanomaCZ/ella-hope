@@ -11,6 +11,7 @@ steal(
 	, "./listing.js"
 	, "./photo.js"
 	, "./photo-format.js"
+	, "./source.js"
 	, "./tag.js"
 	, "./user.js"
 );

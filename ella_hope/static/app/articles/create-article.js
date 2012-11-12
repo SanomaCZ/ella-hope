@@ -4,8 +4,20 @@ steal(
 	, '//app/resources/plugins/markitup/skins/markitup/style.css'
 	, '//app/resources/plugins/markitup/sets/markdown/style.css'
 	, '//app/resources/js/slug.js'
+	, '//app/resources/js/jquery-ui/jquery.ui.core.js'
+	, '//app/resources/js/jquery-ui/jquery.ui.widget.js'
+	, '//app/resources/css/jquery-ui/base/jquery-ui.css'
+	, '//app/resources/css/jquery-ui/ui-lightness/jquery-ui.css'
 )
 .then(
+	'//app/resources/js/jquery-ui/jquery.ui.mouse.js'
+)
+.then(
+
+	'//app/resources/js/jquery-ui/jquery.ui.draggable.js',
+	'//app/resources/js/jquery-ui/jquery.ui.droppable.js',
+	'//app/resources/js/jquery-ui/jquery.ui.sortable.js',
+
 	ArticleCreate = can.Control(
 	/* @static */
 	{
@@ -102,10 +114,11 @@ steal(
 			can.view( '//app/articles/views/create-article.ejs', {
 				article: this.article,
 				drafts: Draft.findAll(),
-				author: Author.findAll(),
+				author: Author.findAll({limit: 10000}),
 				category: Category.findAll(),
 				states: this.options.articleStates,
 				photos: Photo.findAll(),
+				source: Source.findAll(),
 				tag: Tag.findAll()
 				//photoFormat: PhotoFormat.findAll()
 			} ).then(function( frag ){
@@ -145,6 +158,11 @@ steal(
 				};
 				$("#publish_from_time").timepicker(timeOptions);
 				$("#publish_to_time").timepicker(timeOptions);
+
+				// connected articles - enable drag&drop between two lists
+				$( "#sortable1, #sortable2" ).sortable({
+					connectWith: ".connectedSortable"
+				}).disableSelection();
 
 				// test settings - setting some attributes to read-only or disabled
 				// USER.auth_tree.articles.article.fields.title._data.readonly = true;
@@ -263,8 +281,6 @@ steal(
 			values = can.deparam(values);
 
 			values['announced'] = false;
-			values['app_data'] =  "{}";
-			values['photo'] =  null;
 
 			// merge date and time of publish_from
 			values['publish_from'] = null;
@@ -283,6 +299,12 @@ steal(
 
 			// if static is not present, set to false
 			if (!values['static']) values['static'] = false;
+
+			// if photo_displayed is not present, set to true
+			if (!values['photo_displayed']) values['photo_displayed'] = true;
+			else values['photo_displayed'] = false;
+
+			if (values['photo'].length === 0) values['photo'] = null;
 
 			// app_data is required to be sent, althougt it's empty now
 			values['app_data'] = null;
@@ -560,6 +582,47 @@ steal(
 		},
 
 		/**
+		 * open a dialog where new source can be added
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'.add-source click' : function(el, ev) {
+
+			ev.preventDefault();
+			$('#source-modal').modal('show');
+		},
+
+		/**
+		 * create new source and insert it into source's select
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'#source-modal .insert-source click' : function(el, ev) {
+
+			ev.preventDefault();
+
+			// form values
+			var values = $('#source-modal').find('form').serialize();
+			values = can.deparam(values);
+
+			// create new tag
+			var source = new Source();
+			source.attr(values);
+			source.save(function(data){
+				$('#source')
+					// append new tag to tags list and make it selected
+					.append('<option value="'+data.resource_uri+'" selected="selected">'+data.name+'</option>')
+					// update chosen select
+					.trigger('liszt:updated')
+					;
+			});
+
+			$('#source-modal').modal('hide');
+		},
+
+		/**
 		 * open a dialog where new tag can be added
 		 * @param  {[type]} el [description]
 		 * @param  {[type]} ev [description]
@@ -615,6 +678,40 @@ steal(
 		},
 
 		/**
+		 * open a dialog where title photo can be added
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'.add-photo click' : function(el, ev) {
+
+			ev.preventDefault();
+
+			// render list
+			can.view( '//app/articles/views/list-photos.ejs', {
+				photos: Photo.findAll(),
+				data: { title: true }
+			} ).then(function( frag ){
+				$('#photos-modal .photos-list').html(frag);
+			});
+
+			// show modal dialog
+			$('#photos-modal').modal('show');
+		},
+
+		/**
+		 * inserts title photo into an article
+		 * @param  {[type]} photo [description]
+		 * @return {[type]}       [description]
+		 */
+		insertTitlePhoto: function(photo) {
+
+			$('form.article').find('input[name=photo]').val(photo.resource_uri);
+
+
+		},
+
+		/**
 		 * when user clicks on table row (radio, image), check the radio button on that row
 		 * show form with additional parameter
 		 * @param  {[type]} el [description]
@@ -642,10 +739,16 @@ steal(
 			// get checked radio button, it's tr parent and photo from data attribute
 			var tr = $('input[name=photo]:checked', '#photos-modal').parents('tr'),
 				photo = tr.data('photo'),
+				data = tr.data('data'),
 				params = tr.find('.snippet-params'),
 				format = can.deparam(params.serialize());
 
-			if (photo) {
+			// insert title photo
+			if (data && data.title) {
+				this.insertTitlePhoto(photo);
+				$('#photos-modal').modal('hide');
+			}
+			else if (photo) {
 				var snippet = this.generateSnippet('photos.photo', photo, format);
 
 				// insert snippet into textarea
