@@ -110,6 +110,27 @@ steal(
 				this.article['publish_to_time'] = publishTo.toString('HH:mm');
 			}
 
+			// listen to article photo change - display chosen photo or enable to choose new photo
+			this.article.bind('photo', function(ev){
+				//console.log(ev);
+
+				var photo = self.article.photo;
+
+				//console.log(photo);
+				if (photo === null) {
+					$('.title-photo img').attr('src', '');
+					$('form.article').find('input[name=photo]').val('');
+					$('.title-photo-empty').show();
+					$('.title-photo').hide();
+				}
+				else {
+					$('.title-photo img').attr('src', photo.public_url);
+					$('form.article').find('input[name=photo]').val(photo.resource_uri);
+					$('.title-photo-empty').hide();
+					$('.title-photo').show();
+				}
+			});
+
 			// render article form
 			can.view( '//app/articles/views/create-article.ejs', {
 				article: this.article,
@@ -160,7 +181,7 @@ steal(
 				$("#publish_to_time").timepicker(timeOptions);
 
 				// connected articles - enable drag&drop between two lists
-				$( "#sortable1, #sortable2" ).sortable({
+				$( "#found-related-articles, #chosen-related-articles" ).sortable({
 					connectWith: ".connectedSortable"
 				}).disableSelection();
 
@@ -488,14 +509,6 @@ steal(
 			el.siblings('.selected-draft')
 				.append(label)
 				.append('<a href="'+urlDelete+'">x</a>');
-
-			//console.log(this.article.attr());
-			//console.log(draft);
-			//this.article.attr({title: 'hehe'});
-
-			//this.article.attr(draft.data._data);
-
-			//console.log(this.article.attr());
 		},
 
 		/**
@@ -705,10 +718,12 @@ steal(
 		 * @return {[type]}       [description]
 		 */
 		insertTitlePhoto: function(photo) {
+			this.article.attr('photo', photo);
+		},
 
-			$('form.article').find('input[name=photo]').val(photo.resource_uri);
-
-
+		'.remove-photo click': function(el, ev) {
+			ev.preventDefault();
+			this.article.attr('photo', null);
 		},
 
 		/**
@@ -757,6 +772,55 @@ steal(
 
 				$('#photos-modal').modal('hide');
 			}
+		},
+
+		'.set-date-now click': function(el, ev){
+			ev.preventDefault();
+			this.setDate(el);
+		},
+
+		/**
+		 * set today's date to given input
+		 * input is set in element's data-target-date
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		setDate: function(el) {
+			var target = el.data('target-date'),
+				date = new Date(),
+				year = date.getUTCFullYear(),
+				month = date.getMonth()+1,
+				day = date.getDate(),
+				fullDate = year+'-'+month+'-'+day;
+			$('input[name='+target+']').val(fullDate);
+		},
+
+		'.set-time-now click': function(el, ev){
+			ev.preventDefault();
+			this.setTime(el);
+		},
+
+		/**
+		 * set today's time to given input
+		 * input is set in element's data-target-time
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		setTime: function(el){
+			var target = el.data('target-time'),
+				date = new Date(),
+				hours = date.getHours(),
+				minutes = date.getMinutes() < 10 ? '0'+date.getMinutes() : date.getMinutes(),
+				fullTime = hours+':'+minutes;
+			$('input[name='+target+']').val(fullTime);
+		},
+
+		'.set-datetime-now click': function(el, ev){
+			ev.preventDefault();
+			this.setDate(el);
+			this.setTime(el);
 		},
 
 		/**
@@ -847,6 +911,25 @@ steal(
 		 */
 		'#photos-modal hide' : function(el, ev) {
 			$('#photos-modal').find('.upload').remove();
+		},
+
+		/**
+		 * find related articles based on currently selected tags
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'.get-related-articles click': function(el, ev) {
+
+			ev.preventDefault();
+
+			var data = Article.getRelatedArticles({tag: 1});
+
+			if (data) {
+				$.each(data, function(i, article){
+					$('#found-related-articles').append('<li>'+article.title+'</li>');
+				});
+			}
 		},
 
 		/**

@@ -81,7 +81,40 @@ steal(
 				});
 			},
 
-			destroy: 'DELETE ' + BASE_URL + '/article/{id}/'
+			destroy: 'DELETE ' + BASE_URL + '/article/{id}/',
+
+
+			/**
+			 * filter articles by tag
+			 * $server/admin-api/tag/related/article/100;101;106/
+			 * @param  {[type]} data [description]
+			 * @return {[type]}      [description]
+			 */
+			getRelatedArticles : function(data) {
+				var result = {};
+
+				$.ajax({
+					url: BASE_URL+'/tag/related/article/1;3/',
+					type: 'GET',
+					async: false,
+					dataType: 'json',
+					contentType: 'application/json',
+					data: JSON.stringify(data),
+					success : function(data, textStatus, xmlHttpRequest){
+						result = data;
+					},
+					error : function(xhr, ajaxOptions, thrownError) {
+						// console.log(xhr);
+						// console.log(ajaxOptions);
+						// console.log(thrownError);
+						result = {
+							error: true,
+							message: thrownError
+						};
+					}
+				});
+				return result;
+			}
 		}, {});
 
 		// article schema (when authorized)

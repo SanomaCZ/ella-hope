@@ -73,3 +73,24 @@ button.add-author, button.add-tag {
 	position: relative;
 	top: -16px;
 }
+
+.title-photo img {
+	max-height: 100px;
+}
+.remove-photo {
+	vertical-align: bottom;
+}
+
+.connectedSortable {
+	border: 1px solid #cccccc;
+	height: 100px;
+	list-style-type: none;
+	margin: 0;
+}
+.connectedSortable li {
+	display: block;
+	padding: 2px;
+	background-color: rgb(226, 226, 226);
+	margin: 2px;
+	cursor: move;
+}

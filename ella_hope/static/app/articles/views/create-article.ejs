@@ -49,9 +49,7 @@
 							}
 						}
 					%>
-						<option value="<%= cat.resource_uri %>" <%= selected ? "selected=selected" : "" %>>
-							<%= cat.title %>
-						</option>
+						<option value="<%= cat.resource_uri %>" <%= selected ? "selected=selected" : "" %>><%= cat.title %></option>
 					<% }) %>
 				<% } %>
 				</select>
@@ -130,38 +128,35 @@
 		<div class="control-group row">
 			<label class="control-label" for="photo"><%= $.t('Photo')%></label>
 			<div class="controls">
-				<% if (article.photo && article.photo.public_url) { %>
-					<div class="title-photo">
-						<img src="<%= article.photo.public_url %>" height="100" />
-					</div>
-				<% } else { %>
-					<div class="title-photo-empty" style="display:none">
-						<button class="btn btn-mini add-photo"><%= $.t('add photo')%></button>
-					</div>
-				<% } %>
+				<%
+				var titlePhotoShow = false;
+				if (article.photo && article.photo.public_url) {
+					titlePhotoShow = true;
+				} %>
+				<div class="title-photo" <%= titlePhotoShow === false ? 'style=display:none' : '' %>>
+					<img src="<%= article.photo ? article.photo.public_url : '' %>" />
+					<button class="btn btn-mini remove-photo"><%= $.t('remove photo')%></button>
+				</div>
+				<div class="title-photo-empty" <%= titlePhotoShow === true ? 'style=display:none' : '' %>>
+					<button class="btn btn-mini add-photo"><%= $.t('add photo')%></button>
+				</div>
 				<input type="hidden" name="photo" value="<%= article.photo ? article.photo.resource_uri : '' %>" />
 				<span class="help-inline"></span>
 			</div>
 		</div>
 
 		<div class="control-group row">
-			<div class="span4">
-				<ul id="sortable1" class="connectedSortable">
-				    <li>Item 1</li>
-				    <li>Item 2</li>
-				    <li>Item 3</li>
-				    <li>Item 4</li>
-				    <li>Item 5</li>
+			<div class="span4 pull-left" style="margin-left: 0">
+				<label class="control-label"><%= $.t('Related articles')%></label>
+				<ul id="chosen-related-articles" class="connectedSortable">
 				</ul>
 			</div>
 
-			<div class="span4">
-				<ul id="sortable2" class="connectedSortable">
-				    <li>Item 1</li>
-				    <li>Item 2</li>
-				    <li>Item 3</li>
-				    <li>Item 4</li>
-				    <li>Item 5</li>
+			<div class="span4 pull-left">
+				<label>
+					<button class="btn btn-mini get-related-articles"><%= $.t('get related articles')%></button>
+				</label>
+				<ul id="found-related-articles" class="connectedSortable">
 				</ul>
 			</div>
 		</div>
@@ -174,6 +169,10 @@
 
 					<input type="text" class="timepicker-default span1 publish_from" name="publish_from_time" id="publish_from_time" value="<%= article.publish_from_time %>" />
 
+					<button class="btn btn-mini set-date-now" data-target-date="publish_from_date"><%= $.t('today') %></button>
+					<button class="btn btn-mini set-datetime-now" data-target-date="publish_from_date"
+						data-target-time="publish_from_time"><%= $.t('now') %></button>
+
 					<span class="help-inline"></span>
 				</div>
 			</div>
@@ -183,6 +182,11 @@
 					<input class="span2 publish_to" type="datetime-local" name="publish_to_date" id="publish_to" value="<%= article.publish_to_date %>" />
 
 					<input type="text" class="timepicker-default span1" name="publish_to_time" id="publish_to_time" value="<%= article.publish_to_time %>" />
+
+					<button class="btn btn-mini set-date-now" data-target-date="publish_to_date"><%= $.t('today') %></button>
+					<button class="btn btn-mini set-datetime-now" data-target-date="publish_to_date"
+						data-target-time="publish_to_time"><%= $.t('now') %></button>
+
 					<span class="help-inline"></span>
 				</div>
 			</div>
@@ -205,9 +209,7 @@
 							}
 						}
 					%>
-						<option value="<%= t.resource_uri %>" <%= selected ? "selected=selected" : "" %>>
-							<%= t.name %>
-						</option>
+						<option value="<%= t.resource_uri %>" <%= selected ? "selected=selected" : "" %>><%= t.name %></option>
 					<% }) %>
 				<% } %>
 				</select>

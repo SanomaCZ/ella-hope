@@ -62,11 +62,11 @@ steal(
 			// steal the rest files
 			steal(
 				'./models/models.js'				// steals all your models
+				, './resources/js/jquery.own.js'	// own jquery extensions
 				, './navbar/navbar.js'				// navigation bar
 				, './dashboard/dashboard.js'		// dasbboard module
 				, './articles/articles.js'			// articles module
 				, './photos/photos.js'				// photos module
-				, './resources/js/jquery.own.js'	// own jquery extensions
 			)
 			.then(
 				// run the application
