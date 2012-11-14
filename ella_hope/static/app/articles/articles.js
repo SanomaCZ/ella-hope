@@ -23,7 +23,7 @@ steal(
 	{
 		defaults: {
 			initView : "//app/articles/views/init.ejs",
-			articleStates: ["added", "ready", "approved", "published", "postponed",	"deleted"],
+			articleStates: ["added", "ready", "approved", "published", "deleted"], // "postponed"
 			dateOptions: {	// https://github.com/eternicode/bootstrap-datepicker
 				format: 'yyyy-mm-dd',
 				weekStart: 1,
@@ -58,7 +58,8 @@ steal(
 			can.view('//app/articles/views/init.ejs', {
 				author: Author.findAll(),
 				category: Category.findAll(),
-				states: this.options.articleStates
+				states: this.options.articleStates,
+				tag: Tag.findAll()
 			}).then(function( frag ){
 				self.element.html( frag );
 			}).then(function(){
@@ -74,7 +75,7 @@ steal(
 					});
 
 				$(".filter-form select").on('change', function(ev){
-						self.filterArticles();
+					self.filterArticles();
 				});
 
 				// enable chosen select for authors
@@ -249,6 +250,11 @@ steal(
 			// author
 			if ($("select[name=author]").val()) {
 				data.authors__id = $("select[name=author]").val();
+			}
+
+			// tag
+			if ($("select[name=tag]").val()) {
+				data.tags__id = $("select[name=tag]").val();
 			}
 
 

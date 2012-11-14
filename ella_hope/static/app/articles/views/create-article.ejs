@@ -162,7 +162,7 @@
 		</div>
 
 		<div class="control-group row">
-			<div class="pull-left">
+			<div class="span4 pull-left" style="margin-left: 0">
 				<label class="control-label" for="publish_from"><%= $.t('Publish From')%></label>
 				<div class="controls">
 					<input class="span2 publish_from" type="datetime-local" name="publish_from_date" id="publish_from" value="<%= article.publish_from_date %>" />
@@ -176,7 +176,7 @@
 					<span class="help-inline"></span>
 				</div>
 			</div>
-			<div class="pull-left">
+			<div class="span4 pull-left">
 				<label class="control-label" for="publish_to"><%= $.t('Publish To')%></label>
 				<div class="controls">
 					<input class="span2 publish_to" type="datetime-local" name="publish_to_date" id="publish_to" value="<%= article.publish_to_date %>" />
@@ -195,7 +195,7 @@
 		<div class="control-group row">
 			<label class="control-label" for="tags"><%= $.t('Tag(s)')%></label>
 			<div class="controls">
-				<select name="tags[]" id="tags" data-placeholder="<%= $.t('Choose tags')%>" class="chzn-select tags span4" multiple>
+				<select name="tags[]" data-placeholder="<%= $.t('Choose tags')%>" class="chzn-select article-tags span4" multiple>
 				<% if (tag) { %>
 					<% $.each(tag, function(i, t){ %>
 					<%
@@ -214,7 +214,7 @@
 				<% } %>
 				</select>
 				<span class="help-inline"></span>
-				<button class="btn btn-mini add-tag"><%= $.t('add new tag')%></button>
+				<button class="btn btn-mini add-tag" data-target="article-tags"><%= $.t('add new tag')%></button>
 			</div>
 		</div>
 

@@ -644,6 +644,19 @@ steal(
 		'.add-tag click' : function(el, ev) {
 
 			ev.preventDefault();
+
+			// get target element where new tag should be inserted
+			var target = el.data('target');
+
+			console.log(target);
+
+			// save target to insert-tag button so that
+			// we can get it when button is clicked
+			$('#tag-modal .insert-tag').data('target', target);
+
+			console.log($('#tag-modal .insert-tag').data('target'));
+
+			// open dialog
 			$('#tag-modal').modal('show');
 		},
 
@@ -671,6 +684,12 @@ steal(
 
 			ev.preventDefault();
 
+			// target input where new tag should be inserted
+			var target = el.data('target'),
+				targetEl = $('.'+target);
+
+			console.log(targetEl);
+
 			// form values
 			var values = $('#tag-modal').find('form').serialize();
 			values = can.deparam(values);
@@ -679,7 +698,7 @@ steal(
 			var tag = new Tag();
 			tag.attr(values);
 			tag.save(function(data){
-				$('#tags')
+				targetEl
 					// append new tag to tags list and make it selected
 					.append('<option value="'+data.resource_uri+'" selected="selected">'+data.name+'</option>')
 					// update chosen select

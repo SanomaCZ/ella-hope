@@ -49,7 +49,8 @@ steal(
 			// render article form
 			can.view( '//app/photos/views/upload-photos.ejs', {
 				photo: this.photo,
-				author: Author.findAll()
+				author: Author.findAll(),
+				tag: Tag.findAll()
 			} ).then(function( frag ){
 				self.element.html(frag);
 
@@ -156,7 +157,8 @@ steal(
 				can.view( '//app/photos/views/photo.ejs', {
 					file: files[i],
 					photo: {},
-					author: Author.findAll()
+					author: Author.findAll(),
+					tag: Tag.findAll()
 				} ).then(function( frag ){
 					$('#images').append(frag);
 				});
@@ -265,24 +267,25 @@ steal(
 					important_bottom = $(this).find('input[name=important_bottom]').val(),
 					important_right = $(this).find('input[name=important_right]').val();
 
-				important_top = important_top ? parseInt(important_top) : null;
-				important_left = important_left ? parseInt(important_left) : null;
-				important_bottom = important_bottom ? parseInt(important_bottom) : null;
-				important_right = important_right ? parseInt(important_right) : null;
+				important_top = important_top ? parseInt(important_top, 10) : null;
+				important_left = important_left ? parseInt(important_left, 10) : null;
+				important_bottom = important_bottom ? parseInt(important_bottom, 10) : null;
+				important_right = important_right ? parseInt(important_right, 10) : null;
 
 				objects[objects.length] = {
 					"title": $(this).find('.title').val(),
 					"slug": $(this).find('.title').val(),
 					"description": $(this).find('.description').val(),
 					"created": new Date().toISOString(),
-					"authors" : ["/admin-api/author/1/", "/admin-api/author/2/"], //$(this).find('.authors').val(),
+					"authors" : $(this).find('.authors').val(),
+					"tags" : $(this).find('.tags').val(),
 					"app_data": null,
 					"image": "attached_object_id:"+$(this).find('.filename').val(),
 					"important_top": important_top,
 					"important_left": important_left,
 					"important_bottom": important_bottom,
 					"important_right": important_right,
-					"rotate": parseInt($(this).find('input[name=rotate]').val())
+					"rotate": parseInt($(this).find('input[name=rotate]').val(), 10)
 				};
 			});
 
@@ -450,6 +453,74 @@ steal(
 
 		clearFileInput: function() {
 			$('#file').replaceWith('<input type="file" id="file" name="attached_object" multiple />');
+		},
+
+		/**
+		 * open a dialog where new tag can be added
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'.add-tag click' : function(el, ev) {
+
+			ev.preventDefault();
+
+			// get target element where new tag should be inserted
+			var target = el.data('target');
+
+			// save target to insert-tag button so that
+			// we can get it when button is clicked
+			$('#tag-modal .insert-tag').data('target', target);
+
+			// open dialog
+			$('#tag-modal').modal('show');
+		},
+
+		/**
+		 * generate slug from tag name
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'#tag-modal .slug-from-name click' : function(el, ev) {
+
+			ev.preventDefault();
+
+			var name = el.siblings('input[name=name]').val();
+			el.siblings('input[name=slug]').val(slug(name));
+		},
+
+		/**
+		 * create new tag and insert it into tag's select
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'#tag-modal .insert-tag click' : function(el, ev) {
+
+			ev.preventDefault();
+
+			// target input where new tag should be inserted
+			var target = el.data('target'),
+				targetEl = $('.'+target);
+
+			// form values
+			var values = $('#tag-modal').find('form').serialize();
+			values = can.deparam(values);
+
+			// create new tag
+			var tag = new Tag();
+			tag.attr(values);
+			tag.save(function(data){
+				targetEl
+					// append new tag to tags list and make it selected
+					.append('<option value="'+data.resource_uri+'" selected="selected">'+data.name+'</option>')
+					// update chosen select
+					.trigger('liszt:updated')
+					;
+			});
+
+			$('#tag-modal').modal('hide');
 		}
 	})
 );

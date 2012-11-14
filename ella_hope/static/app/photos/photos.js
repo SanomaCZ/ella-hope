@@ -39,10 +39,36 @@ steal(
 		 */
 		init: function(element, options){
 
-			this.element.html(can.view(this.options.initView, this.options));
+			var self = this;
+
+			can.view(this.options.initView, {
+				author: Author.findAll(),
+				tag: Tag.findAll()
+			}).then(function( frag ){
+				self.element.html( frag );
+			}).then(function(){
+				// enable datepicker for publishFrom and publishTo
+				// https://github.com/eternicode/bootstrap-datepicker
+				// $("input[name=publish_from]").datepicker(self.options.dateOptions)
+				// 	.on('changeDate', function(ev){
+				// 		self.filterArticles();
+				// 	});
+				// $("input[name=publish_to]").datepicker(self.options.dateOptions)
+				// 	.on('changeDate', function(ev){
+				// 		self.filterArticles();
+				// 	});
+
+				$(".filter-form select").on('change', function(ev){
+						self.filterPhotos();
+				});
+
+				// enable chosen select for authors
+				// http://harvesthq.github.com/chosen/
+				$('.chzn-select').chosen({allow_single_deselect:true});
+			});
 
 			if (!can.route.attr('action')) {
-				this.listPhotos();
+				this.listPhotos( {} );
 			}
 		},
 
@@ -104,15 +130,71 @@ steal(
 		 * list photos
 		 * @return {[type]} [description]
 		 */
-		'listPhotos': function() {
+		'listPhotos': function(data) {
 
 			var self = this;
 
 			can.view('//app/photos/views/list-photos.ejs', {
-				photos: Photo.findAll()
+				photos: Photo.findAll(data)
 			}).then(function( frag ){
 				$("#inner-content").html( frag );
 			});
+		},
+
+		/**
+		 * search photos based on title
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'.search-photos click' : function(el, ev) {
+
+			ev.preventDefault();
+
+			// get search term
+			var search = el.siblings('input.search-query').val();
+
+			// search articles containing search term in title
+			this.listPhotos({
+				title__icontains: search
+			});
+		},
+
+		/**
+		 * filter photos
+		 * @return {[type]} [description]
+		 */
+		filterPhotos : function() {
+
+			// data from filter form
+			var data = {};
+
+			// author
+			if ($("select[name=author]").val()) {
+				data.authors__id = $("select[name=author]").val();
+			}
+
+			// tag
+			if ($("select[name=tag]").val()) {
+				data.tags__id = $("select[name=tag]").val();
+			}
+
+			// show photos based on filter data
+			this.listPhotos(data);
+		},
+
+		/**
+		 * show/hide filtering form
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'.filter-photos click' : function(el, ev) {
+
+			ev.preventDefault();
+
+			// show/hide filtering form
+			$('.filter-form').toggle();
 		}
 	})
 );

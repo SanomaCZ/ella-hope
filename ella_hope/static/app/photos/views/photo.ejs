@@ -43,6 +43,32 @@
             <textarea class="span4 description" name="description" placeholder="<%= $.t('Add Description')%>" <%= photo.description ? "" : "class='empty'" %>><%= photo.description %></textarea>
         </div>
 
+        <div class="row">
+            <label class="control-label" for="tags"><%= $.t('Tag(s)')%></label>
+            <div class="controls">
+                <select name="tags[]" data-placeholder="<%= $.t('Choose tags')%>" class="chzn-select photo-tags span4" multiple>
+                <% if (tag) { %>
+                    <% $.each(tag, function(i, t){ %>
+                    <%
+                        var selected = false;
+                        if (photo.tags) {
+                            for (var i = 0; i < photo.tags.length; i++) {
+                                if (photo.tags[i]['id'] == t.id) {
+                                    selected = true;
+                                    break;
+                                }
+                            }
+                        }
+                    %>
+                        <option value="<%= t.resource_uri %>" <%= selected ? "selected=selected" : "" %>><%= t.name %></option>
+                    <% }) %>
+                <% } %>
+                </select>
+                <span class="help-inline"></span>
+                <button class="btn btn-mini add-tag" data-target="photo-tags"><%= $.t('add new tag')%></button>
+            </div>
+        </div>
+
         <%
             var file = file || '';
         %>
@@ -74,4 +100,26 @@
 
     <div class="clear"></div>
     <hr>
+</div>
+
+<div id="tag-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">Ă</button>
+        <h3 id="myModalLabel"><%= $.t('Add new author') %></h3>
+    </div>
+    <div class="modal-body">
+        <form>
+            <label for="name"><%= $.t('Name')%></label>
+            <input type="text" name="name" />
+
+            <label for="author-slug"><%= $.t('Slug')%></label>
+            <input type="text" name="slug" />
+
+            <button class="btn btn-mini slug-from-name"><%= $.t('slug from name')%></button>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal"><%= $.t('Close') %></button>
+        <button class="btn btn-primary insert-tag"><%= $.t('Insert') %></button>
+    </div>
 </div>

@@ -5,6 +5,42 @@
 <a href="<%= can.route.url({ page: 'photos', action: 'new-photos' })%>" class="btn btn-primary"><%= $.t('New photo') %></a>
 <a href="<%= can.route.url({ page: 'photos', action: 'new-videos' })%>" class="btn btn-primary"><%= $.t('New video') %></a>
 
+<div class="pull-right">
+	<form class="form-search pull-left">
+		<input type="text" class="input-medium search-query" placeholder="<%= $.t('Search photos by title') %>" />
+		<button type="submit" class="btn search-photos"><%= $.t('Search')%></button>
+	</form>
+</div>
+
+<div class="pull-right">
+	<button type="submit" class="btn filter-photos"><%= $.t('Filter')%></button>
+	&nbsp;
+</div>
+
+<div class="filter-form">
+	<div class="clearfix"></div>
+	<form class="form-inline pull-right filter">
+
+		<select class="input-medium chzn-select" name="author" data-placeholder="<%= $.t('Author')%>">
+			<option></option>
+			<% if (author) { %>
+				<% $.each(author, function(i, author){ %>
+					<option value="<%= author.id %>"><%= author.name %></option>
+				<% }) %>
+			<% } %>
+		</select>
+
+		<select class="input-medium chzn-select" name="tag" data-placeholder="<%= $.t('Tag')%>">
+			<option></option>
+			<% if (tag) { %>
+				<% $.each(tag, function(i, t){ %>
+					<option value="<%= t.id %>"><%= t.name %></option>
+				<% }) %>
+			<% } %>
+		</select>
+	</form>
+	<div class="clearfix"></div>
+</div>
 
 <hr>
 
