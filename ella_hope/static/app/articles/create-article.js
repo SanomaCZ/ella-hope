@@ -22,7 +22,8 @@ steal(
 	/* @static */
 	{
 		defaults: {
-			autosaveInterval: 5 * 1000,	// how ofter is draft automatically saved
+			autosaveInterval: 20 * 1000,	// how ofter is draft automatically saved
+			encyclopediaCategory: '/admin-api/category/2/',
 			markitupSettings: {
 				previewParserPath:	'',
 				onShiftEnter:		{keepDefault:false, openWith:'\n\n'},
@@ -75,7 +76,7 @@ steal(
 			}
 
 			// initialize autosave
-			//this.initAutosave(this.options.autosaveInterval);
+			this.initAutosave(this.options.autosaveInterval);
 		},
 
 		/**
@@ -492,6 +493,29 @@ steal(
 
 			var title = $('.article').find($('input[name=title]')).val();
 			$('#slug').val(slug(title));
+		},
+
+		/**
+		 * encyclopedia is special type of article
+		 * set category, date_puclished and published automatically
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'.encyclopedia click' : function(el, ev) {
+
+			ev.preventDefault();
+
+			// set category to Encyclopedia
+			$('select[name=category]')
+				.val(this.options.encyclopediaCategory)
+				.trigger('liszt:updated');	// update chosen select
+
+			// set historical publish date
+			$('input[name=publish_from_date]').val('2000-01-01');
+
+			// mark article as published
+			$('input[name=published]').attr('checked', true);
 		},
 
 		/**

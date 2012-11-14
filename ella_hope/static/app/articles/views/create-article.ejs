@@ -10,11 +10,16 @@
 
 		<input type="hidden" name="id" id="id" <%= article.id ? "value=" + article.id : "" %> />
 
-		<% if (drafts.length) { %>
-			<div class="row pull-right">
+		<div class="row pull-right">
+
+			<button class="btn btn-normal encyclopedia"><%= $.t('Encyclopedia')%></button>
+
+			<% if (drafts.length) { %>
 				<button class="btn btn-normal draft-select"><%= $.t('Drafts / Templates')%></button>
-			</div>
-		<% } %>
+			<% } %>
+		</div>
+
+
 
 		<div class="control-group row">
 			<label class="control-label" for="title"><%= $.t('Title')%></label>
