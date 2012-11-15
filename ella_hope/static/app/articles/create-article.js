@@ -22,7 +22,7 @@ steal(
 	/* @static */
 	{
 		defaults: {
-			autosaveInterval: 20 * 1000,	// how ofter is draft automatically saved
+			autosaveInterval: 30 * 1000,	// how ofter is draft automatically saved
 			encyclopediaCategory: '/admin-api/category/2/',
 			markitupSettings: {
 				previewParserPath:	'',
@@ -141,8 +141,8 @@ steal(
 				states: this.options.articleStates,
 				photos: Photo.findAll(),
 				source: Source.findAll(),
-				tag: Tag.findAll()
-				//photoFormat: PhotoFormat.findAll()
+				tag: Tag.findAll(),
+				relatedArticles: this.article.id ? Article.getRelatedArticles(this.article.id) : []
 			} ).then(function( frag ){
 				self.element.html(frag);
 
@@ -183,7 +183,19 @@ steal(
 
 				// connected articles - enable drag&drop between two lists
 				$( "#found-related-articles, #chosen-related-articles" ).sortable({
-					connectWith: ".connectedSortable"
+					connectWith: "#chosen-related-articles",
+					// when new article is dropped to related articles
+					receive: function(event, ui) {
+						var el = $(ui.item[0]),
+							receivedID = el.data('article-id'),
+							articleID = self.article.id;
+						// save new relation
+						Article.addRelatedArticle(articleID, receivedID, function(data){
+							// add resource_uri to an element so that it can be deleted
+							el.data('resource_id', data.id);
+							el.append('<i class="icon-remove pull-right remove-related"></i>');
+						});
+					}
 				}).disableSelection();
 
 				// test settings - setting some attributes to read-only or disabled
@@ -966,13 +978,53 @@ steal(
 
 			ev.preventDefault();
 
-			var data = Article.getRelatedArticles({tag: 1});
+			// selected tags
+			var tags = $('.article .article-tags').val();
 
-			if (data) {
+			Article.getArticlesByTag(tags, function(data){
 				$.each(data, function(i, article){
-					$('#found-related-articles').append('<li>'+article.title+'</li>');
+					$('#found-related-articles').append('<li data-article-id="'+article.id+'">'+article.title+'</li>');
 				});
-			}
+			});
+		},
+
+		/**
+		 * find articles by name se that they can be added as related articles
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'.get-articles-by-name click': function(el, ev) {
+
+			ev.preventDefault();
+
+			// name that should be searched
+			var search = el.siblings('input[name=related-name]').val();
+
+			// search in title
+			var data = "title__icontains=" + search;
+
+			Article.findAll(data, function(articles){
+				// empty list with articles if there are any
+				$('#found-related-articles').empty();
+
+				$.each(articles, function(i, article){
+					$('#found-related-articles').append('<li data-article-id="'+article.id+'">'+article.title+'</li>');
+				});
+			});
+		},
+
+		/**
+		 * remove related article
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'.remove-related click' : function(el, ev) {
+
+			Article.deleteRelatedArticle(el.parent().data('resource_id'), function(data) {
+				el.parent().fadeOut();
+			});
 		},
 
 		/**

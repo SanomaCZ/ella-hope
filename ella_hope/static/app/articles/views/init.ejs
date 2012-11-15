@@ -59,11 +59,13 @@
 			<% } %>
 		</select>
 
-		<select class="input-medium chzn-select" name="tag" data-placeholder="<%= $.t('Tag')%>">
+		|
+
+		<select class="input-medium chzn-select" name="tag" data-placeholder="<%= $.t('Tag (separate filter)')%>">
 			<option></option>
 			<% if (tag) { %>
 				<% $.each(tag, function(i, t){ %>
-					<option value="<%= t.id %>"><%= t.name %></option>
+					<option value="<%= t.resource_uri %>"><%= t.name %></option>
 				<% }) %>
 			<% } %>
 		</select>

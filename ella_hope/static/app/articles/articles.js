@@ -252,14 +252,29 @@ steal(
 				data.authors__id = $("select[name=author]").val();
 			}
 
-			// tag
+			// tag - must be different function call, filtering by tags is separate
 			if ($("select[name=tag]").val()) {
-				data.tags__id = $("select[name=tag]").val();
+				this.filterArticlesByTag([$("select[name=tag]").val()]);
+				return false;
 			}
-
 
 			// show articles based on filter data
 			this.listArticles(data);
+		},
+
+		/**
+		 * find articles based on assigned tags
+		 * filtering by tags cannot be grouped with other filtering fields
+		 * because of Tastypie
+		 * @param  {[type]} data [description]
+		 * @return {[type]}      [description]
+		 */
+		filterArticlesByTag: function(data) {
+			can.view('//app/articles/views/list-articles.ejs', {
+				articles: Article.getArticlesByTag(data)
+			}).then(function( frag ){
+				$("#inner-content").html( frag );
+			});
 		},
 
 		/**

@@ -83,38 +83,114 @@ steal(
 
 			destroy: 'DELETE ' + BASE_URL + '/article/{id}/',
 
-
 			/**
-			 * filter articles by tag
+			 * get articles by tags
 			 * $server/admin-api/tag/related/article/100;101;106/
-			 * @param  {[type]} data [description]
+			 * @param  {array} data array of resource_uri
 			 * @return {[type]}      [description]
 			 */
-			getRelatedArticles : function(data) {
-				var result = {};
+			getArticlesByTag : function(data, success, error) {
 
-				$.ajax({
-					url: BASE_URL+'/tag/related/article/1;3/',
-					type: 'GET',
-					async: false,
-					dataType: 'json',
-					contentType: 'application/json',
-					data: JSON.stringify(data),
-					success : function(data, textStatus, xmlHttpRequest){
-						result = data;
-					},
-					error : function(xhr, ajaxOptions, thrownError) {
-						// console.log(xhr);
-						// console.log(ajaxOptions);
-						// console.log(thrownError);
-						result = {
-							error: true,
-							message: thrownError
-						};
+				var tagsArray = [],
+					reId = /\/(\d+)\//,
+					matchId;
+
+				// from resource_uri we need to get only resource id
+				// ["/admin-api/tag/3/"] -> 3
+				$.each(data, function(i, t) {
+					// get id of given resource
+					matchId = t.match(reId);
+					if (matchId[1]) {
+						tagsArray.push(parseInt(matchId[1], 10));
 					}
 				});
-				return result;
+
+				// join found tag ids with semicolon
+				var tags = tagsArray.join(';');
+
+				return $.ajax({
+					url: BASE_URL+'/tag/related/article/'+tags+'/',
+					type: 'GET',
+					async: true,
+					dataType: "json",
+					success: success,
+					error: error
+				});
+			},
+
+			/**
+			 * get articles related (connected) to a given article
+			 * @param  {[type]} articleID [description]
+			 * @param  {[type]} success   [description]
+			 * @param  {[type]} error     [description]
+			 * @return {[type]}           [description]
+			 */
+			getRelatedArticles : function(articleID, success, error) {
+
+				return $.ajax({
+					url: BASE_URL+'/related/?publishable__id='+articleID,
+					type: 'GET',
+					async: true,
+					dataType: "json",
+					success: success,
+					error: error
+				});
+			},
+
+			/**
+			 * save related article to given article (make relation)
+			 * @param {int} articleID given article to which we want to assign related article
+			 * @param {int} relatedID related article
+			 * @param {[type]} success   [description]
+			 * @param {[type]} error     [description]
+			 */
+			addRelatedArticle : function(articleID, relatedID, success, error) {
+
+				return $.ajax({
+					url: BASE_URL+'/related/',
+					type: 'POST',
+					async: true,
+					data: JSON.stringify({
+						publishable: "/admin-api/article/"+articleID+"/",
+						related: "/admin-api/article/"+relatedID+"/"
+					}),
+					dataType: 'json',
+					contentType: 'application/json',
+					success: success,
+					error: error
+				});
+			},
+
+			/**
+			 * delete relation between article and it's related article
+			 * @param  {int} id      relation id
+			 * @param  {[type]} success [description]
+			 * @param  {[type]} error   [description]
+			 * @return {[type]}         [description]
+			 */
+			deleteRelatedArticle : function(id, success, error) {
+
+				return $.ajax({
+					url: BASE_URL+'/related/'+id+'/',
+					type: 'DELETE',
+					async: true,
+					dataType: 'json',
+					contentType: 'application/json',
+					success: success,
+					error: error
+				});
 			}
+
+			// (08:45:27 PM) miso.belica@jabbim.sk: Malo by to fungovať ako všetko ostatné.
+				// /admin-api/related/?publishable__id=<id> ti vráti tie všetky pripojené related k danému článku.
+				// (08:46:09 PM) miso.belica@jabbim.sk: A keď chceš tú reláciu znamazť tak pošleš
+				// DELETE na /admin-api/related/<id_related_objektu>/
+				// (08:46:47 PM) mr.pohoda@jabber.cz/744855381352898658915983: na uložení relace pošlu POST
+				// a na to řazení se teda vykašleme?
+				// (08:47:09 PM) miso.belica@jabbim.sk: Repektíve ty keď získaš related objekty z
+				// admin-api/related/?publishable__id=<id> tak každý ten related obekt má resource_uri,
+				// na ktoré keď pošleš DELETE tak ho zmažeš.
+
 		}, {});
 
 		// article schema (when authorized)
