@@ -160,6 +160,15 @@ steal(
 
 			var self = this;
 
+			if (data) {
+				data.order_by = '-publish_from';
+			}
+			else {
+				data = {
+					order_by: '-publish_from'
+				};
+			}
+
 			can.view('//app/articles/views/list-articles.ejs', {
 				articles: Article.findAll(data)
 			}).then(function( frag ){

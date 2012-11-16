@@ -133,11 +133,11 @@ steal(
 		'listPhotos': function(data) {
 
 			if (data) {
-				//data.order_by = '-id';
+				data.order_by = '-id';
 			}
 			else {
 				data = {
-					//order_by: '-id'
+					order_by: '-id'
 				};
 			}
 
