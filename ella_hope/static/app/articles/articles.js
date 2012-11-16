@@ -24,6 +24,7 @@ steal(
 		defaults: {
 			initView : "//app/articles/views/init.ejs",
 			articleStates: ["added", "ready", "approved", "published", "deleted"], // "postponed"
+			articleComments: ["all", "registered", "nobody"],
 			dateOptions: {	// https://github.com/eternicode/bootstrap-datepicker
 				format: 'yyyy-mm-dd',
 				weekStart: 1,
@@ -112,6 +113,7 @@ steal(
 							type: 'article',
 							article: article,
 							articleStates: self.options.articleStates,
+							articleComments: self.options.articleComments,
 							dateOptions: self.options.dateOptions
 						});
 					});
@@ -124,6 +126,7 @@ steal(
 							type: 'draft',
 							article: draft,
 							articleStates: self.options.articleStates,
+							articleComments: self.options.articleComments,
 							dateOptions: self.options.dateOptions
 						});
 					});

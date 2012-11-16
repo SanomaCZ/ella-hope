@@ -9,7 +9,7 @@ steal(
           return $.ajax({
             url: BASE_URL+'/photo/'+id+'/',
             type: 'PATCH',
-            async: false,
+            async: true,
             dataType: 'json',
             contentType: 'application/json',
             data: JSON.stringify(attrs)

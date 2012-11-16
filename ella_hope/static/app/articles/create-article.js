@@ -139,6 +139,7 @@ steal(
 				author: Author.findAll({limit: 10000}),
 				category: Category.findAll(),
 				states: this.options.articleStates,
+				comments: this.options.articleComments,
 				photos: Photo.findAll(),
 				source: Source.findAll(),
 				tag: Tag.findAll(),
@@ -149,6 +150,7 @@ steal(
 				// enable chosen select for authors
 				// http://harvesthq.github.com/chosen/
 				$('.chzn-select').chosen();
+				$('.enable_comments').chosen({allow_single_deselect:true});
 
 				// enable markup in all textareas
 				$("textarea").markItUp(self.options.markitupSettings);
@@ -197,10 +199,6 @@ steal(
 						});
 					}
 				}).disableSelection();
-
-				// test settings - setting some attributes to read-only or disabled
-				// USER.auth_tree.articles.article.fields.title._data.readonly = true;
-				// USER.auth_tree.articles.article.fields.publish_to._data.disabled = true;
 
 				// here we check for user privileges
 				// users have different roles and they can edit different form fields
@@ -338,7 +336,7 @@ steal(
 			if (!values['photo_displayed']) values['photo_displayed'] = true;
 			else values['photo_displayed'] = false;
 
-			if (values['photo'].length === 0) values['photo'] = null;
+			if (values['photo'] && values['photo'].length === 0) values['photo'] = null;
 
 			// app_data is required to be sent, althougt it's empty now
 			values['app_data'] = null;
@@ -639,6 +637,15 @@ steal(
 		'.add-source click' : function(el, ev) {
 
 			ev.preventDefault();
+
+			// get target element where new source should be inserted
+			var target = el.data('target');
+
+			// save target to insert-source button so that
+			// we can get it when button is clicked
+			$('#source-modal .insert-source').data('target', target);
+
+			// open dialog
 			$('#source-modal').modal('show');
 		},
 
@@ -652,16 +659,20 @@ steal(
 
 			ev.preventDefault();
 
+			// target input where new tag should be inserted
+			var target = el.data('target'),
+				targetEl = $('.'+target);
+
 			// form values
 			var values = $('#source-modal').find('form').serialize();
 			values = can.deparam(values);
 
-			// create new tag
+			// create new source
 			var source = new Source();
 			source.attr(values);
 			source.save(function(data){
-				$('#source')
-					// append new tag to tags list and make it selected
+				targetEl
+					// append new source to sources list and make it selected
 					.append('<option value="'+data.resource_uri+'" selected="selected">'+data.name+'</option>')
 					// update chosen select
 					.trigger('liszt:updated')
@@ -684,13 +695,9 @@ steal(
 			// get target element where new tag should be inserted
 			var target = el.data('target');
 
-			console.log(target);
-
 			// save target to insert-tag button so that
 			// we can get it when button is clicked
 			$('#tag-modal .insert-tag').data('target', target);
-
-			console.log($('#tag-modal .insert-tag').data('target'));
 
 			// open dialog
 			$('#tag-modal').modal('show');
@@ -723,8 +730,6 @@ steal(
 			// target input where new tag should be inserted
 			var target = el.data('target'),
 				targetEl = $('.'+target);
-
-			console.log(targetEl);
 
 			// form values
 			var values = $('#tag-modal').find('form').serialize();

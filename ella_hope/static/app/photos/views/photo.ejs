@@ -69,6 +69,30 @@
             </div>
         </div>
 
+        <div class="control-group row">
+            <label class="control-label" for="source"><%= $.t('Source')%></label>
+            <div class="controls">
+                <select name="source" data-placeholder="<%= $.t('Choose source')%>" class="chzn-select photo-source">
+                    <option></option>
+                    <% if (source) { %>
+                        <% $.each(source, function(i, s){ %>
+                            <%
+                                var selected = false;
+                                if (photo.source) {
+                                    if (photo.source && photo.source['id'] == s.id) {
+                                        selected = true;
+                                    }
+                                }
+                            %>
+                            <option value="<%= s.resource_uri %>" <%= selected ? "selected=selected" : "" %>><%= s.name %></option>
+                        <% }) %>
+                    <% } %>
+                </select>
+                <span class="help-inline"></span>
+                <button class="btn btn-mini add-source" data-target="photo-source"><%= $.t('add new source')%></button>
+            </div>
+        </div>
+
         <%
             var file = file || '';
         %>
@@ -100,6 +124,27 @@
 
     <div class="clear"></div>
     <hr>
+</div>
+
+<div id="source-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">Ă</button>
+        <h3 id="myModalLabel"><%= $.t('Add new source') %></h3>
+    </div>
+    <div class="modal-body">
+        <form>
+            <label for="name"><%= $.t('Name')%>
+                <input type="text" name="name" />
+            </label>
+            <label for="url"><%= $.t('Url')%>
+                <input type="text" name="url" />
+            </label>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal"><%= $.t('Close') %></button>
+        <button class="btn btn-primary insert-source"><%= $.t('Insert') %></button>
+    </div>
 </div>
 
 <div id="tag-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">

@@ -132,7 +132,14 @@ steal(
 		 */
 		'listPhotos': function(data) {
 
-			var self = this;
+			if (data) {
+				//data.order_by = '-id';
+			}
+			else {
+				data = {
+					//order_by: '-id'
+				};
+			}
 
 			can.view('//app/photos/views/list-photos.ejs', {
 				photos: Photo.findAll(data)

@@ -50,6 +50,7 @@ steal(
 			can.view( '//app/photos/views/upload-photos.ejs', {
 				photo: this.photo,
 				author: Author.findAll(),
+				source: Source.findAll(),
 				tag: Tag.findAll()
 			} ).then(function( frag ){
 				self.element.html(frag);
@@ -158,6 +159,7 @@ steal(
 					file: files[i],
 					photo: {},
 					author: Author.findAll(),
+					source: Source.findAll(),
 					tag: Tag.findAll()
 				} ).then(function( frag ){
 					$('#images').append(frag);
@@ -272,13 +274,21 @@ steal(
 				important_bottom = important_bottom ? parseInt(important_bottom, 10) : null;
 				important_right = important_right ? parseInt(important_right, 10) : null;
 
+
+				var tags = $(this).find('.photo-tags').val();
+				tags = tags ? tags : null;
+
+				var source = $(this).find('.photo-source').val();
+				source = source ? source : null;
+
 				objects[objects.length] = {
 					"title": $(this).find('.title').val(),
 					"slug": $(this).find('.title').val(),
 					"description": $(this).find('.description').val(),
 					"created": new Date().toISOString(),
 					"authors" : $(this).find('.authors').val(),
-					"tags" : $(this).find('.tags').val(),
+					"tags" : tags,
+					"source" : source,
 					"app_data": null,
 					"image": "attached_object_id:"+$(this).find('.filename').val(),
 					"important_top": important_top,
@@ -521,6 +531,60 @@ steal(
 			});
 
 			$('#tag-modal').modal('hide');
+		},
+
+		/**
+		 * open a dialog where new source can be added
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'.add-source click' : function(el, ev) {
+
+			ev.preventDefault();
+
+			// get target element where new source should be inserted
+			var target = el.data('target');
+
+			// save target to insert-source button so that
+			// we can get it when button is clicked
+			$('#source-modal .insert-source').data('target', target);
+
+			// open dialog
+			$('#source-modal').modal('show');
+		},
+
+		/**
+		 * create new source and insert it into source's select
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'#source-modal .insert-source click' : function(el, ev) {
+
+			ev.preventDefault();
+
+			// target input where new tag should be inserted
+			var target = el.data('target'),
+				targetEl = $('.'+target);
+
+			// form values
+			var values = $('#source-modal').find('form').serialize();
+			values = can.deparam(values);
+
+			// create new source
+			var source = new Source();
+			source.attr(values);
+			source.save(function(data){
+				targetEl
+					// append new source to sources list and make it selected
+					.append('<option value="'+data.resource_uri+'" selected="selected">'+data.name+'</option>')
+					// update chosen select
+					.trigger('liszt:updated')
+					;
+			});
+
+			$('#source-modal').modal('hide');
 		}
 	})
 );

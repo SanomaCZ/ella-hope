@@ -91,8 +91,9 @@
 		<div class="control-group row">
 			<label class="control-label" for="source"><%= $.t('Source')%></label>
 			<div class="controls">
-				<select name="source" id="source" data-placeholder="<%= $.t('Choose source')%>" class="chzn-select source">
-				<% if (author) { %>
+				<select name="source" id="source" data-placeholder="<%= $.t('Choose source')%>" class="chzn-select article-source">
+				<option></option>
+				<% if (source) { %>
 					<% $.each(source, function(i, s){ %>
 					<%
 						var selected = false;
@@ -107,7 +108,7 @@
 				<% } %>
 				</select>
 				<span class="help-inline"></span>
-				<button class="btn btn-mini add-source"><%= $.t('add new source')%></button>
+				<button class="btn btn-mini add-source" data-target="article-source"><%= $.t('add new source')%></button>
 			</div>
 		</div>
 
@@ -255,14 +256,32 @@
 			</label>
 
 			<label class="checkbox">
-				<input class="article-parameter" type="checkbox" name="article-parameter" <%= article.article_parameter ? 'checked' : '' %> value="true" /> <%= $.t('Article parameter')%>
+				<input class="article-parameter" disabled="disabled" type="checkbox" name="article-parameter" <%= article.article_parameter ? 'checked' : '' %> value="true" /> <%= $.t('Article parameter')%>
 				<span class="help-inline"></span>
 			</label>
+		</div>
 
-			<label class="checkbox">
-				<input class="article-comments" type="checkbox" name="article-comments" <%= article.article_comments ? 'checked' : '' %> value="true" /> <%= $.t('Article comments')%>
+		<div class="control-group row">
+			<label class="control-label" for="state"><%= $.t('Enable comments')%></label>
+			<div class="controls">
+				<select name="enable_comments" data-placeholder="<%= $.t('Article comments')%>" class="enable_comments">
+					<option></option>
+					<% if (comments) { %>
+						<% $.each(comments, function(i, comment){ %>
+						<%
+							var selected = false;
+							if (article.enable_comments == comment) {
+								selected = true;
+							}
+						%>
+							<option value="<%= comment %>" <%= selected ? "selected=selected" : "" %>>
+								<%= comment %>
+							</option>
+						<% }) %>
+					<% } %>
+				</select>
 				<span class="help-inline"></span>
-			</label>
+			</div>
 		</div>
 
 		<div class="control-group row">
