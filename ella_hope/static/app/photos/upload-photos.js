@@ -10,8 +10,6 @@ steal(
 	/* @static */
 	{
 		defaults: {
-			autosaveInterval: 30 * 1000,	// how ofter is draft automatically saved
-			articleStates: ["added", "ready", "approved", "published", "postponed",	"deleted"],
 			// settings for Jcrop
 			// boxWidth and boxHeight automaticaly scale the image and return coordinates
 			// according to original image sizes
@@ -286,7 +284,7 @@ steal(
 					"slug": $(this).find('.title').val(),
 					"description": $(this).find('.description').val(),
 					"created": new Date().toISOString(),
-					"authors" : $(this).find('.authors').val(),
+					"authors" : $(this).find('.authors-photo').val(),
 					"tags" : tags,
 					"source" : source,
 					"app_data": null,
@@ -421,7 +419,7 @@ steal(
 				.css('-webkit-transform', 'rotate('+rotation+'deg)') // rotation for webkit
 				.css('-moz-transform', 'rotate('+rotation+'deg)'); // rotation for mozilla
 
-			if (rotation == 0 || rotation == 180) {
+			if (rotation === 0 || rotation === 180) {
 
 				$img.parent().css('width', $img.css('width')).css('height', $img.css('height'));
 
@@ -455,7 +453,7 @@ steal(
 			}
 		},
 
-		'.cancel click' : function(){
+		'.cancel-upload click' : function(){
 
 			this.clearFileInput();
 			can.route.attr({page:'photos'}, true);
@@ -466,24 +464,79 @@ steal(
 		},
 
 		/**
+		 * open a dialog where new author can be added
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'.add-author-photos click' : function(el, ev) {
+
+			ev.preventDefault();
+			$('.author-modal-photos').modal('show');
+		},
+
+		/**
+		 * generate slug from author name
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'.author-modal-photos .slug-from-name click' : function(el, ev) {
+
+			ev.preventDefault();
+
+			var name = el.siblings('input[name=name]').val();
+			el.siblings('input[name=slug]').val(slug(name));
+		},
+
+		/**
+		 * create new author and insert it into author's select
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'.author-modal-photos .insert-author click' : function(el, ev) {
+
+			ev.preventDefault();
+
+			// form values
+			var values = $('.author-modal-photos').find('form').serialize();
+			values = can.deparam(values);
+
+			// create new author
+			var author = new Author();
+			author.attr(values);
+			author.save(function(data){
+				$('.authors-photo')
+					// append new author to authors list and make it selected
+					.append('<option value="'+data.resource_uri+'" selected="selected">'+data.name+'</option>')
+					// update chosen select
+					.trigger('liszt:updated')
+					;
+			});
+
+			$('.author-modal-photos').modal('hide');
+		},
+
+		/**
 		 * open a dialog where new tag can be added
 		 * @param  {[type]} el [description]
 		 * @param  {[type]} ev [description]
 		 * @return {[type]}    [description]
 		 */
-		'.add-tag click' : function(el, ev) {
+		'.add-tag-photos click' : function(el, ev) {
 
 			ev.preventDefault();
 
 			// get target element where new tag should be inserted
-			var target = el.data('target');
+			target = el.data('target');
 
 			// save target to insert-tag button so that
 			// we can get it when button is clicked
-			$('#tag-modal .insert-tag').data('target', target);
+			$('.tag-modal-photos .insert-tag').data('target', target);
 
 			// open dialog
-			$('#tag-modal').modal('show');
+			$('.tag-modal-photos').modal('show');
 		},
 
 		/**
@@ -492,7 +545,7 @@ steal(
 		 * @param  {[type]} ev [description]
 		 * @return {[type]}    [description]
 		 */
-		'#tag-modal .slug-from-name click' : function(el, ev) {
+		'.tag-modal-photos .slug-from-name click' : function(el, ev) {
 
 			ev.preventDefault();
 
@@ -506,7 +559,7 @@ steal(
 		 * @param  {[type]} ev [description]
 		 * @return {[type]}    [description]
 		 */
-		'#tag-modal .insert-tag click' : function(el, ev) {
+		'.tag-modal-photos .insert-tag click' : function(el, ev) {
 
 			ev.preventDefault();
 
@@ -515,7 +568,7 @@ steal(
 				targetEl = $('.'+target);
 
 			// form values
-			var values = $('#tag-modal').find('form').serialize();
+			var values = $('.tag-modal-photos').find('form').serialize();
 			values = can.deparam(values);
 
 			// create new tag
@@ -530,7 +583,12 @@ steal(
 					;
 			});
 
-			$('#tag-modal').modal('hide');
+			$('.tag-modal-photos').modal('hide');
+		},
+
+		'.tag-modal-photos .close-tag click' : function(el, ev) {
+			ev.preventDefault();
+			$('.tag-modal-photos').modal('hide');
 		},
 
 		/**
@@ -539,7 +597,7 @@ steal(
 		 * @param  {[type]} ev [description]
 		 * @return {[type]}    [description]
 		 */
-		'.add-source click' : function(el, ev) {
+		'.add-source-photos click' : function(el, ev) {
 
 			ev.preventDefault();
 
@@ -548,10 +606,10 @@ steal(
 
 			// save target to insert-source button so that
 			// we can get it when button is clicked
-			$('#source-modal .insert-source').data('target', target);
+			$('.source-modal-photos .insert-source').data('target', target);
 
 			// open dialog
-			$('#source-modal').modal('show');
+			$('.source-modal-photos').modal('show');
 		},
 
 		/**
@@ -560,7 +618,7 @@ steal(
 		 * @param  {[type]} ev [description]
 		 * @return {[type]}    [description]
 		 */
-		'#source-modal .insert-source click' : function(el, ev) {
+		'.source-modal-photos .insert-source click' : function(el, ev) {
 
 			ev.preventDefault();
 
@@ -569,7 +627,7 @@ steal(
 				targetEl = $('.'+target);
 
 			// form values
-			var values = $('#source-modal').find('form').serialize();
+			var values = $('.source-modal-photos').find('form').serialize();
 			values = can.deparam(values);
 
 			// create new source
@@ -584,7 +642,18 @@ steal(
 					;
 			});
 
-			$('#source-modal').modal('hide');
+			$('.source-modal-photos').modal('hide');
+		},
+
+		/**
+		 * close dialog without adding new source
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'.source-modal-photos .close-source click' : function(el, ev) {
+			ev.preventDefault();
+			$('.source-modal-photos').modal('hide');
 		}
 	})
 );

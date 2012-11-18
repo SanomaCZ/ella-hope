@@ -73,6 +73,7 @@ steal(
 		},
 
 		':page route': function( data ) {
+
 			if (data.page == 'photos') {
 				this.init();
 				this.listPhotos();
@@ -80,6 +81,7 @@ steal(
 		},
 
 		':page/:action route': function( data ) {
+
 			if (data.action == 'new-photos') {
 				if (this.photosUpload) {
 					this.photosUpload.destroy();

@@ -579,10 +579,10 @@ steal(
 		 * @param  {[type]} ev [description]
 		 * @return {[type]}    [description]
 		 */
-		'.add-author click' : function(el, ev) {
+		'.add-author-articles click' : function(el, ev) {
 
 			ev.preventDefault();
-			$('#author-modal').modal('show');
+			$('.author-modal-articles').modal('show');
 		},
 
 		/**
@@ -591,7 +591,7 @@ steal(
 		 * @param  {[type]} ev [description]
 		 * @return {[type]}    [description]
 		 */
-		'#author-modal .slug-from-name click' : function(el, ev) {
+		'.author-modal-articles .slug-from-name click' : function(el, ev) {
 
 			ev.preventDefault();
 
@@ -605,19 +605,19 @@ steal(
 		 * @param  {[type]} ev [description]
 		 * @return {[type]}    [description]
 		 */
-		'#author-modal .insert-author click' : function(el, ev) {
+		'.author-modal-articles .insert-author click' : function(el, ev) {
 
 			ev.preventDefault();
 
 			// form values
-			var values = $('#author-modal').find('form').serialize();
+			var values = $('.author-modal-articles').find('form').serialize();
 			values = can.deparam(values);
 
 			// create new author
 			var author = new Author();
 			author.attr(values);
 			author.save(function(data){
-				$('#authors')
+				$('.authors-article')
 					// append new author to authors list and make it selected
 					.append('<option value="'+data.resource_uri+'" selected="selected">'+data.name+'</option>')
 					// update chosen select
@@ -625,7 +625,7 @@ steal(
 					;
 			});
 
-			$('#author-modal').modal('hide');
+			$('.author-modal-articles').modal('hide');
 		},
 
 		/**
@@ -643,10 +643,10 @@ steal(
 
 			// save target to insert-source button so that
 			// we can get it when button is clicked
-			$('#source-modal .insert-source').data('target', target);
+			$('.source-modal-articles .insert-source').data('target', target);
 
 			// open dialog
-			$('#source-modal').modal('show');
+			$('.source-modal-articles').modal('show');
 		},
 
 		/**
@@ -655,7 +655,7 @@ steal(
 		 * @param  {[type]} ev [description]
 		 * @return {[type]}    [description]
 		 */
-		'#source-modal .insert-source click' : function(el, ev) {
+		'.source-modal-articles .insert-source click' : function(el, ev) {
 
 			ev.preventDefault();
 
@@ -664,7 +664,7 @@ steal(
 				targetEl = $('.'+target);
 
 			// form values
-			var values = $('#source-modal').find('form').serialize();
+			var values = $('.source-modal-articles').find('form').serialize();
 			values = can.deparam(values);
 
 			// create new source
@@ -679,7 +679,7 @@ steal(
 					;
 			});
 
-			$('#source-modal').modal('hide');
+			$('.source-modal-articles').modal('hide');
 		},
 
 		/**
@@ -688,19 +688,19 @@ steal(
 		 * @param  {[type]} ev [description]
 		 * @return {[type]}    [description]
 		 */
-		'.add-tag click' : function(el, ev) {
+		'.add-tag-articles click' : function(el, ev) {
 
 			ev.preventDefault();
 
 			// get target element where new tag should be inserted
-			var target = el.data('target');
+			target = el.data('target');
 
 			// save target to insert-tag button so that
 			// we can get it when button is clicked
-			$('#tag-modal .insert-tag').data('target', target);
+			$('.tag-modal-articles .insert-tag').data('target', target);
 
 			// open dialog
-			$('#tag-modal').modal('show');
+			$('.tag-modal-articles').modal('show');
 		},
 
 		/**
@@ -709,7 +709,7 @@ steal(
 		 * @param  {[type]} ev [description]
 		 * @return {[type]}    [description]
 		 */
-		'#tag-modal .slug-from-name click' : function(el, ev) {
+		'.tag-modal-articles .slug-from-name click' : function(el, ev) {
 
 			ev.preventDefault();
 
@@ -723,7 +723,7 @@ steal(
 		 * @param  {[type]} ev [description]
 		 * @return {[type]}    [description]
 		 */
-		'#tag-modal .insert-tag click' : function(el, ev) {
+		'.tag-modal-articles .insert-tag click' : function(el, ev) {
 
 			ev.preventDefault();
 
@@ -732,7 +732,7 @@ steal(
 				targetEl = $('.'+target);
 
 			// form values
-			var values = $('#tag-modal').find('form').serialize();
+			var values = $('.tag-modal-articles').find('form').serialize();
 			values = can.deparam(values);
 
 			// create new tag
@@ -747,7 +747,7 @@ steal(
 					;
 			});
 
-			$('#tag-modal').modal('hide');
+			$('.tag-modal-articles').modal('hide');
 		},
 
 		/**
@@ -762,7 +762,7 @@ steal(
 
 			// render list
 			can.view( '//app/articles/views/list-photos.ejs', {
-				photos: Photo.findAll(),
+				photos: Photo.findAll({order_by: '-id'}),
 				data: { title: true }
 			} ).then(function( frag ){
 				$('#photos-modal .photos-list').html(frag);
@@ -924,7 +924,7 @@ steal(
 
 			// render list
 			can.view( '//app/articles/views/list-photos.ejs', {
-				photos: Photo.findAll()
+				photos: Photo.findAll({order_by: '-id'})
 			} ).then(function( frag ){
 				$('#photos-modal .photos-list').html(frag);
 			});
@@ -961,16 +961,6 @@ steal(
 				// show list of photos
 				photosTable.show();
 			});
-		},
-
-		/**
-		 * when photos modal dialog is closed, clean... remove upload form if it was not removed
-		 * @param  {[type]} el [description]
-		 * @param  {[type]} ev [description]
-		 * @return {[type]}    [description]
-		 */
-		'#photos-modal hide' : function(el, ev) {
-			$('#photos-modal').find('.upload').remove();
 		},
 
 		/**

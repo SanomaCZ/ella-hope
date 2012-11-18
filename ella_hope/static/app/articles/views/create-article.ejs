@@ -65,7 +65,7 @@
 		<div class="control-group row">
 			<label class="control-label" for="authors"><%= $.t('Author(s)')%></label>
 			<div class="controls">
-				<select name="authors[]" id="authors" data-placeholder="<%= $.t('Choose authors')%>" class="chzn-select authors" multiple>
+				<select name="authors[]" data-placeholder="<%= $.t('Choose authors')%>" class="chzn-select authors-article" multiple>
 				<% if (author) { %>
 					<% $.each(author, function(i, a){ %>
 					<%
@@ -84,7 +84,7 @@
 				<% } %>
 				</select>
 				<span class="help-inline"></span>
-				<button class="btn btn-mini add-author"><%= $.t('add new author')%></button>
+				<button class="btn btn-mini add-author-articles"><%= $.t('add new author')%></button>
 			</div>
 		</div>
 
@@ -238,7 +238,7 @@
 				<% } %>
 				</select>
 				<span class="help-inline"></span>
-				<button class="btn btn-mini add-tag" data-target="article-tags"><%= $.t('add new tag')%></button>
+				<button class="btn btn-mini add-tag-articles" data-target="article-tags"><%= $.t('add new tag')%></button>
 			</div>
 		</div>
 
@@ -324,16 +324,16 @@
 				data-saving="<%= $.t('Saving...')%>">
 				<%= $.t('Autosave')%></a>
 			<a href="javascript://" class="btn btn-info preview"><%= $.t('Preview')%></a>
-			<a href="javascript://" class="btn cancel"><%= $.t('Close without saving')%></a>
+			<!--<a href="javascript://" class="btn cancel"><%= $.t('Close without saving')%></a>-->
 		</div>
 	</div>
 </div>
 
 <!-- modal dialogs -->
-<div id="author-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
+<div class="modal hide fade author-modal-articles" tabindex="-1" role="dialog" aria-labelledby="author-modal-articles" aria-hidden="true" style="display: none; ">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		<h3 id="myModalLabel"><%= $.t('Add new author') %></h3>
+		<h3 id="author-modal-articles"><%= $.t('Add new author') %></h3>
 	</div>
 	<div class="modal-body">
 		<form>
@@ -347,15 +347,15 @@
 		</form>
 	</div>
 	<div class="modal-footer">
-		<button class="btn" data-dismiss="modal"><%= $.t('Close') %></button>
+		<button class="btn close-author" data-dismiss="modal"><%= $.t('Close') %></button>
 		<button class="btn btn-primary insert-author"><%= $.t('Insert') %></button>
 	</div>
 </div>
 
-<div id="photos-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
+<div id="photos-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="photos-modal" aria-hidden="true" style="display: none; ">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		<h3 id="myModalLabel"><%= $.t('Insert image') %></h3>
+		<h3 id="photos-modal-label"><%= $.t('Insert image') %></h3>
 	</div>
 	<div class="modal-body">
 
@@ -366,12 +366,12 @@
 		<div class="photos-list"></div>
 	</div>
 	<div class="modal-footer">
-		<button class="btn" data-dismiss="modal"><%= $.t('Close') %></button>
+		<button class="btn close-photo"><%= $.t('Close') %></button>
 		<button class="btn btn-primary insert-photo"><%= $.t('Insert') %></button>
 	</div>
 </div>
 
-<div id="source-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
+<div class="modal hide fade source-modal-articles" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 		<h3 id="myModalLabel"><%= $.t('Add new source') %></h3>
@@ -387,15 +387,15 @@
 		</form>
 	</div>
 	<div class="modal-footer">
-		<button class="btn" data-dismiss="modal"><%= $.t('Close') %></button>
+		<button class="btn close-source" data-dismiss="modal"><%= $.t('Close') %></button>
 		<button class="btn btn-primary insert-source"><%= $.t('Insert') %></button>
 	</div>
 </div>
 
-<div id="tag-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
+<div class="modal hide fade tag-modal-articles" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		<h3 id="myModalLabel"><%= $.t('Add new author') %></h3>
+		<h3 id="myModalLabel"><%= $.t('Add new tag') %></h3>
 	</div>
 	<div class="modal-body">
 		<form>
@@ -409,7 +409,7 @@
 		</form>
 	</div>
 	<div class="modal-footer">
-		<button class="btn" data-dismiss="modal"><%= $.t('Close') %></button>
+		<button class="btn close-tag" data-dismiss="modal"><%= $.t('Close') %></button>
 		<button class="btn btn-primary insert-tag"><%= $.t('Insert') %></button>
 	</div>
 </div>
@@ -457,6 +457,6 @@
 		<% } %>
 	</div>
 	<div class="modal-footer">
-		<button class="btn" data-dismiss="modal"><%= $.t('Close') %></button>
+		<button class="btn close-draft" data-dismiss="modal"><%= $.t('Close') %></button>
 	</div>
 </div>
