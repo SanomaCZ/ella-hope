@@ -32,11 +32,10 @@
 }
 
 #photos-modal {
+	left: 3%;
+	margin-left: auto !important;
+	margin-right: auto !important;
 	width: 90%;
-	margin: 0 auto !important;
-	position: absolute;
-	left: 5%;
-	top: 20px;
 }
 #photos-modal .upload .page-header {
 	display: none;

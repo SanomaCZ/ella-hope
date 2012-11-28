@@ -135,16 +135,16 @@
 			<label class="control-label" for="photo"><%= $.t('Photo')%></label>
 			<div class="controls">
 				<%
-				var titlePhotoShow = false;
+				var titlePhotoInserted = false;
 				if (article.photo && article.photo.public_url) {
-					titlePhotoShow = true;
+					titlePhotoInserted = true;
 				} %>
-				<div class="title-photo" <%= titlePhotoShow === false ? 'style=display:none' : '' %>>
+				<div class="title-photo-empty" <%= titlePhotoInserted === false ? '' : 'style=display:none' %>>
+					<button class="btn btn-mini add-photo"><%= $.t('add photo')%></button>
+				</div>
+				<div class="title-photo" <%= titlePhotoInserted === true ? '' : 'style=display:none' %>>
 					<img src="<%= article.photo ? article.photo.public_url : '' %>" />
 					<button class="btn btn-mini remove-photo"><%= $.t('remove photo')%></button>
-				</div>
-				<div class="title-photo-empty" <%= titlePhotoShow === true ? 'style=display:none' : '' %>>
-					<button class="btn btn-mini add-photo"><%= $.t('add photo')%></button>
 				</div>
 				<input type="hidden" name="photo" value="<%= article.photo ? article.photo.resource_uri : '' %>" />
 				<span class="help-inline"></span>

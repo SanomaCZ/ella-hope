@@ -22,7 +22,7 @@ steal(
 	/* @static */
 	{
 		defaults: {
-			autosaveInterval: 30 * 1000,	// how ofter is draft automatically saved
+			autosaveInterval: 10 * 1000,	// how ofter is draft automatically saved
 			encyclopediaCategory: '/admin-api/category/2/',
 			markitupSettings: {
 				previewParserPath:	'',
@@ -66,6 +66,7 @@ steal(
 
 		init: function() {
 
+			// show draft or article
 			if (this.options.type == 'draft') {
 				this.draft = this.options.article;
 				this.show(this.draft.data);
@@ -113,12 +114,11 @@ steal(
 
 			// listen to article photo change - display chosen photo or enable to choose new photo
 			this.article.bind('photo', function(ev){
-				//console.log(ev);
 
 				var photo = self.article.photo;
+				//console.log('photo: ', photo);
 
-				//console.log(photo);
-				if (photo === null) {
+				if (!photo) {
 					$('.title-photo img').attr('src', '');
 					$('form.article').find('input[name=photo]').val('');
 					$('.title-photo-empty').show();
@@ -336,8 +336,6 @@ steal(
 			if (!values['photo_displayed']) values['photo_displayed'] = true;
 			else values['photo_displayed'] = false;
 
-			if (values['photo'] && values['photo'].length === 0) values['photo'] = null;
-
 			// app_data is required to be sent, althougt it's empty now
 			values['app_data'] = null;
 
@@ -349,6 +347,16 @@ steal(
 			else {
 				// create new article model and validate it
 				this.article = new Article(values);
+			}
+
+			// do not send "photo" property if it's empty
+			if (this.article['photo']) {
+				if (this.article['photo'].length === 0) {
+					delete this.article['photo'];
+				}
+			}
+			else {
+				delete this.article['photo'];
 			}
 
 			// remove all error markup
@@ -424,21 +432,25 @@ steal(
 				"data" : values
 			};
 
+			// create new draft if draft is being saved for the first time
 			if (!this.draft) {
 				this.draft = new Draft();
 			}
 
+			// get draft id
 			var id;
 			if (this.draft) {
 				id = this.draft.id;
 			}
 
+			// set current form values to the draft model
 			this.draft.attr(obj, true);
 
 			if (id) {
 				this.draft.attr('id', id);
 			}
 
+			// create/update draft
 			this.draft.save();
 		},
 
@@ -833,6 +845,18 @@ steal(
 				$('#photos-modal').modal('hide');
 			}
 		},
+
+		/**
+		 * hide dialog
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'#photos-modal .close-photo click':function(el, ev) {
+			ev.preventDefault();
+			$('#photos-modal').modal('hide');
+		},
+
 
 		'.set-date-now click': function(el, ev){
 			ev.preventDefault();
