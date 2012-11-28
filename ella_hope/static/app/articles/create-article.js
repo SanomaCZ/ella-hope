@@ -768,13 +768,8 @@ steal(
 
 			ev.preventDefault();
 
-			// render list
-			can.view( '//app/articles/views/list-photos.ejs', {
-				photos: Photo.findAll({order_by: '-id'}),
-				data: { title: true }
-			} ).then(function( frag ){
-				$('#photos-modal .photos-list').html(frag);
-			});
+			// render list where title photo can be picked
+			this.renderPhotosList({title: true});
 
 			// show modal dialog
 			$('#photos-modal').modal('show');
@@ -930,7 +925,7 @@ steal(
 		insertPhoto: function() {
 
 			// render photos list
-			this.renderPhotosList();
+			this.renderPhotosList({title: false});
 
 			// show modal dialog
 			$('#photos-modal').modal('show');
@@ -940,11 +935,12 @@ steal(
 		 * render photos in dialog so that user can choose photo
 		 * @return {[type]} [description]
 		 */
-		renderPhotosList: function() {
+		renderPhotosList: function(data) {
 
 			// render list
 			can.view( '//app/articles/views/list-photos.ejs', {
-				photos: Photo.findAll({order_by: '-id'})
+				photos: Photo.findAll({order_by: '-id'}),
+				data: data
 			} ).then(function( frag ){
 				$('#photos-modal .photos-list').html(frag);
 			});
@@ -973,7 +969,7 @@ steal(
 			photosUpload.on('photos-uploaded', function(ev){
 
 				// update photos list
-				self.renderPhotosList();
+				self.renderPhotosList({});
 
 				// remove upload form
 				photosUpload.remove();

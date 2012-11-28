@@ -1,7 +1,10 @@
 <%
-var data = this.data || {};
+var data = this.data;
+if (Object.keys(data).length === 0) {
+	data = $('.photos-list').find('table').data('data') || {};
+}
 %>
-<table class="table">
+<table class="table" <%= (el) -> el.data( 'data', data) %>>
 <% if (this.photos) { %>
 	<% list(this.photos, function(photo, index) { %>
 		<%== can.view.render('//app/articles/views/list-photos-item.ejs', {
