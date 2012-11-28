@@ -22,7 +22,7 @@ steal(
 	/* @static */
 	{
 		defaults: {
-			autosaveInterval: 30 * 1000,	// how ofter is draft automatically saved
+			autosaveInterval: 5 * 1000,	// how ofter is draft automatically saved
 			encyclopediaCategory: '/admin-api/category/2/',
 			markitupSettings: {
 				previewParserPath:	'',
@@ -360,8 +360,8 @@ steal(
 			}
 
 			// remove all error markup
-			$('.control-group').removeClass('error');
-			$('.help-inline').empty();
+			$('form.article .control-group').removeClass('error');
+			$('form.article .help-inline').empty();
 
 			// check for errors
 			var errors = this.article.errors();

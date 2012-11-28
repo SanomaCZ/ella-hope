@@ -310,8 +310,39 @@ steal(
 				},
 				clearForm: true,
 				beforeSubmit: function(arr, $form, options) {
+
+					// remove all error markup
+					$('.uploadForm .control-group').removeClass('error');
+					$('.uploadForm .help-inline').empty();
+					$('.response_msg').removeClass('alert-error').hide();
+
+					// create model from each photo so that it can be validated
+					for (var i = 0; i < objects.length; i++) {
+
+						// create model from photo attributes
+						var photo = new Photo(objects[i]);
+
+						// check if there are any errors
+						var errors = photo.errors();
+
+						// there are no errors
+						if (errors === null) {
+							//console.log('no errors');
+							return true;
+						}
+						else {
+
+							$('.response_msg')
+								.show()
+								.addClass('alert-error')
+								.find('span').html($.t('<strong>Stop!</strong> There were some errors. Try to correct them.'));
+
+							self.showErrors(errors);
+							return false;
+						}
+					}
 					// return false to cancel submit
-					return true;
+					return false;
 				},
 				uploadProgress: function(ev, position, total, percentComplete) {
 					// console.log(ev);
@@ -356,6 +387,34 @@ steal(
 			// !!! Important !!!
 			// always return false to prevent standard browser submit and page navigation
 			return false;
+		},
+
+		/**
+		 * highlight inputs with error
+		 * @param  {[type]} errors [description]
+		 * @return {[type]}        [description]
+		 */
+		showErrors: function(errors) {
+
+			if (errors && errors !== true) {
+				$.each(errors, function(e){
+					$('.uploadForm').find('.'+e).each(function(i, input){
+						if (!$(input).val()) {
+							$(input).closest('.control-group')
+								.addClass('error')
+								.find('.help-inline').html(errors[e][0]);
+						}
+					});
+				});
+
+				// scroll to first error
+				// there were occasional errors where element could not be found
+				if ($('.uploadForm .control-group.error').eq(0).length) {
+					$('html, body').animate({
+						scrollTop: $('.uploadForm .control-group.error').eq(0).offset().top - 50
+					}, 500);
+				}
+			}
 		},
 
 		/**

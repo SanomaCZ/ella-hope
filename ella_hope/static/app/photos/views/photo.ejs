@@ -8,15 +8,16 @@
         <input type="hidden" name="important_left"  value="<%= photo ? photo.important_left : '' %>" />
         <input type="hidden" name="rotate" value="0" />
 
-        <div class="row">
+        <div class="row control-group">
             <label for="title"><%= $.t('Title')%></label>
             <input class="span4 title" type="text" id="title" name="title" placeholder="<%= $.t('Add Title')%>"
                 value="<%= photo.title %>" <%= photo.title ? "" : "" %>>
+            <span class="help-inline"></span>
         </div>
 
-        <div class="row">
+        <div class="row control-group">
             <label for="authors"><%= $.t('Author(s)')%></label>
-            <select name="authors[]"  data-placeholder="<%= $.t('Choose authors')%>" class="chzn-select span4 authors-photo" multiple>
+            <select name="authors[]"  data-placeholder="<%= $.t('Choose authors')%>" class="chzn-select span4 authors-photo authors" multiple>
             <% if (author) { %>
                 <% $.each(author, function(i, a){ %>
                     <%
@@ -36,16 +37,16 @@
                 <% }) %>
             <% } %>
             </select>
-            <span class="help-inline"></span>
             <button class="btn btn-mini add-author-photos"><%= $.t('add new author')%></button>
+            <span class="help-inline"></span>
         </div>
 
-        <div class="row">
+        <div class="row control-group">
             <label for="description"><%= $.t('Description')%></label>
             <textarea class="span4 description" name="description" placeholder="<%= $.t('Add Description')%>" <%= photo.description ? "" : "class='empty'" %>><%= photo.description %></textarea>
         </div>
 
-        <div class="row">
+        <div class="row control-group">
             <label class="control-label" for="tags"><%= $.t('Tag(s)')%></label>
             <div class="controls">
                 <select name="tags[]" data-placeholder="<%= $.t('Choose tags')%>" class="chzn-select photo-tags span4" multiple>
