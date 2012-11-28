@@ -33,8 +33,7 @@
 
 #photos-modal {
 	left: 3%;
-	margin-left: auto !important;
-	margin-right: auto !important;
+	margin: auto !important;
 	width: 90%;
 	top: 20px;
 }

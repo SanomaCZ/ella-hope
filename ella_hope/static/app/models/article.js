@@ -28,6 +28,16 @@ steal(
 						return $.t('This field can not be empty');
 					}
 				});
+				// this.validate("photo", function (val){
+				// 	if (val === null || val === '') {
+				// 		return $.t('This field can not be empty');
+				// 	}
+				// });
+				this.validate("source", function (val){
+					if (val === null || val === '') {
+						return $.t('This field can not be empty');
+					}
+				});
 				this.validate("publish_from", function (val){
 					if (val === null || val === '') {
 						return $.t('This field can not be empty');

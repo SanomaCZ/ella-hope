@@ -332,6 +332,9 @@ steal(
 			// if static is not present, set to false
 			if (!values['static']) values['static'] = false;
 
+			// if authors is not present, set to null so we can validate it
+			if (!values['authors']) values['authors'] = null;
+
 			// if photo_displayed is not present, set to true
 			if (!values['photo_displayed']) values['photo_displayed'] = true;
 			else values['photo_displayed'] = false;
@@ -349,19 +352,11 @@ steal(
 				this.article = new Article(values);
 			}
 
-			// do not send "photo" property if it's empty
-			if (this.article['photo']) {
-				if (this.article['photo'].length === 0) {
-					delete this.article['photo'];
-				}
-			}
-			else {
-				delete this.article['photo'];
-			}
-
 			// remove all error markup
 			$('form.article .control-group').removeClass('error');
 			$('form.article .help-inline').empty();
+
+			//console.log(this.article);
 
 			// check for errors
 			var errors = this.article.errors();
@@ -387,6 +382,7 @@ steal(
 
 			if (errors && errors !== true) {
 				$.each(errors, function(e){
+					//console.log(e);
 					$('.'+e).closest('.control-group')
 						.addClass('error')
 						.find('.help-inline').html(errors[e][0]);

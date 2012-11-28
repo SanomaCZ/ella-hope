@@ -65,7 +65,7 @@
 		<div class="control-group row">
 			<label class="control-label" for="authors"><%= $.t('Author(s)')%></label>
 			<div class="controls">
-				<select name="authors[]" data-placeholder="<%= $.t('Choose authors')%>" class="chzn-select authors-article" multiple>
+				<select name="authors[]" data-placeholder="<%= $.t('Choose authors')%>" class="chzn-select authors-article authors" multiple>
 				<% if (author) { %>
 					<% $.each(author, function(i, a){ %>
 					<%
@@ -91,7 +91,7 @@
 		<div class="control-group row">
 			<label class="control-label" for="source"><%= $.t('Source')%></label>
 			<div class="controls">
-				<select name="source" id="source" data-placeholder="<%= $.t('Choose source')%>" class="chzn-select article-source">
+				<select name="source" class="source" id="source" data-placeholder="<%= $.t('Choose source')%>" class="chzn-select article-source">
 				<option></option>
 				<% if (source) { %>
 					<% $.each(source, function(i, s){ %>
@@ -133,7 +133,7 @@
 
 		<div class="control-group row">
 			<label class="control-label" for="photo"><%= $.t('Photo')%></label>
-			<div class="controls">
+			<div class="controls photo">
 				<%
 				var titlePhotoInserted = false;
 				if (article.photo && article.photo.public_url) {
