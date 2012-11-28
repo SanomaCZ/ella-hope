@@ -22,7 +22,7 @@ steal(
 	/* @static */
 	{
 		defaults: {
-			autosaveInterval: 10 * 1000,	// how ofter is draft automatically saved
+			autosaveInterval: 30 * 1000,	// how ofter is draft automatically saved
 			encyclopediaCategory: '/admin-api/category/2/',
 			markitupSettings: {
 				previewParserPath:	'',
