@@ -36,6 +36,7 @@
 	margin-left: auto !important;
 	margin-right: auto !important;
 	width: 90%;
+	top: 20px;
 }
 #photos-modal .upload .page-header {
 	display: none;

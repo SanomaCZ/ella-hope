@@ -43,7 +43,7 @@
 		<div class="control-group row">
 			<label class="control-label" for="category"><%= $.t('Category')%></label>
 			<div class="controls">
-				<select name="category" id="category" data-placeholder="<%= $.t('Choose category')%>" multiple class="chzn-select category">
+				<select name="category" id="category" data-placeholder="<%= $.t('Choose category')%>" class="chzn-select category">
 				<% if (category) { %>
 					<% $.each(category, function(i, cat){ %>
 					<%
@@ -126,7 +126,7 @@
 		<div class="control-group row">
 			<label class="control-label" for="description"><%= $.t('Description')%></label>
 			<div class="controls">
-				<textarea class="description" name="description" id="description" placeholder="<%= $.t('Add Description')%>" <%= article.attr('description') ? "" : "class='empty'" %>><%= article.description %></textarea>
+				<textarea class="description" name="description" id="description" placeholder="<%= $.t('Add Description')%>"><%= article.description %></textarea>
 				<span class="help-inline"></span>
 			</div>
 		</div>
@@ -368,7 +368,7 @@
 		<div class="photos-list"></div>
 	</div>
 	<div class="modal-footer">
-		<button class="btn close-photo"><%= $.t('Close') %></button>
+		<button data-dismiss="modal" aria-hidden="true" class="btn close-photo"><%= $.t('Close') %></button>
 		<button class="btn btn-primary insert-photo"><%= $.t('Insert') %></button>
 	</div>
 </div>
