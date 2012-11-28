@@ -116,17 +116,17 @@ steal(
 			this.article.bind('photo', function(ev){
 
 				var photo = self.article.photo;
-				//console.log('photo: ', photo);
+				// //console.log('photo: ', photo);
 
 				if (!photo) {
 					$('.title-photo img').attr('src', '');
-					$('form.article').find('input[name=photo]').val('');
+					//$('form.article').find('input[name=photo]').val('');
 					$('.title-photo-empty').show();
 					$('.title-photo').hide();
 				}
 				else {
 					$('.title-photo img').attr('src', photo.public_url);
-					$('form.article').find('input[name=photo]').val(photo.resource_uri);
+					//$('form.article').find('input[name=photo]').val(photo.resource_uri);
 					$('.title-photo-empty').hide();
 					$('.title-photo').show();
 				}
@@ -335,6 +335,8 @@ steal(
 			// if authors is not present, set to null so we can validate it
 			if (!values['authors']) values['authors'] = null;
 
+			if (values['photo'] === "") values['photo'] = null;
+
 			// if photo_displayed is not present, set to true
 			if (!values['photo_displayed']) values['photo_displayed'] = true;
 			else values['photo_displayed'] = false;
@@ -440,7 +442,7 @@ steal(
 			}
 
 			// set current form values to the draft model
-			this.draft.attr(obj, true);
+			this.draft.attr(obj);
 
 			if (id) {
 				this.draft.attr('id', id);
@@ -782,11 +784,13 @@ steal(
 		 */
 		insertTitlePhoto: function(photo) {
 			this.article.attr('photo', photo);
+			$('form.article').find('input[name=photo]').val(photo.resource_uri);
 		},
 
 		'.remove-photo click': function(el, ev) {
 			ev.preventDefault();
 			this.article.attr('photo', null);
+			$('form.article').find('input[name=photo]').val('');
 		},
 
 		/**
