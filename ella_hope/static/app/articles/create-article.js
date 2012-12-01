@@ -344,6 +344,10 @@ steal(
 
 			if (values['photo'] === "") values['photo'] = null;
 
+			if (values['source'] === "") {
+				delete values['source'];
+			}
+
 			// if photo_displayed is not present, set to true
 			if (!values['photo_displayed']) values['photo_displayed'] = true;
 			else values['photo_displayed'] = false;
