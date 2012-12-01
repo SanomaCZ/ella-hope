@@ -307,7 +307,7 @@
 		<div class="control-group row">
 			<label class="control-label" for="tags"><%= $.t('Tag(s)')%></label>
 			<div class="controls">
-				<select name="tags[]" data-placeholder="<%= $.t('Choose tags')%>" class="chzn-select article-tags span4" multiple>
+				<select name="tags[]" data-placeholder="<%= $.t('Choose tags')%>" class="chzn-select article-tags span8" multiple>
 				<% if (tag) { %>
 					<% $.each(tag, function(i, t){ %>
 					<%
@@ -327,6 +327,28 @@
 				</select>
 				<span class="help-inline"></span>
 				<button class="btn btn-mini add-tag-articles" data-target="article-tags"><%= $.t('add new tag')%></button>
+			</div>
+		</div>
+
+		<div class="control-group row">
+			<label class="control-label" for="main_tag"><%= $.t('Main Tag')%></label>
+			<div class="controls">
+				<select name="main_tag" data-placeholder="<%= $.t('Choose tag')%>" class="chzn-select article-main-tag">
+					<option></option>
+					<% if (tag) { %>
+						<% $.each(tag, function(i, t){ %>
+						<%
+							var selected = false;
+							if (article.main_tag == t.id) {
+								selected = true;
+							}
+						%>
+							<option value="<%= t.resource_uri %>" <%= selected ? "selected=selected" : "" %>><%= t.name %></option>
+						<% }) %>
+					<% } %>
+				</select>
+				<span class="help-inline"></span>
+				<button class="btn btn-mini add-tag-articles" data-target="article-main-tag"><%= $.t('add new tag')%></button>
 			</div>
 		</div>
 

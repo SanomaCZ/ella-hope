@@ -365,6 +365,19 @@ steal(
 				this.article = new Article(values);
 			}
 
+			// if main_tag was selected, add it as objec into tags attribute
+			// then delete main_tag
+			if (this.article.main_tag) {
+				this.article.tags[this.article.tags.length] = {
+					resource_uri: this.article.main_tag,
+					'main_tag': true
+				}
+				delete this.article.main_tag;
+			}
+
+			console.log(this.article);
+			return false;
+
 			// remove all error markup
 			$('form.article .control-group').removeClass('error');
 			$('form.article .help-inline').empty();
