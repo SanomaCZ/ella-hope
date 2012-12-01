@@ -22,7 +22,7 @@
 
 
 		<div class="control-group row">
-			<label class="control-label" for="title"><%= $.t('Title')%></label>
+			<label class="control-label required" for="title"><%= $.t('Title')%></label>
 			<div class="controls">
 				<input class="title" type="text" name="title" id="title" placeholder="<%= $.t('Add Title')%>"
 				value="<%= article.attr('title') %>" >
@@ -31,7 +31,7 @@
 		</div>
 
 		<div class="control-group row">
-			<label class="control-label" for="slug"><%= $.t('Slug')%></label>
+			<label class="control-label required" for="slug"><%= $.t('Slug')%></label>
 			<div class="controls">
 				<input class="slug" type="text" name="slug" id="slug" placeholder="<%= $.t('Press "slug from title" button to generate slug')%>"
 				value="<%= article.attr('slug') %>" >
@@ -41,7 +41,7 @@
 		</div>
 
 		<div class="control-group row">
-			<label class="control-label" for="category"><%= $.t('Category')%></label>
+			<label class="control-label required" for="category"><%= $.t('Category')%></label>
 			<div class="controls">
 				<select name="category" id="category" data-placeholder="<%= $.t('Choose category')%>" class="chzn-select category">
 				<% if (category) { %>
@@ -63,7 +63,92 @@
 		</div>
 
 		<div class="control-group row">
-			<label class="control-label" for="authors"><%= $.t('Author(s)')%></label>
+			<label class="control-label" for="listing"><%= $.t('Side Category')%></label>
+			<div class="controls">
+
+				<%
+				var listingAttr = {};
+				if (listing[0]) {
+					listingAttr.category = listing[0].category.id;
+					listingAttr.commercial = listing[0].commercial;
+					var publishFrom = Date.parse(listing[0].publish_from);
+					if (publishFrom) {
+						listingAttr.publish_from_date = publishFrom.toString('yyyy-MM-dd');
+						listingAttr.publish_from_time = publishFrom.toString('HH:mm');
+					}
+					var publishTo = Date.parse(listing[0].publish_to);
+					if (publishTo) {
+						listingAttr.publish_to_date = publishTo.toString('yyyy-MM-dd');
+						listingAttr.publish_to_time = publishTo.toString('HH:mm');
+					}
+				}
+				%>
+
+				<select name="listing" id="listing" data-placeholder="<%= $.t('Choose side category')%>" class="listing">
+					<option></option>
+				<% if (category) { %>
+					<% $.each(category, function(i, cat){ %>
+					<%
+						var selected = false;
+						if (listingAttr.category == cat.id) {
+							selected = true;
+						}
+					%>
+						<option value="<%= cat.resource_uri %>" <%= selected ? "selected=selected" : "" %>><%= cat.title %></option>
+					<% }) %>
+				<% } %>
+				</select>
+				<span class="help-inline"></span>
+			</div>
+		</div>
+
+		<div id="listing-options" <%= listingAttr.category ? 'style=display:block' : '' %>>
+
+			<div class="control-group row pull-left">
+				<div class="span4 pull-left" style="margin-left: 0">
+					<label class="control-label required" for="listing_publish_from"><%= $.t('Side Category - Publish From')%></label>
+					<div class="controls">
+						<input class="span2 listing_publish_from" type="datetime-local" name="listing_publish_from_date" id="listing_publish_from" value="<%= listingAttr.publish_from_date %>" />
+
+						<input type="text" class="timepicker-default span1 listing_publish_from" name="listing_publish_from_time" id="listing_publish_from_time" value="<%= listingAttr.publish_from_time %>" />
+
+						<button class="btn btn-mini set-date-now" data-target-date="listing_publish_from_date"><%= $.t('today') %></button>
+						<button class="btn btn-mini set-datetime-now" data-target-date="listing_publish_from_date"
+							data-target-time="listing_publish_from_time"><%= $.t('now') %></button>
+
+						<span class="help-inline"></span>
+					</div>
+					<div id="listing-date-alert"><%= $.t('Please, correct the dates.')%></div>
+				</div>
+			</div>
+
+			<div class="control-group row pull-left">
+				<div class="span4 pull-left" style="margin-left: 0">
+					<label class="control-label" for="listing_publish_to"><%= $.t('Side Category - Publish To')%></label>
+					<div class="controls">
+						<input class="span2 listing_publish_to" type="datetime-local" name="listing_publish_to_date" id="listing_publish_to" value="<%= listingAttr.publish_to_date %>" />
+
+						<input type="text" class="timepicker-default span1 listing_publish_to" name="listing_publish_to_time" id="listing_publish_to_time" value="<%= listingAttr.publish_to_time %>" />
+
+						<button class="btn btn-mini set-date-now" data-target-date="listing_publish_to_date"><%= $.t('today') %></button>
+						<button class="btn btn-mini set-datetime-now" data-target-date="listing_publish_to_date"
+							data-target-time="listing_publish_to_time"><%= $.t('now') %></button>
+
+						<span class="help-inline"></span>
+					</div>
+				</div>
+			</div>
+
+			<div class="control-group row">
+				<label class="checkbox"><%= $.t('Side Category - Commercial')%></label>
+				<input class="listing_commercial" type="checkbox" name="listing_commercial" <%= listingAttr.commercial ? 'checked' : '' %> value="true" />
+				<span class="help-inline"></span>
+			</div>
+
+		</div>
+
+		<div class="control-group row">
+			<label class="control-label required" for="authors"><%= $.t('Author(s)')%></label>
 			<div class="controls">
 				<select name="authors[]" data-placeholder="<%= $.t('Choose authors')%>" class="chzn-select authors-article authors" multiple>
 				<% if (author) { %>
@@ -89,7 +174,7 @@
 		</div>
 
 		<div class="control-group row">
-			<label class="control-label" for="source"><%= $.t('Source')%></label>
+			<label class="control-label required" for="source"><%= $.t('Source')%></label>
 			<div class="controls">
 				<select name="source" id="source" data-placeholder="<%= $.t('Choose source')%>" class="chzn-select article-source source">
 				<option></option>
@@ -113,7 +198,7 @@
 		</div>
 
 		<div class="control-group row">
-			<label class="control-label" for="content"><%= $.t('Content')%></label>
+			<label class="control-label required" for="content"><%= $.t('Content')%></label>
 			<div class="controls pull-left">
 				<textarea class="content" rows="10" name="content" placeholder="<%= $.t('Add Content')%>"><%= article.content %></textarea>
 				<span class="help-inline"></span>
@@ -153,7 +238,7 @@
 
 		<div class="control-group row">
 			<div class="span4 pull-left" style="margin-left: 0">
-				<label class="control-label"><%= $.t('Related articles')%></label>
+				<label class="control-label"><%= $.t('Related articles (article must have ID before adding)')%></label>
 				<ul id="chosen-related-articles" class="connectedSortable">
 					<% if (relatedArticles.length) { %>
 						<% $.each(relatedArticles, function(i, a) { %>
@@ -187,7 +272,7 @@
 
 		<div class="control-group row pull-left">
 			<div class="span4 pull-left" style="margin-left: 0">
-				<label class="control-label" for="publish_from"><%= $.t('Publish From')%></label>
+				<label class="control-label required" for="publish_from"><%= $.t('Publish From')%></label>
 				<div class="controls">
 					<input class="span2 publish_from" type="datetime-local" name="publish_from_date" id="publish_from" value="<%= article.publish_from_date %>" />
 
@@ -199,6 +284,7 @@
 
 					<span class="help-inline"></span>
 				</div>
+				<div id="date-alert"><%= $.t('Please, correct the dates.')%></div>
 			</div>
 		</div>
 		<div class="control-group row">

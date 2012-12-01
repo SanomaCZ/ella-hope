@@ -73,6 +73,10 @@ button.add-author, button.add-tag {
 	top: -16px;
 }
 
+#listing-options {
+	display: none;
+}
+
 .title-photo img {
 	max-height: 100px;
 }

@@ -143,33 +143,41 @@ steal(
 				photos: Photo.findAll(),
 				source: Source.findAll(),
 				tag: Tag.findAll(),
-				relatedArticles: this.article.id ? Article.getRelatedArticles(this.article.id) : []
+				relatedArticles: this.article.id ? Article.getRelatedArticles(this.article.id) : [],
+				listing: this.article.id ? Listing.getListingByArticle({articleId: this.article.id}) : {}
 			} ).then(function( frag ){
 				self.element.html(frag);
 
-				// enable chosen select for authors
+				// enable chosen select
 				// http://harvesthq.github.com/chosen/
 				$('.chzn-select').chosen();
-				$('.enable_comments').chosen({allow_single_deselect:true});
+				$('.enable_comments, .listing').chosen({allow_single_deselect:true});
 
 				// enable markup in all textareas
 				$("textarea").markItUp(self.options.markitupSettings);
 
 				// enable datepicker for publishFrom and publishTo
-				$("#publish_from").datepicker(self.options.dateOptions)
+				$("#publish_from, #publish_to").datepicker(self.options.dateOptions)
 					.on('changeDate', function(ev){
-						if ($("#publish_to_date").val() && $("#publish_from_date").val() > $("#publish_to_date").val()){
+						var from = $("#publish_from").val(),
+							to = $("#publish_to").val();
+						if (to && from > to){
 							$('#date-alert').show();
 						} else {
 							$('#date-alert').hide();
 						}
 					});
-				$("#publish_to").datepicker(self.options.dateOptions)
+
+				// enable datepicker for listing publishFrom and publishTo
+				$("#listing_publish_from, #listing_publish_to").datepicker(self.options.dateOptions)
 					.on('changeDate', function(ev){
-						if ($("#publish_from_date").val() && $("#publish_from_date").val() > $("#publish_to_date").val()){
-							$('#date-alert').show();
+						var from = $("#listing_publish_from").val(),
+							to = $("#listing_publish_to").val();
+						//console.log('change', from, to);
+						if (to && from > to){
+							$('#listing-date-alert').show();
 						} else {
-							$('#date-alert').hide();
+							$('#listing-date-alert').hide();
 						}
 					});
 
@@ -180,8 +188,7 @@ steal(
 					defaultTime: false, // 'value',
 					showMeridian: false // enable 24 hours mode
 				};
-				$("#publish_from_time").timepicker(timeOptions);
-				$("#publish_to_time").timepicker(timeOptions);
+				$("#publish_from_time, #publish_to_time, #listing_publish_from_time, #listing_publish_to_time").timepicker(timeOptions);
 
 				// connected articles - enable drag&drop between two lists
 				$( "#found-related-articles, #chosen-related-articles" ).sortable({
@@ -367,6 +374,17 @@ steal(
 			if (errors === null) {
 				// save article
 				this.article.save();
+
+				// listing - must be saved when article exists
+				if (values['listing']) {
+					if (!this.article.id) {
+						alert('Side category (listing) error - probably article is not saved');
+					}
+					else {
+						this.saveListing(this.article, values);
+					}
+				}
+
 				return true;
 			}
 			else {
@@ -395,6 +413,63 @@ steal(
 					scrollTop: $('.control-group.error').eq(0).offset().top - 50
 				}, 500);
 			}
+		},
+
+		/**
+		 * save listing - side category for article
+		 * it is saved as relation between article and category, also with publish_from
+		 * https://github.com/SanomaCZ/ella-hub/blob/master/doc/api.rst#listing
+		 * @param  {[type]} articleId [description]
+		 * @param  {[type]} values    [description]
+		 * @return {[type]}           [description]
+		 */
+		saveListing: function(article, values) {
+
+			//console.log('save listing', article, values);
+
+			var listingPublishFrom = null,
+				listingPublishTo = null,
+				commercial = null;
+
+			// prepare object for Listing model
+			var listingAttrs = {
+				publishable: article.resource_uri,
+				category: values['listing']
+			};
+
+			if (values['listing_publish_from_date']) {
+				listingAttrs.publish_from = values['listing_publish_from_date']+'T'+values['listing_publish_from_time'];
+			}
+			if (values['listing_publish_to_date']) {
+				listingAttrs.publish_to = values['listing_publish_to_date']+'T'+values['listing_publish_to_time'];
+			}
+			if (values['listing_commercial']) {
+				listingAttrs.commercial = values['listing_commercial'];
+			}
+			else {
+				listingAttrs.commercial = false;
+			}
+
+			// check if current article has already saved listing
+			Listing.getListingByArticle({articleId: article.id}, function(data){
+
+				// create new Listing
+				// if id is present, it will update the existing one
+				var listing = new Listing(listingAttrs);
+
+				//console.log('listing id', listing.id);
+
+				// if listing exists, update it
+				// if it does not exists, create it
+				if (data.length && data[0].id) {
+					listing.id = data[0].id;
+				}
+
+				//console.log(listing);
+
+				// create or update - based on existing id
+				listing.save();
+			});
 		},
 
 		/**
@@ -553,6 +628,22 @@ steal(
 			el.siblings('.selected-draft')
 				.append(label)
 				.append('<a href="'+urlDelete+'">x</a>');
+		},
+
+		/**
+		 * if listing (side category) is selected, show listing's optional fields
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'select[name=listing] change': function(el, ev) {
+
+			if (el.val()) {
+				$('#listing-options').slideDown(200);
+			}
+			else {
+				$('#listing-options').slideUp(200);
+			}
 		},
 
 		/**
