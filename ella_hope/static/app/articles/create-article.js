@@ -61,6 +61,7 @@ steal(
 	{
 		article: null,			// current article
 		draft: null,			// current draft object
+		gallery: null,			// if current article is gallery
 		previousDraftValues: null,	// use this for comparison of old and new draft values
 		autosaveTimer: null,	// timer for autosave, we need this to stop timer
 
@@ -352,27 +353,29 @@ steal(
 			if (!values['photo_displayed']) values['photo_displayed'] = true;
 			else values['photo_displayed'] = false;
 
+			// if main_tag was selected, add it as objec into tags attribute
+			// then delete main_tag
+			if (values.main_tag) {
+
+				values.tags[values.tags.length] = {
+					resource_uri: values.main_tag,
+					'main_tag': true
+				}
+				delete values.main_tag;
+			}
+
 			// app_data is required to be sent, althougt it's empty now
 			values['app_data'] = null;
 
 			if (!values['id']) delete values['id'];
 
+			// if article exists, update its values
 			if (this.article) {
 				this.article.attr(values);
 			}
 			else {
-				// create new article model and validate it
+				// create new article model
 				this.article = new Article(values);
-			}
-
-			// if main_tag was selected, add it as objec into tags attribute
-			// then delete main_tag
-			if (this.article.main_tag) {
-				this.article.tags[this.article.tags.length] = {
-					resource_uri: this.article.main_tag,
-					'main_tag': true
-				}
-				delete this.article.main_tag;
 			}
 
 			// remove all error markup
@@ -381,7 +384,7 @@ steal(
 
 			//console.log(this.article);
 
-			// check for errors
+			// check for errors (validation)
 			var errors = this.article.errors();
 
 			// no errors
@@ -602,6 +605,21 @@ steal(
 
 			var title = $('.article').find($('input[name=title]')).val();
 			$('#slug').val(slug(title));
+		},
+
+		/**
+		 * gallery inherits from article
+		 * it allows to save galleryitem along with an article
+		 * https://github.com/SanomaCZ/ella-hub/blob/master/doc/api.rst#galleryitem
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'.gallery click' : function(el, ev) {
+
+			ev.preventDefault();
+
+			$('#gallery-items').slideDown(200);
 		},
 
 		/**

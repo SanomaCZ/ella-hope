@@ -73,7 +73,7 @@ button.add-author, button.add-tag {
 	top: -16px;
 }
 
-#listing-options {
+#listing-options, #gallery-items {
 	display: none;
 }
 
