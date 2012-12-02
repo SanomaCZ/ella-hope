@@ -375,9 +375,6 @@ steal(
 				delete this.article.main_tag;
 			}
 
-			console.log(this.article);
-			return false;
-
 			// remove all error markup
 			$('form.article .control-group').removeClass('error');
 			$('form.article .help-inline').empty();
