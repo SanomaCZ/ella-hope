@@ -350,7 +350,7 @@
 						var selected = false;
 						if (article.tags) {
 							for (var i = 0; i < article.tags.length; i++) {
-								if (article.tags[i]['id'] == t.id) {
+								if (article.tags[i]['id'] == t.id && article.tags[i].main_tag !== true) {
 									selected = true;
 									break;
 								}
@@ -369,16 +369,18 @@
 		<div class="control-group row">
 			<label class="control-label" for="main_tag"><%= $.t('Main Tag')%></label>
 			<div class="controls">
-				<select name="main_tag" data-placeholder="<%= $.t('Choose tag')%>" class="chzn-select article-main-tag">
+				<select name="main_tag" data-placeholder="<%= $.t('Choose tag')%>" class="article-main-tag">
 					<option></option>
 					<% if (tag) { %>
 						<% $.each(tag, function(i, t){ %>
-						<%
-							var selected = false;
-							if (article.main_tag == t.id) {
-								selected = true;
-							}
-						%>
+							<% var selected = false; %>
+							<% $.each(article.tags, function(j, t2){ %>
+								<%
+									if (t2.main_tag === true && t.id === t2.id) {
+										selected = true;
+									}
+								%>
+							<% }) %>
 							<option value="<%= t.resource_uri %>" <%= selected ? "selected=selected" : "" %>><%= t.name %></option>
 						<% }) %>
 					<% } %>

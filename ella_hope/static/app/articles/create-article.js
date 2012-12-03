@@ -152,7 +152,7 @@ steal(
 				// enable chosen select
 				// http://harvesthq.github.com/chosen/
 				$('.chzn-select').chosen();
-				$('.enable_comments, .listing').chosen({allow_single_deselect:true});
+				$('.enable_comments, .listing, .article-main-tag').chosen({allow_single_deselect:true});
 
 				// enable markup in all textareas
 				$("textarea").markItUp(self.options.markitupSettings);
@@ -364,6 +364,8 @@ steal(
 				delete values.main_tag;
 			}
 
+			//console.log('save', values);
+
 			// app_data is required to be sent, althougt it's empty now
 			values['app_data'] = null;
 
@@ -371,7 +373,7 @@ steal(
 
 			// if article exists, update its values
 			if (this.article) {
-				this.article.attr(values);
+				this.article.attr(values, true);
 			}
 			else {
 				// create new article model
