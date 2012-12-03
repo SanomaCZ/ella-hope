@@ -374,13 +374,15 @@
 					<% if (tag) { %>
 						<% $.each(tag, function(i, t){ %>
 							<% var selected = false; %>
-							<% $.each(article.tags, function(j, t2){ %>
-								<%
-									if (t2.main_tag === true && t.id === t2.id) {
-										selected = true;
-									}
-								%>
-							<% }) %>
+							<% if (article.tags) { %>
+								<% $.each(article.tags, function(j, t2){ %>
+									<%
+										if (t2.main_tag === true && t.id === t2.id) {
+											selected = true;
+										}
+									%>
+								<% }) %>
+							<% } %>
 							<option value="<%= t.resource_uri %>" <%= selected ? "selected=selected" : "" %>><%= t.name %></option>
 						<% }) %>
 					<% } %>
