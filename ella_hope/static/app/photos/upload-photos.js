@@ -272,10 +272,6 @@ steal(
 				important_bottom = important_bottom ? parseInt(important_bottom, 10) : null;
 				important_right = important_right ? parseInt(important_right, 10) : null;
 
-
-				var tags = $(this).find('.photo-tags').val();
-				tags = tags ? tags : null;
-
 				var source = $(this).find('.photo-source').val();
 				source = source ? source : null;
 
@@ -285,7 +281,7 @@ steal(
 					"description": $(this).find('.description').val(),
 					"created": new Date().toISOString(),
 					"authors" : $(this).find('.authors-photo').val(),
-					"tags" : tags,
+					//"tags" : tags,
 					"source" : source,
 					"app_data": null,
 					"image": "attached_object_id:"+$(this).find('.filename').val(),
@@ -295,6 +291,11 @@ steal(
 					"important_right": important_right,
 					"rotate": parseInt($(this).find('input[name=rotate]').val(), 10)
 				};
+
+				var tags = $(this).find('.photo-tags').val();
+				if (tags) {
+					objects[objects.length - 1].tags = tags;
+				}
 			});
 
 			// prepare Options Object
