@@ -350,12 +350,14 @@ steal(
 			}
 
 			// if photo_displayed is not present, set to true
-			if (!values['photo_displayed']) values['photo_displayed'] = true;
-			else values['photo_displayed'] = false;
+			else values['photo_displayed'] = Boolean(values['photo_displayed'])
 
-			// if main_tag was selected, add it as objec into tags attribute
+			// if main_tag was selected, add it as object into tags attribute
 			// then delete main_tag
 			if (values.main_tag) {
+				if (typeof values.tags === 'undefined') {
+					values.tags = []
+				}
 
 				values.tags[values.tags.length] = {
 					resource_uri: values.main_tag,
@@ -1120,7 +1122,9 @@ steal(
 
 			// selected tags
 			var tags = $('.article .article-tags').val();
-
+			if (!tags) {
+				return;
+			}
 			Article.getArticlesByTag(tags, function(data){
 				$.each(data, function(i, article){
 					$('#found-related-articles').append('<li data-article-id="'+article.id+'">'+article.title+'</li>');
