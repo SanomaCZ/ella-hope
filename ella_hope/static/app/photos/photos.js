@@ -133,15 +133,8 @@ steal(
 		 * @return {[type]} [description]
 		 */
 		'listPhotos': function(data) {
-
-			if (data) {
-				data.order_by = '-id';
-			}
-			else {
-				data = {
-					order_by: '-id'
-				};
-			}
+			data = data || {};
+			data.order_by = '-id';
 
 			can.view('//app/photos/views/list-photos.ejs', {
 				photos: Photo.findAll(data)
