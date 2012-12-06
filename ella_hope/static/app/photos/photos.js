@@ -11,6 +11,7 @@ steal(
 	, '//app/resources/css/bootstrap-timepicker.css'	// timepicker css
 	, '//app/resources/js/jquery.chosen.js'	// select list js
 	, '//app/resources/css/jquery.chosen.css'	// select list css
+	, '//app/resources/js/jquery.cookie.js'
 )
 .then(
 
@@ -197,6 +198,8 @@ steal(
 
 			// show/hide filtering form
 			$('.filter-form').toggle();
+			var old_val = $.cookie('HOPE_filter_form') || 'false';
+			$.cookie('HOPE_filter_form', old_val == 'true' ? 'false': 'true', {path: '/'});
 		}
 	})
 );
