@@ -8,6 +8,30 @@
         <input type="hidden" name="important_left"  value="<%= photo ? photo.important_left : '' %>" />
         <input type="hidden" name="rotate" value="0" />
 
+		<div class="control-group row">
+			<label class="control-label" for="source"><%= $.t('Source')%></label>
+			<div class="controls">
+				<select name="source" data-placeholder="<%= $.t('Choose source')%>" class="chzn-select photo-source">
+					<option></option>
+					<% if (source) { %>
+						<% $.each(source, function(i, s){ %>
+							<%
+								var selected = false;
+								if (photo.source) {
+									if (photo.source && photo.source['id'] == s.id) {
+										selected = true;
+									}
+								}
+							%>
+							<option value="<%= s.resource_uri %>" <%= selected ? "selected=selected" : "" %>><%= s.name %></option>
+						<% }) %>
+					<% } %>
+				</select>
+				<span class="help-inline"></span>
+				<button class="btn btn-mini add-source-photos" data-target="photo-source"><%= $.t('add new source')%></button>
+			</div>
+		</div>
+
         <div class="row control-group">
             <label for="title"><%= $.t('Title')%></label>
             <input class="span4 title" type="text" id="title" name="title" placeholder="<%= $.t('Add Title')%>"
@@ -69,30 +93,6 @@
                 </select>
                 <span class="help-inline"></span>
                 <button class="btn btn-mini add-tag-photos" data-target="photo-tags"><%= $.t('add new tag')%></button>
-            </div>
-        </div>
-
-        <div class="control-group row">
-            <label class="control-label" for="source"><%= $.t('Source')%></label>
-            <div class="controls">
-                <select name="source" data-placeholder="<%= $.t('Choose source')%>" class="chzn-select photo-source">
-                    <option></option>
-                    <% if (source) { %>
-                        <% $.each(source, function(i, s){ %>
-                            <%
-                                var selected = false;
-                                if (photo.source) {
-                                    if (photo.source && photo.source['id'] == s.id) {
-                                        selected = true;
-                                    }
-                                }
-                            %>
-                            <option value="<%= s.resource_uri %>" <%= selected ? "selected=selected" : "" %>><%= s.name %></option>
-                        <% }) %>
-                    <% } %>
-                </select>
-                <span class="help-inline"></span>
-                <button class="btn btn-mini add-source-photos" data-target="photo-source"><%= $.t('add new source')%></button>
             </div>
         </div>
 
