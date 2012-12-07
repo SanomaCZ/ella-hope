@@ -1,3 +1,4 @@
+//override "/login-backends/" in your webserver quod libet
 function getBackends() {
 	return [
 		{
