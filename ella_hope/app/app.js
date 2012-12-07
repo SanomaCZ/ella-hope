@@ -2,6 +2,7 @@ steal(
 	'./app.css'					// application CSS file
 	, 'can/control/route'					// enable routing
 	, './login/login.js'				// login module
+	, '//app/login-backends/backends.js'
 )
 .then(
 	'./resources/js/jquery.jsperanto.js'	// translation library
@@ -47,9 +48,10 @@ steal(
 
 			// hide navbar
 			$("#navbar").empty();
-
 			// login controller
-			var login = new Login($("#content"));
+			var login = new Login($("#content"), {
+				api_url: getBackends()
+			});
 		});
 	}
 )

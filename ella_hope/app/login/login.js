@@ -40,7 +40,6 @@ steal(
 		 * Initializes a new instance of Login control.
 		 */
 		init : function(el, options){
-
 			// if user is already logged in, skip login page
 			this.checkLogin();
 		},
@@ -59,7 +58,7 @@ steal(
 				data = {};
 
 			// get username and password
-			$.each($('#login form').serializeArray(), function(i, field) {
+			$.each($('form', '#login').serializeArray(), function(i, field) {
 				data[field.name] = field.value;
 			});
 
@@ -80,7 +79,8 @@ steal(
 
 			// steal User model so that login can be performed
 			steal(
-				'//app/models/user.js', '//app/login/ajax-setup.js'
+				'//app/models/user.js',
+				'//app/login/ajax-setup.js'
 			)
 			.then(
 				function(){
