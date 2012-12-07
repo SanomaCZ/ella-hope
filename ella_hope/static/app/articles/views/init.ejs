@@ -1,8 +1,12 @@
 <div class="page-header">
-	<h1><%= $.t('Articles') %></h1>
+	<h1><%= this.model === 'articles' ? $.t('Articles') : $.t('Galleries') %></h1>
 </div>
 
-<a href="<%= can.route.url({ page: 'articles', action: 'new' })%>" class="btn btn-primary"><%= $.t('New article') %></a>
+<% if (this.model === 'articles') { %>
+	<a href="<%= can.route.url({ page: 'articles', action: 'new' })%>" class="btn btn-primary"><%= $.t('New article') %></a>
+<% } else if (this.model === 'gallery') { %>
+	<a href="<%= can.route.url({ page: 'galleries', action: 'new' })%>" class="btn btn-primary"><%= $.t('New gallery') %></a>
+<% } %>
 
 <div class="pull-right">
 	<form class="form-search pull-left">

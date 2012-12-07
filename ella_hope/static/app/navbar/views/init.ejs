@@ -14,12 +14,12 @@
 					<li class="articles"><%== can.route.link( $.t('Articles'), { page: 'articles' }, {}, false); %></li>
 				<% } %>
 
-				<% if (1 || USER.auth_tree.photo) { %>
-					<li class="photos"><%== can.route.link( $.t('Photos/videos'), { page: 'photos' }, {}, false); %></li>
+				<% if (1 || USER.auth_tree.galleries) { %>
+					<li class="galleries"><%== can.route.link( $.t('Galleries'), { page: 'galleries' }, {}, false); %></li>
 				<% } %>
 
-				<% if (USER.auth_tree.gallery) { %>
-					<li class="gallery"><%== can.route.link( $.t('Photogallery'), { page: 'gallery' }, {}, false); %></li>
+				<% if (1 || USER.auth_tree.photo) { %>
+					<li class="photos"><%== can.route.link( $.t('Photos/videos'), { page: 'photos' }, {}, false); %></li>
 				<% } %>
 
 				<% if (USER.auth_tree.contest) { %>

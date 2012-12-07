@@ -69,6 +69,8 @@ steal(
 				, './photos/photos.js'				// photos module
 			)
 			.then(
+				'./galleries/galleries.js',		// galleries module
+
 				// run the application
 				function(){
 

@@ -8,6 +8,7 @@ steal(
 	, "./author.js"
 	, "./draft.js"
 	, "./category.js"
+	, "./galleryitem.js"
 	, "./listing.js"
 	, "./photo.js"
 	, "./photo-format.js"

@@ -16,7 +16,7 @@ steal(
 				return $.ajax({
 					url: BASE_URL+'/gallery/',
 					type: 'POST',
-					async: false,
+					async: true,
 					dataType: 'json',
 					contentType: 'application/json',	// this is necessary
 					data: JSON.stringify(attrs)	// JSON.stringify is necessary, it also escapes newline chars
@@ -27,7 +27,7 @@ steal(
 				return $.ajax({
 					url: BASE_URL+'/gallery/'+id+'/',
 					type: 'PATCH',
-					async: false,
+					async: true,
 					dataType: 'json',
 					contentType: 'application/json',
 					data: JSON.stringify(attrs)

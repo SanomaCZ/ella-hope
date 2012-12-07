@@ -29,7 +29,8 @@ steal(
 				format: 'yyyy-mm-dd',
 				weekStart: 1,
 				autoclose: true
-			}
+			},
+			model: 'articles'
 		}
 	},
 	/* @prototype */
@@ -47,6 +48,8 @@ steal(
 		 */
 		init: function(element, options){
 
+			//console.log(this.options);
+
 			var self = this;
 
 			// destroy articleCreate control if it was created
@@ -60,7 +63,8 @@ steal(
 				author: Author.findAll(),
 				category: Category.findAll(),
 				states: this.options.articleStates,
-				tag: Tag.findAll()
+				tag: Tag.findAll(),
+				model: self.options.model
 			}).then(function( frag ){
 				self.element.html( frag );
 			}).then(function(){
@@ -92,9 +96,20 @@ steal(
 			this.listArticles({});
 		},
 
+		/**
+		 * this route is called when we i.e. edit an articles
+		 * and then click on Articles in menu
+		 * @param  {[type]} data [description]
+		 * @return {[type]}      [description]
+		 */
 		':page route': function( data ) {
-			if (data.page == 'articles') {
-				this.init();
+			if (data.page == 'articles' || data.page == 'galleries') {
+				// if there are children, control needs to be initialized
+				// it's because there was something else in the element and
+				// we need to initialize it with current control
+				if (this.element && this.element.children().length) {
+					this.init();
+				}
 			}
 		},
 
@@ -110,15 +125,29 @@ steal(
 
 			if (data.action == 'edit') {
 				if (data.id > 0) {
-					Article.findOne({id: data.id}, function(article){
-						self.articleCreate = new ArticleCreate(self.element, {
-							type: 'article',
-							article: article,
-							articleStates: self.options.articleStates,
-							articleComments: self.options.articleComments,
-							dateOptions: self.options.dateOptions
+					if (data.page === 'articles') {
+						Article.findOne({id: data.id}, function(article){
+							self.articleCreate = new ArticleCreate(self.element, {
+								type: 'article',
+								article: article,
+								articleStates: self.options.articleStates,
+								articleComments: self.options.articleComments,
+								dateOptions: self.options.dateOptions
+							});
 						});
-					});
+					}
+					else if (data.page === 'galleries') {
+						Gallery.findOne({id: data.id}, function(article){
+							self.articleCreate = new ArticleCreate(self.element, {
+								type: 'article',
+								article: article,
+								articleStates: self.options.articleStates,
+								articleComments: self.options.articleComments,
+								dateOptions: self.options.dateOptions,
+								model: 'gallery'
+							});
+						});
+					}
 				}
 			}
 			else if (data.action == 'edit-draft') {
@@ -172,7 +201,8 @@ steal(
 			}
 
 			can.view('//app/articles/views/list-articles.ejs', {
-				articles: Article.findAll(data)
+				articles: self.options.model === 'articles' ? Article.findAll(data) : Gallery.findAll(data),
+				model: self.options.model
 			}).then(function( frag ){
 				$("#inner-content").html( frag );
 			});

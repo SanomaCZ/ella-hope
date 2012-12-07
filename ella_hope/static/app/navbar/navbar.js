@@ -69,6 +69,10 @@ steal(
 					this.currentControl = new Photos($("#content"), {});
 					$('.nav .photos').addClass('active');
 					break;
+				case 'galleries':
+					this.currentControl = new Galleries($("#content"), {});
+					$('.nav .galleries').addClass('active');
+					break;
 				case 'user':
 				default:
 					this.currentControl = new Dashboard($("#content"), {});

@@ -69,7 +69,7 @@ button.add-author, button.add-tag {
 	top: -16px;
 }
 
-#listing-options, #gallery-items {
+#listing-options, #date-alert {
 	display: none;
 }
 
@@ -95,7 +95,7 @@ button.add-author, button.add-tag {
 	margin: 2px;
 	cursor: move;
 }
-.remove-related:hover {
+.icon-remove:hover {
 	background-color: rgb(245, 245, 245);
 	cursor: pointer;
 }

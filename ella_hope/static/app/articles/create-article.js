@@ -95,8 +95,8 @@ steal(
 			this.article = article;
 			if (!this.article) {
 				//console.log('new article');
-				// we want to create a new article
-				this.article = new Article();
+				// we want to create a new article / gallery
+				this.article = this.options.model === 'article' ? new Article() : new Gallery();
 			}
 
 			// parse publishFrom date
@@ -145,7 +145,9 @@ steal(
 				source: Source.findAll(),
 				tag: Tag.findAll(),
 				relatedArticles: this.article.id ? Article.getRelatedArticles(this.article.id) : [],
-				listing: this.article.id ? Listing.getListingByArticle({articleId: this.article.id}) : {}
+				listing: this.article.id ? Listing.getListingByArticle({articleId: this.article.id}) : {},
+				galleryitem: this.article.id && self.options.model === 'gallery' ? GalleryItem.getRelated(this.article.id) : {},
+				model: self.options.model
 			} ).then(function( frag ){
 				self.element.html(frag);
 
@@ -205,6 +207,31 @@ steal(
 							el.data('resource_id', data.id);
 							el.append('<i class="icon-remove pull-right remove-related"></i>');
 						});
+					}
+				}).disableSelection();
+
+				// gallery - gallery items - enable drag&drop between two lists
+				$( "#found-recent-photos, #chosen-recent-photos" ).sortable({
+					connectWith: "#chosen-recent-photos",
+					// when new article is dropped to related articles
+					receive: function(event, ui) {
+						var el = $(ui.item[0]),
+							receivedID = el.data('photo-id'),
+							articleID = self.article.resource_uri;
+
+						console.log(receivedID, articleID);
+						// save new relation
+						var item = new GalleryItem({
+							gallery: articleID,
+							photo: receivedID,
+							order: 0
+						});
+						item.save();
+						// Article.addRelatedArticle(articleID, receivedID, function(data){
+						// 	// add resource_uri to an element so that it can be deleted
+						// 	el.data('resource_id', data.id);
+						// 	el.append('<i class="icon-remove pull-right remove-related"></i>');
+						// });
 					}
 				}).disableSelection();
 
@@ -379,7 +406,7 @@ steal(
 			}
 			else {
 				// create new article model
-				this.article = new Article(values);
+				this.article = this.options.model === 'articles' ? new Article(values) : new Gallery(values);
 			}
 
 			// remove all error markup
@@ -522,7 +549,7 @@ steal(
 			// this is how draft should look like
 			var obj = {
 				//"user": "/admin-api/user/6/",
-				"content_type": 'article',
+				"content_type": this.options.model === 'articles' ? 'article' : 'gallery',
 				"data" : values
 			};
 
@@ -1172,6 +1199,37 @@ steal(
 		},
 
 		/**
+		 * find recent photos
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'.get-recent-photos click': function(el, ev) {
+
+			ev.preventDefault();
+
+			// TODO find all photos
+			Photo.findAll({}, function(data){
+				// append each photo to the list
+				$.each(data, function(i, photo){
+					$('#found-recent-photos').append('<li data-photo-id="'+photo.resource_uri+'"><img height="30px" src="'+photo.public_url+'" /> '+photo.title+'</li>');
+				});
+			});
+		},
+
+		/**
+		 * remove connected photo in gallery
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'.remove-recent-photo click' : function(el, ev) {
+
+			GalleryItem.destroy(el.parent().data('resource_id'));
+			el.parent().fadeOut();
+		},
+
+		/**
 		 * find snippets in textarea so that images etc. can be handled comfortably
 		 *
 		 * snippet example:
@@ -1364,7 +1422,7 @@ steal(
 			// TODO
 			var id = $('#id').val();
 
-			// save article before it is previews
+			// save article / gallery before it is previews
 			var errors = this.save();
 
 			if (errors === true) {

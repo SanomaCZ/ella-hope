@@ -1,3 +1,5 @@
+<% var model = this.model; %>
+
 <table class="table table-striped">
 	<thead>
 		<tr>
@@ -13,8 +15,14 @@
 	<tbody>
 		<% list(this.articles, function( article ) { %>
 			<%
-			var editUrl = can.route.url({ page: 'articles', action: 'edit', id: article.id });
-			var deleteUrl = can.route.url({ page: 'articles', action: 'delete', id: article.id });
+				if (model === 'articles') {
+					var editUrl = can.route.url({ page: 'articles', action: 'edit', id: article.id });
+					var deleteUrl = can.route.url({ page: 'articles', action: 'delete', id: article.id });
+				}
+				else if (model === 'gallery') {
+					var editUrl = can.route.url({ page: 'galleries', action: 'edit', id: article.id });
+					var deleteUrl = can.route.url({ page: 'galleries', action: 'delete', id: article.id });
+				}
 
 			var timestamp = Date.parse(article.publish_from);
 			var articleDate = timestamp.toString('yyyy-MM-dd');

@@ -2,7 +2,7 @@
 <%#  console.log(relatedArticles); %>
 
 <div class="page-header">
-	<h1><%= $.t('Articles - Edit') %></h1>
+	<h1><%= this.model === 'articles' ? $.t('Articles') : $.t('Galleries') %> - <%= $.t('Edit') %></h1>
 </div>
 
 <div class="hero-unit">
@@ -12,50 +12,14 @@
 
 		<div class="row pull-right">
 
-			<button class="btn btn-normal gallery"><%= $.t('Gallery')%></button>
-
-			<button class="btn btn-normal encyclopedia"><%= $.t('Encyclopedia')%></button>
+			<% if (this.model === 'articles') { %>
+				<button class="btn btn-normal encyclopedia"><%= $.t('Encyclopedia')%></button>
+			<% } %>
 
 			<% if (drafts.length) { %>
 				<button class="btn btn-normal draft-select"><%= $.t('Drafts / Templates')%></button>
 			<% } %>
 		</div>
-
-
-		<div class="control-group row" id="gallery-items">
-			<div class="span4 pull-left" style="margin-left: 0">
-				<label class="control-label"><%= $.t('Gallery items (gallery must have ID before adding)')%></label>
-				<ul id="chosen-related-articles" class="connectedSortable">
-					<% if (relatedArticles.length) { %>
-						<% $.each(relatedArticles, function(i, a) { %>
-							<li data-resource_id="<%= a.id %>">
-								<%= a.related.title %> <i class="icon-remove pull-right remove-related"></i>
-							</li>
-						<% }); %>
-					<% } %>
-				</ul>
-			</div>
-
-			<div class="span4 pull-left">
-				<label><%= $.t('Articles that can be added as related')%></label>
-				<ul id="found-related-articles" class="connectedSortable">
-				</ul>
-			</div>
-
-			<div class="span2 pull-left">
-				<label>&nbsp;</label>
-				<div class="control-group row" style="margin:0">
-					<button class="btn btn-mini get-related-articles"><%= $.t('get related articles')%></button>
-				</div>
-				&nbsp;
-				<div class="control-group row" style="margin:0">
-					<input type="text" class="span1 pull-left" name="related-name" placeholder="<%= $.t('Name') %>" />
-					&nbsp;
-					<button class="btn btn-mini get-articles-by-name"><%= $.t('find by name')%></button>
-				</div>
-			</div>
-		</div>
-
 
 		<div class="control-group row">
 			<label class="control-label required" for="title"><%= $.t('Title')%></label>
@@ -274,7 +238,7 @@
 
 		<div class="control-group row">
 			<div class="span4 pull-left" style="margin-left: 0">
-				<label class="control-label"><%= $.t('Related articles (article must have ID before adding)')%></label>
+				<label class="control-label"><%= $.t('Related articles (save before adding an article)')%></label>
 				<ul id="chosen-related-articles" class="connectedSortable">
 					<% if (relatedArticles.length) { %>
 						<% $.each(relatedArticles, function(i, a) { %>
@@ -307,6 +271,43 @@
 				</div>
 			</div>
 		</div>
+
+		<% if (this.model === 'gallery') { %>
+			<div class="control-group row" id="gallery-items">
+				<div class="span4 pull-left" style="margin-left: 0">
+					<label class="control-label"><%= $.t('Gallery items (save before adding a photo)')%></label>
+					<ul id="chosen-recent-photos" class="connectedSortable">
+						<% if (galleryitem.length) { %>
+							<% $.each(galleryitem, function(i, g) { %>
+								<li data-resource_id="<%= g.id %>">
+									<img height="30px" src="<%= g.photo.public_url %>" />
+									<%= g.photo.title %> <i class="icon-remove pull-right remove-recent-photo"></i>
+								</li>
+							<% }); %>
+						<% } %>
+					</ul>
+				</div>
+
+				<div class="span4 pull-left">
+					<label><%= $.t('List of recent photos')%></label>
+					<ul id="found-recent-photos" class="connectedSortable">
+					</ul>
+				</div>
+
+				<div class="span2 pull-left">
+					<label>&nbsp;</label>
+					<div class="control-group row" style="margin:0">
+						<button class="btn btn-mini get-recent-photos"><%= $.t('get recent photos')%></button>
+					</div>
+					&nbsp;
+					<div class="control-group row" style="margin:0">
+						<input type="text" class="span1 pull-left" name="related-name" placeholder="<%= $.t('Name') %>" />
+						&nbsp;
+						<button class="btn btn-mini get-photos-by-name"><%= $.t('find by name')%></button>
+					</div>
+				</div>
+			</div>
+		<% } %>
 
 		<div class="control-group row pull-left">
 			<div class="span4 pull-left" style="margin-left: 0">
