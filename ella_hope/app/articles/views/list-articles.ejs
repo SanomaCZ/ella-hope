@@ -46,7 +46,9 @@
 					</a>
 
 					<!-- Delete -->
-					<a <%= (el) -> el.data( 'article', article ) %> href="javascript://" class="btn btn-mini btn-danger delete" data-confirm="<%= $.t('Are you sure you want to delete the article?') %>"><%= $.t('Delete');%> <i class="icon-trash icon-white"></i></a>
+					<a <%= (el) -> el.data( 'article', article ) %> href="javascript://" class="btn btn-mini btn-danger delete" data-confirm="<%= $.t('Are you sure you want to delete the article?') %>">
+						<%= $.t('Delete');%> <i class="icon-trash icon-white"></i>
+					</a>
 				</td>
 			</tr>
 		<% } ) %>
