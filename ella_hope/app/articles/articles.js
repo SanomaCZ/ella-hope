@@ -333,6 +333,9 @@ steal(
 
 			// show/hide filtering form
 			$('.filter-form').toggle();
+
+			var old_val = $.cookie(window.HOPECFG.COOKIE_FILTER) || 'false';
+			$.cookie(window.HOPECFG.COOKIE_FILTER, old_val == 'true' ? 'false': 'true', {path: '/'});
 		},
 
 		/**

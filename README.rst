@@ -24,6 +24,13 @@ Start server
 	python -m SimpleHTTPServer
 
 
+Configuration
+-------------
+
+Default configuration is saved in 'config' directory.
+Overwrite those configuration directly in files or
+create an alias for given directory in webserver.
+
 
 Contacts
 --------
