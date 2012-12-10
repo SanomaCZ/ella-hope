@@ -53,10 +53,6 @@ steal(
 			} ).then(function( frag ){
 				self.element.html(frag);
 
-				$('#file').on('change', function(){
-					self.fileChange();
-				});
-
 				var jcropOptions = self.options.jcropOptions;
 
 				// enable chosen select for authors
@@ -109,6 +105,10 @@ steal(
 			});
 
 			this.element.slideDown(200);
+		},
+
+		'#file change': function(){
+			this.fileChange();
 		},
 
 		/**
