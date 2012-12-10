@@ -563,7 +563,7 @@ steal(
 			}
 
 			// set current form values to the draft model
-			this.draft.attr(obj);
+			this.draft.attr(obj, true);
 
 			if (id) {
 				this.draft.attr('id', id);
