@@ -375,7 +375,7 @@ steal(
 			}
 
 			// if photo_displayed is not present, set to true
-			else values['photo_displayed'] = Boolean(values['photo_displayed'])
+			values['photo_displayed'] = Boolean(values['photo_displayed'])
 
 			// if main_tag was selected, add it as object into tags attribute
 			// then delete main_tag
