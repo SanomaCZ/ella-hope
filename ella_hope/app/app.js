@@ -2,7 +2,7 @@ steal(
 	'./app.css'					// application CSS file
 	, 'can/control/route'					// enable routing
 	, './login/login.js'				// login module
-	, '//app/config/config.js'
+	, '//config/config.js'
 )
 .then(
 	'./resources/js/jquery.jsperanto.js'	// translation library
