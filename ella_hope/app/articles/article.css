@@ -99,3 +99,7 @@ button.add-author, button.add-tag {
 	background-color: rgb(245, 245, 245);
 	cursor: pointer;
 }
+
+#chosen-recent-photos, #found-recent-photos {
+	height: 400px;
+}

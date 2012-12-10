@@ -13,7 +13,6 @@ steal(
 	'//app/resources/js/jquery-ui/jquery.ui.mouse.js'
 )
 .then(
-
 	'//app/resources/js/jquery-ui/jquery.ui.draggable.js',
 	'//app/resources/js/jquery-ui/jquery.ui.droppable.js',
 	'//app/resources/js/jquery-ui/jquery.ui.sortable.js',
@@ -219,7 +218,6 @@ steal(
 							receivedID = el.data('photo-id'),
 							articleID = self.article.resource_uri;
 
-						console.log(receivedID, articleID);
 						// save new relation
 						var item = new GalleryItem({
 							gallery: articleID,
@@ -1208,12 +1206,49 @@ steal(
 
 			ev.preventDefault();
 
+			var self = this;
+
 			// TODO find all photos
-			Photo.findAll({}, function(data){
-				// append each photo to the list
-				$.each(data, function(i, photo){
-					$('#found-recent-photos').append('<li data-photo-id="'+photo.resource_uri+'"><img height="30px" src="'+photo.public_url+'" /> '+photo.title+'</li>');
-				});
+			Photo.findAll({}, function(photos){
+				self.renderRecentPhotos(photos);
+			});
+		},
+
+		/**
+		 * find photos by name se that they can be added to gallery
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'.get-photos-by-name click': function(el, ev) {
+
+			var self = this;
+
+			ev.preventDefault();
+
+			// name that should be searched
+			var search = el.siblings('input[name=related-name]').val();
+
+			// search in title
+			var data = "title__icontains=" + search;
+
+			Photo.findAll(data, function(photos){
+				self.renderRecentPhotos(photos);
+			});
+		},
+
+		/**
+		 * render found photos, which can be added as galleryitem
+		 * @param  {[type]} photos [description]
+		 * @return {[type]}        [description]
+		 */
+		renderRecentPhotos: function(photos) {
+
+			// empty list with photos if there are any
+			$('#found-recent-photos').empty();
+
+			$.each(photos, function(i, photo){
+				$('#found-recent-photos').append('<li data-photo-id="'+photo.resource_uri+'"><img height="60px" src="'+photo.public_url+'" /> '+photo.title+'</li>');
 			});
 		},
 

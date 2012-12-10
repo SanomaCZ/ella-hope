@@ -60,7 +60,7 @@ steal(
 				// 	});
 
 				$(".filter-form select").on('change', function(ev){
-						self.filterPhotos();
+					self.filterPhotos();
 				});
 
 				// enable chosen select for authors

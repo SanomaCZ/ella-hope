@@ -256,7 +256,7 @@
 				</ul>
 			</div>
 
-			<div class="span2 pull-left">
+			<div class="span pull-left">
 				<label>&nbsp;</label>
 				<div class="control-group row" style="margin:0">
 					<button class="btn btn-mini get-related-articles" title="<%= $.t('relation is evaluated by tags') %>">
@@ -265,7 +265,7 @@
 				</div>
 				&nbsp;
 				<div class="control-group row" style="margin:0">
-					<input type="text" class="span1 pull-left" name="related-name" placeholder="<%= $.t('Name') %>" />
+					<input type="text" class="span2 pull-left" name="related-name" placeholder="<%= $.t('Name') %>" />
 					&nbsp;
 					<button class="btn btn-mini get-articles-by-name"><%= $.t('find by name')%></button>
 				</div>
@@ -280,7 +280,7 @@
 						<% if (galleryitem.length) { %>
 							<% $.each(galleryitem, function(i, g) { %>
 								<li data-resource_id="<%= g.id %>">
-									<img height="30px" src="<%= g.photo.public_url %>" />
+									<img height="60px" src="<%= g.photo.public_url %>" />
 									<%= g.photo.title %> <i class="icon-remove pull-right remove-recent-photo"></i>
 								</li>
 							<% }); %>
@@ -294,14 +294,14 @@
 					</ul>
 				</div>
 
-				<div class="span2 pull-left">
+				<div class="span pull-left">
 					<label>&nbsp;</label>
 					<div class="control-group row" style="margin:0">
 						<button class="btn btn-mini get-recent-photos"><%= $.t('get recent photos')%></button>
 					</div>
 					&nbsp;
 					<div class="control-group row" style="margin:0">
-						<input type="text" class="span1 pull-left" name="related-name" placeholder="<%= $.t('Name') %>" />
+						<input type="text" class="span2 pull-left" name="related-name" placeholder="<%= $.t('Name') %>" />
 						&nbsp;
 						<button class="btn btn-mini get-photos-by-name"><%= $.t('find by name')%></button>
 					</div>
