@@ -601,7 +601,7 @@ steal(
 
 			if (errors === true) {
 				// redirect to articles list
-				can.route.attr({page:'articles'}, true);
+				can.route.attr({page: this.options.model == 'gallery' ? 'galleries': 'articles'}, true);
 			}
 			else {
 				this.showErrors(errors);
