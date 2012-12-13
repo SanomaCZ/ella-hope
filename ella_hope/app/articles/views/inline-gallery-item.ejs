@@ -1,0 +1,14 @@
+<% if (typeof item != "undefined") { %>
+	<li data-resource_id="<%= item.id %>">
+<% } else { %>
+	<li data-photo-id="<%= photo.resource_uri %>">
+<% } %>
+	<img height="60px" src="<%= photo.public_url %>" />
+	<span data-value="<%= photo.title %>">
+		<span class="value">
+			<%= photo.title %>
+		</span>
+		<i class="icon-pencil change-galleryitem-title" title="<%= $.t('Change photo\'s title') %>"></i>
+	</span>
+	<i class="icon-remove pull-right remove-recent-photo"></i>
+</li>

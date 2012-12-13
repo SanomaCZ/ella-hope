@@ -1245,10 +1245,13 @@ steal(
 		renderRecentPhotos: function(photos) {
 
 			// empty list with photos if there are any
-			$('#found-recent-photos').empty();
+			var el = $('#found-recent-photos');
+			el.empty();
 
 			$.each(photos, function(i, photo){
-				$('#found-recent-photos').append('<li data-photo-id="'+photo.resource_uri+'"><img height="60px" src="'+photo.public_url+'" /> '+photo.title+'</li>');
+				el.append(can.view.render('//app/articles/views/inline-gallery-item.ejs', {
+					photo: photo
+				}));
 			});
 		},
 
@@ -1259,9 +1262,18 @@ steal(
 		 * @return {[type]}    [description]
 		 */
 		'.remove-recent-photo click' : function(el, ev) {
+			var parent = el.parent();
+			GalleryItem.destroy(parent.data('resource_id'));
+			parent.fadeOut();
+		},
 
-			GalleryItem.destroy(el.parent().data('resource_id'));
-			el.parent().fadeOut();
+		'#chosen-recent-photos .change-galleryitem-title click': function(el, ev) {
+			var parent = el.parent('span');
+			var title = prompt($.t("Enter photo title"), parent.data('value'));
+			if (title !== null) {
+				parent.find('span.value')[0].innerHTML = title;
+				parent.data('value', title);
+			}
 		},
 
 		/**

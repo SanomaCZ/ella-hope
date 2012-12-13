@@ -95,6 +95,7 @@ button.add-author, button.add-tag {
 	margin: 2px;
 	cursor: move;
 }
+.icon-pencil:hover,
 .icon-remove:hover {
 	background-color: rgb(245, 245, 245);
 	cursor: pointer;
@@ -102,4 +103,9 @@ button.add-author, button.add-tag {
 
 #chosen-recent-photos, #found-recent-photos {
 	height: 400px;
+}
+
+#found-recent-photos i.icon-pencil,
+#found-recent-photos i.icon-remove {
+	display: none;
 }
