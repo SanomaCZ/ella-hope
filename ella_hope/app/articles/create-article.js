@@ -222,7 +222,9 @@ steal(
 						var item = new GalleryItem({
 							gallery: articleID,
 							photo: receivedID,
-							order: 0
+							order: 0,
+							title: el.data('title')
+
 						});
 						item.save();
 						// Article.addRelatedArticle(articleID, receivedID, function(data){
@@ -1264,15 +1266,20 @@ steal(
 		'.remove-recent-photo click' : function(el, ev) {
 			var parent = el.parent();
 			GalleryItem.destroy(parent.data('resource_id'));
-			parent.fadeOut();
+			parent.fadeOut().remove();
 		},
 
 		'#chosen-recent-photos .change-galleryitem-title click': function(el, ev) {
-			var parent = el.parent('span');
-			var title = prompt($.t("Enter photo title"), parent.data('value'));
+			var parent = el.parent('li');
+			var curr_title = parent.data('title');
+			var title = prompt($.t("Enter photo title"), curr_title);
+
 			if (title !== null) {
 				parent.find('span.value')[0].innerHTML = title;
-				parent.data('value', title);
+				parent.data('title', title);
+				if ( title != curr_title) {
+					GalleryItem.update(parent.data('resource_id'), {title: title});
+				}
 			}
 		},
 

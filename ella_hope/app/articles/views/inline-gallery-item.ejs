@@ -1,10 +1,9 @@
 <% if (typeof item != "undefined") { %>
-	<li data-resource_id="<%= item.id %>">
+	<li data-resource_id="<%= item.id %>" data-title="<%= photo.title %>">
 <% } else { %>
-	<li data-photo-id="<%= photo.resource_uri %>">
+	<li data-photo-id="<%= photo.resource_uri %>" data-title="<%= photo.title %>">
 <% } %>
 	<img height="60px" src="<%= photo.public_url %>" />
-	<span data-value="<%= photo.title %>">
 		<span class="value">
 			<%= photo.title %>
 		</span>
