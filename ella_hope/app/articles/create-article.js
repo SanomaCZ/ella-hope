@@ -95,7 +95,7 @@ steal(
 			if (!this.article) {
 				//console.log('new article');
 				// we want to create a new article / gallery
-				this.article = this.options.model === 'article' ? new Article() : new Gallery();
+				this.article = this.options.model === 'articles' ? new Article() : new Gallery();
 			}
 
 			// parse publishFrom date
