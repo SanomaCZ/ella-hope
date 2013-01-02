@@ -10,3 +10,7 @@ form .required:after {
     content: ' *';
     display:inline;
 }
+
+.chzn-container {
+	float: left;
+}

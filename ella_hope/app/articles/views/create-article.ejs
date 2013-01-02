@@ -33,7 +33,7 @@
 				<input class="slug" type="text" name="slug" id="slug" placeholder="<%= $.t('Press "slug from title" button to generate slug')%>"
 				value="<%= article.attr('slug') %>" >
 				<span class="help-inline"></span>
-				<button class="btn btn-mini slug-from-title"><%= $.t('slug from title')%></button>
+				<button class="btn btn-normal slug-from-title"><%= $.t('slug from title')%></button>
 			</div>
 		</div>
 
@@ -58,6 +58,77 @@
 				<span class="help-inline"></span>
 			</div>
 		</div>
+
+		<div class="control-group row">
+			<label class="control-label required" for="authors"><%= $.t('Author(s)')%></label>
+			<div class="controls">
+				<select name="authors[]" data-placeholder="<%= $.t('Choose authors')%>" class="chzn-select authors-article authors" multiple>
+				<% if (author) { %>
+					<% $.each(author, function(i, a){ %>
+					<%
+						var selected = false;
+						if (article.authors) {
+							for (var i = 0; i < article.authors.length; i++) {
+								if (article.authors[i]['id'] == a.id) {
+									selected = true;
+									break;
+								}
+							}
+						}
+					%>
+						<option value="<%= a.resource_uri %>" <%= selected ? "selected=selected" : "" %>><%= a.name %></option>
+					<% }) %>
+				<% } %>
+				</select>
+				<span class="help-inline"></span>
+				<button class="btn btn-normal add-author-articles"><%= $.t('add new author')%></button>
+			</div>
+		</div>
+
+		<div class="control-group row">
+			<label class="control-label required" for="content"><%= $.t('Content')%></label>
+			<div class="controls pull-left">
+				<textarea class="content" rows="10" name="content" placeholder="<%= $.t('Add Content')%>"><%= article.content %></textarea>
+				<span class="help-inline"></span>
+			</div>
+			<div class="box-snippet"></div>
+		</div>
+
+		<div class="control-group row pull-left">
+			<div class="span4 pull-left" style="margin-left: 0">
+				<label class="control-label required" for="publish_from"><%= $.t('Publish From')%></label>
+				<div class="controls">
+					<input class="span2 publish_from" type="datetime-local" name="publish_from_date" id="publish_from" value="<%= article.publish_from_date %>" />
+
+					<input type="text" class="timepicker-default span1 publish_from" name="publish_from_time" id="publish_from_time" value="<%= article.publish_from_time %>" />
+
+					<button class="btn btn-normal set-date-now" data-target-date="publish_from_date"><%= $.t('today') %></button>
+					<button class="btn btn-normal set-datetime-now" data-target-date="publish_from_date"
+						data-target-time="publish_from_time"><%= $.t('now') %></button>
+
+					<span class="help-inline"></span>
+				</div>
+				<div id="date-alert"><%= $.t('Please, correct the dates.')%></div>
+			</div>
+		</div>
+		<div class="control-group row">
+			<div class="span4 pull-left">
+				<label class="control-label" for="publish_to"><%= $.t('Publish To')%></label>
+				<div class="controls">
+					<input class="span2 publish_to" type="datetime-local" name="publish_to_date" id="publish_to" value="<%= article.publish_to_date %>" />
+
+					<input type="text" class="timepicker-default span1" name="publish_to_time" id="publish_to_time" value="<%= article.publish_to_time %>" />
+
+					<button class="btn btn-normal set-date-now" data-target-date="publish_to_date"><%= $.t('today') %></button>
+					<button class="btn btn-normal set-datetime-now" data-target-date="publish_to_date"
+						data-target-time="publish_to_time"><%= $.t('now') %></button>
+
+					<span class="help-inline"></span>
+				</div>
+			</div>
+		</div>
+
+		<!-- non-required fields -->
 
 		<div class="control-group row">
 			<label class="control-label" for="listing"><%= $.t('Side Category')%></label>
@@ -109,8 +180,8 @@
 
 						<input type="text" class="timepicker-default span1 listing_publish_from" name="listing_publish_from_time" id="listing_publish_from_time" value="<%= listingAttr.publish_from_time %>" />
 
-						<button class="btn btn-mini set-date-now" data-target-date="listing_publish_from_date"><%= $.t('today') %></button>
-						<button class="btn btn-mini set-datetime-now" data-target-date="listing_publish_from_date"
+						<button class="btn btn-normal set-date-now" data-target-date="listing_publish_from_date"><%= $.t('today') %></button>
+						<button class="btn btn-normal set-datetime-now" data-target-date="listing_publish_from_date"
 							data-target-time="listing_publish_from_time"><%= $.t('now') %></button>
 
 						<span class="help-inline"></span>
@@ -127,8 +198,8 @@
 
 						<input type="text" class="timepicker-default span1 listing_publish_to" name="listing_publish_to_time" id="listing_publish_to_time" value="<%= listingAttr.publish_to_time %>" />
 
-						<button class="btn btn-mini set-date-now" data-target-date="listing_publish_to_date"><%= $.t('today') %></button>
-						<button class="btn btn-mini set-datetime-now" data-target-date="listing_publish_to_date"
+						<button class="btn btn-normal set-date-now" data-target-date="listing_publish_to_date"><%= $.t('today') %></button>
+						<button class="btn btn-normal set-datetime-now" data-target-date="listing_publish_to_date"
 							data-target-time="listing_publish_to_time"><%= $.t('now') %></button>
 
 						<span class="help-inline"></span>
@@ -142,32 +213,6 @@
 				<span class="help-inline"></span>
 			</div>
 
-		</div>
-
-		<div class="control-group row">
-			<label class="control-label required" for="authors"><%= $.t('Author(s)')%></label>
-			<div class="controls">
-				<select name="authors[]" data-placeholder="<%= $.t('Choose authors')%>" class="chzn-select authors-article authors" multiple>
-				<% if (author) { %>
-					<% $.each(author, function(i, a){ %>
-					<%
-						var selected = false;
-						if (article.authors) {
-							for (var i = 0; i < article.authors.length; i++) {
-								if (article.authors[i]['id'] == a.id) {
-									selected = true;
-									break;
-								}
-							}
-						}
-					%>
-						<option value="<%= a.resource_uri %>" <%= selected ? "selected=selected" : "" %>><%= a.name %></option>
-					<% }) %>
-				<% } %>
-				</select>
-				<span class="help-inline"></span>
-				<button class="btn btn-mini add-author-articles"><%= $.t('add new author')%></button>
-			</div>
 		</div>
 
 		<div class="control-group row">
@@ -190,17 +235,8 @@
 				<% } %>
 				</select>
 				<span class="help-inline"></span>
-				<button class="btn btn-mini add-source" data-target="article-source"><%= $.t('add new source')%></button>
+				<button class="btn btn-normal add-source" data-target="article-source"><%= $.t('add new source')%></button>
 			</div>
-		</div>
-
-		<div class="control-group row">
-			<label class="control-label required" for="content"><%= $.t('Content')%></label>
-			<div class="controls pull-left">
-				<textarea class="content" rows="10" name="content" placeholder="<%= $.t('Add Content')%>"><%= article.content %></textarea>
-				<span class="help-inline"></span>
-			</div>
-			<div class="box-snippet"></div>
 		</div>
 
 		<div class="control-group row" id="photos-preview"></div>
@@ -222,14 +258,40 @@
 					titlePhotoInserted = true;
 				} %>
 				<div class="title-photo-empty" <%= titlePhotoInserted === false ? '' : 'style=display:none' %>>
-					<button class="btn btn-mini add-photo"><%= $.t('add photo')%></button>
+					<button class="btn btn-normal add-photo"><%= $.t('add photo')%></button>
 				</div>
 				<div class="title-photo" <%= titlePhotoInserted === true ? '' : 'style=display:none' %>>
 					<img src="<%= article.photo ? article.photo.public_url : '' %>" />
-					<button class="btn btn-mini remove-photo"><%= $.t('remove photo')%></button>
+					<button class="btn btn-normal remove-photo"><%= $.t('remove photo')%></button>
 				</div>
 				<input type="hidden" name="photo" value="<%= article.photo ? article.photo.resource_uri : '' %>" />
 				<span class="help-inline"></span>
+			</div>
+		</div>
+
+		<div class="control-group row">
+			<label class="control-label" for="tags"><%= $.t('Tag(s)')%></label>
+			<div class="controls">
+				<select name="tags[]" data-placeholder="<%= $.t('Choose tags')%>" class="chzn-select article-tags span8" multiple>
+				<% if (tag) { %>
+					<% $.each(tag, function(i, t){ %>
+					<%
+						var selected = false;
+						if (article.tags) {
+							for (var i = 0; i < article.tags.length; i++) {
+								if (article.tags[i]['id'] == t.id && article.tags[i].main_tag !== true) {
+									selected = true;
+									break;
+								}
+							}
+						}
+					%>
+						<option value="<%= t.resource_uri %>" <%= selected ? "selected=selected" : "" %>><%= t.name %></option>
+					<% }) %>
+				<% } %>
+				</select>
+				<span class="help-inline"></span>
+				<button class="btn btn-normal add-tag-articles" data-target="article-tags"><%= $.t('add new tag')%></button>
 			</div>
 		</div>
 
@@ -256,7 +318,7 @@
 			<div class="span pull-left">
 				<label>&nbsp;</label>
 				<div class="control-group row" style="margin:0">
-					<button class="btn btn-mini get-related-articles" title="<%= $.t('relation is evaluated by tags') %>">
+					<button class="btn btn-normal get-related-articles" title="<%= $.t('relation is evaluated by tags') %>">
 						<%= $.t('get related articles')%>
 					</button>
 				</div>
@@ -264,7 +326,7 @@
 				<div class="control-group row" style="margin:0">
 					<input type="text" class="span2 pull-left" name="related-name" placeholder="<%= $.t('Name') %>" />
 					&nbsp;
-					<button class="btn btn-mini get-articles-by-name"><%= $.t('find by name')%></button>
+					<button class="btn btn-normal get-articles-by-name"><%= $.t('find by name')%></button>
 				</div>
 			</div>
 		</div>
@@ -292,77 +354,17 @@
 				<div class="span pull-left">
 					<label>&nbsp;</label>
 					<div class="control-group row" style="margin:0">
-						<button class="btn btn-mini get-recent-photos"><%= $.t('get recent photos')%></button>
+						<button class="btn btn-normal get-recent-photos"><%= $.t('get recent photos')%></button>
 					</div>
 					&nbsp;
 					<div class="control-group row" style="margin:0">
 						<input type="text" class="span2 pull-left" name="related-name" placeholder="<%= $.t('Name') %>" />
 						&nbsp;
-						<button class="btn btn-mini get-photos-by-name"><%= $.t('find by name')%></button>
+						<button class="btn btn-normal get-photos-by-name"><%= $.t('find by name')%></button>
 					</div>
 				</div>
 			</div>
 		<% } %>
-
-		<div class="control-group row pull-left">
-			<div class="span4 pull-left" style="margin-left: 0">
-				<label class="control-label required" for="publish_from"><%= $.t('Publish From')%></label>
-				<div class="controls">
-					<input class="span2 publish_from" type="datetime-local" name="publish_from_date" id="publish_from" value="<%= article.publish_from_date %>" />
-
-					<input type="text" class="timepicker-default span1 publish_from" name="publish_from_time" id="publish_from_time" value="<%= article.publish_from_time %>" />
-
-					<button class="btn btn-mini set-date-now" data-target-date="publish_from_date"><%= $.t('today') %></button>
-					<button class="btn btn-mini set-datetime-now" data-target-date="publish_from_date"
-						data-target-time="publish_from_time"><%= $.t('now') %></button>
-
-					<span class="help-inline"></span>
-				</div>
-				<div id="date-alert"><%= $.t('Please, correct the dates.')%></div>
-			</div>
-		</div>
-		<div class="control-group row">
-			<div class="span4 pull-left">
-				<label class="control-label" for="publish_to"><%= $.t('Publish To')%></label>
-				<div class="controls">
-					<input class="span2 publish_to" type="datetime-local" name="publish_to_date" id="publish_to" value="<%= article.publish_to_date %>" />
-
-					<input type="text" class="timepicker-default span1" name="publish_to_time" id="publish_to_time" value="<%= article.publish_to_time %>" />
-
-					<button class="btn btn-mini set-date-now" data-target-date="publish_to_date"><%= $.t('today') %></button>
-					<button class="btn btn-mini set-datetime-now" data-target-date="publish_to_date"
-						data-target-time="publish_to_time"><%= $.t('now') %></button>
-
-					<span class="help-inline"></span>
-				</div>
-			</div>
-		</div>
-
-		<div class="control-group row">
-			<label class="control-label" for="tags"><%= $.t('Tag(s)')%></label>
-			<div class="controls">
-				<select name="tags[]" data-placeholder="<%= $.t('Choose tags')%>" class="chzn-select article-tags span8" multiple>
-				<% if (tag) { %>
-					<% $.each(tag, function(i, t){ %>
-					<%
-						var selected = false;
-						if (article.tags) {
-							for (var i = 0; i < article.tags.length; i++) {
-								if (article.tags[i]['id'] == t.id && article.tags[i].main_tag !== true) {
-									selected = true;
-									break;
-								}
-							}
-						}
-					%>
-						<option value="<%= t.resource_uri %>" <%= selected ? "selected=selected" : "" %>><%= t.name %></option>
-					<% }) %>
-				<% } %>
-				</select>
-				<span class="help-inline"></span>
-				<button class="btn btn-mini add-tag-articles" data-target="article-tags"><%= $.t('add new tag')%></button>
-			</div>
-		</div>
 
 		<div class="control-group row">
 			<label class="control-label" for="main_tag"><%= $.t('Main Tag')%></label>
@@ -386,7 +388,7 @@
 					<% } %>
 				</select>
 				<span class="help-inline"></span>
-				<button class="btn btn-mini add-tag-articles" data-target="article-main-tag"><%= $.t('add new tag')%></button>
+				<button class="btn btn-normal add-tag-articles" data-target="article-main-tag"><%= $.t('add new tag')%></button>
 			</div>
 		</div>
 
@@ -491,7 +493,7 @@
 			<label for="slug">Slug</label>
 			<input type="text" name="slug" />
 
-			<button class="btn btn-mini slug-from-name"><%= $.t('slug from name')%></button>
+			<button class="btn btn-normal slug-from-name"><%= $.t('slug from name')%></button>
 		</form>
 	</div>
 	<div class="modal-footer">
@@ -553,7 +555,7 @@
 			<label for="author-slug"><%= $.t('Slug')%></label>
 			<input type="text" name="slug" />
 
-			<button class="btn btn-mini slug-from-name"><%= $.t('slug from name')%></button>
+			<button class="btn btn-normal slug-from-name"><%= $.t('slug from name')%></button>
 		</form>
 	</div>
 	<div class="modal-footer">
@@ -592,12 +594,12 @@
 						<td><%= draftDate %> <%= draftTime %></td>
 						<td>
 							<!-- Edit -->
-							<a <%= (el) -> el.data( 'article', draft ) %> href="<%= editUrl %>" class="btn btn-mini edit-draft">
+							<a <%= (el) -> el.data( 'article', draft ) %> href="<%= editUrl %>" class="btn btn-normal edit-draft">
 								<%= $.t('Edit');%> <i class="icon-pencil"></i>
 							</a>
 
 							<!-- Delete -->
-							<a <%= (el) -> el.data( 'article', draft ) %> href="javascript://" class="btn btn-mini btn-danger delete" data-confirm="<%= $.t('Are you sure you want to delete the draft?') %>"><%= $.t('Delete');%> <i class="icon-trash icon-white"></i></a>
+							<a <%= (el) -> el.data( 'article', draft ) %> href="javascript://" class="btn btn-normal btn-danger delete" data-confirm="<%= $.t('Are you sure you want to delete the draft?') %>"><%= $.t('Delete');%> <i class="icon-trash icon-white"></i></a>
 						</td>
 					</tr>
 				<% }) %>
