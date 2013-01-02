@@ -21,7 +21,7 @@ steal(
 	/* @static */
 	{
 		defaults: {
-			autosaveInterval: 30 * 1000,	// how ofter is draft automatically saved
+			autosaveInterval: 15 * 1000,	// how ofter is draft automatically saved
 			encyclopediaCategory: '/admin-api/category/3/',
 			markitupSettings: {
 				previewParserPath:	'',
@@ -93,9 +93,10 @@ steal(
 
 			this.article = article;
 			if (!this.article) {
+
 				//console.log('new article');
 				// we want to create a new article / gallery
-				this.article = this.options.model === 'article' ? new Article() : new Gallery();
+				this.article = this.options.model === 'articles' ? new Article() : new Gallery();
 			}
 
 			// parse publishFrom date
@@ -396,16 +397,8 @@ steal(
 			// app_data is required to be sent, althougt it's empty now
 			values['app_data'] = null;
 
-			if (!values['id']) delete values['id'];
-
-			// if article exists, update its values
-			if (this.article) {
-				this.article.attr(values, true);
-			}
-			else {
-				// create new article model
-				this.article = this.options.model === 'articles' ? new Article(values) : new Gallery(values);
-			}
+			// update article's values
+			this.article.attr(values);
 
 			// remove all error markup
 			$('form.article .control-group').removeClass('error');
@@ -600,8 +593,12 @@ steal(
 			var errors = this.save();
 
 			if (errors === true) {
+
+				// stop autosave when leaving article
+				this.stopAutosave();
+
 				// redirect to list
-				var page = this.options.model === 'article' ? 'articles' : 'galleries';
+				var page = this.options.model === 'articles' ? 'articles' : 'galleries';
 				can.route.attr({page: page}, true);
 			}
 			else {
@@ -620,7 +617,7 @@ steal(
 
 			this.deleteDraft();
 
-			var page = this.options.model === 'article' ? 'articles' : 'galleries';
+			var page = this.options.model === 'articles' ? 'articles' : 'galleries';
 			can.route.attr({page: page}, true);
 		},
 

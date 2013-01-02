@@ -132,7 +132,8 @@ steal(
 								article: article,
 								articleStates: self.options.articleStates,
 								articleComments: self.options.articleComments,
-								dateOptions: self.options.dateOptions
+								dateOptions: self.options.dateOptions,
+								model: 'articles'
 							});
 						});
 					}
@@ -144,7 +145,7 @@ steal(
 								articleStates: self.options.articleStates,
 								articleComments: self.options.articleComments,
 								dateOptions: self.options.dateOptions,
-								model: 'gallery'
+								model: 'galleries'
 							});
 						});
 					}

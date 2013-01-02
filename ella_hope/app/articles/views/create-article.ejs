@@ -5,7 +5,9 @@
 <div class="hero-unit">
 	<form class="article">
 
-		<input type="hidden" name="id" id="id" <%= article.id ? "value=" + article.id : "" %> />
+		<% if (article.id) { %>
+			<input type="hidden" name="id" id="id" value="<%= article.id  %>" />
+		<% } %>
 
 		<div class="row pull-right">
 
