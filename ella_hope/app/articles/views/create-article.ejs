@@ -51,7 +51,7 @@
 							}
 						}
 					%>
-						<option value="<%= cat.resource_uri %>" <%= selected ? "selected=selected" : "" %>><%= cat.title %></option>
+						<option value="<%= cat.resource_uri %>" <%= selected ? "selected=selected" : "" %>><%= cat.full_title %></option>
 					<% }) %>
 				<% } %>
 				</select>
@@ -91,7 +91,7 @@
 							selected = true;
 						}
 					%>
-						<option value="<%= cat.resource_uri %>" <%= selected ? "selected=selected" : "" %>><%= cat.title %></option>
+						<option value="<%= cat.resource_uri %>" <%= selected ? "selected=selected" : "" %>><%= cat.full_title %></option>
 					<% }) %>
 				<% } %>
 				</select>
