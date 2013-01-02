@@ -95,7 +95,7 @@ steal(
 			if (!this.article) {
 				//console.log('new article');
 				// we want to create a new article / gallery
-				this.article = this.options.model === 'articles' ? new Article() : new Gallery();
+				this.article = this.options.model === 'article' ? new Article() : new Gallery();
 			}
 
 			// parse publishFrom date
@@ -222,9 +222,7 @@ steal(
 						var item = new GalleryItem({
 							gallery: articleID,
 							photo: receivedID,
-							order: 0,
-							title: el.data('title')
-
+							order: 0
 						});
 						item.save();
 						// Article.addRelatedArticle(articleID, receivedID, function(data){
@@ -377,7 +375,7 @@ steal(
 			}
 
 			// if photo_displayed is not present, set to true
-			values['photo_displayed'] = Boolean(values['photo_displayed'])
+			else values['photo_displayed'] = Boolean(values['photo_displayed'])
 
 			// if main_tag was selected, add it as object into tags attribute
 			// then delete main_tag
@@ -602,8 +600,9 @@ steal(
 			var errors = this.save();
 
 			if (errors === true) {
-				// redirect to articles list
-				can.route.attr({page: this.options.model == 'gallery' ? 'galleries': 'articles'}, true);
+				// redirect to list
+				var page = this.options.model === 'article' ? 'articles' : 'galleries';
+				can.route.attr({page: page}, true);
 			}
 			else {
 				this.showErrors(errors);
@@ -621,7 +620,8 @@ steal(
 
 			this.deleteDraft();
 
-			can.route.attr({page:'articles'}, true);
+			var page = this.options.model === 'article' ? 'articles' : 'galleries';
+			can.route.attr({page: page}, true);
 		},
 
 		/**
@@ -1247,13 +1247,10 @@ steal(
 		renderRecentPhotos: function(photos) {
 
 			// empty list with photos if there are any
-			var el = $('#found-recent-photos');
-			el.empty();
+			$('#found-recent-photos').empty();
 
 			$.each(photos, function(i, photo){
-				el.append(can.view.render('//app/articles/views/inline-gallery-item.ejs', {
-					photo: photo
-				}));
+				$('#found-recent-photos').append('<li data-photo-id="'+photo.resource_uri+'"><img height="60px" src="'+photo.public_url+'" /> '+photo.title+'</li>');
 			});
 		},
 
@@ -1264,23 +1261,9 @@ steal(
 		 * @return {[type]}    [description]
 		 */
 		'.remove-recent-photo click' : function(el, ev) {
-			var parent = el.parent();
-			GalleryItem.destroy(parent.data('resource_id'));
-			parent.fadeOut().remove();
-		},
 
-		'#chosen-recent-photos .change-galleryitem-title click': function(el, ev) {
-			var parent = el.parent('li');
-			var curr_title = parent.data('title');
-			var title = prompt($.t("Enter photo title"), curr_title);
-
-			if (title !== null) {
-				parent.find('span.value')[0].innerHTML = title;
-				parent.data('title', title);
-				if ( title != curr_title) {
-					GalleryItem.update(parent.data('resource_id'), {title: title});
-				}
-			}
+			GalleryItem.destroy(el.parent().data('resource_id'));
+			el.parent().fadeOut();
 		},
 
 		/**
