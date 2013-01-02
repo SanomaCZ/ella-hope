@@ -21,7 +21,7 @@ steal(
 	/* @static */
 	{
 		defaults: {
-			autosaveInterval: 15 * 1000,	// how ofter is draft automatically saved
+			autosaveInterval: 30 * 1000,	// how ofter is draft automatically saved
 			encyclopediaCategory: '/admin-api/category/3/',
 			markitupSettings: {
 				previewParserPath:	'',
@@ -397,8 +397,17 @@ steal(
 			// app_data is required to be sent, althougt it's empty now
 			values['app_data'] = null;
 
+			// when setting new article values in the next step,
+			// we need to pass true as a second parameter
+			// it means that we can remove (delete) previously added attributes
+			// id would be deleted too and new article would be created
+			// wherefore we need to maintain article id
+			if (this.article.id) {
+				values['id'] = this.article.id;
+			}
+
 			// update article's values
-			this.article.attr(values);
+			this.article.attr(values, true);
 
 			// remove all error markup
 			$('form.article .control-group').removeClass('error');
