@@ -22,7 +22,7 @@ steal(
 	{
 		defaults: {
 			autosaveInterval: 30 * 1000,	// how ofter is draft automatically saved
-			encyclopediaCategory: '/admin-api/category/2/',
+			encyclopediaCategory: '/admin-api/category/3/',
 			markitupSettings: {
 				previewParserPath:	'',
 				onShiftEnter:		{keepDefault:false, openWith:'\n\n'},
