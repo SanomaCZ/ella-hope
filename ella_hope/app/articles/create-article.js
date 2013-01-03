@@ -375,9 +375,6 @@ steal(
 				delete values['source'];
 			}
 
-			// if photo_displayed is not present, set to true
-			else values['photo_displayed'] = Boolean(values['photo_displayed'])
-
 			// if main_tag was selected, add it as object into tags attribute
 			// then delete main_tag
 			if (values.main_tag) {
@@ -394,8 +391,9 @@ steal(
 
 			//console.log('save', values);
 
-			// app_data is required to be sent, althougt it's empty now
-			values['app_data'] = null;
+			values['app_data'] = {'ella':
+				{'without_photo': Boolean(values['without_photo'])}
+			}
 
 			// when setting new article values in the next step,
 			// we need to pass true as a second parameter
