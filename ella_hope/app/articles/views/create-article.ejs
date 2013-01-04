@@ -403,7 +403,12 @@
 			</label>
 
 			<label class="checkbox">
-				<input class="photo-displayed" type="checkbox" name="without_photo" <%= article.app_data.ella && article.app_data.ella.without_photo === true ? 'checked' : '' %> value="true" /> <%= $.t('Article without photo')%>
+				<% if (article.app_data && article.app_data.ella && article.app_data.ella.without_photo === true) { %>
+					<input class="photo-displayed" type="checkbox" name="without_photo" checked="checked" value="true" />
+				<% } else { %>
+					<input class="photo-displayed" type="checkbox" name="without_photo" value="true" />
+				<% } %>
+				<%= $.t('Article without photo')%>
 				<span class="help-inline"></span>
 			</label>
 
