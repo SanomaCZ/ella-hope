@@ -974,6 +974,11 @@ steal(
 		 * @return {[type]}    [description]
 		 */
 		'#photos-modal .insert-photo click':function(el, ev) {
+			var now = new Date().getTime();
+			if (!el.data('progress')) {
+				el.data('progress', now);
+			}
+
 			ev.preventDefault();
 
 			// get checked radio button, it's tr parent and photo from data attribute
@@ -991,12 +996,17 @@ steal(
 			else if (photo) {
 				var snippet = this.generateSnippet('photos.photo', photo, format);
 
-				// insert snippet into textarea
-				$.markItUp( { replaceWith: snippet } );
-				//console.log(photo);
-
 				$('#photos-modal').modal('hide');
+
+				// insert snippet into textarea
+				if (now == el.data('progress')) {
+					$.markItUp( { replaceWith: snippet } );
+				}
 			}
+
+			setTimeout(function() {
+				el.data('progress', false);
+			}, 500);
 		},
 
 		/**
