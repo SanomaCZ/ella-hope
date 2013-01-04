@@ -136,14 +136,14 @@ steal(
 			// render article form
 			can.view( '//app/articles/views/create-article.ejs', {
 				article: this.article,
-				drafts: Draft.findAll(),
+				drafts: Draft.findAll({limit: 10000}),
 				author: Author.findAll({limit: 10000}),
-				category: Category.findAll(),
+				category: Category.findAll({limit: 10000}),
 				states: this.options.articleStates,
 				comments: this.options.articleComments,
 				photos: Photo.findAll(),
-				source: Source.findAll(),
-				tag: Tag.findAll(),
+				source: Source.findAll({limit: 10000}),
+				tag: Tag.findAll({limit: 10000}),
 				relatedArticles: this.article.id ? Article.getRelatedArticles(this.article.id) : [],
 				listing: this.article.id ? Listing.getListingByArticle({articleId: this.article.id}) : {},
 				galleryitem: this.article.id && self.options.model === 'gallery' ? GalleryItem.getRelated(this.article.id) : {},
