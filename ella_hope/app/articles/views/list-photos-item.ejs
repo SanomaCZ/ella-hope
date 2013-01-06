@@ -14,16 +14,16 @@
 		<td>
 			<form class="snippet-params">
 				<select class="span2" name="size">
-					<option value="mala" <%= data.size == 'mala' ? "selected='selected'" : '' %>><%= $.t('Small')%></option>
-					<option value="standard" <%= data.size == 'standard' ? "selected='selected'" : '' %>><%= $.t('Medium')%></option>
-					<option value="velka" <%= data.size == 'velka' ? "selected='selected'" : '' %>><%= $.t('Large')%></option>
+					<option value="mala" <%= data.size == 'mala' ? "selected=selected" : '' %>><%= $.t('Small')%></option>
+					<option value="standard" <%= data.size == 'standard' ? "selected=selected" : '' %>><%= $.t('Medium')%></option>
+					<option value="velka" <%= data.size == 'velka' ? "selected=selected" : '' %>><%= $.t('Large')%></option>
 				</select>
 				<select class="span2" name="format">
-					<option value="ctverec" <%= data.format == 'ctverec' ? "selected='selected'" : '' %>>ctverec</option>
-					<option value="nudle_sirka" <%= data.format == 'nudle_sirka' ? "selected='selected'" : '' %>>nudle_sirka</option>
-					<option value="nudle_vyska" <%= data.format == 'nudle_vyska' ? "selected='selected'" : '' %>>nudle_vyska</option>
-					<option value="obdelnik_sirka" <%= data.format == 'obdelnik_sirka' ? "selected='selected'" : '' %>>obdelnik_sirka</option>
-					<option value="obdelnik_vyska" <%= data.format == 'obdelnik_vyska' ? "selected='selected'" : '' %>>obdelnik_vyska</option>
+					<option value="ctverec" <%= data.format == 'ctverec' ? "selected=selected" : '' %>>ctverec</option>
+					<option value="nudle_sirka" <%= data.format == 'nudle_sirka' ? "selected=selected" : '' %>>nudle_sirka</option>
+					<option value="nudle_vyska" <%= data.format == 'nudle_vyska' ? "selected=selected" : '' %>>nudle_vyska</option>
+					<option value="obdelnik_sirka" <%= data.format == 'obdelnik_sirka' ? "selected=selected" : '' %>>obdelnik_sirka</option>
+					<option value="obdelnik_vyska" <%= data.format == 'obdelnik_vyska' ? "selected=selected" : '' %>>obdelnik_vyska</option>
 				</select>
 
 				<table>
@@ -43,9 +43,9 @@
 				<label for="align">
 					<%= $.t('Align')%>:&nbsp;
 					<select class="span2" name="align">
-						<option value="right" <%= data.align == 'right' ? "selected='selected'" : '' %>><%= $.t('Right')%></option>
-						<option value="left" <%= data.align == 'left' ? "selected='selected'" : '' %>><%= $.t('Left')%></option>
-						<option value="center" <%= data.align == 'center' ? "selected='selected'" : '' %>><%= $.t('Center')%></option>
+						<option value="right" <%= data.align == 'right' ? "selected=selected" : '' %>><%= $.t('Right')%></option>
+						<option value="left" <%= data.align == 'left' ? "selected=selected" : '' %>><%= $.t('Left')%></option>
+						<option value="center" <%= data.align == 'center' ? "selected=selected" : '' %>><%= $.t('Center')%></option>
 					</select>
 				</label>
 
