@@ -22,7 +22,6 @@ steal(
 	{
 		defaults: {
 			autosaveInterval: 30 * 1000,	// how ofter is draft automatically saved
-			encyclopediaCategory: '/admin-api/category/3/',
 			markitupSettings: {
 				previewParserPath:	'',
 				onShiftEnter:		{keepDefault:false, openWith:'\n\n'},
@@ -669,9 +668,11 @@ steal(
 			ev.preventDefault();
 
 			// set category to Encyclopedia
-			$('select[name=category]')
-				.val(this.options.encyclopediaCategory)
-				.trigger('liszt:updated');	// update chosen select
+			Category.getEncyclopediaCategory({}, function(cat){
+				$('select[name=category]')
+					.val(cat[0].resource_uri)
+					.trigger('liszt:updated');	// update chosen select
+			});
 
 			// set historical publish date
 			$('input[name=publish_from_date]').val('2000-01-01');
