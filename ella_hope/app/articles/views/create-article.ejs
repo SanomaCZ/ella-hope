@@ -375,16 +375,19 @@
 					<option></option>
 					<%
 					if (tag) {
-						var main_tags =  [];
+						var main_tag =  false;
 						if (article.tags) {
 							$.each(article.tags, function(i, t) {
-								main_tags.push(t.id);
+								if(t.main_tag) {
+									main_tag = t.id;
+									return false;
+								}
 							})
 						}
 
 						$.each(tag, function(i, t){
 							if (t.namespace == "MAIN") { %>
-								<option value="<%= t.resource_uri %>" <%= ( $.inArray(article.main_tag, main_tags) != -1) ? "selected=selected" : "" %>>
+								<option value="<%= t.resource_uri %>" <%= ( t.id == main_tag ) ? "selected=selected" : "" %>>
 									<%= t.name %>
 								</option>
 							<% }
