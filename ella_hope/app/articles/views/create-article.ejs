@@ -373,21 +373,23 @@
 			<div class="controls">
 				<select name="main_tag" data-placeholder="<%= $.t('Choose tag')%>" class="article-main-tag">
 					<option></option>
-					<% if (tag) { %>
-						<% $.each(tag, function(i, t){ %>
-							<% var selected = false; %>
-							<% if (article.tags) { %>
-								<% $.each(article.tags, function(j, t2){ %>
-									<%
-										if (t2.main_tag === true && t.id === t2.id) {
-											selected = true;
-										}
-									%>
-								<% }) %>
-							<% } %>
-							<option value="<%= t.resource_uri %>" <%= selected ? "selected=selected" : "" %>><%= t.name %></option>
-						<% }) %>
-					<% } %>
+					<%
+					if (tag) {
+						var main_tags =  [];
+						if (article.tags) {
+							$.each(article.tags, function(i, t) {
+								main_tags.push(t.id);
+							})
+						}
+
+						$.each(tag, function(i, t){
+							if (t.namespace == "MAIN") { %>
+								<option value="<%= t.resource_uri %>" <%= ( $.inArray(article.main_tag, main_tags) != -1) ? "selected=selected" : "" %>>
+									<%= t.name %>
+								</option>
+							<% }
+						})
+					} %>
 				</select>
 				<span class="help-inline"></span>
 				<button class="btn btn-normal add-tag-articles" data-target="article-main-tag"><%= $.t('add new tag')%></button>
