@@ -8,6 +8,7 @@ steal(
 	, '//app/resources/js/jquery-ui/jquery.ui.widget.js'
 	, '//app/resources/css/jquery-ui/base/jquery-ui.css'
 	, '//app/resources/css/jquery-ui/ui-lightness/jquery-ui.css'
+	, '//app/resources/js/ajax-chosen.js'	// https://github.com/meltingice/ajax-chosen
 )
 .then(
 	'//app/resources/js/jquery-ui/jquery.ui.mouse.js'
@@ -153,7 +154,23 @@ steal(
 				// enable chosen select
 				// http://harvesthq.github.com/chosen/
 				$('.chzn-select').chosen();
-				$('.enable_comments, .listing, .article-main-tag').chosen({allow_single_deselect:true});
+				$('.enable_comments, .listing').chosen({allow_single_deselect:true});
+
+				$('.article-tags, .article-main-tag').ajaxChosen({
+					type: 'GET',
+					url: BASE_URL+'/tag/?',
+					jsonTermKey: 'name__icontains',
+					dataType: 'json'
+				}, function (data) {
+
+					var results = [];
+
+					$.each(data, function (i, val) {
+						results.push({ value: val.resource_uri, text: val.name });
+					});
+
+					return results;
+				});
 
 				// enable markup in all textareas
 				$("textarea").markItUp(self.options.markitupSettings);
