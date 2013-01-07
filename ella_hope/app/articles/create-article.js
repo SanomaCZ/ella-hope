@@ -1473,14 +1473,11 @@ steal(
 				return parser.protocol + '//' + parser.host + '/';
 			}
 
-			// TODO
-			var id = $('#id').val();
-
 			// save article / gallery before it is previews
 			var errors = this.save();
 
 			if (errors === true) {
-				window.open(getBaseUrl(BASE_URL) + 'preview/'+id+'/');
+				window.open(getBaseUrl(BASE_URL) + 'preview/'+ this.article.id +'/');
 			}
 			else {
 				this.showErrors(errors);
