@@ -435,7 +435,13 @@ steal(
 			// no errors
 			if (errors === null) {
 				// save article
-				this.article.save();
+				this.article.save(function(){
+					//console.log('ok');
+				}, function(xhr){
+					//console.log('error');
+					alert('Error occured, try again later.');
+					return false;
+				});
 
 				// listing - must be saved when article exists
 				if (values['listing']) {
