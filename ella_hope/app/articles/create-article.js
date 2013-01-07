@@ -63,6 +63,7 @@ steal(
 		gallery: null,			// if current article is gallery
 		previousDraftValues: null,	// use this for comparison of old and new draft values
 		autosaveTimer: null,	// timer for autosave, we need this to stop timer
+		photoPaginator: null,	// paginator for photos
 
 		init: function() {
 
@@ -75,6 +76,8 @@ steal(
 				this.article = this.options.article;
 				this.show(this.article);
 			}
+
+			this.initPhotosPagination();
 
 			// initialize autosave
 			this.initAutosave(this.options.autosaveInterval);
@@ -1130,9 +1133,19 @@ steal(
 		 */
 		renderPhotosList: function(data) {
 
+			var self = this;
+
+			if (!this.photoPaginator) {
+				this.initPhotosPagination();
+			}
+
 			// render list
 			can.view( '//app/articles/views/list-photos.ejs', {
-				photos: Photo.findAll({order_by: '-id'}),
+				photos: Photo.findAll({
+					order_by: '-id',
+					offset: self.photoPaginator.attr('offset'),
+					limit: self.photoPaginator.attr('limit')
+				}),
 				data: data
 			} ).then(function( frag ){
 				$('#photos-modal .photos-list').html(frag);
@@ -1171,6 +1184,49 @@ steal(
 				photosTable.show();
 			});
 		},
+
+		/**
+         * pagination for photo list
+         * @return {[type]} [description]
+         */
+        initPhotosPagination: function() {
+
+			var self = this;
+
+			this.photoPaginator = new can.Observe({
+				limit: 5,
+				offset: 0
+			});
+
+			// when paginator attribute changes, reload articles list
+			this.photoPaginator.bind('change', function(ev, attr, how, newVal, oldVal) {
+				self.renderPhotosList({});
+			});
+        },
+
+        /**
+         * pagination item is clicked - update paginator
+         * @param  {[type]} el [description]
+         * @param  {[type]} ev [description]
+         * @return {[type]}    [description]
+         */
+        '.pagination-photos li a click': function(el, ev) {
+
+			ev.preventDefault();
+
+			var newOffset;
+
+			if (el.hasClass('prev')) {
+				newOffset = this.photoPaginator.attr('offset') - this.photoPaginator.attr('limit');
+				if (newOffset < 0) {
+					newOffset = 0;
+				}
+			}
+			else if (el.hasClass('next')) {
+				newOffset = this.photoPaginator.attr('offset') + this.photoPaginator.attr('limit');
+			}
+			this.photoPaginator.attr('offset', newOffset);
+        },
 
 		/**
 		 * find related articles based on currently selected tags

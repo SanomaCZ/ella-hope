@@ -36,6 +36,7 @@ steal(
 	/* @prototype */
 	{
 		articleCreate: null,	// control for creating/editing an article
+		paginator: null,	// articles paginator
 
 		/**
 		 * Initializes a new instance of Articles container.
@@ -58,6 +59,8 @@ steal(
 			if (this.articleCreate) {
 				this.articleCreate.destroy();
 			}
+
+			this.initPagination();
 
 			can.view('//app/articles/views/init.ejs', {
 				author: Author.findAll(),
@@ -166,6 +169,50 @@ steal(
 			}
         },
 
+        /**
+         * pagination for articles list
+         * @return {[type]} [description]
+         */
+        initPagination: function() {
+
+			var self = this;
+
+			this.paginator = new can.Observe({
+				limit: 10,
+				offset: 0
+			});
+
+			// when paginator attribute changes, reload articles list
+			this.paginator.bind('change', function(ev, attr, how, newVal, oldVal) {
+				//console.log('change', attr, newVal);
+				self.listArticles();
+			});
+        },
+
+        /**
+         * pagination item is clicked - update paginator
+         * @param  {[type]} el [description]
+         * @param  {[type]} ev [description]
+         * @return {[type]}    [description]
+         */
+        '.pagination-articles li a click': function(el, ev) {
+
+			ev.preventDefault();
+
+			var newOffset;
+
+			if (el.hasClass('prev')) {
+				newOffset = this.paginator.attr('offset') - this.paginator.attr('limit');
+				if (newOffset < 0) {
+					newOffset = 0;
+				}
+			}
+			else if (el.hasClass('next')) {
+				newOffset = this.paginator.attr('offset') + this.paginator.attr('limit');
+			}
+			this.paginator.attr('offset', newOffset);
+        },
+
 		/**
 		 * delete article
 		 * @param  {[type]} el [description]
@@ -200,6 +247,10 @@ steal(
 					order_by: '-publish_from'
 				};
 			}
+
+			// pagination
+			data.limit = this.paginator.attr('limit');
+			data.offset = this.paginator.attr('offset');
 
 			can.view('//app/articles/views/list-articles.ejs', {
 				articles: self.options.model === 'articles' ? Article.findAll(data) : Gallery.findAll(data),

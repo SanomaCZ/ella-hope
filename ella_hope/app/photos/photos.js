@@ -29,6 +29,8 @@ steal(
 	/* @prototype */
 	{
 		photosUpload: null,
+		paginator: null,	// articles paginator
+
 		/**
 		 * Initializes a new instance of Articles container.
 		 * @codestart
@@ -41,6 +43,8 @@ steal(
 		init: function(element, options){
 
 			var self = this;
+
+			this.initPagination();
 
 			can.view(this.options.initView, {
 				author: Author.findAll(),
@@ -111,6 +115,50 @@ steal(
 			}
         },
 
+        /**
+         * pagination for articles list
+         * @return {[type]} [description]
+         */
+        initPagination: function() {
+
+			var self = this;
+
+			this.paginator = new can.Observe({
+				limit: 5,
+				offset: 0
+			});
+
+			// when paginator attribute changes, reload articles list
+			this.paginator.bind('change', function(ev, attr, how, newVal, oldVal) {
+				//console.log('change', attr, newVal);
+				self.listPhotos();
+			});
+        },
+
+        /**
+         * pagination item is clicked - update paginator
+         * @param  {[type]} el [description]
+         * @param  {[type]} ev [description]
+         * @return {[type]}    [description]
+         */
+        '.pagination li a click': function(el, ev) {
+
+			ev.preventDefault();
+
+			var newOffset;
+
+			if (el.hasClass('prev')) {
+				newOffset = this.paginator.attr('offset') - this.paginator.attr('limit');
+				if (newOffset < 0) {
+					newOffset = 0;
+				}
+			}
+			else if (el.hasClass('next')) {
+				newOffset = this.paginator.attr('offset') + this.paginator.attr('limit');
+			}
+			this.paginator.attr('offset', newOffset);
+        },
+
 		/**
 		 * delete article
 		 * @param  {[type]} el [description]
@@ -136,6 +184,10 @@ steal(
 		'listPhotos': function(data) {
 			data = data || {};
 			data.order_by = '-id';
+
+			// pagination
+			data.limit = this.paginator.attr('limit');
+			data.offset = this.paginator.attr('offset');
 
 			can.view('//app/photos/views/list-photos.ejs', {
 				photos: Photo.findAll(data)
