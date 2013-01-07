@@ -275,13 +275,14 @@
 			<label class="control-label" for="tags"><%= $.t('Tag(s)')%></label>
 			<div class="controls">
 				<select name="tags[]" data-placeholder="<%= $.t('Choose tags')%>" class="article-tags span8" multiple>
-					<% for (var i = 0; i < article.tags.length; i++) { %>
-						<% var t = article.tags[i]; %>
-						<% if (t.main_tag !== true) { %>
-							<option value="<%= t.resource_uri %>" selected="selected"><%= t.name %></option>
+					<% if (article.tags) { %>
+						<% for (var i = 0; i < article.tags.length; i++) { %>
+							<% var t = article.tags[i]; %>
+							<% if (t.main_tag !== true) { %>
+								<option value="<%= t.resource_uri %>" selected="selected"><%= t.name %></option>
+							<% } %>
 						<% } %>
 					<% } %>
-
 				</select>
 				<span class="help-inline"></span>
 				<button class="btn btn-normal add-tag-articles" data-target="article-tags"><%= $.t('add new tag')%></button>
@@ -364,10 +365,12 @@
 			<div class="controls">
 				<select name="main_tag" data-placeholder="<%= $.t('Choose tag')%>" class="article-main-tag">
 					<option></option>
-					<% for (var i = 0; i < article.tags.length; i++){ %>
-						<% var t = article.tags[i]; %>
-						<% if (t.main_tag === true) { %>
-							<option value="<%= t.resource_uri %>" selected="selected"><%= t.name %></option>
+					<% if (article.tags) { %>
+						<% for (var i = 0; i < article.tags.length; i++){ %>
+							<% var t = article.tags[i]; %>
+							<% if (t.main_tag === true) { %>
+								<option value="<%= t.resource_uri %>" selected="selected"><%= t.name %></option>
+							<% } %>
 						<% } %>
 					<% } %>
 				</select>
