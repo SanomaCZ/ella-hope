@@ -481,9 +481,8 @@ steal(
 		 * save listing - side category for article
 		 * it is saved as relation between article and category, also with publish_from
 		 * https://github.com/SanomaCZ/ella-hub/blob/master/doc/api.rst#listing
-		 * @param  {[type]} articleId [description]
-		 * @param  {[type]} values    [description]
-		 * @return {[type]}           [description]
+		 * @param {model} article - instance of article
+		 * @param {array} values - object w/ values for article
 		 */
 		saveListing: function(article, values) {
 
@@ -597,6 +596,7 @@ steal(
 
 			if (this.draft) {
 				this.draft.destroy();
+				this.draft = null;
 			}
 		},
 
@@ -1044,13 +1044,12 @@ steal(
 			this.setDate(el);
 		},
 
+
 		/**
 		 * set today's date to given input
 		 * input is set in element's data-target-date
-		 * @param  {[type]} el [description]
-		 * @param  {[type]} ev [description]
-		 * @return {[type]}    [description]
-		 */
+		 * @param {object} el - element which is operated on
+	 	 */
 		setDate: function(el) {
 			var target = el.data('target-date'),
 				date = new Date(),
@@ -1069,9 +1068,7 @@ steal(
 		/**
 		 * set today's time to given input
 		 * input is set in element's data-target-time
-		 * @param  {[type]} el [description]
-		 * @param  {[type]} ev [description]
-		 * @return {[type]}    [description]
+		 * @param {object} el - element which is operated on
 		 */
 		setTime: function(el){
 			var target = el.data('target-time'),
@@ -1489,14 +1486,11 @@ steal(
 				return parser.protocol + '//' + parser.host + '/';
 			}
 
-			// TODO
-			var id = $('#id').val();
-
 			// save article / gallery before it is previews
 			var errors = this.save();
 
 			if (errors === true) {
-				window.open(getBaseUrl(BASE_URL) + 'preview/'+id+'/');
+				window.open(getBaseUrl(BASE_URL) + 'preview/'+ this.article.id +'/');
 			}
 			else {
 				this.showErrors(errors);
