@@ -580,6 +580,7 @@ steal(
 
 			if (this.draft) {
 				this.draft.destroy();
+				this.draft = null;
 			}
 		},
 
