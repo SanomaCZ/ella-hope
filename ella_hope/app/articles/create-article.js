@@ -427,8 +427,8 @@ steal(
 			this.article.attr(values, true);
 
 			// remove all error markup
-			$('form.article .control-group').removeClass('error');
-			$('form.article .help-inline').empty();
+			form.find('.control-group').removeClass('error');
+			form.find('.help-inline').empty();
 
 			//console.log(this.article);
 
@@ -704,7 +704,7 @@ steal(
 			$('input[name=publish_from_date]').val('2000-01-01');
 
 			// mark article as published
-			$('input[name=published]').attr('checked', true);
+			$('input[name=published]').attr('checked', 'checked');
 		},
 
 		/**

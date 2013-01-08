@@ -211,7 +211,7 @@
 
 			<div class="control-group row">
 				<label class="checkbox"><%= $.t('Side Category - Commercial')%></label>
-				<input class="listing_commercial" type="checkbox" name="listing_commercial" <%= listingAttr.commercial ? 'checked' : '' %> value="true" />
+				<input class="listing_commercial" type="checkbox" name="listing_commercial" <%= listingAttr.commercial ? 'checked=checked' : '' %> value="true" />
 				<span class="help-inline"></span>
 			</div>
 
@@ -383,7 +383,7 @@
 			<label class="control-label" for="display-options"><%= $.t('Display options')%></label>
 
 			<label class="checkbox">
-				<input class="commercial" type="checkbox" name="commercial" <%= article.commercial ? 'checked' : '' %> value="true" /> <%= $.t('Commercial')%>
+				<input class="commercial" type="checkbox" name="commercial" <%= article.commercial ? 'checked=checked' : '' %> value="true" /> <%= $.t('Commercial')%>
 				<span class="help-inline"></span>
 			</label>
 
@@ -398,7 +398,7 @@
 			</label>
 
 			<label class="checkbox">
-				<input class="article-parameter" disabled="disabled" type="checkbox" name="article-parameter" <%= article.article_parameter ? 'checked' : '' %> value="true" /> <%= $.t('Article parameter')%>
+				<input class="article-parameter" disabled="disabled" type="checkbox" name="article-parameter" <%= article.article_parameter ? 'checked=checked' : '' %> value="true" /> <%= $.t('Article parameter')%>
 				<span class="help-inline"></span>
 			</label>
 		</div>
@@ -451,7 +451,15 @@
 		<div class="control-group row">
 			<label class="control-label" for="published"><%= $.t('Published')%></label>
 			<div class="controls">
-				<input class="published" type="checkbox" name="published" id="published" <%= article.published ? 'checked' : '' %> value="true" />
+				<input class="published" type="checkbox" name="published" id="published" <%= article.published ? 'checked=checked' : '' %> value="true" />
+				<span class="help-inline"></span>
+			</div>
+		</div>
+
+		<div class="control-group row">
+			<label class="control-label" for="static"><%= $.t('Static')%></label>
+			<div class="controls">
+				<input class="static" type="checkbox" name="static" id="static" <%= article.static ? 'checked=checked' : '' %> value="true" />
 				<span class="help-inline"></span>
 			</div>
 		</div>
