@@ -429,29 +429,79 @@ steal(
 			var form = this.element.find('form'),
 				values = form.serialize();
 
+			// these values are from form - they contain some useless fields
+			// which should not be sent to the server
 			values = can.deparam(values);
 
+			// values which we want to send to the server
+			var properValues = {};
+
+			// which photo id we want to patch
+			properValues.id = values.id;
+
+			// do not send rotate parameter if photo is not rotated
+			if (values.rotate !== '0') {
+				properValues.rotate = values.rotate;
+			}
+
+			properValues.source = values.source;
+			properValues.title = values.title;
+			properValues.authors = values.authors;
+			properValues.description = values.description;
+			//properValues.name = values.name;
+			properValues.slug = values.slug;
+			properValues.tags = values.tags;
+			//properValues.url = values.url;
+
 			// app_data is required for django, can be set to null but must be there
-			values.app_data = null;
+			properValues.app_data = values.app_data || null;
 
 			// convert crop coordinates from preview image size to original image size
 			if (values.important_top && values.important_left &&
 				values.important_bottom && values.important_right) {
-				values.important_top = Math.round(values.important_top);
-				values.important_left = Math.round(values.important_left);
-				values.important_bottom = Math.round(values.important_bottom);
-				values.important_right = Math.round(values.important_right);
+				properValues.important_top = Math.round(values.important_top);
+				properValues.important_left = Math.round(values.important_left);
+				properValues.important_bottom = Math.round(values.important_bottom);
+				properValues.important_right = Math.round(values.important_right);
 			}
 
 			var p = new Photo();
-			//a.attr(values).save();
-			p.attr(values);
-			//console.log(a);
-			p.save();
+			p.attr(properValues);
 
-			//console.log(values);
+			// check for errors
+			var errors = p.errors();
 
-			can.route.attr({page:'photos'}, true);
+			if (errors === null) {
+				// save photo
+				p.save();
+				// return to photos list
+				can.route.attr({page:'photos'}, true);
+			}
+			else {
+				this.showErrors(errors);
+			}
+		},
+
+		/**
+		 * highlight inputs with error
+		 * @param  {[type]} errors [description]
+		 * @return {[type]}        [description]
+		 */
+		showErrors: function(errors) {
+
+			if (errors && errors !== true) {
+				$.each(errors, function(e){
+					//console.log(e);
+					$('.'+e).closest('.control-group')
+						.addClass('error')
+						.find('.help-inline').html(errors[e][0]);
+				});
+
+				// scroll to first error
+				$('html, body').animate({
+					scrollTop: $('.control-group.error').eq(0).offset().top - 50
+				}, 500);
+			}
 		},
 
 		/**

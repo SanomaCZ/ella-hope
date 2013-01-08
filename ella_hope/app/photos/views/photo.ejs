@@ -9,9 +9,9 @@
         <input type="hidden" name="rotate" value="0" />
 
 		<div class="control-group row">
-			<label class="control-label" for="source"><%= $.t('Source')%></label>
+			<label class="control-label required" for="source"><%= $.t('Source')%></label>
 			<div class="controls">
-				<select name="source" data-placeholder="<%= $.t('Choose source')%>" class="chzn-select photo-source">
+				<select name="source" data-placeholder="<%= $.t('Choose source')%>" class="chzn-select photo-source source">
 					<option></option>
 					<% if (source) { %>
 						<% $.each(source, function(i, s){ %>
@@ -33,14 +33,14 @@
 		</div>
 
         <div class="row control-group">
-            <label for="title"><%= $.t('Title')%></label>
+            <label class="control-label" for="title"><%= $.t('Title')%></label>
             <input class="span4 title" type="text" id="title" name="title" placeholder="<%= $.t('Add Title')%>"
                 value="<%= photo.title %>" <%= photo.title ? "" : "" %>>
             <span class="help-inline"></span>
         </div>
 
         <div class="row control-group">
-            <label for="authors"><%= $.t('Author(s)')%></label>
+            <label class="control-label required" for="authors"><%= $.t('Author(s)')%></label>
             <select name="authors[]"  data-placeholder="<%= $.t('Choose authors')%>" class="chzn-select span4 authors-photo authors" multiple>
             <% if (author) { %>
                 <% $.each(author, function(i, a){ %>
