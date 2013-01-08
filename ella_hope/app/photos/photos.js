@@ -44,7 +44,7 @@ steal(
 
 			var self = this;
 
-			this.initPagination();
+			console.log('init', self, self.element);
 
 			can.view(this.options.initView, {
 				author: Author.findAll(),
@@ -72,16 +72,17 @@ steal(
 				$('.chzn-select').chosen({allow_single_deselect:true});
 			});
 
-			if (!can.route.attr('action')) {
-				this.listPhotos( {} );
-			}
+			this.initPagination();
+
+			this.listPhotos( {} );
 		},
 
 		':page route': function( data ) {
 
 			if (data.page == 'photos') {
-				this.init();
-				this.listPhotos();
+				if (this.element && this.element.children().length) {
+					this.init();
+				}
 			}
 		},
 
