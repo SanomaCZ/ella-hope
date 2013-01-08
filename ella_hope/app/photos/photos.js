@@ -44,8 +44,6 @@ steal(
 
 			var self = this;
 
-			console.log('init', self, self.element);
-
 			can.view(this.options.initView, {
 				author: Author.findAll(),
 				tag: Tag.findAll()
@@ -104,11 +102,11 @@ steal(
 			if (data.action == 'edit') {
 				if (data.id > 0) {
 					Photo.findOne({id: data.id}, function(photo){
-						if (this.photosUpload) {
-							this.photosUpload.destroy();
-							this.photosUpload = null;
+						if (self.photosUpload) {
+							self.photosUpload.destroy();
+							self.photosUpload = null;
 						}
-						this.photosUpload = new PhotosUpload(self.element, {
+						self.photosUpload = new PhotosUpload(self.element, {
 							photo: photo
 						});
 					});
