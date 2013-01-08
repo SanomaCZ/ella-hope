@@ -4,7 +4,7 @@
 
 <% if (this.model === 'articles') { %>
 	<a href="<%= can.route.url({ page: 'articles', action: 'new' })%>" class="btn btn-primary"><%= $.t('New article') %></a>
-<% } else if (this.model === 'gallery') { %>
+<% } else if (this.model === 'galleries') { %>
 	<a href="<%= can.route.url({ page: 'galleries', action: 'new' })%>" class="btn btn-primary"><%= $.t('New gallery') %></a>
 <% } %>
 
