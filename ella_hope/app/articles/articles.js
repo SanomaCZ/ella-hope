@@ -383,11 +383,23 @@ steal(
 
 			ev.preventDefault();
 
-			// show/hide filtering form
 			$('.filter-form').toggle();
 
 			var old_val = $.cookie(window.HOPECFG.COOKIE_FILTER) || 'false';
 			$.cookie(window.HOPECFG.COOKIE_FILTER, old_val == 'true' ? 'false': 'true', {path: '/'});
+			el.html(old_val == 'false' ? $.t('Hide filter') : $.t('Show filter'));
+		},
+
+		'.reset-filter click': function(el, ev) {
+
+			ev.preventDefault();
+
+			$('.filter-form').find('input, select').each(function() {
+				$(this).val("").trigger('liszt:updated');
+			})
+
+			this.filterArticles();
+
 		},
 
 		/**
