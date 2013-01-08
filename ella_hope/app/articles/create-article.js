@@ -100,7 +100,7 @@ steal(
 				//console.log('new article');
 				// we want to create a new article / gallery
 				this.article = this.options.model === 'articles' ? new Article() : new Gallery();
-				this.article.static = (this.options.model === 'gallery');
+				this.article.static = (this.options.model === 'galleries');
 			}
 
 			// parse publishFrom date
@@ -150,7 +150,7 @@ steal(
 				tag: Tag.findAll({limit: 0}),
 				relatedArticles: this.article.id ? Article.getRelatedArticles(this.article.id) : [],
 				listing: this.article.id ? Listing.getListingByArticle({articleId: this.article.id}) : {},
-				galleryitem: this.article.id && self.options.model === 'gallery' ? GalleryItem.getRelated(this.article.id) : {},
+				galleryitem: this.article.id && self.options.model === 'galleries' ? GalleryItem.getRelated(this.article.id) : {},
 				model: self.options.model
 			} ).then(function( frag ){
 				self.element.html(frag);

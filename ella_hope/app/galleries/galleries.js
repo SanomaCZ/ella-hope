@@ -12,7 +12,7 @@ steal(
 	/* @static */
 	{
 		defaults: {
-			model: 'gallery'
+			model: 'galleries'
 		}
 	},
 	/* @prototype */
