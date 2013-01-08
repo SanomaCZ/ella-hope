@@ -224,7 +224,6 @@ steal(
 						// save new relation
 						Article.addRelatedArticle(articleID, receivedID, function(data){
 							// add resource_uri to an element so that it can be deleted
-							el.data('resource_id', data.id);
 							el.append('<i class="icon-remove pull-right remove-related"></i>');
 						});
 					}
@@ -243,14 +242,12 @@ steal(
 						var item = new GalleryItem({
 							gallery: articleID,
 							photo: receivedID,
+							title: el.data('title'),
 							order: 0
 						});
-						item.save();
-						// Article.addRelatedArticle(articleID, receivedID, function(data){
-						// 	// add resource_uri to an element so that it can be deleted
-						// 	el.data('resource_id', data.id);
-						// 	el.append('<i class="icon-remove pull-right remove-related"></i>');
-						// });
+						item.save(function(model) {
+							el.data('resource_id', model.id);
+						});
 					}
 				}).disableSelection();
 
@@ -1343,7 +1340,9 @@ steal(
 			el.empty();
 
 			$.each(photos, function(i, photo){
-				el.append('<li data-photo-id="'+photo.resource_uri+'"><img height="60px" src="'+photo.public_url+'" /> '+photo.title+'</li>');
+				el.append(can.view.render('//app/articles/views/inline-gallery-item.ejs', {
+					photo: photo
+				}));
 			});
 		},
 
@@ -1357,6 +1356,25 @@ steal(
 
 			GalleryItem.destroy(el.parent().data('resource_id'));
 			el.parent().fadeOut();
+		},
+
+		/**
+		 * change galleryItem title
+		 * @param el galleryItem element encapsulated in jQuery
+		 * @param ev occured event
+		 */
+		'#chosen-recent-photos .change-galleryitem-title click': function (el, ev) {
+			var parent = el.parent('li');
+			var curr_title = parent.data('title');
+			var title = prompt($.t("Enter photo title"), curr_title);
+
+			if (title !== null) {
+				parent.find('span.value')[0].innerHTML = title;
+				parent.data('title', title);
+				if (title != curr_title) {
+					GalleryItem.update(parent.data('resource_id'), {title: title});
+				}
+			}
 		},
 
 		/**

@@ -1,11 +1,11 @@
-<% if (typeof item != "undefined") { %>
+<% if (typeof item != "undefined") { title = item.title; %>
 	<li data-resource_id="<%= item.id %>" data-title="<%= photo.title %>">
-<% } else { %>
+<% } else { title = photo.title; %>
 	<li data-photo-id="<%= photo.resource_uri %>" data-title="<%= photo.title %>">
 <% } %>
 	<img height="60px" src="<%= photo.public_url %>" />
 		<span class="value">
-			<%= photo.title %>
+			<%= title %>
 		</span>
 		<i class="icon-pencil change-galleryitem-title" title="<%= $.t('Change photo\'s title') %>"></i>
 	</span>
