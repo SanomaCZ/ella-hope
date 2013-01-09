@@ -281,8 +281,6 @@ steal(
 					"description": $(this).find('.description').val(),
 					"created": new Date().toISOString(),
 					"authors" : $(this).find('.authors-photo').val(),
-					//"tags" : tags,
-					"source" : source,
 					"app_data": null,
 					"image": "attached_object_id:"+$(this).find('.filename').val(),
 					"important_top": important_top,
@@ -295,6 +293,10 @@ steal(
 				var tags = $(this).find('.photo-tags').val();
 				if (tags) {
 					objects[objects.length - 1].tags = tags;
+				}
+
+				if (source) {
+					objects[objects.length - 1].source = source;
 				}
 			});
 
@@ -444,7 +446,6 @@ steal(
 				properValues.rotate = values.rotate;
 			}
 
-			properValues.source = values.source;
 			properValues.title = values.title;
 			properValues.authors = values.authors;
 			properValues.description = values.description;
@@ -463,6 +464,11 @@ steal(
 				properValues.important_left = Math.round(values.important_left);
 				properValues.important_bottom = Math.round(values.important_bottom);
 				properValues.important_right = Math.round(values.important_right);
+			}
+
+			// source is not required, but it should not be sent if it's empty
+			if (values.source) {
+				properValues.source = values.source;
 			}
 
 			var p = new Photo();
