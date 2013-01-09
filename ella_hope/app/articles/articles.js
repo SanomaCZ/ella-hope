@@ -407,6 +407,12 @@ steal(
 		 * @return {[type]} [description]
 		 */
 		destroy: function() {
+
+			// if this.articleCreate exist, call its destroy method
+			if (this.articleCreate) {
+				this.articleCreate.destroy();
+			}
+
 			can.Control.prototype.destroy.call( this );
 		}
 	})
