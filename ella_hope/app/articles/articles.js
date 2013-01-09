@@ -395,7 +395,7 @@ steal(
 			ev.preventDefault();
 
 			$('.filter-form').find('input, select').each(function() {
-				$(this).val("").trigger('liszt:updated');
+				$(this).val(null).trigger('liszt:updated');
 			})
 
 			this.filterArticles();
