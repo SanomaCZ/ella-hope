@@ -62,38 +62,83 @@ steal(
 
 			this.initPagination();
 
-			can.view('//app/articles/views/init.ejs', {
-				author: Author.findAll(),
-				category: Category.findAll(),
+			// render init view
+			this.element.html(can.view('//app/articles/views/init.ejs', {
 				states: this.options.articleStates,
-				tag: Tag.findAll(),
 				model: self.options.model
-			}).then(function( frag ){
-				self.element.html( frag );
-			}).then(function(){
-				// enable datepicker for publishFrom and publishTo
-				// https://github.com/eternicode/bootstrap-datepicker
-				$("input[name=publish_from], input[name=publish_to]", ".filter-form")
-					.datepicker(self.options.dateOptions)
-					.on('changeDate',function (ev) {
-						self.filterArticles();
-					})
-					.on('change', function () {
-						if (!this.value) {
-							$(this).trigger('changeDate');
-						}
-					});
+			}));
 
-				$(".filter-form select").on('change', function(ev){
+			// enable datepicker for publishFrom and publishTo
+			// https://github.com/eternicode/bootstrap-datepicker
+			$("input[name=publish_from], input[name=publish_to]", ".filter-form")
+				.datepicker(self.options.dateOptions)
+				.on('changeDate',function (ev) {
 					self.filterArticles();
+				})
+				.on('change', function () {
+					if (!this.value) {
+						$(this).trigger('changeDate');
+					}
 				});
 
-				// enable chosen select for authors
-				// http://harvesthq.github.com/chosen/
-				$('.chzn-select').chosen({allow_single_deselect:true});
+			$(".filter-form select").on('change', function(ev){
+				self.filterArticles();
 			});
 
-			//this.element.html(can.view(this.options.initView, this.options));
+			// ajax autocomplete for category
+			$('.category-filter').ajaxChosen({
+				type: 'GET',
+				url: BASE_URL+'/category/?',
+				jsonTermKey: 'title__icontains',
+				dataType: 'json'
+			}, function (data) {
+
+				var results = [];
+
+				$.each(data, function (i, val) {
+					results.push({ value: val.id, text: val.full_title });
+				});
+
+				return results;
+			});
+
+			// ajax autocomplete for author
+			$('.author-filter').ajaxChosen({
+				type: 'GET',
+				url: BASE_URL+'/author/?',
+				jsonTermKey: 'name__icontains',
+				dataType: 'json'
+			}, function (data) {
+
+				var results = [];
+
+				$.each(data, function (i, val) {
+					results.push({ value: val.id, text: val.name });
+				});
+
+				return results;
+			});
+
+			// ajax autocomplete for tags
+			$('.tag-filter').ajaxChosen({
+				type: 'GET',
+				url: BASE_URL+'/tag/?',
+				jsonTermKey: 'name__icontains',
+				dataType: 'json'
+			}, function (data) {
+
+				var results = [];
+
+				$.each(data, function (i, val) {
+					results.push({ value: val.resource_uri, text: val.name });
+				});
+
+				return results;
+			});
+
+			// enable chosen select for authors
+			// http://harvesthq.github.com/chosen/
+			$('.chzn-select').chosen({allow_single_deselect:true});
 
 			// list articles
 			this.listArticles({});

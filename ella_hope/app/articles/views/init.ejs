@@ -26,11 +26,8 @@
 	<div class="clearfix"></div>
 	<form class="form-inline pull-right filter">
 
-		<select class="input-medium chzn-select" name="category" data-placeholder="<%= $.t('Category')%>">
+		<select class="input-medium category-filter" name="category" data-placeholder="<%= $.t('Category')%>">
 			<option></option>
-			<% $.each(category || [], function(i, cat){ %>
-				<option value="<%= cat.id %>"><%= cat.title %></option>
-			<% }) %>
 		</select>
 
 		<input class="input-small" name="publish_from" type="datetime-local" placeholder="<%= $.t('Publish from') %>" />
@@ -54,24 +51,14 @@
 			<% } %>
 		</select>
 
-		<select class="input-medium chzn-select" name="author" data-placeholder="<%= $.t('Author')%>">
+		<select class="input-medium author-filter" name="author" data-placeholder="<%= $.t('Author')%>">
 			<option></option>
-			<% if (author) { %>
-				<% $.each(author, function(i, author){ %>
-					<option value="<%= author.id %>"><%= author.name %></option>
-				<% }) %>
-			<% } %>
 		</select>
 
 		|
 
-		<select class="input-medium chzn-select" name="tag" data-placeholder="<%= $.t('Tag (separate filter)')%>">
+		<select class="input-medium tag-filter" name="tag" data-placeholder="<%= $.t('Tag (separate filter)')%>">
 			<option></option>
-			<% if (tag) { %>
-				<% $.each(tag, function(i, t){ %>
-					<option value="<%= t.resource_uri %>"><%= t.name %></option>
-				<% }) %>
-			<% } %>
 		</select>
 
 		<button class="btn btn-small btn-inverse reset-filter">
