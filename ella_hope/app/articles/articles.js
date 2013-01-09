@@ -100,6 +100,8 @@ steal(
 				});
 
 				return results;
+			}, {
+				"allow_single_deselect": true
 			});
 
 			// ajax autocomplete for author
@@ -117,6 +119,8 @@ steal(
 				});
 
 				return results;
+			}, {
+				"allow_single_deselect": true
 			});
 
 			// ajax autocomplete for tags
@@ -134,6 +138,8 @@ steal(
 				});
 
 				return results;
+			}, {
+				"allow_single_deselect": true
 			});
 
 			// enable chosen select for authors

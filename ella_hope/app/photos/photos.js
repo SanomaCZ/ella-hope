@@ -66,6 +66,8 @@ steal(
 				});
 
 				return results;
+			}, {
+				"allow_single_deselect": true
 			});
 
 			// ajax autocomplete for tags
@@ -83,6 +85,8 @@ steal(
 				});
 
 				return results;
+			}, {
+				"allow_single_deselect": true
 			});
 
 			this.initPagination();

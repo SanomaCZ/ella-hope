@@ -64,6 +64,8 @@ steal(
 					});
 
 					return results;
+				}, {
+					"allow_single_deselect": true
 				});
 
 				// ajax autocomplete for source
@@ -81,6 +83,8 @@ steal(
 					});
 
 					return results;
+				}, {
+					"allow_single_deselect": true
 				});
 
 				// ajax autocomplete for tags
@@ -98,6 +102,8 @@ steal(
 					});
 
 					return results;
+				}, {
+					"allow_single_deselect": true
 				});
 
 				var jcropOptions = self.options.jcropOptions;

@@ -171,6 +171,8 @@ steal(
 					});
 
 					return results;
+				}, {
+					"allow_single_deselect": true
 				});
 
 				// ajax autocomplete for author
@@ -188,9 +190,11 @@ steal(
 					});
 
 					return results;
+				}, {
+					"allow_single_deselect": true
 				});
 
-				// ajax autocomplete for author
+				// ajax autocomplete for source
 				$('.article-source').ajaxChosen({
 					type: 'GET',
 					url: BASE_URL+'/source/?',
@@ -205,6 +209,8 @@ steal(
 					});
 
 					return results;
+				}, {
+					"allow_single_deselect": true
 				});
 
 				// ajax autocomplete for tags
@@ -222,6 +228,8 @@ steal(
 					});
 
 					return results;
+				}, {
+					"allow_single_deselect": true
 				});
 
 
