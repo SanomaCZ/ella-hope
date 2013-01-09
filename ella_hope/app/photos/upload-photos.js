@@ -50,7 +50,7 @@ steal(
 			}));
 
 				// ajax autocomplete for author
-				$('.authors-photo').ajaxChosen({
+				$('.authors-photo, .author-default').ajaxChosen({
 					type: 'GET',
 					url: BASE_URL+'/author/?',
 					jsonTermKey: 'name__icontains',

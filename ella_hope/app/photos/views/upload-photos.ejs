@@ -39,16 +39,13 @@
             <div class="pull-left">
                 &nbsp;&nbsp;
                 <%= $.t('Title') %>: <input class="span2" type="text" name="default_title" />
+                &nbsp;&nbsp;
             </div>
             <div class="pull-left">
-                &nbsp;&nbsp;
-                <%= $.t('Author') %>:
-                <select name="default_author">
-                    <option value=""><%= $.t('Select author...') %></option>
-                    <% $.each(author, function(i, a){ %>
-                        <option value="<%= a.resource_uri %>"><%= a.name %></option>
-                    <% }) %>
-                </select>
+                <%# $.t('Author') %>
+                <select class="input-medium author-default" name="default_author" data-placeholder="<%= $.t('Author')%>">
+					<option></option>
+				</select>
             </div>
             <div class="pull-left">
                 &nbsp;&nbsp;
