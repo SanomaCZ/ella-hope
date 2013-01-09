@@ -141,13 +141,9 @@ steal(
 			can.view( '//app/articles/views/create-article.ejs', {
 				article: this.article,
 				drafts: Draft.findAll({limit: 0}),
-				author: Author.findAll({limit: 0}),
-				category: Category.findAll({limit: 0}),
 				states: this.options.articleStates,
 				comments: this.options.articleComments,
-				photos: Photo.findAll(),
-				source: Source.findAll({limit: 0}),
-				tag: Tag.findAll({limit: 0}),
+				//photos: Photo.findAll(),
 				relatedArticles: this.article.id ? Article.getRelatedArticles(this.article.id) : [],
 				listing: this.article.id ? Listing.getListingByArticle({articleId: this.article.id}) : {},
 				galleryitem: this.article.id && self.options.model === 'galleries' ? GalleryItem.getRelated(this.article.id) : {},
@@ -160,6 +156,58 @@ steal(
 				$('.chzn-select').chosen();
 				$('.enable_comments, .listing').chosen({allow_single_deselect:true});
 
+				// ajax autocomplete for category
+				$('#category, #listing').ajaxChosen({
+					type: 'GET',
+					url: BASE_URL+'/category/?',
+					jsonTermKey: 'title__icontains',
+					dataType: 'json'
+				}, function (data) {
+
+					var results = [];
+
+					$.each(data, function (i, val) {
+						results.push({ value: val.resource_uri, text: val.full_title });
+					});
+
+					return results;
+				});
+
+				// ajax autocomplete for author
+				$('.authors-article').ajaxChosen({
+					type: 'GET',
+					url: BASE_URL+'/author/?',
+					jsonTermKey: 'name__icontains',
+					dataType: 'json'
+				}, function (data) {
+
+					var results = [];
+
+					$.each(data, function (i, val) {
+						results.push({ value: val.resource_uri, text: val.name });
+					});
+
+					return results;
+				});
+
+				// ajax autocomplete for author
+				$('.article-source').ajaxChosen({
+					type: 'GET',
+					url: BASE_URL+'/source/?',
+					jsonTermKey: 'name__icontains',
+					dataType: 'json'
+				}, function (data) {
+
+					var results = [];
+
+					$.each(data, function (i, val) {
+						results.push({ value: val.resource_uri, text: val.name });
+					});
+
+					return results;
+				});
+
+				// ajax autocomplete for tags
 				$('.article-tags, .article-main-tag').ajaxChosen({
 					type: 'GET',
 					url: BASE_URL+'/tag/?',
@@ -175,6 +223,7 @@ steal(
 
 					return results;
 				});
+
 
 				// enable markup in all textareas
 				$("textarea").markItUp(self.options.markitupSettings);

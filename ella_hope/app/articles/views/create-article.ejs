@@ -42,20 +42,12 @@
 		<div class="control-group row">
 			<label class="control-label required" for="category"><%= $.t('Category')%></label>
 			<div class="controls">
-				<select name="category" id="category" data-placeholder="<%= $.t('Choose category')%>" class="chzn-select category">
-				<% if (category) { %>
-					<% $.each(category, function(i, cat){ %>
-					<%
-						var selected = false;
-						if (article.category) {
-							if (article.category.id == cat.id) {
-								selected = true;
-							}
-						}
-					%>
-						<option value="<%= cat.resource_uri %>" <%= selected ? "selected=selected" : "" %>><%= cat.full_title %></option>
-					<% }) %>
-				<% } %>
+				<select name="category" id="category" data-placeholder="<%= $.t('Choose category')%>" class="category">
+					<option></option>
+					<% if (article.category) { %>
+						<% var c = article.category; %>
+						<option value="<%= c.resource_uri %>" selected="selected"><%= c.full_title %></option>
+					<% } %>
 				</select>
 				<span class="help-inline"></span>
 			</div>
@@ -64,23 +56,14 @@
 		<div class="control-group row">
 			<label class="control-label required" for="authors"><%= $.t('Author(s)')%></label>
 			<div class="controls">
-				<select name="authors[]" data-placeholder="<%= $.t('Choose authors')%>" class="chzn-select authors-article authors" multiple>
-				<% if (author) { %>
-					<% $.each(author, function(i, a){ %>
-					<%
-						var selected = false;
-						if (article.authors) {
-							for (var i = 0; i < article.authors.length; i++) {
-								if (article.authors[i]['id'] == a.id) {
-									selected = true;
-									break;
-								}
-							}
-						}
-					%>
-						<option value="<%= a.resource_uri %>" <%= selected ? "selected=selected" : "" %>><%= a.name %></option>
-					<% }) %>
-				<% } %>
+				<select name="authors[]" data-placeholder="<%= $.t('Choose authors')%>" class="authors-article authors" multiple>
+					<option></option>
+					<% if (article.authors) { %>
+						<% for (var i = 0; i < article.authors.length; i++) { %>
+							<% var a = article.authors[i]; %>
+							<option value="<%= a.resource_uri %>" selected="selected"><%= a.name %></option>
+						<% } %>
+					<% } %>
 				</select>
 				<span class="help-inline"></span>
 				<button class="btn btn-normal add-author-articles"><%= $.t('add new author')%></button>
@@ -139,7 +122,7 @@
 				<%
 				var listingAttr = {};
 				if (listing[0]) {
-					listingAttr.category = listing[0].category.id;
+					listingAttr.category = listing[0].category;
 					listingAttr.commercial = listing[0].commercial;
 					var publishFrom = Date.parse(listing[0].publish_from);
 					if (publishFrom) {
@@ -156,17 +139,10 @@
 
 				<select name="listing" id="listing" data-placeholder="<%= $.t('Choose side category')%>" class="listing">
 					<option></option>
-				<% if (category) { %>
-					<% $.each(category, function(i, cat){ %>
-					<%
-						var selected = false;
-						if (listingAttr.category == cat.id) {
-							selected = true;
-						}
-					%>
-						<option value="<%= cat.resource_uri %>" <%= selected ? "selected=selected" : "" %>><%= cat.full_title %></option>
-					<% }) %>
-				<% } %>
+					<% if (listingAttr.category) { %>
+						<% var c = listingAttr.category; %>
+						<option value="<%= c.resource_uri %>" selected="selected"><%= c.full_title %></option>
+					<% } %>
 				</select>
 				<span class="help-inline"></span>
 			</div>
@@ -220,21 +196,12 @@
 		<div class="control-group row">
 			<label class="control-label" for="source"><%= $.t('Source')%></label>
 			<div class="controls">
-				<select name="source" id="source" data-placeholder="<%= $.t('Choose source')%>" class="chzn-select article-source source">
-				<option></option>
-				<% if (source) { %>
-					<% $.each(source, function(i, s){ %>
-					<%
-						var selected = false;
-						if (article.source) {
-							if (article.source['id'] == s.id) {
-								selected = true;
-							}
-						}
-					%>
-						<option value="<%= s.resource_uri %>" <%= selected ? "selected=selected" : "" %>><%= s.name %></option>
-					<% }) %>
-				<% } %>
+				<select name="source" id="source" data-placeholder="<%= $.t('Choose source')%>" class="article-source source">
+					<option></option>
+					<% if (article.source) { %>
+						<% var s = article.source; %>
+						<option value="<%= s.resource_uri %>" selected="selected"><%= s.name %></option>
+					<% } %>
 				</select>
 				<span class="help-inline"></span>
 				<button class="btn btn-normal add-source" data-target="article-source"><%= $.t('add new source')%></button>

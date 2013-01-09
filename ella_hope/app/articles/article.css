@@ -69,7 +69,7 @@ button.add-author, button.add-tag {
 	top: -16px;
 }
 
-#listing-options, #date-alert {
+#listing-options, #listing-date-alert {
 	display: none;
 }
 
