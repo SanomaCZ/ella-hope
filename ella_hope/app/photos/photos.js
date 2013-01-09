@@ -44,30 +44,45 @@ steal(
 
 			var self = this;
 
-			can.view(this.options.initView, {
-				author: Author.findAll(),
-				tag: Tag.findAll()
-			}).then(function( frag ){
-				self.element.html( frag );
-			}).then(function(){
-				// enable datepicker for publishFrom and publishTo
-				// https://github.com/eternicode/bootstrap-datepicker
-				// $("input[name=publish_from]").datepicker(self.options.dateOptions)
-				// 	.on('changeDate', function(ev){
-				// 		self.filterArticles();
-				// 	});
-				// $("input[name=publish_to]").datepicker(self.options.dateOptions)
-				// 	.on('changeDate', function(ev){
-				// 		self.filterArticles();
-				// 	});
+			// render init view
+			this.element.html(can.view(this.options.initView, {}));
 
-				$(".filter-form select").on('change', function(ev){
-					self.filterPhotos();
+			$(".filter-form select").on('change', function(ev){
+				self.filterPhotos();
+			});
+
+			// ajax autocomplete for author
+			$('.author-filter').ajaxChosen({
+				type: 'GET',
+				url: BASE_URL+'/author/?',
+				jsonTermKey: 'name__icontains',
+				dataType: 'json'
+			}, function (data) {
+
+				var results = [];
+
+				$.each(data, function (i, val) {
+					results.push({ value: val.id, text: val.name });
 				});
 
-				// enable chosen select for authors
-				// http://harvesthq.github.com/chosen/
-				$('.chzn-select').chosen({allow_single_deselect:true});
+				return results;
+			});
+
+			// ajax autocomplete for tags
+			$('.tag-filter').ajaxChosen({
+				type: 'GET',
+				url: BASE_URL+'/tag/?',
+				jsonTermKey: 'name__icontains',
+				dataType: 'json'
+			}, function (data) {
+
+				var results = [];
+
+				$.each(data, function (i, val) {
+					results.push({ value: val.id, text: val.name });
+				});
+
+				return results;
 			});
 
 			this.initPagination();
@@ -251,6 +266,23 @@ steal(
 			$('.filter-form').toggle();
 			var old_val = $.cookie(window.HOPECFG.COOKIE_FILTER) || 'false';
 			$.cookie(window.HOPECFG.COOKIE_FILTER, old_val == 'true' ? 'false': 'true', {path: '/'});
+		},
+
+		/**
+		 * reset filter form values
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'.reset-filter click': function(el, ev) {
+
+			ev.preventDefault();
+
+			$('.filter-form').find('input, select').each(function() {
+				$(this).val(null).trigger('liszt:updated');
+			});
+
+			this.listPhotos();
 		}
 	})
 );

@@ -21,23 +21,19 @@
 	<div class="clearfix"></div>
 	<form class="form-inline pull-right filter">
 
-		<select class="input-medium chzn-select" name="author" data-placeholder="<%= $.t('Author')%>">
+		<select class="input-medium author-filter" name="author" data-placeholder="<%= $.t('Author')%>">
 			<option></option>
-			<% if (author) { %>
-				<% $.each(author, function(i, author){ %>
-					<option value="<%= author.id %>"><%= author.name %></option>
-				<% }) %>
-			<% } %>
 		</select>
 
-		<select class="input-medium chzn-select" name="tag" data-placeholder="<%= $.t('Tag')%>">
+		<select class="input-medium tag-filter" name="tag" data-placeholder="<%= $.t('Tag')%>">
 			<option></option>
-			<% if (tag) { %>
-				<% $.each(tag, function(i, t){ %>
-					<option value="<%= t.id %>"><%= t.name %></option>
-				<% }) %>
-			<% } %>
 		</select>
+
+		|
+
+		<button class="btn btn-small btn-inverse reset-filter">
+			<%= $.t('Reset filter'); %>
+		</button>
 	</form>
 	<div class="clearfix"></div>
 </div>
