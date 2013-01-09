@@ -11,20 +11,11 @@
 		<div class="control-group row">
 			<label class="control-label" for="source"><%= $.t('Source')%></label>
 			<div class="controls">
-				<select name="source" data-placeholder="<%= $.t('Choose source')%>" class="chzn-select photo-source source">
+				<select name="source" data-placeholder="<%= $.t('Choose source')%>" class="photo-source source">
 					<option></option>
-					<% if (source) { %>
-						<% $.each(source, function(i, s){ %>
-							<%
-								var selected = false;
-								if (photo.source) {
-									if (photo.source && photo.source['id'] == s.id) {
-										selected = true;
-									}
-								}
-							%>
-							<option value="<%= s.resource_uri %>" <%= selected ? "selected=selected" : "" %>><%= s.name %></option>
-						<% }) %>
+					<% if (photo.source) { %>
+						<% var s = photo.source; %>
+						<option value="<%= s.resource_uri %>" selected="selected"><%= s.name %></option>
 					<% } %>
 				</select>
 				<span class="help-inline"></span>
@@ -41,25 +32,14 @@
 
         <div class="row control-group">
             <label class="control-label required" for="authors"><%= $.t('Author(s)')%></label>
-            <select name="authors[]"  data-placeholder="<%= $.t('Choose authors')%>" class="chzn-select span4 authors-photo authors" multiple>
-            <% if (author) { %>
-                <% $.each(author, function(i, a){ %>
-                    <%
-                        var selected = false;
-                        if (photo.authors) {
-                            for (var i = 0; i < photo.authors.length; i++) {
-                                if (photo.authors[i]['id'] == a.id) {
-                                    selected = true;
-                                    break;
-                                }
-                            }
-                        }
-                    %>
-                    <option value="<%= a.resource_uri %>" <%= selected ? "selected=selected" : "" %>>
-                        <%= a.name %>
-                    </option>
-                <% }) %>
-            <% } %>
+            <select name="authors[]"  data-placeholder="<%= $.t('Choose authors')%>" class="span4 authors-photo authors" multiple>
+            	<option></option>
+				<% if (photo.authors) { %>
+					<% for (var i = 0; i < photo.authors.length; i++) { %>
+						<% var a = photo.authors[i]; %>
+						<option value="<%= a.resource_uri %>" selected="selected"><%= a.name %></option>
+					<% } %>
+				<% } %>
             </select>
             <button class="btn btn-mini add-author-photos"><%= $.t('add new author')%></button>
             <span class="help-inline"></span>
@@ -73,23 +53,13 @@
         <div class="row control-group">
             <label class="control-label" for="tags"><%= $.t('Tag(s)')%></label>
             <div class="controls">
-                <select name="tags[]" data-placeholder="<%= $.t('Choose tags')%>" class="chzn-select photo-tags span4" multiple>
-                <% if (tag) { %>
-                    <% $.each(tag, function(i, t){ %>
-                    <%
-                        var selected = false;
-                        if (photo.tags) {
-                            for (var i = 0; i < photo.tags.length; i++) {
-                                if (photo.tags[i]['id'] == t.id) {
-                                    selected = true;
-                                    break;
-                                }
-                            }
-                        }
-                    %>
-                        <option value="<%= t.resource_uri %>" <%= selected ? "selected=selected" : "" %>><%= t.name %></option>
-                    <% }) %>
-                <% } %>
+                <select name="tags[]" data-placeholder="<%= $.t('Choose tags')%>" class="photo-tags span4" multiple>
+                	<% if (photo.tags) { %>
+						<% for (var i = 0; i < photo.tags.length; i++) { %>
+							<% var t = photo.tags[i]; %>
+							<option value="<%= t.resource_uri %>" selected="selected"><%= t.name %></option>
+						<% } %>
+					<% } %>
                 </select>
                 <span class="help-inline"></span>
                 <button class="btn btn-mini add-tag-photos" data-target="photo-tags"><%= $.t('add new tag')%></button>

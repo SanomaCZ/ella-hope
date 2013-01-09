@@ -45,13 +45,60 @@ steal(
 			}
 
 			// render article form
-			can.view( '//app/photos/views/upload-photos.ejs', {
-				photo: this.photo,
-				author: Author.findAll(),
-				source: Source.findAll(),
-				tag: Tag.findAll()
-			} ).then(function( frag ){
-				self.element.html(frag);
+			self.element.html(can.view( '//app/photos/views/upload-photos.ejs', {
+				photo: this.photo
+			}));
+
+				// ajax autocomplete for author
+				$('.authors-photo').ajaxChosen({
+					type: 'GET',
+					url: BASE_URL+'/author/?',
+					jsonTermKey: 'name__icontains',
+					dataType: 'json'
+				}, function (data) {
+
+					var results = [];
+
+					$.each(data, function (i, val) {
+						results.push({ value: val.resource_uri, text: val.name });
+					});
+
+					return results;
+				});
+
+				// ajax autocomplete for source
+				$('.photo-source').ajaxChosen({
+					type: 'GET',
+					url: BASE_URL+'/source/?',
+					jsonTermKey: 'name__icontains',
+					dataType: 'json'
+				}, function (data) {
+
+					var results = [];
+
+					$.each(data, function (i, val) {
+						results.push({ value: val.resource_uri, text: val.name });
+					});
+
+					return results;
+				});
+
+				// ajax autocomplete for tags
+				$('.photo-tags').ajaxChosen({
+					type: 'GET',
+					url: BASE_URL+'/tag/?',
+					jsonTermKey: 'name__icontains',
+					dataType: 'json'
+				}, function (data) {
+
+					var results = [];
+
+					$.each(data, function (i, val) {
+						results.push({ value: val.resource_uri, text: val.name });
+					});
+
+					return results;
+				});
 
 				var jcropOptions = self.options.jcropOptions;
 
@@ -102,7 +149,6 @@ steal(
 
 				// enable crop
 				$('.photo-preview img').Jcrop(jcropOptions);
-			});
 
 			this.element.slideDown(200);
 		},
@@ -153,14 +199,63 @@ steal(
 
 				//this.filelist.files.push(files[i]);
 
-				can.view( '//app/photos/views/photo.ejs', {
+				$('#images').append(can.view( '//app/photos/views/photo.ejs', {
 					file: files[i],
-					photo: {},
-					author: Author.findAll(),
-					source: Source.findAll(),
-					tag: Tag.findAll()
-				} ).then(function( frag ){
-					$('#images').append(frag);
+					photo: {}
+					//author: Author.findAll(),
+					//source: Source.findAll(),
+					//tag: Tag.findAll()
+				}));
+
+				// ajax autocomplete for author
+				$('.authors-photo').ajaxChosen({
+					type: 'GET',
+					url: BASE_URL+'/author/?',
+					jsonTermKey: 'name__icontains',
+					dataType: 'json'
+				}, function (data) {
+
+					var results = [];
+
+					$.each(data, function (i, val) {
+						results.push({ value: val.resource_uri, text: val.name });
+					});
+
+					return results;
+				});
+
+				// ajax autocomplete for source
+				$('.photo-source').ajaxChosen({
+					type: 'GET',
+					url: BASE_URL+'/source/?',
+					jsonTermKey: 'name__icontains',
+					dataType: 'json'
+				}, function (data) {
+
+					var results = [];
+
+					$.each(data, function (i, val) {
+						results.push({ value: val.resource_uri, text: val.name });
+					});
+
+					return results;
+				});
+
+				// ajax autocomplete for tags
+				$('.photo-tags').ajaxChosen({
+					type: 'GET',
+					url: BASE_URL+'/tag/?',
+					jsonTermKey: 'name__icontains',
+					dataType: 'json'
+				}, function (data) {
+
+					var results = [];
+
+					$.each(data, function (i, val) {
+						results.push({ value: val.resource_uri, text: val.name });
+					});
+
+					return results;
 				});
 
 				// show image next to form
