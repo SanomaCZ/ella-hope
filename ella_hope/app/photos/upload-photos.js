@@ -194,111 +194,135 @@ steal(
 			// show progress bar
 			$('.progress').show().find('.bar').css('width', '0px');
 
-			// add selected files to observe se that it can be rendered
-			for (var i = 0; i < files.length; i++) {
+			var j = 0;
+			var f = function() {
+				setTimeout(function(){
+					if (j < nFiles) {
+						self.createNewImage(files[j]);
+						f();
+						j++;
+					}
+					else {
+						self.applyDefaultValues();
+					}
+				}, 1000);
+			};
 
-				//this.filelist.files.push(files[i]);
+			f();
+		},
 
-				$('#images').append(can.view( '//app/photos/views/photo.ejs', {
-					file: files[i],
-					photo: {}
-					//author: Author.findAll(),
-					//source: Source.findAll(),
-					//tag: Tag.findAll()
-				}));
 
-				// ajax autocomplete for author
-				$('.authors-photo').ajaxChosen({
-					type: 'GET',
-					url: BASE_URL+'/author/?',
-					jsonTermKey: 'name__icontains',
-					dataType: 'json'
-				}, function (data) {
+		/**
+		 * apply chosen select and default values
+		 * @return {[type]} [description]
+		 */
+		applyDefaultValues: function() {
 
-					var results = [];
+			var $defaults = $('.defaults'),
+				$images = $('#images');
 
-					$.each(data, function (i, val) {
-						results.push({ value: val.resource_uri, text: val.name });
-					});
+			// get default values
+			defaultTitle = $defaults.find('input[name=default_title]').val();
+			defaultDescription = $defaults.find('input[name=default_description]').val();
+			defaultAuthor = $defaults.find('select[name=default_author]').val();
 
-					return results;
-				});
-
-				// ajax autocomplete for source
-				$('.photo-source').ajaxChosen({
-					type: 'GET',
-					url: BASE_URL+'/source/?',
-					jsonTermKey: 'name__icontains',
-					dataType: 'json'
-				}, function (data) {
-
-					var results = [];
-
-					$.each(data, function (i, val) {
-						results.push({ value: val.resource_uri, text: val.name });
-					});
-
-					return results;
-				});
-
-				// ajax autocomplete for tags
-				$('.photo-tags').ajaxChosen({
-					type: 'GET',
-					url: BASE_URL+'/tag/?',
-					jsonTermKey: 'name__icontains',
-					dataType: 'json'
-				}, function (data) {
-
-					var results = [];
-
-					$.each(data, function (i, val) {
-						results.push({ value: val.resource_uri, text: val.name });
-					});
-
-					return results;
-				});
-
-				// show image next to form
-				self.showImagePreview(files[i]);
+			// set default values
+			if (defaultTitle) {
+				$images.find('input[name=title]').val(defaultTitle);
+			}
+			if (defaultDescription) {
+				$images.find('textarea[name=description]').val(defaultDescription);
+			}
+			if (defaultAuthor) {
+				$images.find('.authors').find("option[value='"+defaultAuthor+"']").attr("selected", "selected");
 			}
 
-			// wait till all images a rendered so we can apply chosen select and default values
-			setTimeout(function(){
+			// if filename should be used as default value for any field
+			filenameDefault = $defaults.find('select[name=filename_default]').val();
+			if (filenameDefault) {
+				$images.find('.upload-image').each(function(i, v){
+					var filename = $(v).find('input[name=filename]').val();
+					filename = filename.substr(0, filename.lastIndexOf('.')) || filename;
+					$(v).find('.'+filenameDefault).val(filename);
+				});
+			}
 
-				var $defaults = $('.defaults'),
-					$images = $('#images');
+			// enable chosen select for authors
+			// http://harvesthq.github.com/chosen/
+			$('.chzn-select').chosen();
+		},
 
-				// get default values
-				defaultTitle = $defaults.find('input[name=default_title]').val();
-				defaultDescription = $defaults.find('input[name=default_description]').val();
-				defaultAuthor = $defaults.find('select[name=default_author]').val();
+		/**
+		 * create container for each image
+		 * @param  {[type]} file [description]
+		 * @return {[type]}      [description]
+		 */
+		createNewImage: function(file) {
 
-				// set default values
-				if (defaultTitle) {
-					$images.find('input[name=title]').val(defaultTitle);
-				}
-				if (defaultDescription) {
-					$images.find('textarea[name=description]').val(defaultDescription);
-				}
-				if (defaultAuthor) {
-					$images.find('.authors').find("option[value='"+defaultAuthor+"']").attr("selected", "selected");
-				}
+			// append new image
+			// with .find(':last') we can get lastly appended element
+			// we need to do this because ajaxChosen needs to be initialized on each input separately
+			var image = $('#images').append(can.view('//app/photos/views/photo.ejs', {
+				file: file,
+				photo: {}
+			})).find(':last');
 
-				// if filename should be used as default value for any field
-				filenameDefault = $defaults.find('select[name=filename_default]').val();
-				if (filenameDefault) {
-					$images.find('.upload-image').each(function(i, v){
-						var filename = $(v).find('input[name=filename]').val();
-						filename = filename.substr(0, filename.lastIndexOf('.')) || filename;
-						$(v).find('.'+filenameDefault).val(filename);
-					});
-				}
+			// get uploaded image div
+			var uploadImage = image.closest('.modal').prevAll('.upload-image').eq(0);
 
-				// enable chosen select for authors
-				// http://harvesthq.github.com/chosen/
-				$('.chzn-select').chosen();
-			}, 1000);
+			// ajax autocomplete for author
+			$(uploadImage).find('.authors-photo').ajaxChosen({
+				type: 'GET',
+				url: BASE_URL+'/author/?',
+				jsonTermKey: 'name__icontains',
+				dataType: 'json'
+			}, function (data) {
 
+				var results = [];
+
+				$.each(data, function (i, val) {
+					results.push({ value: val.resource_uri, text: val.name });
+				});
+
+				return results;
+			});
+
+			// ajax autocomplete for source
+			$(uploadImage).find('.photo-source').ajaxChosen({
+				type: 'GET',
+				url: BASE_URL+'/source/?',
+				jsonTermKey: 'name__icontains',
+				dataType: 'json'
+			}, function (data) {
+
+				var results = [];
+
+				$.each(data, function (i, val) {
+					results.push({ value: val.resource_uri, text: val.name });
+				});
+
+				return results;
+			});
+
+			// ajax autocomplete for tags
+			$(uploadImage).find('.photo-tags').ajaxChosen({
+				type: 'GET',
+				url: BASE_URL+'/tag/?',
+				jsonTermKey: 'name__icontains',
+				dataType: 'json'
+			}, function (data) {
+
+				var results = [];
+
+				$.each(data, function (i, val) {
+					results.push({ value: val.resource_uri, text: val.name });
+				});
+
+				return results;
+			});
+
+			// show image next to form
+			this.showImagePreview(file);
 		},
 
 		/**
@@ -311,35 +335,30 @@ steal(
 
 			var self = this;
 
-			// we need to set timeout here otherwise it was too soon and preview elements
-			// were not already created
+			var imageType = /image.*/;
+
+			if (!file.type.match(imageType)) {
+				//continue;
+			}
+
+			var img = document.createElement("img");
+			img.classList.add("obj");
+			img.file = file;
+			document.getElementById("preview-"+file.size).appendChild(img);
+
+			var reader = new FileReader();
+			reader.onload = (function(aImg) { return function(e) { aImg.src = e.target.result; }; })(img);
+			reader.readAsDataURL(file);
+
 			setTimeout(function(){
-
-				var imageType = /image.*/;
-
-				if (!file.type.match(imageType)) {
-					//continue;
+				var id = "#preview-" + file.size;
+				if ($(id + " img").length) {
+					$(id + " img").Jcrop({
+						onSelect: function(coords){self.updateCoords(id, coords);},
+						boxWidth: 600,
+						boxHeight: 600
+					});
 				}
-
-				var img = document.createElement("img");
-				img.classList.add("obj");
-				img.file = file;
-				document.getElementById("preview-"+file.size).appendChild(img);
-
-				var reader = new FileReader();
-				reader.onload = (function(aImg) { return function(e) { aImg.src = e.target.result; }; })(img);
-				reader.readAsDataURL(file);
-
-				setTimeout(function(){
-					var id = "#preview-" + file.size;
-					if ($(id + " img").length) {
-						$(id + " img").Jcrop({
-							onSelect: function(coords){self.updateCoords(id, coords);},
-							boxWidth: 600,
-							boxHeight: 600
-						});
-					}
-				}, 10);
 			}, 1000);
 		},
 
