@@ -156,23 +156,25 @@ steal(
 				$('.chzn-select').chosen();
 				$('.enable_comments, .listing').chosen({allow_single_deselect:true});
 
-				// ajax autocomplete for category
-				$('#category, #listing').ajaxChosen({
-					type: 'GET',
-					url: BASE_URL+'/category/?',
-					jsonTermKey: 'title__icontains',
-					dataType: 'json'
-				}, function (data) {
+				// ajax autocomplete for category/listings
+				$.each([$('#category'), $('#listing')], function () {
+					this.ajaxChosen({
+						type: 'GET',
+						url: BASE_URL + '/category/?',
+						jsonTermKey: 'title__icontains',
+						dataType: 'json'
+					}, function (data) {
 
-					var results = [];
+						var results = [];
 
-					$.each(data, function (i, val) {
-						results.push({ value: val.resource_uri, text: val.full_title });
+						$.each(data, function (i, val) {
+							results.push({ value: val.resource_uri, text: val.full_title });
+						});
+
+						return results;
+					}, {
+						"allow_single_deselect": true
 					});
-
-					return results;
-				}, {
-					"allow_single_deselect": true
 				});
 
 				// ajax autocomplete for author
