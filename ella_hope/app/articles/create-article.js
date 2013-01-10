@@ -216,22 +216,25 @@ steal(
 				});
 
 				// ajax autocomplete for tags
-				$('.article-tags, .article-main-tag').ajaxChosen({
-					type: 'GET',
-					url: BASE_URL+'/tag/?',
-					jsonTermKey: 'name__icontains',
-					dataType: 'json'
-				}, function (data) {
+				$.each([$('.article-tags'), $('.article-main-tag')], function () {
+					this.ajaxChosen({
+						type: 'GET',
+						url: BASE_URL + '/tag/?',
+						jsonTermKey: 'name__icontains',
+						dataType: 'json'
+					}, function (data) {
 
-					var results = [];
+						var results = [];
 
-					$.each(data, function (i, val) {
-						results.push({ value: val.resource_uri, text: val.name });
+						$.each(data, function (i, val) {
+							results.push({ value: val.resource_uri, text: val.name });
+						});
+
+						return results;
+					}, {
+						"allow_single_deselect": true
 					});
 
-					return results;
-				}, {
-					"allow_single_deselect": true
 				});
 
 

@@ -49,10 +49,11 @@ steal(
 				photo: this.photo
 			}));
 
-				// ajax autocomplete for author
-				$('.authors-photo, .author-default').ajaxChosen({
+			// ajax autocomplete for author
+			$.each([$('.authors-photo'), $('.author-default')], function () {
+				this.ajaxChosen({
 					type: 'GET',
-					url: BASE_URL+'/author/?',
+					url: BASE_URL + '/author/?',
 					jsonTermKey: 'name__icontains',
 					dataType: 'json'
 				}, function (data) {
@@ -67,6 +68,7 @@ steal(
 				}, {
 					"allow_single_deselect": true
 				});
+			});
 
 				// ajax autocomplete for source
 				$('.photo-source').ajaxChosen({
