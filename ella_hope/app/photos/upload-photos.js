@@ -276,10 +276,10 @@ steal(
 			})).find(':last');
 
 			// get uploaded image div
-			var uploadImage = image.closest('.modal').prevAll('.upload-image').eq(0);
+			var uploadImage = $(image.closest('.modal').prevAll('.upload-image').eq(0));
 
 			// ajax autocomplete for author
-			$(uploadImage).find('.authors-photo').ajaxChosen({
+			uploadImage.find('.authors-photo').ajaxChosen({
 				type: 'GET',
 				url: BASE_URL+'/author/?',
 				jsonTermKey: 'name__icontains',
@@ -296,7 +296,7 @@ steal(
 			});
 
 			// ajax autocomplete for source
-			$(uploadImage).find('.photo-source').ajaxChosen({
+			uploadImage.find('.photo-source').ajaxChosen({
 				type: 'GET',
 				url: BASE_URL+'/source/?',
 				jsonTermKey: 'name__icontains',
@@ -313,7 +313,7 @@ steal(
 			});
 
 			// ajax autocomplete for tags
-			$(uploadImage).find('.photo-tags').ajaxChosen({
+			uploadImage.find('.photo-tags').ajaxChosen({
 				type: 'GET',
 				url: BASE_URL+'/tag/?',
 				jsonTermKey: 'name__icontains',
@@ -373,12 +373,7 @@ steal(
 		// bind to the form's submit event
 		'.uploadForm submit': function(el, ev) {
 
-			var form = el,//.parent('form'),
-				values = form.serialize(),
-				self = this;
-
-			values = can.deparam(values);
-
+			var self = this;
 			var objects = [];
 
 			// compose resource_data object from all selected files
