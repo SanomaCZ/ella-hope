@@ -561,18 +561,17 @@ steal(
 				category: values['listing']
 			};
 
-			if (values['listing_publish_from_date']) {
+			if (values['listing_publish_from_date'] && values['listing_publish_from_time']) {
 				listingAttrs.publish_from = values['listing_publish_from_date']+'T'+values['listing_publish_from_time'];
+			} else {
+				return false;
 			}
+
 			if (values['listing_publish_to_date']) {
 				listingAttrs.publish_to = values['listing_publish_to_date']+'T'+values['listing_publish_to_time'];
 			}
-			if (values['listing_commercial']) {
-				listingAttrs.commercial = values['listing_commercial'];
-			}
-			else {
-				listingAttrs.commercial = false;
-			}
+
+			listingAttrs.commercial = Boolean(values['listing_commercial']);
 
 			// check if current article has already saved listing
 			Listing.getListingByArticle({articleId: article.id}, function(data){
