@@ -230,9 +230,9 @@ steal(
 				$images = $('#images');
 
 			// get default values
-			defaultTitle = $defaults.find('input[name=default_title]').val();
-			defaultDescription = $defaults.find('input[name=default_description]').val();
-			defaultAuthor = $defaults.find('select[name=default_author]').val();
+			var defaultTitle = $defaults.find('input[name=default_title]').val();
+			var defaultDescription = $defaults.find('input[name=default_description]').val();
+			var defaultAuthor = $defaults.find('select[name=default_author]').val();
 
 			// set default values
 			if (defaultTitle) {
@@ -246,7 +246,7 @@ steal(
 			}
 
 			// if filename should be used as default value for any field
-			filenameDefault = $defaults.find('select[name=filename_default]').val();
+			var filenameDefault = $defaults.find('select[name=filename_default]').val();
 			if (filenameDefault) {
 				$images.find('.upload-image').each(function(i, v){
 					var filename = $(v).find('input[name=filename]').val();
