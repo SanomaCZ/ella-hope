@@ -100,7 +100,7 @@ steal(
 				//console.log('new article');
 				// we want to create a new article / gallery
 				this.article = this.options.model === 'articles' ? new Article() : new Gallery();
-				this.article.static = (this.options.model === 'galleries');
+				this.article.static = true;
 			}
 
 			// parse publishFrom date
