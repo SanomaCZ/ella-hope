@@ -154,7 +154,7 @@ steal(
 				// enable chosen select
 				// http://harvesthq.github.com/chosen/
 				$('.chzn-select').chosen();
-				$('.enable_comments, .listing').chosen({allow_single_deselect:true});
+				$('.enable_comments').chosen({allow_single_deselect:true});
 
 				// ajax autocomplete for category/listings
 				$.each([$('#category'), $('#listing')], function () {
@@ -554,12 +554,6 @@ steal(
 		 * @param {array} values - object w/ values for article
 		 */
 		saveListing: function(article, values) {
-
-			//console.log('save listing', article, values);
-
-			var listingPublishFrom = null,
-				listingPublishTo = null,
-				commercial = null;
 
 			// prepare object for Listing model
 			var listingAttrs = {
