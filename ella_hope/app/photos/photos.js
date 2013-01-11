@@ -287,6 +287,15 @@ steal(
 			});
 
 			this.listPhotos();
+		},
+
+		destroy: function() {
+			if (this.photosUpload) {
+				this.photosUpload.destroy();
+			}
+
+			can.Control.prototype.destroy.call( this );
 		}
+
 	})
 );
