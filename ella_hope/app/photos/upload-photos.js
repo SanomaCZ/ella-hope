@@ -49,10 +49,11 @@ steal(
 				photo: this.photo
 			}));
 
-				// ajax autocomplete for author
-				$('.authors-photo, .author-default').ajaxChosen({
+			// ajax autocomplete for author
+			$.each([$('.authors-photo'), $('.author-default')], function () {
+				this.ajaxChosen({
 					type: 'GET',
-					url: BASE_URL+'/author/?',
+					url: BASE_URL + '/author/?',
 					jsonTermKey: 'name__icontains',
 					dataType: 'json'
 				}, function (data) {
@@ -67,6 +68,7 @@ steal(
 				}, {
 					"allow_single_deselect": true
 				});
+			});
 
 				// ajax autocomplete for source
 				$('.photo-source').ajaxChosen({
@@ -228,9 +230,9 @@ steal(
 				$images = $('#images');
 
 			// get default values
-			defaultTitle = $defaults.find('input[name=default_title]').val();
-			defaultDescription = $defaults.find('input[name=default_description]').val();
-			defaultAuthor = $defaults.find('select[name=default_author]').val();
+			var defaultTitle = $defaults.find('input[name=default_title]').val();
+			var defaultDescription = $defaults.find('input[name=default_description]').val();
+			var defaultAuthor = $defaults.find('select[name=default_author]').val();
 
 			// set default values
 			if (defaultTitle) {
@@ -244,7 +246,7 @@ steal(
 			}
 
 			// if filename should be used as default value for any field
-			filenameDefault = $defaults.find('select[name=filename_default]').val();
+			var filenameDefault = $defaults.find('select[name=filename_default]').val();
 			if (filenameDefault) {
 				$images.find('.upload-image').each(function(i, v){
 					var filename = $(v).find('input[name=filename]').val();
@@ -274,10 +276,10 @@ steal(
 			})).find(':last');
 
 			// get uploaded image div
-			var uploadImage = image.closest('.modal').prevAll('.upload-image').eq(0);
+			var uploadImage = $(image.closest('.modal').prevAll('.upload-image').eq(0));
 
 			// ajax autocomplete for author
-			$(uploadImage).find('.authors-photo').ajaxChosen({
+			uploadImage.find('.authors-photo').ajaxChosen({
 				type: 'GET',
 				url: BASE_URL+'/author/?',
 				jsonTermKey: 'name__icontains',
@@ -294,7 +296,7 @@ steal(
 			});
 
 			// ajax autocomplete for source
-			$(uploadImage).find('.photo-source').ajaxChosen({
+			uploadImage.find('.photo-source').ajaxChosen({
 				type: 'GET',
 				url: BASE_URL+'/source/?',
 				jsonTermKey: 'name__icontains',
@@ -311,7 +313,7 @@ steal(
 			});
 
 			// ajax autocomplete for tags
-			$(uploadImage).find('.photo-tags').ajaxChosen({
+			uploadImage.find('.photo-tags').ajaxChosen({
 				type: 'GET',
 				url: BASE_URL+'/tag/?',
 				jsonTermKey: 'name__icontains',
@@ -371,12 +373,7 @@ steal(
 		// bind to the form's submit event
 		'.uploadForm submit': function(el, ev) {
 
-			var form = el,//.parent('form'),
-				values = form.serialize(),
-				self = this;
-
-			values = can.deparam(values);
-
+			var self = this;
 			var objects = [];
 
 			// compose resource_data object from all selected files

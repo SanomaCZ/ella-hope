@@ -100,7 +100,7 @@ steal(
 				//console.log('new article');
 				// we want to create a new article / gallery
 				this.article = this.options.model === 'articles' ? new Article() : new Gallery();
-				this.article.static = (this.options.model === 'galleries');
+				this.article.static = true;
 			}
 
 			// parse publishFrom date
@@ -154,25 +154,27 @@ steal(
 				// enable chosen select
 				// http://harvesthq.github.com/chosen/
 				$('.chzn-select').chosen();
-				$('.enable_comments, .listing').chosen({allow_single_deselect:true});
+				$('.enable_comments').chosen({allow_single_deselect:true});
 
-				// ajax autocomplete for category
-				$('#category, #listing').ajaxChosen({
-					type: 'GET',
-					url: BASE_URL+'/category/?',
-					jsonTermKey: 'title__icontains',
-					dataType: 'json'
-				}, function (data) {
+				// ajax autocomplete for category/listings
+				$.each([$('#category'), $('#listing')], function () {
+					this.ajaxChosen({
+						type: 'GET',
+						url: BASE_URL + '/category/?',
+						jsonTermKey: 'title__icontains',
+						dataType: 'json'
+					}, function (data) {
 
-					var results = [];
+						var results = [];
 
-					$.each(data, function (i, val) {
-						results.push({ value: val.resource_uri, text: val.full_title });
+						$.each(data, function (i, val) {
+							results.push({ value: val.resource_uri, text: val.full_title });
+						});
+
+						return results;
+					}, {
+						"allow_single_deselect": true
 					});
-
-					return results;
-				}, {
-					"allow_single_deselect": true
 				});
 
 				// ajax autocomplete for author
@@ -214,22 +216,25 @@ steal(
 				});
 
 				// ajax autocomplete for tags
-				$('.article-tags, .article-main-tag').ajaxChosen({
-					type: 'GET',
-					url: BASE_URL+'/tag/?',
-					jsonTermKey: 'name__icontains',
-					dataType: 'json'
-				}, function (data) {
+				$.each([$('.article-tags'), $('.article-main-tag')], function () {
+					this.ajaxChosen({
+						type: 'GET',
+						url: BASE_URL + '/tag/?',
+						jsonTermKey: 'name__icontains',
+						dataType: 'json'
+					}, function (data) {
 
-					var results = [];
+						var results = [];
 
-					$.each(data, function (i, val) {
-						results.push({ value: val.resource_uri, text: val.name });
+						$.each(data, function (i, val) {
+							results.push({ value: val.resource_uri, text: val.name });
+						});
+
+						return results;
+					}, {
+						"allow_single_deselect": true
 					});
 
-					return results;
-				}, {
-					"allow_single_deselect": true
 				});
 
 
@@ -550,30 +555,23 @@ steal(
 		 */
 		saveListing: function(article, values) {
 
-			//console.log('save listing', article, values);
-
-			var listingPublishFrom = null,
-				listingPublishTo = null,
-				commercial = null;
-
 			// prepare object for Listing model
 			var listingAttrs = {
 				publishable: article.resource_uri,
 				category: values['listing']
 			};
 
-			if (values['listing_publish_from_date']) {
+			if (values['listing_publish_from_date'] && values['listing_publish_from_time']) {
 				listingAttrs.publish_from = values['listing_publish_from_date']+'T'+values['listing_publish_from_time'];
+			} else {
+				return false;
 			}
+
 			if (values['listing_publish_to_date']) {
 				listingAttrs.publish_to = values['listing_publish_to_date']+'T'+values['listing_publish_to_time'];
 			}
-			if (values['listing_commercial']) {
-				listingAttrs.commercial = values['listing_commercial'];
-			}
-			else {
-				listingAttrs.commercial = false;
-			}
+
+			listingAttrs.commercial = Boolean(values['listing_commercial']);
 
 			// check if current article has already saved listing
 			Listing.getListingByArticle({articleId: article.id}, function(data){
