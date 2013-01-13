@@ -137,7 +137,7 @@
 				}
 				%>
 
-				<select name="listing" id="listing" data-placeholder="<%= $.t('Choose side category')%>" class="listing">
+				<select data-id="<%= listing[0] ? listing[0].id : null %>" name="listing" id="listing" data-placeholder="<%= $.t('Choose side category')%>" class="listing">
 					<option></option>
 					<% if (listingAttr.category) { %>
 						<% var c = listingAttr.category; %>

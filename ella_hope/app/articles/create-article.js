@@ -591,7 +591,9 @@ steal(
 				//console.log(listing);
 
 				// create or update - based on existing id
-				listing.save();
+				listing.save(function(data){
+					$('#listing').data('id', data.id);
+				});
 			});
 		},
 
@@ -789,6 +791,15 @@ steal(
 				$('#listing-options').slideDown(200);
 			}
 			else {
+
+				var id = el.data('id');
+
+				// if there is saved listing to the article, delete it
+				if (id) {
+					el.removeAttr('data-id');
+					Listing.destroy(id);
+				}
+
 				$('#listing-options').slideUp(200);
 			}
 		},
