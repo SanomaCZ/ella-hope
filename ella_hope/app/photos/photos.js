@@ -74,7 +74,7 @@ steal(
 			$('.tag-filter').ajaxChosen({
 				type: 'GET',
 				url: BASE_URL+'/tag/?',
-				jsonTermKey: 'name__icontains',
+				jsonTermKey: 'tags__in',
 				dataType: 'json'
 			}, function (data) {
 
