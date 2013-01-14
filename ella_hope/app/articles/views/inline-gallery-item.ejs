@@ -1,5 +1,5 @@
 <% if (typeof item != "undefined") { title = item.title; %>
-	<li data-resource_id="<%= item.id %>" data-title="<%= photo.title %>">
+	<li data-resource_id="<%= item.id %>" data-title="<%= photo.title %>" data-order="<%= item.order %>">
 <% } else { title = photo.title; %>
 	<li data-photo-id="<%= photo.resource_uri %>" data-title="<%= photo.title %>">
 <% } %>

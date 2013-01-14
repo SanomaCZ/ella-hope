@@ -43,7 +43,7 @@ steal(
 			getRelated : function(galleryID, success, error) {
 
 				return $.ajax({
-					url: BASE_URL+'/galleryitem/?gallery__id='+galleryID,
+					url: BASE_URL+'/galleryitem/?gallery__id='+galleryID+'&order_by=order',
 					type: 'GET',
 					async: true,
 					dataType: "json",

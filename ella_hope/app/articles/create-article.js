@@ -291,11 +291,30 @@ steal(
 					}
 				}).disableSelection();
 
+					//TODO - optimise (set each order * 2 to allow injecting items to empty spaces
+					// w/o need to reorder the whole set
+					var setOrder = function (sortable) {
+						var $sortable = $(sortable);
+
+						//don't trust in natural elements order, let jQuery serialize their order
+						var itemsOrder = $sortable.sortable('toArray', { 'attribute': 'data-resource_id'});//.reverse();
+						var current;
+
+						for (var one in itemsOrder) {
+							current = $sortable.find('li[data-resource_id=' + itemsOrder[one] + ']');
+							if ($(current).data('order') * 1 != one) {
+								$(current).data('order', one);
+								GalleryItem.update($(current).data('resource_id'), {order: one});
+							}
+						}
+					};
+
 				// gallery - gallery items - enable drag&drop between two lists
 				$( "#found-recent-photos, #chosen-recent-photos" ).sortable({
 					connectWith: "#chosen-recent-photos",
 					// when new article is dropped to related articles
 					receive: function(event, ui) {
+						var uiself = this;
 						var el = $(ui.item[0]),
 							receivedID = el.data('photo-id'),
 							articleID = self.article.resource_uri;
@@ -307,8 +326,13 @@ steal(
 							title: el.data('title'),
 							order: 0
 						});
-						item.save(function(model) {
-							el.data('resource_id', model.id);
+
+						item.save(function (model) {
+							//jQuery UI's sortable serialize() returns value via attr()
+							// so make it reachable via attr() [.data() isn't]
+							el.attr('data-resource_id', model.id);
+							el.data('order', item.order);
+							setOrder(uiself);
 						});
 					}
 				}).disableSelection();
