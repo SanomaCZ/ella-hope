@@ -291,24 +291,6 @@ steal(
 					}
 				}).disableSelection();
 
-					//TODO - optimise (set each order * 2 to allow injecting items to empty spaces
-					// w/o need to reorder the whole set
-					var setOrder = function (sortable) {
-						var $sortable = $(sortable);
-
-						//don't trust in natural elements order, let jQuery serialize their order
-						var itemsOrder = $sortable.sortable('toArray', { 'attribute': 'data-resource_id'});//.reverse();
-						var current;
-
-						for (var one in itemsOrder) {
-							current = $sortable.find('li[data-resource_id=' + itemsOrder[one] + ']');
-							if ($(current).data('order') * 1 != one) {
-								$(current).data('order', one);
-								GalleryItem.update($(current).data('resource_id'), {order: one});
-							}
-						}
-					};
-
 				// gallery - gallery items - enable drag&drop between two lists
 				$( "#found-recent-photos, #chosen-recent-photos" ).sortable({
 					connectWith: "#chosen-recent-photos",
@@ -334,6 +316,12 @@ steal(
 							el.data('order', item.order);
 							setOrder(uiself);
 						});
+					},
+					update: function(event, ui) {
+						clearTimeout(this.saveGalleryTimer);
+						self.saveGalleryTimer = setTimeout(function() {
+							self.setGalleryOrder($("#chosen-recent-photos"));
+						}, 30 * 1000);
 					}
 				}).disableSelection();
 
@@ -391,6 +379,23 @@ steal(
 		stopAutosave: function() {
 			clearInterval(this.autosaveTimer);
 			this.autosaveTimer = null;
+		},
+
+		//TODO - optimise (set each order * 2 to allow injecting items to empty spaces
+		// w/o need to reorder the whole set
+		setGalleryOrder: function (sortable) {
+
+			//don't trust in natural elements order, let jQuery serialize their order
+			var itemsOrder = sortable.sortable('toArray', { 'attribute': 'data-resource_id'});//.reverse();
+			var current;
+
+			for (var one in itemsOrder) {
+				current = sortable.find('li[data-resource_id=' + itemsOrder[one] + ']');
+				if ($(current).data('order') * 1 != one) {
+					$(current).data('order', one);
+					GalleryItem.update($(current).data('resource_id'), {order: one});
+				}
+			}
 		},
 
 		/**
