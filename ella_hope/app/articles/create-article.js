@@ -370,9 +370,10 @@ steal(
 		},
 
 		setGallerySaveTimeout: function(interval) {
+			if (this.options.model != 'galleries' || !this.article) { return; }
 			var self = this;
-			clearTimeout(this.saveGalleryTimeout);
-			this.saveGalleryTimeout = null;
+
+			this.stopGalleryAutosave();
 
 			if (interval === 0) {
 				self.setGalleryOrder($("#chosen-recent-photos"));
@@ -381,6 +382,11 @@ steal(
 					self.setGalleryOrder($("#chosen-recent-photos"));
 				}, interval || 30 * 1000);
 			}
+		},
+
+		stopGalleryAutosave: function() {
+			clearTimeout(this.saveGalleryTimeout);
+			this.saveGalleryTimeout = null;
 		},
 
 		/**
@@ -404,7 +410,11 @@ steal(
 				current = sortable.find('li[data-resource_id=' + itemsOrder[one] + ']');
 				if ($(current).data('order') * 1 != one) {
 					$(current).data('order', one);
-					GalleryItem.update($(current).data('resource_id'), {order: one});
+					try {
+						GalleryItem.update($(current).data('resource_id'), {order: one});
+					} catch (e) {
+						return;
+					}
 				}
 			}
 		},
@@ -479,11 +489,9 @@ steal(
 				values['publish_to'] = values['publish_to_date']+'T'+values['publish_to_time'];
 			}
 
-			// if published is not present, set to false
-			if (!values['published']) values['published'] = false;
+			values['published'] = (values['state'] == 'published');
 
-			// if static is not present, set to false
-			if (!values['static']) values['static'] = false;
+			values['static'] = Boolean(values['static']);
 
 			// if authors is not present, set to null so we can validate it
 			if (!values['authors']) values['authors'] = null;
@@ -797,9 +805,6 @@ steal(
 
 			// set historical publish date
 			$('input[name=publish_from_date]').val('2000-01-01');
-
-			// mark article as published
-			$('input[name=published]').attr('checked', 'checked');
 		},
 
 		/**
