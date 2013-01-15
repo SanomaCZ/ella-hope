@@ -314,14 +314,11 @@ steal(
 							// so make it reachable via attr() [.data() isn't]
 							el.attr('data-resource_id', model.id);
 							el.data('order', item.order);
-							setOrder(uiself);
+							self.setGallerySaveTimeout();
 						});
 					},
 					update: function(event, ui) {
-						clearTimeout(this.saveGalleryTimer);
-						self.saveGalleryTimer = setTimeout(function() {
-							self.setGalleryOrder($("#chosen-recent-photos"));
-						}, 30 * 1000);
+						self.setGallerySaveTimeout();
 					}
 				}).disableSelection();
 
@@ -370,6 +367,20 @@ steal(
 			this.autosaveTimer = setInterval(function(){
 				self.save();
 			}, interval);
+		},
+
+		setGallerySaveTimeout: function(interval) {
+			var self = this;
+			clearTimeout(this.saveGalleryTimeout);
+			this.saveGalleryTimeout = null;
+
+			if (interval === 0) {
+				self.setGalleryOrder($("#chosen-recent-photos"));
+			} else {
+				this.saveGalleryTimeout = setTimeout(function () {
+					self.setGalleryOrder($("#chosen-recent-photos"));
+				}, interval || 30 * 1000);
+			}
 		},
 
 		/**
@@ -1674,6 +1685,8 @@ steal(
 		},
 
 		destroy: function() {
+
+			this.setGallerySaveTimeout(0);
 
 			// clear timer
 			this.stopAutosave();
