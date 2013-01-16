@@ -97,7 +97,7 @@ steal(
 			getArticlesByTag : function(data, success, error) {
 
 				var tagsArray = [],
-					reId = /\/(\d+)\//,
+					reId = /\/(\d+)\/$/,
 					matchId;
 
 				// from resource_uri we need to get only resource id

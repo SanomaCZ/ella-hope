@@ -110,10 +110,6 @@ steal(
 
 				var jcropOptions = self.options.jcropOptions;
 
-				// enable chosen select for authors
-				// http://harvesthq.github.com/chosen/
-				$('.chzn-select').chosen();
-
 				// important part of image, based on uploader's crop
 				if (jQuery.isNumeric(self.photo.important_top) && jQuery.isNumeric(self.photo.important_left) &&
 					jQuery.isNumeric(self.photo.important_bottom) && jQuery.isNumeric(self.photo.important_bottom)) {
@@ -167,7 +163,7 @@ steal(
 
 		/**
 		 * get coordinates from Jcrop and update form fields
-		 * @param  {[type]} id [description]
+		 * @param  {[type]} element [description]
 		 * @param  {[type]} c  [description]
 		 * @return {[type]}    [description]
 		 */
@@ -206,7 +202,8 @@ steal(
 			var f = function() {
 				setTimeout(function(){
 					if (j < nFiles) {
-						self.createNewImage(files[j]);
+						console.log(defs);
+						self.createNewImage(files[j], defs);
 						f();
 						j++;
 					}
@@ -216,9 +213,21 @@ steal(
 				}, 1000);
 			};
 
-			f();
+			var defs = {};
+
+			self.getDefaultAuthor(function(instance) {
+				defs.author = instance;
+				f();
+			})
 		},
 
+		getDefaultAuthor: function (cb) {
+			var val = $(".author-default").val();
+			var id = val.match(/\/(\d+)\/$/);
+			if (!id) {return null}
+
+			return Author.findOne({id: id[1]}, cb);
+		},
 
 		/**
 		 * apply chosen select and default values
@@ -232,7 +241,6 @@ steal(
 			// get default values
 			var defaultTitle = $defaults.find('input[name=default_title]').val();
 			var defaultDescription = $defaults.find('input[name=default_description]').val();
-			var defaultAuthor = $defaults.find('select[name=default_author]').val();
 
 			// set default values
 			if (defaultTitle) {
@@ -240,9 +248,6 @@ steal(
 			}
 			if (defaultDescription) {
 				$images.find('textarea[name=description]').val(defaultDescription);
-			}
-			if (defaultAuthor) {
-				$images.find('.authors').find("option[value='"+defaultAuthor+"']").attr("selected", "selected");
 			}
 
 			// if filename should be used as default value for any field
@@ -265,14 +270,15 @@ steal(
 		 * @param  {[type]} file [description]
 		 * @return {[type]}      [description]
 		 */
-		createNewImage: function(file) {
-
+		createNewImage: function(file, defaults) {
+			defaults = defaults || {};
 			// append new image
 			// with .find(':last') we can get lastly appended element
 			// we need to do this because ajaxChosen needs to be initialized on each input separately
 			var image = $('#images').append(can.view('//app/photos/views/photo.ejs', {
 				file: file,
-				photo: {}
+				photo: {},
+				author: defaults.author
 			})).find(':last');
 
 			// get uploaded image div
@@ -762,7 +768,7 @@ steal(
 			ev.preventDefault();
 
 			// get target element where new tag should be inserted
-			target = el.data('target');
+			var target = el.data('target');
 
 			// save target to insert-tag button so that
 			// we can get it when button is clicked

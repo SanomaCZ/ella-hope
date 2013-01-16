@@ -34,12 +34,9 @@
             <label class="control-label required" for="authors"><%= $.t('Author(s)')%></label>
             <select name="authors[]"  data-placeholder="<%= $.t('Choose authors')%>" class="span4 authors-photo authors" multiple>
             	<option></option>
-				<% if (photo.authors) { %>
-					<% for (var i = 0; i < photo.authors.length; i++) { %>
-						<% var a = photo.authors[i]; %>
-						<option value="<%= a.resource_uri %>" selected="selected"><%= a.name %></option>
-					<% } %>
-				<% } %>
+                <% if (author) { %>
+                    <option value="<%= author.resource_uri %>" selected="selected"><%= author.name %></option>
+                <% } %>
             </select>
             <button class="btn btn-mini add-author-photos"><%= $.t('add new author')%></button>
             <span class="help-inline"></span>
@@ -90,7 +87,7 @@
             <div class="photo-preview"><img src="<%= photo.public_url %>" /></div>
         <% } else { %>
             <%# when uploading files, there is going to be a preview before upload %>
-            <div class="photo-preview" id="preview-<%=file.size%>"></div>
+            <div class="photo-preview" id="preview-<%= file.size %>"></div>
         <% } %>
 
     </div>

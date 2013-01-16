@@ -3,6 +3,7 @@ steal(
 	function($) {
 		Author = can.Model({
 
+			findOne: 'GET ' + BASE_URL + '/author/{id}/',
 			findAll: 'GET ' + BASE_URL + '/author/',
 			create : function(attrs){
 				return $.ajax({
