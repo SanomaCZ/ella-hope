@@ -744,6 +744,7 @@ steal(
 			this.save();
 		},
 		'.preview click' : function(el, ev) {
+			this.setGallerySaveTimeout(0);
 			this.showPreview();
 		},
 		'.cancel click' : function(){
