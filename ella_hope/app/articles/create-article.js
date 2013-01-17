@@ -296,7 +296,6 @@ steal(
 					connectWith: "#chosen-recent-photos",
 					// when new article is dropped to related articles
 					receive: function(event, ui) {
-						var uiself = this;
 						var el = $(ui.item[0]),
 							receivedID = el.data('photo-id'),
 							articleID = self.article.resource_uri;
@@ -305,7 +304,8 @@ steal(
 						var item = new GalleryItem({
 							gallery: articleID,
 							photo: receivedID,
-							title: el.data('title'),
+							title: el.find('.photo-title').data('label'),
+							text: el.find('.photo-description').data('label'),
 							order: 0
 						});
 
@@ -1467,7 +1467,7 @@ steal(
 		'.remove-recent-photo click' : function(el, ev) {
 
 			GalleryItem.destroy(el.parent().data('resource_id'));
-			el.parent().fadeOut();
+			el.parent().fadeOut().remove();
 		},
 
 		/**
@@ -1475,17 +1475,17 @@ steal(
 		 * @param el galleryItem element encapsulated in jQuery
 		 * @param ev occured event
 		 */
-		'#chosen-recent-photos .change-galleryitem-title click': function (el, ev) {
-			var parent = el.parent('li');
-			var curr_title = parent.data('title');
-			var title = prompt($.t("Enter photo title"), curr_title);
+		'#chosen-recent-photos .change-galleryitem-label click': function (el, ev) {
+			var parent = el.parent('div');
+			var curr_title = parent.data('label');
+			var title = prompt($.t("Enter photo's label"), curr_title);
 
-			if (title !== null) {
+			if (title !== null && title != curr_title) {
 				parent.find('span.value')[0].innerHTML = title;
-				parent.data('title', title);
-				if (title != curr_title) {
-					GalleryItem.update(parent.data('resource_id'), {title: title});
-				}
+				parent.data('label', title);
+				update_attrs = {};
+				update_attrs[parent.data('attr')] = title;
+				GalleryItem.update(parent.parent('li').data('resource_id'), update_attrs);
 			}
 		},
 
