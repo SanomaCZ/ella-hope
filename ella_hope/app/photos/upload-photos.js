@@ -224,7 +224,10 @@ steal(
 		getDefaultAuthor: function (cb) {
 			var val = $(".author-default").val();
 			var id = val.match(/\/(\d+)\/$/);
-			if (!id) {return null}
+			if (!id) {
+				cb();
+				return null;
+			}
 
 			return Author.findOne({id: id[1]}, cb);
 		},
