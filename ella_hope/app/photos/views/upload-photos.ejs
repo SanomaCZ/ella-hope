@@ -14,7 +14,8 @@
 
     <% if (this.photo && this.photo.attr('id')) { %>
         <%== can.view.render( '//app/photos/views/photo.ejs', {
-            photo: photo
+            photo: photo,
+            author: null
         }) %>
 
         <div class="row">
