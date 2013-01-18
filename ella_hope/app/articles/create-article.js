@@ -355,6 +355,20 @@ steal(
 		},
 
 		/**
+		 * detect a change in any form input
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'form.article change': function(el, ev) {
+
+			var target = $(ev.target),
+				name = $(ev.target).attr('name');
+
+			//console.log('change', target, name);
+		},
+
+		/**
 		 * initialize autosave timer
 		 * @param  {[type]} interval [description]
 		 * @return {[type]}          [description]
