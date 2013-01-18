@@ -1318,7 +1318,7 @@ steal(
 			var self = this;
 
 			this.photoPaginator = new can.Observe({
-				limit: 5,
+				limit: 20,
 				offset: 0
 			});
 
