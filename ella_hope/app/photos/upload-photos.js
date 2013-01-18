@@ -222,7 +222,7 @@ steal(
 
 		getDefaultAuthor: function (cb) {
 			var val = $(".author-default").val();
-			var id = val.match(/\/(\d+)\/$/);
+			var id = val && val.match(/\/(\d+)\/$/);
 			if (!id) {
 				cb();
 				return null;
