@@ -202,7 +202,6 @@ steal(
 			var f = function() {
 				setTimeout(function(){
 					if (j < nFiles) {
-						console.log(defs);
 						self.createNewImage(files[j], defs);
 						f();
 						j++;
@@ -401,10 +400,12 @@ steal(
 				var source = $(this).find('.photo-source').val();
 				source = source ? source : null;
 
+				var title = encodeURIComponent($(this).find('.title').val());
+
 				objects[objects.length] = {
-					"title": $(this).find('.title').val(),
-					"slug": $(this).find('.title').val(),
-					"description": $(this).find('.description').val(),
+					"title": title,
+					"slug": title,
+					"description": encodeURIComponent($(this).find('.description').val()),
 					"created": new Date().toISOString(),
 					"authors" : $(this).find('.authors-photo').val(),
 					"app_data": null,

@@ -13,7 +13,7 @@
       chosenOptions = function() {};
     }
     defaultOptions = {
-      minTermLength: 3,
+      minTermLength: 2,
       afterTypeDelay: 500,
       jsonTermKey: "term",
       keepTypingMsg: "Keep typing...",
