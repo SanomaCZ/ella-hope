@@ -1255,7 +1255,7 @@ steal(
 		 * render photos in dialog so that user can choose photo
 		 * @return {[type]} [description]
 		 */
-		renderPhotosList: function(data) {
+		renderPhotosList: function(data, filterData) {
 
 			var self = this;
 
@@ -1263,17 +1263,42 @@ steal(
 				this.initPhotosPagination();
 			}
 
+			var setFilter = {
+				order_by: '-id',
+				offset: self.photoPaginator.attr('offset'),
+				limit: self.photoPaginator.attr('limit')
+			};
+			filterData = filterData || {};
+
+			for (var one in filterData) {
+				setFilter[one] = filterData[one];
+			}
+
+
 			// render list
 			can.view( '//app/articles/views/list-photos.ejs', {
-				photos: Photo.findAll({
-					order_by: '-id',
-					offset: self.photoPaginator.attr('offset'),
-					limit: self.photoPaginator.attr('limit')
-				}),
+				photos: Photo.findAll(setFilter),
 				data: data
 			} ).then(function( frag ){
 				$('#photos-modal .photos-list').html(frag);
 			});
+		},
+
+		'#photos-modal .filter submit': function (el, ev) {
+			//reset offset
+			this.photoPaginator.attr('offset', 0);
+
+			var data = {};
+
+			// author
+			var title = $('#photos-modal .filter input[name=title]').val();
+			if (title) {
+				data.title__icontains = title;
+			}
+
+			this.renderPhotosList({}, data);
+
+			return false;
 		},
 
 		/**
