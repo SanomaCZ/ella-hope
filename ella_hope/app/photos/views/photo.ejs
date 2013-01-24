@@ -33,10 +33,10 @@
         <div class="row control-group">
             <label class="control-label required" for="authors"><%= $.t('Author(s)')%></label>
             <select name="authors[]"  data-placeholder="<%= $.t('Choose authors')%>" class="span4 authors-photo authors" multiple>
-            	<option></option>
-                <% if (author) { %>
-                    <option value="<%= author.resource_uri %>" selected="selected"><%= author.name %></option>
-                <% } %>
+                <option></option>
+                <% $.each(author || {}, function(i, a) { %>
+                    <option value="<%= a.resource_uri %>" selected="selected"><%= a.name %></option>
+                <% }); %>
             </select>
             <button class="btn btn-mini add-author-photos"><%= $.t('add new author')%></button>
             <span class="help-inline"></span>
