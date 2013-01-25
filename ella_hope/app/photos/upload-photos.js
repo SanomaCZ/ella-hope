@@ -280,7 +280,7 @@ steal(
 			var image = $('#images').append(can.view('//app/photos/views/photo.ejs', {
 				file: file,
 				photo: {},
-				author: defaults.author
+				author: [defaults.author]
 			})).find(':last');
 
 			// get uploaded image div
