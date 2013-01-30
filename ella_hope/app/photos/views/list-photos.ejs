@@ -1,10 +1,10 @@
 <table class="table table-striped">
 	<thead>
 		<tr>
-			<th><%= $.t('Image') %></th>
-			<th><%= $.t('Title') %></th>
-			<th><%= $.t('Description') %></th>
-			<th><%= $.t('Actions') %></th>
+			<th><%= $.t('photos.image') %></th>
+			<th><%= $.t('photos.title') %></th>
+			<th><%= $.t('photos.description') %></th>
+			<th><%= $.t('photos.action') %></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -19,11 +19,11 @@
 				<td>
 					<!-- Edit -->
 					<a <%= (el) -> el.data( 'photo', photo ) %> href="<%= editUrl %>" class="btn btn-mini edit-photo">
-						<%= $.t('Edit');%> <i class="icon-pencil"></i>
+						<%= $.t('photos.edit');%> <i class="icon-pencil"></i>
 					</a>
 
 					<!-- Delete -->
-					<a <%= (el) -> el.data( 'photo', photo ) %> href="javascript://" class="btn btn-mini btn-danger delete" data-confirm="<%= $.t('Are you sure you want to delete the photo?') %>"><%= $.t('Delete');%> <i class="icon-trash icon-white"></i></a>
+					<a <%= (el) -> el.data( 'photo', photo ) %> href="javascript://" class="btn btn-mini btn-danger delete" data-confirm="<%= $.t('photos.confirm_delete_photo') %>"><%= $.t('photos.delete');%> <i class="icon-trash icon-white"></i></a>
 				</td>
 			</tr>
 		<% } ) %>

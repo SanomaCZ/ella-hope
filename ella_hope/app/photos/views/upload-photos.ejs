@@ -2,7 +2,7 @@
 <%#  console.log(user); %>
 
 <div class="page-header">
-	<h1><%= $.t('Photos - Upload') %></h1>
+	<h1><%= $.t('photos.upload_heading') %></h1>
 </div>
 
 <div class="hero-unit">
@@ -20,21 +20,21 @@
 
         <div class="row">
             <div class="buttons">
-                <a href="javascript://" class="btn btn-primary photo-save"><%= $.t('Save')%></a>
-                <a href="javascript://" class="btn cancel-upload"><%= $.t('Cancel')%></a>
+                <a href="javascript://" class="btn btn-primary photo-save"><%= $.t('photos.save')%></a>
+                <a href="javascript://" class="btn cancel-upload"><%= $.t('photos.cancel')%></a>
             </div>
         </div>
 
     <% } else { %>
 
         <div class="row defaults">
-            <%= $.t('Default values')%>
+            <%= $.t('photos.default_values')%>
             <br>
             <div class="pull-left">
                 <select name="filename_default">
-                    <option value=""><%= $.t('Use filename as...')%></option>
-                    <option value="title"><%= $.t('Title');%></option>
-                    <option value="description"><%= $.t('Description');%></option>
+                    <option value=""><%= $.t('photos.use_filename')%></option>
+                    <option value="title"><%= $.t('photos.title');%></option>
+                    <option value="description"><%= $.t('photos.description');%></option>
                 </select>
             </div>
             <div class="pull-left">
@@ -44,13 +44,13 @@
             </div>
             <div class="pull-left">
                 <%# $.t('Author') %>
-                <select class="input-medium author-default" name="default_author" data-placeholder="<%= $.t('Author')%>">
+                <select class="input-medium author-default" name="default_author" data-placeholder="<%= $.t('photos.author')%>">
 					<option></option>
 				</select>
             </div>
             <div class="pull-left">
                 &nbsp;&nbsp;
-                <%= $.t('Description') %>: <input type="text" name="default_description" />
+                <%= $.t('photos.description') %>: <input type="text" name="default_description" />
             </div>
         </div>
 
@@ -58,7 +58,7 @@
 
         <div class="row">
             <div>
-                <label for="image"><%= $.t('File')%></label>
+                <label for="image"><%= $.t('photos.file')%></label>
             </div>
             <input type="file" id="file" name="attached_object" multiple />
         </div>
@@ -69,7 +69,7 @@
 
         <div class="row ">
             <div class="upload-buttons">
-                <input type="submit" class="btn btn-primary" value="<%= $.t('Upload')%>" name="uploadSubmitter1" />
+                <input type="submit" class="btn btn-primary" value="<%= $.t('photos.upload')%>" name="uploadSubmitter1" />
             </div>
         </div>
 

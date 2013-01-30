@@ -4,12 +4,12 @@
 	<thead>
 		<tr>
 			<th>&nbsp;</th>
-			<th><%= $.t('Title') %></th>
-			<th><%= $.t('Photo') %></th>
-			<th><%= $.t('Category') %></th>
-			<th><%= $.t('Publish from') %></th>
-			<th><%= $.t('State') %></th>
-			<th><%= $.t('Actions') %></th>
+			<th><%= $.t('articles.title') %></th>
+			<th><%= $.t('articles.photo') %></th>
+			<th><%= $.t('articles.category') %></th>
+			<th><%= $.t('articles.publish_from') %></th>
+			<th><%= $.t('articles.state') %></th>
+			<th><%= $.t('articles.action') %></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -46,7 +46,7 @@
 					</a>
 
 					<!-- Delete -->
-					<a <%= (el) -> el.data( 'article', article ) %> href="javascript://" class="btn btn-mini btn-danger delete" data-confirm="<%= $.t('Are you sure you want to delete the article?') %>">
+					<a <%= (el) -> el.data( 'article', article ) %> href="javascript://" class="btn btn-mini btn-danger delete" data-confirm="<%= $.t('articles.confirm_delete_article') %>">
 						<%= $.t('Delete');%> <i class="icon-trash icon-white"></i>
 					</a>
 				</td>

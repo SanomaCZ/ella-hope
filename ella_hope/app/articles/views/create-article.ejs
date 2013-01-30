@@ -1,5 +1,5 @@
 <div class="page-header">
-	<h1><%= this.model === 'articles' ? $.t('Articles') : $.t('Galleries') %> - <%= $.t('Edit') %></h1>
+	<h1><%= this.model === 'articles' ? $.t('articles.articles') : $.t('articles.galleries') %> - <%= $.t('articles.edit') %></h1>
 </div>
 
 <div class="hero-unit">
@@ -12,37 +12,37 @@
 		<div class="row pull-right">
 
 			<% if (this.model === 'articles') { %>
-				<button class="btn btn-normal encyclopedia"><%= $.t('Encyclopedia')%></button>
+				<button class="btn btn-normal encyclopedia"><%= $.t('articles.encyclopedia')%></button>
 			<% } %>
 
 			<% if (drafts.length) { %>
-				<button class="btn btn-normal draft-select"><%= $.t('Drafts / Templates')%></button>
+				<button class="btn btn-normal draft-select"><%= $.t('articles.drafts_templates')%></button>
 			<% } %>
 		</div>
 
 		<div class="control-group row">
-			<label class="control-label required" for="title"><%= $.t('Title')%></label>
+			<label class="control-label required" for="title"><%= $.t('articles.title')%></label>
 			<div class="controls">
-				<input class="title" type="text" name="title" id="title" placeholder="<%= $.t('Add Title')%>"
+				<input class="title" type="text" name="title" id="title" placeholder="<%= $.t('articles.add_title')%>"
 				value="<%= article.attr('title') %>" >
 				<span class="help-inline"></span>
 			</div>
 		</div>
 
 		<div class="control-group row">
-			<label class="control-label required" for="slug"><%= $.t('Slug')%></label>
+			<label class="control-label required" for="slug"><%= $.t('articles.slug')%></label>
 			<div class="controls">
-				<input class="slug" type="text" name="slug" id="slug" placeholder="<%= $.t('Press "slug from title" button to generate slug')%>"
+				<input class="slug" type="text" name="slug" id="slug" placeholder="<%= $.t('articles.slug_press')%>"
 				value="<%= article.attr('slug') %>" >
 				<span class="help-inline"></span>
-				<button class="btn btn-normal slug-from-title"><%= $.t('slug from title')%></button>
+				<button class="btn btn-normal slug-from-title"><%= $.t('articles.slug_from_title')%></button>
 			</div>
 		</div>
 
 		<div class="control-group row">
-			<label class="control-label required" for="category"><%= $.t('Category')%></label>
+			<label class="control-label required" for="category"><%= $.t('articles.category')%></label>
 			<div class="controls">
-				<select name="category" id="category" data-placeholder="<%= $.t('Choose category')%>" class="category">
+				<select name="category" id="category" data-placeholder="<%= $.t('articles.choose_category')%>" class="category">
 					<option></option>
 					<% if (article.category) { %>
 						<% var c = article.category; %>
@@ -54,9 +54,9 @@
 		</div>
 
 		<div class="control-group row">
-			<label class="control-label required" for="authors"><%= $.t('Author(s)')%></label>
+			<label class="control-label required" for="authors"><%= $.t('articles.authors')%></label>
 			<div class="controls">
-				<select name="authors[]" data-placeholder="<%= $.t('Choose authors')%>" class="authors-article authors" multiple>
+				<select name="authors[]" data-placeholder="<%= $.t('articles.choose_authors')%>" class="authors-article authors" multiple>
 					<option></option>
 					<% if (article.authors) { %>
 						<% for (var i = 0; i < article.authors.length; i++) { %>
@@ -66,14 +66,14 @@
 					<% } %>
 				</select>
 				<span class="help-inline"></span>
-				<button class="btn btn-normal add-author-articles"><%= $.t('add new author')%></button>
+				<button class="btn btn-normal add-author-articles"><%= $.t('articles.add_new_author')%></button>
 			</div>
 		</div>
 
 		<div class="control-group row">
-			<label class="control-label required" for="content"><%= $.t('Content')%></label>
+			<label class="control-label required" for="content"><%= $.t('articles.content')%></label>
 			<div class="controls pull-left">
-				<textarea class="content" rows="10" name="content" placeholder="<%= $.t('Add Content')%>"><%= article.content %></textarea>
+				<textarea class="content" rows="10" name="content" placeholder="<%= $.t('articles.add_content')%>"><%= article.content %></textarea>
 				<span class="help-inline"></span>
 			</div>
 			<div class="box-snippet"></div>
@@ -81,32 +81,32 @@
 
 		<div class="control-group row pull-left">
 			<div class="span4 pull-left" style="margin-left: 0">
-				<label class="control-label required" for="publish_from"><%= $.t('Publish From')%></label>
+				<label class="control-label required" for="publish_from"><%= $.t('articles.publish_from')%></label>
 				<div class="controls">
 					<input class="span2 publish_from" type="datetime-local" name="publish_from_date" id="publish_from" value="<%= article.publish_from_date %>" />
 
 					<input type="text" class="timepicker-default span1 publish_from" name="publish_from_time" id="publish_from_time" value="<%= article.publish_from_time %>" />
 
-					<button class="btn btn-normal set-date-now" data-target-date="publish_from_date"><%= $.t('today') %></button>
+					<button class="btn btn-normal set-date-now" data-target-date="publish_from_date"><%= $.t('articles.today') %></button>
 					<button class="btn btn-normal set-datetime-now" data-target-date="publish_from_date"
-						data-target-time="publish_from_time"><%= $.t('now') %></button>
+						data-target-time="publish_from_time"><%= $.t('articles.now') %></button>
 
 					<span class="help-inline"></span>
 				</div>
-				<div id="date-alert"><%= $.t('Please, correct the dates.')%></div>
+				<div id="date-alert"><%= $.t('articles.correct_days')%></div>
 			</div>
 		</div>
 		<div class="control-group row">
 			<div class="span4 pull-left">
-				<label class="control-label" for="publish_to"><%= $.t('Publish To')%></label>
+				<label class="control-label" for="publish_to"><%= $.t('articles.publish_to')%></label>
 				<div class="controls">
 					<input class="span2 publish_to" type="datetime-local" name="publish_to_date" id="publish_to" value="<%= article.publish_to_date %>" />
 
 					<input type="text" class="timepicker-default span1" name="publish_to_time" id="publish_to_time" value="<%= article.publish_to_time %>" />
 
-					<button class="btn btn-normal set-date-now" data-target-date="publish_to_date"><%= $.t('today') %></button>
+					<button class="btn btn-normal set-date-now" data-target-date="publish_to_date"><%= $.t('articles.today') %></button>
 					<button class="btn btn-normal set-datetime-now" data-target-date="publish_to_date"
-						data-target-time="publish_to_time"><%= $.t('now') %></button>
+						data-target-time="publish_to_time"><%= $.t('articles.now') %></button>
 
 					<span class="help-inline"></span>
 				</div>
@@ -116,7 +116,7 @@
 		<!-- non-required fields -->
 
 		<div class="control-group row">
-			<label class="control-label" for="listing"><%= $.t('Side Category')%></label>
+			<label class="control-label" for="listing"><%= $.t('articles.side_category')%></label>
 			<div class="controls">
 
 				<%
@@ -137,7 +137,7 @@
 				}
 				%>
 
-				<select data-id="<%= listing[0] ? listing[0].id : null %>" name="listing" id="listing" data-placeholder="<%= $.t('Choose side category')%>" class="listing">
+				<select data-id="<%= listing[0] ? listing[0].id : null %>" name="listing" id="listing" data-placeholder="<%= $.t('articles.choose_side_category')%>" class="listing">
 					<option></option>
 					<% if (listingAttr.category) { %>
 						<% var c = listingAttr.category; %>
@@ -152,33 +152,33 @@
 
 			<div class="control-group row pull-left">
 				<div class="span4 pull-left" style="margin-left: 0">
-					<label class="control-label required" for="listing_publish_from"><%= $.t('Side Category - Publish From')%></label>
+					<label class="control-label required" for="listing_publish_from"><%= $.t('articles.side_category_publish_from')%></label>
 					<div class="controls">
 						<input class="span2 listing_publish_from" type="datetime-local" name="listing_publish_from_date" id="listing_publish_from" value="<%= listingAttr.publish_from_date %>" />
 
 						<input type="text" class="timepicker-default span1 listing_publish_from" name="listing_publish_from_time" id="listing_publish_from_time" value="<%= listingAttr.publish_from_time %>" />
 
-						<button class="btn btn-normal set-date-now" data-target-date="listing_publish_from_date"><%= $.t('today') %></button>
+						<button class="btn btn-normal set-date-now" data-target-date="listing_publish_from_date"><%= $.t('articles.today') %></button>
 						<button class="btn btn-normal set-datetime-now" data-target-date="listing_publish_from_date"
-							data-target-time="listing_publish_from_time"><%= $.t('now') %></button>
+							data-target-time="listing_publish_from_time"><%= $.t('articles.now') %></button>
 
 						<span class="help-inline"></span>
 					</div>
-					<div id="listing-date-alert"><%= $.t('Please, correct the dates.')%></div>
+					<div id="listing-date-alert"><%= $.t('articles.correct_days')%></div>
 				</div>
 			</div>
 
 			<div class="control-group row pull-left">
 				<div class="span4 pull-left" style="margin-left: 0">
-					<label class="control-label" for="listing_publish_to"><%= $.t('Side Category - Publish To')%></label>
+					<label class="control-label" for="listing_publish_to"><%= $.t('articles.side_category_publish_from')%></label>
 					<div class="controls">
 						<input class="span2 listing_publish_to" type="datetime-local" name="listing_publish_to_date" id="listing_publish_to" value="<%= listingAttr.publish_to_date %>" />
 
 						<input type="text" class="timepicker-default span1 listing_publish_to" name="listing_publish_to_time" id="listing_publish_to_time" value="<%= listingAttr.publish_to_time %>" />
 
-						<button class="btn btn-normal set-date-now" data-target-date="listing_publish_to_date"><%= $.t('today') %></button>
+						<button class="btn btn-normal set-date-now" data-target-date="listing_publish_to_date"><%= $.t('articles.today') %></button>
 						<button class="btn btn-normal set-datetime-now" data-target-date="listing_publish_to_date"
-							data-target-time="listing_publish_to_time"><%= $.t('now') %></button>
+							data-target-time="listing_publish_to_time"><%= $.t('articles.now') %></button>
 
 						<span class="help-inline"></span>
 					</div>
@@ -186,7 +186,7 @@
 			</div>
 
 			<div class="control-group row">
-				<label class="checkbox"><%= $.t('Side Category - Commercial')%></label>
+				<label class="checkbox"><%= $.t('articles.side_category_commercial')%></label>
 				<input class="listing_commercial" type="checkbox" name="listing_commercial" <%= listingAttr.commercial ? 'checked=checked' : '' %> value="true" />
 				<span class="help-inline"></span>
 			</div>
@@ -194,9 +194,9 @@
 		</div>
 
 		<div class="control-group row">
-			<label class="control-label" for="source"><%= $.t('Source')%></label>
+			<label class="control-label" for="source"><%= $.t('articles.source')%></label>
 			<div class="controls">
-				<select name="source" id="source" data-placeholder="<%= $.t('Choose source')%>" class="article-source source">
+				<select name="source" id="source" data-placeholder="<%= $.t('articles.choose_source')%>" class="article-source source">
 					<option></option>
 					<% if (article.source) { %>
 						<% var s = article.source; %>
@@ -204,22 +204,22 @@
 					<% } %>
 				</select>
 				<span class="help-inline"></span>
-				<button class="btn btn-normal add-source" data-target="article-source"><%= $.t('add new source')%></button>
+				<button class="btn btn-normal add-source" data-target="article-source"><%= $.t('articles.add_new_source')%></button>
 			</div>
 		</div>
 
 		<div class="control-group row" id="photos-preview"></div>
 
 		<div class="control-group row">
-			<label class="control-label" for="description"><%= $.t('Description')%></label>
+			<label class="control-label" for="description"><%= $.t('articles.description')%></label>
 			<div class="controls">
-				<textarea class="description" name="description" id="description" placeholder="<%= $.t('Add Description')%>"><%= article.description %></textarea>
+				<textarea class="description" name="description" id="description" placeholder="<%= $.t('articles.add_description')%>"><%= article.description %></textarea>
 				<span class="help-inline"></span>
 			</div>
 		</div>
 
 		<div class="control-group row">
-			<label class="control-label" for="photo"><%= $.t('Photo')%></label>
+			<label class="control-label" for="photo"><%= $.t('articles.photo')%></label>
 			<div class="controls photo">
 				<%
 				var titlePhotoInserted = false;
@@ -227,11 +227,11 @@
 					titlePhotoInserted = true;
 				} %>
 				<div class="title-photo-empty" <%= titlePhotoInserted === false ? '' : 'style=display:none' %>>
-					<button class="btn btn-normal add-photo"><%= $.t('add photo')%></button>
+					<button class="btn btn-normal add-photo"><%= $.t('articles.add_photo')%></button>
 				</div>
 				<div class="title-photo" <%= titlePhotoInserted === true ? '' : 'style=display:none' %>>
 					<img src="<%= article.photo ? article.photo.public_url : '' %>" />
-					<button class="btn btn-normal remove-photo"><%= $.t('remove photo')%></button>
+					<button class="btn btn-normal remove-photo"><%= $.t('articles.remove_photo')%></button>
 				</div>
 				<input type="hidden" name="photo" value="<%= article.photo ? article.photo.resource_uri : '' %>" />
 				<span class="help-inline"></span>
@@ -239,9 +239,9 @@
 		</div>
 
 		<div class="control-group row">
-			<label class="control-label" for="tags"><%= $.t('Tag(s)')%></label>
+			<label class="control-label" for="tags"><%= $.t('articles.tags')%></label>
 			<div class="controls">
-				<select name="tags[]" data-placeholder="<%= $.t('Choose tags')%>" class="article-tags span8" multiple>
+				<select name="tags[]" data-placeholder="<%= $.t('articles.choose_tags')%>" class="article-tags span8" multiple>
 					<% if (article.tags) { %>
 						<% for (var i = 0; i < article.tags.length; i++) { %>
 							<% var t = article.tags[i]; %>
@@ -252,13 +252,13 @@
 					<% } %>
 				</select>
 				<span class="help-inline"></span>
-				<button class="btn btn-normal add-tag-articles" data-target="article-tags"><%= $.t('add new tag')%></button>
+				<button class="btn btn-normal add-tag-articles" data-target="article-tags"><%= $.t('articles.add_new_tag')%></button>
 			</div>
 		</div>
 
 		<div class="control-group row">
 			<div class="span4 pull-left" style="margin-left: 0">
-				<label class="control-label"><%= $.t('Related articles (save before adding an article)')%></label>
+				<label class="control-label"><%= $.t('articles.related_articles')%></label>
 				<ul id="chosen-related-articles" class="connectedSortable">
 					<% if (relatedArticles.length) { %>
 						<% $.each(relatedArticles, function(i, a) { %>
@@ -271,7 +271,7 @@
 			</div>
 
 			<div class="span4 pull-left">
-				<label><%= $.t('Articles that can be added as related')%></label>
+				<label><%= $.t('articles.articles_can_be_added_related')%></label>
 				<ul id="found-related-articles" class="connectedSortable">
 				</ul>
 			</div>
@@ -279,15 +279,15 @@
 			<div class="span pull-left">
 				<label>&nbsp;</label>
 				<div class="control-group row" style="margin:0">
-					<button class="btn btn-normal get-related-articles" title="<%= $.t('relation is evaluated by tags') %>">
-						<%= $.t('get related articles')%>
+					<button class="btn btn-normal get-related-articles" title="<%= $.t('articles.relation_is_evaluated_by_tags') %>">
+						<%= $.t('articles.get_related_articles')%>
 					</button>
 				</div>
 				&nbsp;
 				<div class="control-group row" style="margin:0">
-					<input type="text" class="span2 pull-left" name="related-name" placeholder="<%= $.t('Name') %>" />
+					<input type="text" class="span2 pull-left" name="related-name" placeholder="<%= $.t('articles.name') %>" />
 					&nbsp;
-					<button class="btn btn-normal get-articles-by-name"><%= $.t('find by name')%></button>
+					<button class="btn btn-normal get-articles-by-name"><%= $.t('articles.find_by_name')%></button>
 				</div>
 			</div>
 		</div>
@@ -295,7 +295,7 @@
 		<% if (this.model === 'galleries') { %>
 			<div class="control-group row" id="gallery-items">
 				<div class="span4 pull-left" style="margin-left: 0">
-					<label class="control-label"><%= $.t('Gallery items (save before adding a photo)')%></label>
+					<label class="control-label"><%= $.t('articles.gallery_items')%></label>
 					<ul id="chosen-recent-photos" class="connectedSortable">
 						<% $.each(galleryitem || [], function(i, g) { %>
 							<%== can.view.render('//app/articles/views/inline-gallery-item.ejs', {
@@ -307,7 +307,7 @@
 				</div>
 
 				<div class="span4 pull-left">
-					<label><%= $.t('List of recent photos')%></label>
+					<label><%= $.t('articles.list_of_photos')%></label>
 					<ul id="found-recent-photos" class="connectedSortable">
 					</ul>
 				</div>
@@ -315,22 +315,22 @@
 				<div class="span pull-left">
 					<label>&nbsp;</label>
 					<div class="control-group row" style="margin:0">
-						<button class="btn btn-normal get-recent-photos"><%= $.t('get recent photos')%></button>
+						<button class="btn btn-normal get-recent-photos"><%= $.t('articles.get_recent_photos')%></button>
 					</div>
 					&nbsp;
 					<div class="control-group row" style="margin:0">
-						<input type="text" class="span2 pull-left" name="related-name" placeholder="<%= $.t('Name') %>" />
+						<input type="text" class="span2 pull-left" name="related-name" placeholder="<%= $.t('articles.name') %>" />
 						&nbsp;
-						<button class="btn btn-normal get-photos-by-name"><%= $.t('find by name')%></button>
+						<button class="btn btn-normal get-photos-by-name"><%= $.t('articles.find_by_name')%></button>
 					</div>
 				</div>
 			</div>
 		<% } %>
 
 		<div class="control-group row">
-			<label class="control-label" for="main_tag"><%= $.t('Main Tag')%></label>
+			<label class="control-label" for="main_tag"><%= $.t('articles.main_tag')%></label>
 			<div class="controls">
-				<select name="main_tag" data-placeholder="<%= $.t('Choose tag')%>" class="article-main-tag">
+				<select name="main_tag" data-placeholder="<%= $.t('articles.choose_tag')%>" class="article-main-tag">
 					<option></option>
 					<% if (article.tags) { %>
 						<% for (var i = 0; i < article.tags.length; i++){ %>
@@ -342,15 +342,15 @@
 					<% } %>
 				</select>
 				<span class="help-inline"></span>
-				<button class="btn btn-normal add-tag-articles" data-target="article-main-tag"><%= $.t('add new tag')%></button>
+				<button class="btn btn-normal add-tag-articles" data-target="article-main-tag"><%= $.t('articles.add_new_tag')%></button>
 			</div>
 		</div>
 
 		<div class="control-group row">
-			<label class="control-label" for="display-options"><%= $.t('Display options')%></label>
+			<label class="control-label" for="display-options"><%= $.t('articles.display_options')%></label>
 
 			<label class="checkbox">
-				<input class="commercial" type="checkbox" name="commercial" <%= article.commercial ? 'checked=checked' : '' %> value="true" /> <%= $.t('Commercial')%>
+				<input class="commercial" type="checkbox" name="commercial" <%= article.commercial ? 'checked=checked' : '' %> value="true" /> <%= $.t('articles.commercial')%>
 				<span class="help-inline"></span>
 			</label>
 
@@ -360,7 +360,7 @@
 				<% } else { %>
 					<input class="photo-displayed" type="checkbox" name="without_photo" value="true" />
 				<% } %>
-				<%= $.t('Article without photo')%>
+				<%= $.t('articles.article_without_photo')%>
 				<span class="help-inline"></span>
 			</label>
 
@@ -371,9 +371,9 @@
 		</div>
 
 		<div class="control-group row">
-			<label class="control-label" for="state"><%= $.t('Enable comments')%></label>
+			<label class="control-label" for="state"><%= $.t('articles.enable_comments')%></label>
 			<div class="controls">
-				<select name="enable_comments" data-placeholder="<%= $.t('Article comments')%>" class="enable_comments">
+				<select name="enable_comments" data-placeholder="<%= $.t('articles.article_comments')%>" class="enable_comments">
 					<option></option>
 					<% if (comments) { %>
 						<% $.each(comments, function(i, comment){ %>
@@ -394,9 +394,9 @@
 		</div>
 
 		<div class="control-group row">
-			<label class="control-label" for="state"><%= $.t('State')%></label>
+			<label class="control-label" for="state"><%= $.t('articles.state')%></label>
 			<div class="controls">
-				<select name="state" id="state" data-placeholder="<%= $.t('Choose state')%>" class="chzn-select state">
+				<select name="state" id="state" data-placeholder="<%= $.t('articles.choose_state')%>" class="chzn-select state">
 				<% if (states) { %>
 					<% $.each(states, function(i, state){ %>
 					<%
@@ -416,7 +416,7 @@
 		</div>
 
 		<div class="control-group row">
-			<label class="control-label" for="static"><%= $.t('Static')%></label>
+			<label class="control-label" for="static"><%= $.t('articles.static')%></label>
 			<div class="controls">
 				<input class="static" type="checkbox" name="static" id="static" <%= article.static ? 'checked=checked' : '' %> value="true" />
 				<span class="help-inline"></span>
@@ -427,13 +427,12 @@
 
 	<div class="control-group row">
 		<div class="buttons">
-			<a href="javascript://" class="btn btn-primary article-save"><%= $.t('Save and leave')%></a>
+			<a href="javascript://" class="btn btn-primary article-save"><%= $.t('articles.save_and_leave')%></a>
 			<a href="javascript://" class="btn btn-info autosave"
-				data-normal="<%= $.t('Autosave')%>"
-				data-saving="<%= $.t('Saving...')%>">
+				data-normal="<%= $.t('articles.autosave')%>"
+				data-saving="<%= $.t('articles.saving')%>">
 				<%= $.t('Autosave')%></a>
-			<a href="javascript://" class="btn btn-info preview"><%= $.t('Preview')%></a>
-			<!--<a href="javascript://" class="btn cancel"><%= $.t('Close without saving')%></a>-->
+			<a href="javascript://" class="btn btn-info preview"><%= $.t('articles.preview')%></a>
 		</div>
 	</div>
 </div>
@@ -442,100 +441,100 @@
 <div class="modal hide fade author-modal-articles" tabindex="-1" role="dialog" aria-labelledby="author-modal-articles" aria-hidden="true" style="display: none; ">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		<h3 id="author-modal-articles"><%= $.t('Add new author') %></h3>
+		<h3 id="author-modal-articles"><%= $.t('articles.add_new_author') %></h3>
 	</div>
 	<div class="modal-body">
 		<form>
-			<label for="name">Name</label>
+			<label for="name"><%= $.t('articles.name') %></label>
 			<input type="text" name="name" />
 
-			<label for="slug">Slug</label>
+			<label for="slug"><%= $.t('articles.slug') %></label>
 			<input type="text" name="slug" />
 
-			<button class="btn btn-normal slug-from-name"><%= $.t('slug from name')%></button>
+			<button class="btn btn-normal slug-from-name"><%= $.t('articles.slug_from_name')%></button>
 		</form>
 	</div>
 	<div class="modal-footer">
-		<button class="btn close-author" data-dismiss="modal"><%= $.t('Close') %></button>
-		<button class="btn btn-primary insert-author"><%= $.t('Insert') %></button>
+		<button class="btn close-author" data-dismiss="modal"><%= $.t('articles.close') %></button>
+		<button class="btn btn-primary insert-author"><%= $.t('articles.insert') %></button>
 	</div>
 </div>
 
 <div id="photos-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="photos-modal" aria-hidden="true" style="display: none; ">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		<h3 id="photos-modal-label"><%= $.t('Insert image') %></h3>
+		<h3 id="photos-modal-label"><%= $.t('articles.insert_image') %></h3>
 	</div>
 	<div class="modal-body">
 
 		<div class="control-group">
-			<button class="btn btn-primary new-photo"><%= $.t('New photo') %></button>
+			<button class="btn btn-primary new-photo"><%= $.t('articles.new_photo') %></button>
 		</div>
 
 		<div class="photos-list"></div>
 	</div>
 	<div class="modal-footer">
-		<button data-dismiss="modal" aria-hidden="true" class="btn close-photo"><%= $.t('Close') %></button>
-		<button class="btn btn-primary insert-photo"><%= $.t('Insert') %></button>
+		<button data-dismiss="modal" aria-hidden="true" class="btn close-photo"><%= $.t('articles.close') %></button>
+		<button class="btn btn-primary insert-photo"><%= $.t('articles.insert') %></button>
 	</div>
 </div>
 
 <div class="modal hide fade source-modal-articles" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		<h3 id="myModalLabel"><%= $.t('Add new source') %></h3>
+		<h3 id="myModalLabel"><%= $.t('articles.add_new_source') %></h3>
 	</div>
 	<div class="modal-body">
 		<form>
-			<label for="name"><%= $.t('Name')%>
+			<label for="name"><%= $.t('articles.name')%>
 				<input type="text" name="name" />
 			</label>
-			<label for="url"><%= $.t('Url')%>
+			<label for="url"><%= $.t('articles.url')%>
 				<input type="text" name="url" />
 			</label>
 		</form>
 	</div>
 	<div class="modal-footer">
-		<button class="btn close-source" data-dismiss="modal"><%= $.t('Close') %></button>
-		<button class="btn btn-primary insert-source"><%= $.t('Insert') %></button>
+		<button class="btn close-source" data-dismiss="modal"><%= $.t('articles.close') %></button>
+		<button class="btn btn-primary insert-source"><%= $.t('articles.insert') %></button>
 	</div>
 </div>
 
 <div class="modal hide fade tag-modal-articles" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		<h3 id="myModalLabel"><%= $.t('Add new tag') %></h3>
+		<h3 id="myModalLabel"><%= $.t('articles.add_new_tag') %></h3>
 	</div>
 	<div class="modal-body">
 		<form>
-			<label for="name"><%= $.t('Name')%></label>
+			<label for="name"><%= $.t('articles.name')%></label>
 			<input type="text" name="name" />
 
-			<label for="author-slug"><%= $.t('Slug')%></label>
+			<label for="author-slug"><%= $.t('articles.slug')%></label>
 			<input type="text" name="slug" />
 
-			<button class="btn btn-normal slug-from-name"><%= $.t('slug from name')%></button>
+			<button class="btn btn-normal slug-from-name"><%= $.t('articles.slug_from_name')%></button>
 		</form>
 	</div>
 	<div class="modal-footer">
-		<button class="btn close-tag" data-dismiss="modal"><%= $.t('Close') %></button>
-		<button class="btn btn-primary insert-tag"><%= $.t('Insert') %></button>
+		<button class="btn close-tag" data-dismiss="modal"><%= $.t('articles.close') %></button>
+		<button class="btn btn-primary insert-tag"><%= $.t('articles.insert') %></button>
 	</div>
 </div>
 
 <div id="draft-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		<h3 id="myModalLabel"><%= $.t('Drafts / Templates') %></h3>
+		<h3 id="myModalLabel"><%= $.t('articles.drafts_tepmplates') %></h3>
 	</div>
 	<div class="modal-body">
 		<% if (drafts.length) { %>
 			<table class="table">
 				<tr>
 					<th><%= $.t('ID')%></th>
-					<th><%= $.t('Title')%></th>
-					<th><%= $.t('Created')%></th>
-					<th><%= $.t('Action')%></th>
+					<th><%= $.t('articles.title')%></th>
+					<th><%= $.t('articles.created')%></th>
+					<th><%= $.t('articles.action')%></th>
 				</tr>
 				<% $.each(drafts, function(i, draft){ %>
 					<tr>
@@ -558,7 +557,7 @@
 							</a>
 
 							<!-- Delete -->
-							<a <%= (el) -> el.data( 'article', draft ) %> href="javascript://" class="btn btn-normal btn-danger delete" data-confirm="<%= $.t('Are you sure you want to delete the draft?') %>"><%= $.t('Delete');%> <i class="icon-trash icon-white"></i></a>
+							<a <%= (el) -> el.data( 'article', draft ) %> href="javascript://" class="btn btn-normal btn-danger delete" data-confirm="<%= $.t('articles.confirm_delete_draft') %>"><%= $.t('articles.delete');%> <i class="icon-trash icon-white"></i></a>
 						</td>
 					</tr>
 				<% }) %>
@@ -566,6 +565,6 @@
 		<% } %>
 	</div>
 	<div class="modal-footer">
-		<button class="btn close-draft" data-dismiss="modal"><%= $.t('Close') %></button>
+		<button class="btn close-draft" data-dismiss="modal"><%= $.t('articles.close') %></button>
 	</div>
 </div>

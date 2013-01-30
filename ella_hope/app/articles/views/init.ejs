@@ -1,23 +1,23 @@
 <div class="page-header">
-	<h1><%= this.model === 'articles' ? $.t('Articles') : $.t('Galleries') %></h1>
+	<h1><%= this.model === 'articles' ? $.t('articles.articles') : $.t('articles.galleries') %></h1>
 </div>
 
 <% if (this.model === 'articles') { %>
-	<a href="<%= can.route.url({ page: 'articles', action: 'new' })%>" class="btn btn-primary"><%= $.t('New article') %></a>
+	<a href="<%= can.route.url({ page: 'articles', action: 'new' })%>" class="btn btn-primary"><%= $.t('articles.new_article') %></a>
 <% } else if (this.model === 'galleries') { %>
-	<a href="<%= can.route.url({ page: 'galleries', action: 'new' })%>" class="btn btn-primary"><%= $.t('New gallery') %></a>
+	<a href="<%= can.route.url({ page: 'galleries', action: 'new' })%>" class="btn btn-primary"><%= $.t('articles.new_gallery') %></a>
 <% } %>
 
 <div class="pull-right">
 	<form class="form-search pull-left">
-		<input type="text" class="input-medium search-query" placeholder="<%= $.t('Search articles by title') %>" />
-		<button type="submit" class="btn search-articles"><%= $.t('Search')%></button>
+		<input type="text" class="input-medium search-query" placeholder="<%= $.t('articles.search_by_title') %>" />
+		<button type="submit" class="btn search-articles"><%= $.t('articles.search')%></button>
 	</form>
 </div>
 
 <div class="pull-right">
 	<button type="submit" class="btn filter-articles">
-		<%= ($.cookie(window.HOPECFG.COOKIE_FILTER) == 'true') ? $.t('Hide filter') : $.t('Show filter') %>
+		<%= ($.cookie(window.HOPECFG.COOKIE_FILTER) == 'true') ? $.t('articles.hide_filter') : $.t('articles.show_filter') %>
 	</button>
 	&nbsp;
 </div>
@@ -26,23 +26,23 @@
 	<div class="clearfix"></div>
 	<form class="form-inline pull-right filter">
 
-		<select class="input-medium category-filter" name="category" data-placeholder="<%= $.t('Category')%>">
+		<select class="input-medium category-filter" name="category" data-placeholder="<%= $.t('articles.category')%>">
 			<option></option>
 		</select>
 
-		<input class="input-small" name="publish_from" type="datetime-local" placeholder="<%= $.t('Publish from') %>" />
+		<input class="input-small" name="publish_from" type="datetime-local" placeholder="<%= $.t('articles.publish_from') %>" />
 
-		<input class="input-small" name="publish_to" type="datetime-local" placeholder="<%= $.t('Publish to') %>" />
+		<input class="input-small" name="publish_to" type="datetime-local" placeholder="<%= $.t('articles.publish_to') %>" />
 
-		<select class="input-small chzn-select" name="published" data-placeholder="<%= $.t('Published') %>">
+		<select class="input-small chzn-select" name="published" data-placeholder="<%= $.t('articles.published') %>">
 			<option></option>
-			<option value="today"><%= $.t('Today') %></option>
-			<option value="yesterday"><%= $.t('Yesterday') %></option>
-			<option value="week"><%= $.t('Week') %></option>
-			<option value="month"><%= $.t('Month') %></option>
+			<option value="today"><%= $.t('articles.today') %></option>
+			<option value="yesterday"><%= $.t('articles.yesterday') %></option>
+			<option value="week"><%= $.t('articles.week') %></option>
+			<option value="month"><%= $.t('articles.month') %></option>
 		</select>
 
-		<select class="input-small chzn-select" name="state" data-placeholder="<%= $.t('State')%>">
+		<select class="input-small chzn-select" name="state" data-placeholder="<%= $.t('articles.state')%>">
 			<option></option>
 			<% if (states) { %>
 				<% $.each(states, function(i, state){ %>
@@ -51,18 +51,18 @@
 			<% } %>
 		</select>
 
-		<select class="input-medium author-filter" name="author" data-placeholder="<%= $.t('Author')%>">
+		<select class="input-medium author-filter" name="author" data-placeholder="<%= $.t('articles.author')%>">
 			<option></option>
 		</select>
 
 		|
 
-		<select class="input-medium tag-filter" name="tag" data-placeholder="<%= $.t('Tag (separate filter)')%>">
+		<select class="input-medium tag-filter" name="tag" data-placeholder="<%= $.t('articles.tags_filter')%>">
 			<option></option>
 		</select>
 
 		<button class="btn btn-small btn-inverse reset-filter">
-			<%= $.t('Reset filter'); %>
+			<%= $.t('articles.reset_filter'); %>
 		</button>
 
 	</form>
@@ -75,7 +75,7 @@
 
 <div class="pagination pagination-centered pagination-articles">
 	<ul>
-		<li><a href="#" class="prev">Prev</a></li>
-		<li><a href="#" class="next">Next</a></li>
+		<li><a href="#" class="prev"><%= $.t('common.prev'); %></a></li>
+		<li><a href="#" class="next"><%= $.t('common.next'); %></a></li>
 	</ul>
 </div>

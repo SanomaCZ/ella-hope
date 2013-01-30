@@ -1,19 +1,19 @@
 <div class="page-header">
-	<h1><%= $.t('Photos/videos') %></h1>
+	<h1><%= $.t('photos.heading') %></h1>
 </div>
 
-<a href="<%= can.route.url({ page: 'photos', action: 'new-photos' })%>" class="btn btn-primary"><%= $.t('New photo') %></a>
-<a href="<%= can.route.url({ page: 'photos', action: 'new-videos' })%>" class="btn btn-primary"><%= $.t('New video') %></a>
+<a href="<%= can.route.url({ page: 'photos', action: 'new-photos' })%>" class="btn btn-primary"><%= $.t('photos.new_photo') %></a>
+<a href="<%= can.route.url({ page: 'photos', action: 'new-videos' })%>" class="btn btn-primary"><%= $.t('photos.new_video') %></a>
 
 <div class="pull-right">
 	<form class="form-search pull-left">
-		<input type="text" class="input-medium search-query" placeholder="<%= $.t('Search photos by title') %>" />
-		<button type="submit" class="btn search-photos"><%= $.t('Search')%></button>
+		<input type="text" class="input-medium search-query" placeholder="<%= $.t('photos.search_by_title') %>" />
+		<button type="submit" class="btn search-photos"><%= $.t('photos.search')%></button>
 	</form>
 </div>
 
 <div class="pull-right">
-	<button type="submit" class="btn filter-photos"><%= $.t('Filter')%></button>
+	<button type="submit" class="btn filter-photos"><%= $.t('photos.filter')%></button>
 	&nbsp;
 </div>
 
@@ -21,18 +21,18 @@
 	<div class="clearfix"></div>
 	<form class="form-inline pull-right filter">
 
-		<select class="input-medium author-filter" name="author" data-placeholder="<%= $.t('Author')%>">
+		<select class="input-medium author-filter" name="author" data-placeholder="<%= $.t('photos.author')%>">
 			<option></option>
 		</select>
 
-		<select class="input-medium tag-filter" name="tag" data-placeholder="<%= $.t('Tag')%>">
+		<select class="input-medium tag-filter" name="tag" data-placeholder="<%= $.t('photos.tag')%>">
 			<option></option>
 		</select>
 
 		|
 
 		<button class="btn btn-small btn-inverse reset-filter">
-			<%= $.t('Reset filter'); %>
+			<%= $.t('photos.reset_filter'); %>
 		</button>
 	</form>
 	<div class="clearfix"></div>
@@ -44,7 +44,7 @@
 
 <div class="pagination pagination-centered">
 	<ul>
-		<li><a href="#" class="prev">Prev</a></li>
-		<li><a href="#" class="next">Next</a></li>
+		<li><a href="#" class="prev"><%= $.t('common.prev') %></a></li>
+		<li><a href="#" class="next"><%= $.t('common.next') %></a></li>
 	</ul>
 </div>

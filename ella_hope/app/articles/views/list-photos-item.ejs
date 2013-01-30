@@ -14,9 +14,9 @@
 		<td>
 			<form class="snippet-params">
 				<select class="span2" name="size">
-					<option value="mala" <%= data.size == 'mala' ? "selected=selected" : '' %>><%= $.t('Small')%></option>
-					<option value="standard" <%= data.size == 'standard' ? "selected=selected" : '' %>><%= $.t('Medium')%></option>
-					<option value="velka" <%= data.size == 'velka' ? "selected=selected" : '' %>><%= $.t('Large')%></option>
+					<option value="mala" <%= data.size == 'mala' ? "selected=selected" : '' %>><%= $.t('photos.small')%></option>
+					<option value="standard" <%= data.size == 'standard' ? "selected=selected" : '' %>><%= $.t('photos.medium')%></option>
+					<option value="velka" <%= data.size == 'velka' ? "selected=selected" : '' %>><%= $.t('photos.large')%></option>
 				</select>
 				<select class="span2" name="format">
 					<option value="ctverec" <%= data.format == 'ctverec' ? "selected=selected" : '' %>>ctverec</option>
@@ -29,28 +29,28 @@
 				<table>
 					<tr>
 						<td><label for="resizable"><input type="checkbox" name="resizable" value="1"
-							<%= data.show_resizable == 1 ? 'checked=checked' : ''  %> />&nbsp;<%= $.t('Resizable') %></label>
+							<%= data.show_resizable == 1 ? 'checked=checked' : ''  %> />&nbsp;<%= $.t('photos.resizable') %></label>
 						</td>
 						<td><label for="author"><input type="checkbox" name="authors" value="1"
-							<%= data.show_authors == 1 ? 'checked=checked' : ''  %> />&nbsp;<%= $.t('Authors') %></label></td>
+							<%= data.show_authors == 1 ? 'checked=checked' : ''  %> />&nbsp;<%= $.t('photos.authors') %></label></td>
 					</tr>
 					<tr>
-						<td><label for="description"><input type="checkbox" name="description" value="1" <%= data.show_description == 1 ? 'checked=checked' : ''  %>/>&nbsp;<%= $.t('Description') %></label></td>
-						<td><label for="source"><input type="checkbox" name="source" value="1" <%= data.show_source == 1 ? 'checked=checked' : ''  %>/>&nbsp;<%= $.t('Source') %></label></td>
+						<td><label for="description"><input type="checkbox" name="description" value="1" <%= data.show_description == 1 ? 'checked=checked' : ''  %>/>&nbsp;<%= $.t('photos.description') %></label></td>
+						<td><label for="source"><input type="checkbox" name="source" value="1" <%= data.show_source == 1 ? 'checked=checked' : ''  %>/>&nbsp;<%= $.t('photos.source') %></label></td>
 					</tr>
 				</table>
 
 				<label for="align">
 					<%= $.t('Align')%>:&nbsp;
 					<select class="span2" name="align">
-						<option value="right" <%= data.align == 'right' ? "selected=selected" : '' %>><%= $.t('Right')%></option>
-						<option value="left" <%= data.align == 'left' ? "selected=selected" : '' %>><%= $.t('Left')%></option>
-						<option value="center" <%= data.align == 'center' ? "selected=selected" : '' %>><%= $.t('Center')%></option>
+						<option value="right" <%= data.align == 'right' ? "selected=selected" : '' %>><%= $.t('photos.right')%></option>
+						<option value="left" <%= data.align == 'left' ? "selected=selected" : '' %>><%= $.t('photos.left')%></option>
+						<option value="center" <%= data.align == 'center' ? "selected=selected" : '' %>><%= $.t('photos.center')%></option>
 					</select>
 				</label>
 
 				<label for="external_url">
-					<%= $.t('External url')%>:&nbsp;
+					<%= $.t('photos.external_url')%>:&nbsp;
 					<input class="span2" type="text" name="url" />
 				</label>
 			</form>

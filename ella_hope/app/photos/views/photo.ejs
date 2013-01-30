@@ -9,9 +9,9 @@
         <input type="hidden" name="rotate" value="0" />
 
 		<div class="control-group row">
-			<label class="control-label" for="source"><%= $.t('Source')%></label>
+			<label class="control-label" for="source"><%= $.t('photos.source')%></label>
 			<div class="controls">
-				<select name="source" data-placeholder="<%= $.t('Choose source')%>" class="photo-source source">
+				<select name="source" data-placeholder="<%= $.t('photos.choose_source')%>" class="photo-source source">
 					<option></option>
 					<% if (photo.source) { %>
 						<% var s = photo.source; %>
@@ -19,38 +19,38 @@
 					<% } %>
 				</select>
 				<span class="help-inline"></span>
-				<button class="btn btn-mini add-source-photos" data-target="photo-source"><%= $.t('add new source')%></button>
+				<button class="btn btn-mini add-source-photos" data-target="photo-source"><%= $.t('photos.add_new_source')%></button>
 			</div>
 		</div>
 
         <div class="row control-group">
-            <label class="control-label" for="title"><%= $.t('Title')%></label>
-            <input class="span4 title" type="text" id="title" name="title" placeholder="<%= $.t('Add Title')%>"
+            <label class="control-label" for="title"><%= $.t('photos.title')%></label>
+            <input class="span4 title" type="text" id="title" name="title" placeholder="<%= $.t('photos.add_title')%>"
                 value="<%= photo.title %>" <%= photo.title ? "" : "" %>>
             <span class="help-inline"></span>
         </div>
 
         <div class="row control-group">
-            <label class="control-label required" for="authors"><%= $.t('Author(s)')%></label>
-            <select name="authors[]"  data-placeholder="<%= $.t('Choose authors')%>" class="span4 authors-photo authors" multiple>
+            <label class="control-label required" for="authors"><%= $.t('photos.authors')%></label>
+            <select name="authors[]"  data-placeholder="<%= $.t('photos.choose_authors')%>" class="span4 authors-photo authors" multiple>
             	<option></option>
                 <% if (author) { %>
                     <option value="<%= author.resource_uri %>" selected="selected"><%= author.name %></option>
                 <% } %>
             </select>
-            <button class="btn btn-mini add-author-photos"><%= $.t('add new author')%></button>
+            <button class="btn btn-mini add-author-photos"><%= $.t('photos.add_new_author')%></button>
             <span class="help-inline"></span>
         </div>
 
         <div class="row control-group">
-            <label for="description"><%= $.t('Description')%></label>
-            <textarea class="span4 description" name="description" placeholder="<%= $.t('Add Description')%>" <%= photo.description ? "" : "class='empty'" %>><%= photo.description %></textarea>
+            <label for="description"><%= $.t('photos.description')%></label>
+            <textarea class="span4 description" name="description" placeholder="<%= $.t('photos.add_description')%>" <%= photo.description ? "" : "class='empty'" %>><%= photo.description %></textarea>
         </div>
 
         <div class="row control-group">
-            <label class="control-label" for="tags"><%= $.t('Tag(s)')%></label>
+            <label class="control-label" for="tags"><%= $.t('photos.tags')%></label>
             <div class="controls">
-                <select name="tags[]" data-placeholder="<%= $.t('Choose tags')%>" class="photo-tags span4" multiple>
+                <select name="tags[]" data-placeholder="<%= $.t('photos.choose_tags')%>" class="photo-tags span4" multiple>
                 	<% if (photo.tags) { %>
 						<% for (var i = 0; i < photo.tags.length; i++) { %>
 							<% var t = photo.tags[i]; %>
@@ -59,7 +59,7 @@
 					<% } %>
                 </select>
                 <span class="help-inline"></span>
-                <button class="btn btn-mini add-tag-photos" data-target="photo-tags"><%= $.t('add new tag')%></button>
+                <button class="btn btn-mini add-tag-photos" data-target="photo-tags"><%= $.t('photos.add_new_tag')%></button>
             </div>
         </div>
 
@@ -104,60 +104,60 @@
     </div>
     <div class="modal-body">
         <form>
-            <label for="name">Name</label>
+            <label for="name"><%= $.t('photos.name') %></label>
             <input type="text" name="name" />
 
-            <label for="slug">Slug</label>
+            <label for="slug"><%= $.t('photos.slug') %></label>
             <input type="text" name="slug" />
 
-            <button class="btn btn-mini slug-from-name"><%= $.t('slug from name')%></button>
+            <button class="btn btn-mini slug-from-name"><%= $.t('photos.slug_from_name')%></button>
         </form>
     </div>
     <div class="modal-footer">
-        <button class="btn close-author" data-dismiss="modal"><%= $.t('Close') %></button>
-        <button class="btn btn-primary insert-author"><%= $.t('Insert') %></button>
+        <button class="btn close-author" data-dismiss="modal"><%= $.t('photos.close') %></button>
+        <button class="btn btn-primary insert-author"><%= $.t('photos.insert') %></button>
     </div>
 </div>
 
 <div class="modal hide fade source-modal-photos" tabindex="-1" role="dialog" aria-labelledby="source-modal-photos" aria-hidden="true" style="display: none; ">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">Ă</button>
-        <h3 id="source-modal-photos"><%= $.t('Add new source') %></h3>
+        <h3 id="source-modal-photos"><%= $.t('photos.add_new_source') %></h3>
     </div>
     <div class="modal-body">
         <form>
-            <label for="name"><%= $.t('Name')%>
+            <label for="name"><%= $.t('photos.name')%>
                 <input type="text" name="name" />
             </label>
-            <label for="url"><%= $.t('Url')%>
+            <label for="url"><%= $.t('photos.url')%>
                 <input type="text" name="url" />
             </label>
         </form>
     </div>
     <div class="modal-footer">
-        <button class="btn close-source"><%= $.t('Close') %></button>
-        <button class="btn btn-primary insert-source"><%= $.t('Insert') %></button>
+        <button class="btn close-source"><%= $.t('photos.close') %></button>
+        <button class="btn btn-primary insert-source"><%= $.t('photos.insert') %></button>
     </div>
 </div>
 
 <div class="modal hide fade tag-modal-photos" tabindex="-1" role="dialog" aria-labelledby="tag-modal-photos" aria-hidden="true" style="display: none; ">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">Ă</button>
-        <h3 id="tag-modal-photos"><%= $.t('Add new tag') %></h3>
+        <h3 id="tag-modal-photos"><%= $.t('photos.add_new_tag') %></h3>
     </div>
     <div class="modal-body">
         <form>
-            <label for="name"><%= $.t('Name')%></label>
+            <label for="name"><%= $.t('photos.name')%></label>
             <input type="text" name="name" />
 
-            <label for="author-slug"><%= $.t('Slug')%></label>
+            <label for="author-slug"><%= $.t('photos.slug')%></label>
             <input type="text" name="slug" />
 
-            <button class="btn btn-mini slug-from-name"><%= $.t('slug from name')%></button>
+            <button class="btn btn-mini slug-from-name"><%= $.t('photos.slug_from_name')%></button>
         </form>
     </div>
     <div class="modal-footer">
-        <button class="btn close-tag"><%= $.t('Close') %></button>
-        <button class="btn btn-primary insert-tag"><%= $.t('Insert') %></button>
+        <button class="btn close-tag"><%= $.t('photos.close') %></button>
+        <button class="btn btn-primary insert-tag"><%= $.t('photos.insert') %></button>
     </div>
 </div>
