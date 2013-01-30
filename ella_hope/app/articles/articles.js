@@ -229,7 +229,7 @@ steal(
 			var self = this;
 
 			this.paginator = new can.Observe({
-				limit: 10,
+				limit: 20,
 				offset: 0
 			});
 
