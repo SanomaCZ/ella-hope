@@ -1012,7 +1012,7 @@ steal(
 			ev.preventDefault();
 
 			// get target element where new tag should be inserted
-			target = el.data('target');
+			var target = el.data('target');
 
 			// save target to insert-tag button so that
 			// we can get it when button is clicked
@@ -1255,9 +1255,9 @@ steal(
 		 * render photos in dialog so that user can choose photo
 		 * @return {[type]} [description]
 		 */
-		renderPhotosList: function(data, filterData) {
-
+		renderPhotosList: function(data) {
 			var self = this;
+            data = data || {};
 
 			if (!this.photoPaginator) {
 				this.initPhotosPagination();
@@ -1268,12 +1268,11 @@ steal(
 				offset: self.photoPaginator.attr('offset'),
 				limit: self.photoPaginator.attr('limit')
 			};
-			filterData = filterData || {};
 
-			for (var one in filterData) {
-				setFilter[one] = filterData[one];
-			}
-
+            var title = self.photoPaginator.attr('title') || $('#photos-modal .filter input[name=title]').val();
+            if (title) {
+                setFilter['title__icontains'] = title;
+            }
 
 			// render list
 			can.view( '//app/articles/views/list-photos.ejs', {
@@ -1287,16 +1286,7 @@ steal(
 		'#photos-modal .filter submit': function (el, ev) {
 			//reset offset
 			this.photoPaginator.attr('offset', 0);
-
-			var data = {};
-
-			// author
-			var title = $('#photos-modal .filter input[name=title]').val();
-			if (title) {
-				data.title__icontains = title;
-			}
-
-			this.renderPhotosList({}, data);
+            this.photoPaginator.attr('title', $('#photos-modal .filter input[name=title]').val());
 
 			return false;
 		},
@@ -1324,7 +1314,7 @@ steal(
 			photosUpload.on('photos-uploaded', function(ev){
 
 				// update photos list
-				self.renderPhotosList({});
+				self.renderPhotosList();
 
 				// remove upload form
 				photosUpload.remove();
@@ -1341,15 +1331,15 @@ steal(
         initPhotosPagination: function() {
 
 			var self = this;
-
 			this.photoPaginator = new can.Observe({
 				limit: 20,
-				offset: 0
+				offset: 0,
+                title: null
 			});
 
 			// when paginator attribute changes, reload articles list
 			this.photoPaginator.bind('change', function(ev, attr, how, newVal, oldVal) {
-				self.renderPhotosList({});
+				self.renderPhotosList();
 			});
         },
 
