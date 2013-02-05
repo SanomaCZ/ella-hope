@@ -286,7 +286,7 @@ steal(
 						// save new relation
 						Article.addRelatedArticle(articleID, receivedID, function(data){
 							// add resource_uri to an element so that it can be deleted
-							el.append('<i class="icon-remove pull-right remove-related"></i>');
+                            el.data('resource_id', data.id).append('<i class="icon-remove pull-right remove-related"></i>');
 						});
 					}
 				}).disableSelection();
@@ -1380,6 +1380,7 @@ steal(
 			// selected tags
 			var tags = $('.article .article-tags').val();
 			if (!tags) {
+                alert($.t("Related articles are being found by tags, however current article has no tags assigned."));
 				return;
 			}
 			Article.getArticlesByTag(tags, function(data){
@@ -1424,7 +1425,7 @@ steal(
 		'.remove-related click' : function(el, ev) {
 
 			Article.deleteRelatedArticle(el.parent().data('resource_id'), function(data) {
-				el.parent().fadeOut();
+				el.parent().fadeOut().remove();
 			});
 		},
 
