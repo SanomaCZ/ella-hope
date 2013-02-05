@@ -44,7 +44,8 @@ steal(
 					{separator:'---------------' },
 					//{name:'Picture', key:'P', replaceWith:'![[![Alternative text]!]]([![Url:!:http://]!] "[![Title]!]")'},
 					{name:'Picture', key:'P', closeWith:function(markItUp) { return ArticleCreate.prototype.insertPhoto(); }},
-					{name:'Link', key:'L', openWith:'[', closeWith:']([![Url:!:http://]!] "[![Title]!]")', placeHolder:'Your text to link here...' }
+					{name:'Link', key:'L', openWith:'[', closeWith:']([![Url:!:http://]!] "[![Title]!]")', placeHolder:'Your text to link here...' },
+                    {name: 'Wiki', key: 'W', closeWith: function (markItUp) { return ArticleCreate.prototype.insertWikiRef(); }, className: 'markItUpwikiRef'}
 					//{separator:'---------------'},
 					//{name:'Quotes', openWith:'> '},
 					//{name:'Code Block / Code', openWith:'(!(\t|!|`)!)', closeWith:'(!(`)!)'},
@@ -947,6 +948,23 @@ steal(
 			$('.author-modal-articles').modal('hide');
 		},
 
+		'#wikiref-modal .insert-wikiref click': function(el, ev) {
+			ev.preventDefault();
+
+			var values = $('.author-modal-articles').find('form').serialize();
+			values = can.deparam(values);
+
+			var snippet = '{% box inline_wiki_reference %}' +
+				'\nslug: ' + values.name +
+				'\ntitle: ' + values.title +
+				'\n{% endbox %}';
+
+			$.markItUp( { replaceWith: snippet } );
+
+
+			$("#wikiref-modal").modal('hide');
+		},
+
 		/**
 		 * open a dialog where new source can be added
 		 * @param  {[type]} el [description]
@@ -1251,6 +1269,32 @@ steal(
 			$('#photos-modal').modal('show');
 		},
 
+		insertWikiRef: function () {
+			this.showWikiRefPopup();
+
+			$('#wikiref-modal').modal('show');
+		},
+
+		showWikiRefPopup: function() {
+			$("#wikiref-name").ajaxChosen({
+				type: 'GET',
+				url: BASE_URL + '/wikipage/?',
+				jsonTermKey: 'title__icontains',
+				dataType: 'json'
+			}, function (data) {
+
+				var results = [];
+
+				$.each(data, function (i, val) {
+					results.push({ value: val.resource_uri, text: val.title });
+				});
+
+				return results;
+			}, {
+				"allow_single_deselect": true
+			});
+		},
+
 		/**
 		 * render photos in dialog so that user can choose photo
 		 * @return {[type]} [description]
@@ -1269,10 +1313,10 @@ steal(
 				limit: self.photoPaginator.attr('limit')
 			};
 
-            var title = self.photoPaginator.attr('title') || $('#photos-modal .filter input[name=title]').val();
-            if (title) {
-                setFilter['title__icontains'] = title;
-            }
+			var title = self.photoPaginator.attr('title') || $('#photos-modal .filter input[name=title]').val();
+			if (title) {
+				setFilter['title__icontains'] = title;
+			}
 
 			// render list
 			can.view( '//app/articles/views/list-photos.ejs', {

@@ -109,3 +109,7 @@ button.add-author, button.add-tag {
 #found-recent-photos i.icon-remove {
 	display: none;
 }
+
+#wikiref-modal .modal-body {
+	min-height: 150px;
+}

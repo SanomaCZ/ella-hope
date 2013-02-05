@@ -172,7 +172,7 @@
 				var ul = $('<ul></ul>'), i = 0;
 				$('li:hover > ul', ul).css('display', 'block');
 				$.each(markupSet, function() {
-					var button = this, t = '', title, li, j;
+					var button = this, t = '', title, li, j, key;
 					title = (button.key) ? (button.name||'')+' [Ctrl+'+button.key+']' : (button.name||'');
 					key   = (button.key) ? 'accesskey="'+button.key+'"' : '';
 					if (button.separator) {

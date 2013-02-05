@@ -52,3 +52,7 @@
 .markItUp .preview a {
 	background-image:url(images/preview.png);
 }
+
+.markItUp .markItUpButton13.markItUpwikiRef a{
+	background-image:url('images/wiki.png');
+}
