@@ -1223,9 +1223,9 @@
 
 					var parts = pair.split('='),
 						key   = prep( parts.shift() ),
-						value = prep( parts.join("=") );
+						value = prep( parts.join("=")),
+					    current = data;
 
-					current = data;
 					parts = key.match(keyBreaker);
 			
 					for ( var j = 0, l = parts.length - 1; j < l; j++ ) {
