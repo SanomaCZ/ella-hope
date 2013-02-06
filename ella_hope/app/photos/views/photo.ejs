@@ -32,11 +32,15 @@
 
         <div class="row control-group">
             <label class="control-label required" for="authors"><%= $.t('photos.authors')%></label>
-            <select name="authors[]"  data-placeholder="<%= $.t('Cphotos.choose_authors')%>" class="span4 authors-photo authors" multiple>
+            <select name="authors[]"  data-placeholder="<%= $.t('photos.choose_authors')%>" class="span4 authors-photo authors" multiple>
                 <option></option>
-                <% $.each(author || {}, function(i, a) { %>
-                    <option value="<%= a.resource_uri %>" selected="selected"><%= a.name %></option>
-                <% }); %>
+                <% if (author) { %>
+                    <% can.each(author, function(a, i) { %>
+                        <% if (typeof a !==  'undefined') { %>
+                            <option value="<%= a.resource_uri %>" selected="selected"><%= a.name %></option>
+                        <% } %>
+                    <% }); %>
+                <% } %>
             </select>
             <button class="btn btn-mini add-author-photos"><%= $.t('photos.add_new_author')%></button>
             <span class="help-inline"></span>

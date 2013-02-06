@@ -15,8 +15,8 @@ steal(
 			// according to original image sizes
 			jcropOptions: {
 				onSelect: function(coords){PhotosUpload.prototype.updateCoords('.photo-preview img', coords);},
-				boxWidth: 600,
-				boxHeight: 600
+				boxWidth: 550,
+				boxHeight: 550
 			}
 		}
 	},
@@ -159,6 +159,7 @@ steal(
 
 		'#file change': function(){
 			this.fileChange();
+			$('#photosRemoveAll').show();
 		},
 
 		/**
@@ -371,8 +372,8 @@ steal(
 				if ($(id + " img").length) {
 					$(id + " img").Jcrop({
 						onSelect: function(coords){self.updateCoords(id, coords);},
-						boxWidth: 600,
-						boxHeight: 600
+						boxWidth: 550,
+						boxHeight: 550
 					});
 				}
 			}, 1000);
@@ -400,11 +401,12 @@ steal(
 				var source = $(this).find('.photo-source').val();
 				source = source ? source : null;
 
+				//var title = encodeURIComponent($(this).find('.title').val());
 				var title = encodeURIComponent($(this).find('.title').val());
 
 				objects[objects.length] = {
 					"title": title,
-					"slug": title,
+					"slug": slug(title),
 					"description": encodeURIComponent($(this).find('.description').val()),
 					"created": new Date().toISOString(),
 					"authors" : $(this).find('.authors-photo').val(),
@@ -501,12 +503,12 @@ steal(
 						.addClass('alert-success')
 						.find('span').html($.t('<strong>Well done!</strong> Photo uploaded.'));
 				},
-				error: function() {
+				error: function(xhr, error) {
 					self.clearFileInput();
 					$('.response_msg')
 						.show()
 						.addClass('alert-error')
-						.find('span').html($.t('<strong>Stop!</strong> Something went wrong.'));
+						.find('span').html(xhr.statusText + '<br><small>' + xhr.responseText + '</small>');
 				}
 			};
 
@@ -702,8 +704,22 @@ steal(
 			can.route.attr({page:'photos'}, true);
 		},
 
+		'#photosRemoveAll click': function(el, ev){
+			ev.preventDefault();
+
+			this.clearFileInput();
+
+			// hide all images
+			$('.upload-image').remove();
+			// show upload button
+			$('.upload-buttons').hide();
+			// show progress bar
+			$('.progress').hide();
+		},
+
 		clearFileInput: function() {
 			$('#file').replaceWith('<input type="file" id="file" name="attached_object" multiple />');
+			$('#photosRemoveAll').hide();
 		},
 
 		/**

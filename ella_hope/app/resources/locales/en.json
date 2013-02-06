@@ -116,7 +116,9 @@
 		"source": "Source",
 		"choose_source": "Choose source",
 		"add_new_source": "Add new source",
+		"add_new_author": "Add new author",
 		"description": "Description",
+		"none": "None",
 		"right": "Right",
 		"left": "Left",
 		"center": "Center",
@@ -154,7 +156,8 @@
 		"default_values": "Default values",
 		"use_filename": "Use filename as...",
 		"file": "File",
-		"upload": "Upload"
+		"upload": "Upload",
+		"remove_all": "Remove all photos"
 	},
 	"dashboard": {
 		"heading": "D&Z admin"

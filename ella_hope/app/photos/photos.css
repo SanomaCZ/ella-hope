@@ -17,12 +17,15 @@
 	text-align: center;
 }
 .photo-preview {
-	max-height: 600px;
-	max-width: 600px;
+	max-height: 550px;
+	max-width: 550px;
 	position: relative;
 }
 .photo-preview img {
-	max-height: 600px;
-	max-width: 600px;
+	max-height: 550px;
+	max-width: 550px;
 	position: absolute;
+}
+#photosRemoveAll {
+	display: none;
 }

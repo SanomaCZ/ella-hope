@@ -1245,14 +1245,14 @@ steal(
 		generateSnippet: function(type, object, format) {
 
 			return ["{% box inline_"+format.size+"_"+format.format+" for "+type+" with pk "+object.id+" %}",
-						"align:"+format.align,
+						format.align === 'none' ? "" : "align:"+format.align,
 						'show_title:' + (format.title ? 1 : 0),
 						'show_description:' + (format.description ? 1 : 0),
 						'show_authors:' + (format.authors ? 1 : 0),
 						'show_source:' + (format.source ? 1 : 0),
 						'show_detail:' + (format.detail ? 1 : 0),
 						"{% endbox %}"
-					].join('\n');
+					].join('\n').replace(/\n\n/g, "\n");
 		},
 
 		/**

@@ -168,7 +168,7 @@
 				</div>
 			</div>
 
-			<div class="control-group row pull-left">
+			<div class="control-group row pull-left" style="margin-left: 0">
 				<div class="span4 pull-left" style="margin-left: 0">
 					<label class="control-label" for="listing_publish_to"><%= $.t('articles.side_category_publish_from')%></label>
 					<div class="controls">
@@ -256,42 +256,6 @@
 			</div>
 		</div>
 
-		<div class="control-group row">
-			<div class="span4 pull-left" style="margin-left: 0">
-				<label class="control-label"><%= $.t('articles.related_articles')%></label>
-				<ul id="chosen-related-articles" class="connectedSortable">
-					<% if (relatedArticles.length) { %>
-						<% $.each(relatedArticles, function(i, a) { %>
-							<li data-resource_id="<%= a.id %>">
-								<%= a.related.title %> <i class="icon-remove pull-right remove-related"></i>
-							</li>
-						<% }); %>
-					<% } %>
-				</ul>
-			</div>
-
-			<div class="span4 pull-left">
-				<label><%= $.t('articles.articles_can_be_added_related')%></label>
-				<ul id="found-related-articles" class="connectedSortable">
-				</ul>
-			</div>
-
-			<div class="span pull-left">
-				<label>&nbsp;</label>
-				<div class="control-group row" style="margin:0">
-					<button class="btn btn-normal get-related-articles" title="<%= $.t('articles.relation_is_evaluated_by_tags') %>">
-						<%= $.t('articles.get_related_articles')%>
-					</button>
-				</div>
-				&nbsp;
-				<div class="control-group row" style="margin:0">
-					<input type="text" class="span2 pull-left" name="related-name" placeholder="<%= $.t('articles.name') %>" />
-					&nbsp;
-					<button class="btn btn-normal get-articles-by-name"><%= $.t('articles.find_by_name')%></button>
-				</div>
-			</div>
-		</div>
-
 		<% if (this.model === 'galleries') { %>
 			<div class="control-group row" id="gallery-items">
 				<div class="span4 pull-left" style="margin-left: 0">
@@ -328,6 +292,42 @@
 		<% } %>
 
 		<div class="control-group row">
+			<div class="span4 pull-left" style="margin-left: 0">
+				<label class="control-label"><%= $.t('articles.related_articles')%></label>
+				<ul id="chosen-related-articles" class="connectedSortable">
+					<% if (relatedArticles.length) { %>
+						<% $.each(relatedArticles, function(i, a) { %>
+							<li data-resource_id="<%= a.id %>">
+								<%= a.related.title %> <i class="icon-remove pull-right remove-related"></i>
+							</li>
+						<% }); %>
+					<% } %>
+				</ul>
+			</div>
+
+			<div class="span4 pull-left">
+				<label><%= $.t('articles.articles_can_be_added_related')%></label>
+				<ul id="found-related-articles" class="connectedSortable">
+				</ul>
+			</div>
+
+			<div class="span pull-left">
+				<label>&nbsp;</label>
+				<div class="control-group row" style="margin:0">
+					<button class="btn btn-normal get-related-articles" title="<%= $.t('articles.relation_is_evaluated_by_tags') %>">
+						<%= $.t('articles.get_related_articles')%>
+					</button>
+				</div>
+				&nbsp;
+				<div class="control-group row" style="margin:0">
+					<input type="text" class="span2 pull-left" name="related-name" placeholder="<%= $.t('articles.name') %>" />
+					&nbsp;
+					<button class="btn btn-normal get-articles-by-name"><%= $.t('articles.find_by_name')%></button>
+				</div>
+			</div>
+		</div>
+
+		<div class="control-group row">
 			<label class="control-label" for="main_tag"><%= $.t('articles.main_tag')%></label>
 			<div class="controls">
 				<select name="main_tag" data-placeholder="<%= $.t('articles.choose_tag')%>" class="article-main-tag">
@@ -349,12 +349,14 @@
 		<div class="control-group row">
 			<label class="control-label" for="display-options"><%= $.t('articles.display_options')%></label>
 
-			<label class="checkbox">
+			<label class="checkbox pull-left">
 				<input class="commercial" type="checkbox" name="commercial" <%= article.commercial ? 'checked=checked' : '' %> value="true" /> <%= $.t('articles.commercial')%>
 				<span class="help-inline"></span>
 			</label>
 
-			<label class="checkbox">
+			<div class="clearfix"></div>
+
+			<label class="checkbox pull-left">
 				<% if (article.app_data && article.app_data.ella && article.app_data.ella.without_photo === true) { %>
 					<input class="photo-displayed" type="checkbox" name="without_photo" checked="checked" value="true" />
 				<% } else { %>
@@ -364,7 +366,9 @@
 				<span class="help-inline"></span>
 			</label>
 
-			<label class="checkbox">
+			<div class="clearfix"></div>
+
+			<label class="checkbox pull-left">
 				<input class="article-parameter" disabled="disabled" type="checkbox" name="article-parameter" <%= article.article_parameter ? 'checked=checked' : '' %> value="true" /> <%= $.t('Article parameter')%>
 				<span class="help-inline"></span>
 			</label>

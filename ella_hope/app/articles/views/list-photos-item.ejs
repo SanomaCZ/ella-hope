@@ -43,6 +43,7 @@
 				<label for="align">
 					<%= $.t('Align')%>:&nbsp;
 					<select class="span2" name="align">
+						<option value="none" <%= data.align == 'none' ? "selected=selected" : '' %>><%= $.t('photos.none')%></option>
 						<option value="right" <%= data.align == 'right' ? "selected=selected" : '' %>><%= $.t('photos.right')%></option>
 						<option value="left" <%= data.align == 'left' ? "selected=selected" : '' %>><%= $.t('photos.left')%></option>
 						<option value="center" <%= data.align == 'center' ? "selected=selected" : '' %>><%= $.t('photos.center')%></option>
