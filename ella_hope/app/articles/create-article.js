@@ -951,13 +951,12 @@ steal(
 		'#wikiref-modal .insert-wikiref click': function(el, ev) {
 			ev.preventDefault();
 
-			var values = $('.author-modal-articles').find('form').serialize();
+			var values = $('#wikiref-modal').find('form').serialize();
 			values = can.deparam(values);
 
-			var snippet = '{% box inline_wiki_reference %}' +
-				'\nslug: ' + values.name +
-				'\ntitle: ' + values.title +
-				'\n{% endbox %}';
+			var snippet = ['{% box inline_wiki_reference for wikipages.wikipage with slug '+ values.slug +' %}',
+				'title:' + values.title,
+				'{% endbox %}'].join('\n');
 
 			$.markItUp( { replaceWith: snippet } );
 
@@ -1247,11 +1246,11 @@ steal(
 
 			return ["{% box inline_"+format.size+"_"+format.format+" for "+type+" with pk "+object.id+" %}",
 						"align:"+format.align,
-						format.title ? 'show_title:1' : 'show_title:0',
-						format.description ? 'show_description:1' : 'show_description:0',
-						format.authors ? 'show_authors:1' : 'show_authors:0',
-						format.source ? 'show_source:1' : 'show_source:0',
-						format.detail ? 'show_detail:1' : 'show_detail:0',
+						'show_title:' + (format.title ? 1 : 0),
+						'show_description:' + (format.description ? 1 : 0),
+						'show_authors:' + (format.authors ? 1 : 0),
+						'show_source:' + (format.source ? 1 : 0),
+						'show_detail:' + (format.detail ? 1 : 0),
 						"{% endbox %}"
 					].join('\n');
 		},
@@ -1286,7 +1285,7 @@ steal(
 				var results = [];
 
 				$.each(data, function (i, val) {
-					results.push({ value: val.resource_uri, text: val.title });
+					results.push({ value: val.slug, text: val.title });
 				});
 
 				return results;
@@ -1611,46 +1610,51 @@ steal(
 			// container where snippet can be edited
 			var snippetBox = el.closest('.controls').siblings('.box-snippet');
 
-			if (foundIndex !== null) {
+			snippetBox.empty();
 
-				var foundSnippetPosition = {
-					start: snippetStarts[foundIndex],
-					end: snippetEnds[foundIndex]
-				};
-
-				// select the text surrounding the snippet
-				el.setInputSelection(foundSnippetPosition.start, foundSnippetPosition.end);
-
-				// get snippet text
-				var snippet = str.substring(foundSnippetPosition.start, foundSnippetPosition.end);
-
-				// parse snippet to get info about it
-				var snippetInfo = this.getSnippetInfo(snippet);
-
-				// snippet contains photos.photo resource
-				if (snippetInfo.type == 'photos.photo' && snippetInfo.id) {
-
-					// render photo form
-					can.view( '//app/articles/views/list-photos-item.ejs', {
-						photo: Photo.findOne( { id: snippetInfo.id } ),
-						data: snippetInfo,
-						insideArticle: true
-					} ).then(function( frag ){
-						snippetBox.empty()
-							.append('<table></table>')
-							.append('<button class="btn btn-primary snippet-update" data-snippet-start="'+foundSnippetPosition.start+'" data-snippet-end="'+foundSnippetPosition.end+'">'+$.t('Update photo')+'</button> ')
-							.append('<button class="btn snippet-cancel">'+$.t('Cancel')+'</button>')
-							.find('table').html(frag);
-					});
-				}
-				else {
-					snippetBox.empty();
-				}
+			if (foundIndex == null) {
+				return;
 			}
-			else {
-				// clean...
-				snippetBox.empty();
+
+			var foundSnippetPosition = {
+				start: snippetStarts[foundIndex],
+				end: snippetEnds[foundIndex]
+			};
+
+			// select the text surrounding the snippet
+			el.setInputSelection(foundSnippetPosition.start, foundSnippetPosition.end);
+
+			// get snippet text
+			var snippet = str.substring(foundSnippetPosition.start, foundSnippetPosition.end);
+
+			// parse snippet to get info about it
+			var snippetInfo = this.getSnippetInfo(snippet);
+
+			// snippet contains photos.photo resource
+			if (!snippetInfo.lookup_name) {
+				return;
 			}
+
+			if (snippetInfo.type == 'photos.photo') {
+				// render photo form
+				can.view( '//app/articles/views/list-photos-item.ejs', {
+					photo: Photo.findOne( { id: snippetInfo.lookup_value } ),
+					data: snippetInfo,
+					insideArticle: true
+				} ).then(function( frag ){
+					snippetBox
+						.append('<table></table>')
+						.append('<button class="btn btn-primary snippet-update" data-snippet-start="'+foundSnippetPosition.start+'" data-snippet-end="'+foundSnippetPosition.end+'">'+$.t('Update photo')+'</button> ')
+						.append('<button class="btn snippet-cancel">'+$.t('Cancel')+'</button>')
+						.find('table').html(frag);
+				});
+			} else if (snippetInfo.type == 'wikipages.wikipage') {
+				var renderForm = can.view.render('//app/articles/views/list-wikipage-item.ejs', {
+					data: snippetInfo
+				} );
+				snippetBox.append(renderForm);
+			}
+
 		},
 
 		/**
@@ -1659,6 +1663,7 @@ steal(
 		 * @return {type: string, id: int} object with snippet type and id
 		 */
 		getSnippetInfo: function(snippet) {
+			//TODO - do it more generic
 
 			var snippetInfo = {};
 
@@ -1667,35 +1672,46 @@ steal(
 			// size
 			var reSize = /inline_([a-z]*)_/;
 			var matchSize = snippet.match(reSize);
-			if (matchSize[1].length) snippetInfo.size = matchSize[1];
+			if (matchSize && matchSize[1].length) snippetInfo.size = matchSize[1];
 
 			// format
 			var reFormat = /inline_[a-z]*_(\w+)/;
 			var matchFormat = snippet.match(reFormat);
-			if (matchFormat[1].length) snippetInfo.format = matchFormat[1];
+			if (matchFormat && matchFormat[1].length) snippetInfo.format = matchFormat[1];
 
 			// we need to get "photos.photo"
 			var reType = /([a-z]*[.][a-z]*)/g;
 			var matchType = snippet.match(reType);
-			if (matchType[0].length) snippetInfo.type = matchType[0];
+			if (matchType && matchType[0].length) snippetInfo.type = matchType[0];
 
-			// get primary key "3"
-			var reId = /pk\s(\d+)/;
+			// get lookup param
+			var reId = /\swith\s(\w+)\s(\w+)/;
 			var matchId = snippet.match(reId);
-			if (matchId[1]) snippetInfo.id = parseInt(matchId[1], 10);
+			if (matchId && matchId[1] && matchId[2]) {
+				snippetInfo.lookup_name = matchId[1];
+				snippetInfo.lookup_value = matchId[2];
+			}
 
 			// get photo's align
-			var reAlign = /align:(\w+)/;
+			var reAlign = /\Walign:(\w+)/;
 			var matchAlign = snippet.match(reAlign);
-			if (matchAlign[1]) snippetInfo.align = matchAlign[1];
+			if (matchAlign && matchAlign[1]) snippetInfo.align = matchAlign[1];
+
+			//title
+			var reTitle = /\Wtitle:(.*)/;
+			var matchTitle = snippet.match(reTitle);
+			if (matchTitle && matchTitle[1]) snippetInfo.title = matchTitle[1];
 
 			// get photo's params (show_title, show_description, ...)
 			var reShow = /show_(\w+):(\w+)/g,
 				matchShow = snippet.match(reShow),
 				split;
-			for (var i = 0; i < matchShow.length; i++) {
-				split = matchShow[i].split(":");
-				snippetInfo[split[0]] = parseInt(split[1], 10);
+
+			if (matchShow && matchShow.length) {
+				for (var i = 0; i < matchShow.length; i++) {
+					split = matchShow[i].split(":");
+					snippetInfo[split[0]] = parseInt(split[1], 10);
+				}
 			}
 
 			return snippetInfo;
