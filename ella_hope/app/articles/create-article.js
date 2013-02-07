@@ -948,22 +948,6 @@ steal(
 			$('.author-modal-articles').modal('hide');
 		},
 
-		'#wikiref-modal .insert-wikiref click': function(el, ev) {
-			ev.preventDefault();
-
-			var values = $('#wikiref-modal').find('form').serialize();
-			values = can.deparam(values);
-
-			var snippet = ['{% box inline_wiki_reference for wikipages.wikipage with slug '+ values.slug +' %}',
-				'title:' + values.title,
-				'{% endbox %}'].join('\n');
-
-			$.markItUp( { replaceWith: snippet } );
-
-
-			$("#wikiref-modal").modal('hide');
-		},
-
 		/**
 		 * open a dialog where new source can be added
 		 * @param  {[type]} el [description]
@@ -1242,17 +1226,29 @@ steal(
 		 * @param  {object} format additional params
 		 * @return {string}        generated snippet
 		 */
-		generateSnippet: function(type, object, format) {
+		generateSnippet: function(contentType, object, params) {
+			if (contentType == 'ella_wikipages.wikipage') {
+				var snippetData = [
+					'{% box inline_wiki_reference for ' + contentType + ' with slug "' + params.slug + '" %}',
+					'title:' + params.title,
+					'{% endbox %}'
+				]
+			} else if (contentType == 'photos.photo') {
+				var snippetData = [
+					"{% box inline_"+params.size+"_"+params.format+" for "+contentType+" with pk "+object.id+" %}",
+					params.align === 'none' ? "" : "align:"+params.align,
+					'show_title:' + (params.title ? 1 : 0),
+					'show_description:' + (params.description ? 1 : 0),
+					'show_authors:' + (params.authors ? 1 : 0),
+					'show_source:' + (params.source ? 1 : 0),
+					'show_detail:' + (params.detail ? 1 : 0),
+					"{% endbox %}"
+					]
+			} else {
+				alert('invalid widget type: ' + contentType);
+			}
 
-			return ["{% box inline_"+format.size+"_"+format.format+" for "+type+" with pk "+object.id+" %}",
-						format.align === 'none' ? "" : "align:"+format.align,
-						'show_title:' + (format.title ? 1 : 0),
-						'show_description:' + (format.description ? 1 : 0),
-						'show_authors:' + (format.authors ? 1 : 0),
-						'show_source:' + (format.source ? 1 : 0),
-						'show_detail:' + (format.detail ? 1 : 0),
-						"{% endbox %}"
-					].join('\n').replace(/\n\n/g, "\n");
+			return snippetData.join('\n').replace(/\n\n/g, "\n");
 		},
 
 		/**
@@ -1268,30 +1264,42 @@ steal(
 			$('#photos-modal').modal('show');
 		},
 
-		insertWikiRef: function () {
-			this.showWikiRefPopup();
+		insertWikiRef: function (snippetInfo) {
+			snippetInfo = snippetInfo || {};
+			var renderForm = can.view.render('//app/articles/views/list-wikipage-item.ejs', {
+				data: snippetInfo
+			});
 
-			$('#wikiref-modal').modal('show');
+			$('#box-snippet')
+				.empty()
+				.append(renderForm)
+				.find(".wikiref-name").ajaxChosen({
+					type: 'GET',
+					url: BASE_URL + '/wikipage/?',
+					jsonTermKey: 'title__icontains',
+					dataType: 'json'
+				}, function (data) {
+					var results = [];
+
+					$.each(data, function (i, val) {
+						results.push({ value: val.slug, text: val.title });
+					});
+
+					return results;
+				});
 		},
 
-		showWikiRefPopup: function() {
-			$("#wikiref-name").ajaxChosen({
-				type: 'GET',
-				url: BASE_URL + '/wikipage/?',
-				jsonTermKey: 'title__icontains',
-				dataType: 'json'
-			}, function (data) {
+		'#wikiref-modal .insert-wikiref click': function(el, ev) {
+			ev.preventDefault();
 
-				var results = [];
+			var values = $('#wikiref-modal').find('form').serialize();
+			values = can.deparam(values);
 
-				$.each(data, function (i, val) {
-					results.push({ value: val.slug, text: val.title });
-				});
+			var snippet = this.generateSnippet('ella_wikipages.wikipage', null, values);
 
-				return results;
-			}, {
-				"allow_single_deselect": true
-			});
+			$.markItUp( { replaceWith: snippet } );
+
+			$("#wikiref-modal").modal('hide');
 		},
 
 		/**
@@ -1575,6 +1583,7 @@ steal(
 		 * @return {[type]}    [description]
 		 */
 		'textarea click' : function(el, ev) {
+			var self = this;
 
 			// get current cursor position
 			var position = el.getCursorPosition();
@@ -1595,9 +1604,6 @@ steal(
 				snippetEnds.push(result.index + 12);	// 12 is the length of snippet end {% endbox %}
 			}
 
-			//console.log(snippetStarts);
-			//console.log(snippetEnds);
-
 			// check if cursor is inside any snippet
 			var foundIndex = null;
 			for (var i = 0; i < snippetStarts.length; i++) {
@@ -1608,7 +1614,7 @@ steal(
 			}
 
 			// container where snippet can be edited
-			var snippetBox = el.closest('.controls').siblings('.box-snippet');
+			var snippetBox = $('#box-snippet');
 
 			snippetBox.empty();
 
@@ -1648,13 +1654,13 @@ steal(
 						.append('<button class="btn snippet-cancel">'+$.t('Cancel')+'</button>')
 						.find('table').html(frag);
 				});
-			} else if (snippetInfo.type == 'wikipages.wikipage') {
-				var renderForm = can.view.render('//app/articles/views/list-wikipage-item.ejs', {
-					data: snippetInfo
-				} );
-				snippetBox.append(renderForm);
+			} else if (snippetInfo.type == 'ella_wikipages.wikipage') {
+				WikiPage.findOne({slug: snippetInfo.lookup_value.substring(1, snippetInfo.lookup_value.length-1)}, function(wikiPage) {
+					snippetInfo.lookup_object = wikiPage[0];
+					snippetInfo.snippetPosition = foundSnippetPosition;
+					self.insertWikiRef(snippetInfo)
+				})
 			}
-
 		},
 
 		/**
@@ -1680,12 +1686,12 @@ steal(
 			if (matchFormat && matchFormat[1].length) snippetInfo.format = matchFormat[1];
 
 			// we need to get "photos.photo"
-			var reType = /([a-z]*[.][a-z]*)/g;
+			var reType = /([a-z_]*[.][a-z_]*)/g;
 			var matchType = snippet.match(reType);
 			if (matchType && matchType[0].length) snippetInfo.type = matchType[0];
 
 			// get lookup param
-			var reId = /\swith\s(\w+)\s(\w+)/;
+			var reId = /\swith\s(\w+)\s(\S+)/;
 			var matchId = snippet.match(reId);
 			if (matchId && matchId[1] && matchId[2]) {
 				snippetInfo.lookup_name = matchId[1];
@@ -1727,18 +1733,23 @@ steal(
 
 			ev.preventDefault();
 
-			var snippetBox = el.closest('.box-snippet'),
-				photo = snippetBox.find('tr').eq(0).data('photo'),
+			var snippetBox = $('#box-snippet'),
 				oldSnippetStart = el.data('snippet-start'),
 				oldSnippetEnd = el.data('snippet-end'),
 				textarea = el.closest('.control-group').find('textarea'),
 				text = textarea.val(),
 				form = snippetBox.find('form'),
-				params = can.deparam(form.serialize());
+				params = can.deparam(form.serialize()),
+				snippetObject = null;
 
-			// generate new snippet
-			var newSnippet = this.generateSnippet('photos.photo', photo, params);
+			var boxType = form.data('content');
+			if (boxType == 'photos.photo') {
+				snippetObject = snippetBox.find('tr').eq(0).data('photo');
+			} else if (boxType == 'ella_wikipages.wikipage') {
 
+			}
+
+			var newSnippet = this.generateSnippet(boxType, snippetObject, params);
 			// replace old snippet with new snippet in textarea
 			var oldSnippet = text.substr(oldSnippetStart, oldSnippetEnd - oldSnippetStart);
 			textarea.val(text.replace(oldSnippet, newSnippet));
@@ -1754,7 +1765,7 @@ steal(
 		 * @return {[type]}    [description]
 		 */
 		'.snippet-cancel click' : function(el, ev) {
-			el.closest('.box-snippet').empty();
+			$('#box-snippet').empty();
 		},
 
 		/**

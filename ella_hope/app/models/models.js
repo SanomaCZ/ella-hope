@@ -15,6 +15,7 @@ steal(
 	, "./source.js"
 	, "./tag.js"
 	, "./user.js"
+	, "./wikipage.js"
 )
 .then(	// following models inherit from previous models - must be loaded later
 	"./gallery.js"

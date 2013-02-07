@@ -12,7 +12,7 @@
 
 	<% if (!data.title) { %>
 		<td>
-			<form class="snippet-params">
+			<form class="snippet-params" data-content="photos.photo">
 				<select class="span2" name="size">
 					<option value="mala" <%= data.size == 'mala' ? "selected=selected" : '' %>><%= $.t('photos.small')%></option>
 					<option value="standard" <%= data.size == 'standard' ? "selected=selected" : '' %>><%= $.t('photos.medium')%></option>

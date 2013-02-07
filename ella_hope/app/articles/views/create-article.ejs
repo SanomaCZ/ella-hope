@@ -76,7 +76,7 @@
 				<textarea class="content" rows="10" name="content" placeholder="<%= $.t('articles.add_content')%>"><%= article.content %></textarea>
 				<span class="help-inline"></span>
 			</div>
-			<div class="box-snippet"></div>
+			<div id="box-snippet"></div>
 		</div>
 
 		<div class="control-group row pull-left">
@@ -442,23 +442,6 @@
 </div>
 
 <!-- modal dialogs -->
-<div id="wikiref-modal" class="modal hide" role="dialog" aria-hidden="true" style="display:none;" tabindex="-1">
-	<div class="modal-body">
-		<form>
-			<label for="name"><%= $.t('wikiref.name') %></label>
-			<select id="wikiref-name" name="slug">
-				<option></option>
-			</select>
-
-			<label for="title"><%= $.t('wikiref.title') %></label>
-			<input type="text" name="title" />
-		</form>
-	</div>
-	<div class="modal-footer">
-		<button class="btn close-wikiref" data-dismiss="modal"><%= $.t('articles.close') %></button>
-		<button class="btn btn-primary insert-wikiref"><%= $.t('articles.insert') %></button>
-	</div>
-</div>
 
 <div class="modal hide fade author-modal-articles" tabindex="-1" role="dialog" aria-labelledby="author-modal-articles" aria-hidden="true" style="display: none; ">
 	<div class="modal-header">
