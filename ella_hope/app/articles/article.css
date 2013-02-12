@@ -113,3 +113,8 @@ button.add-author, button.add-tag {
 #wikiref-modal .modal-body {
 	min-height: 150px;
 }
+
+.hero-nested {
+	background-color: #DDDDDD;
+	padding: 30px;
+}

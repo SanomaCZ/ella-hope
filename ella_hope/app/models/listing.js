@@ -34,11 +34,11 @@ steal(
 
 			getListingByArticle: function(data, success, error) {
 				return $.ajax({
-					url: BASE_URL+'/listing/?publishable__id='+data.articleId,
+					url: BASE_URL + '/listing/?publishable__id=' + data.articleId,
 					type: 'GET',
 					async: true,
 					dataType: 'json',
-					contentType: 'application/json',	// this is necessary
+					contentType: 'application/json',	// this is neccessary
 					success: success,
 					error: error
 				});

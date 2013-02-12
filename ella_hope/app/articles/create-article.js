@@ -93,12 +93,9 @@ steal(
 
 			var self = this;
 
-			//console.log(article);
-
 			this.article = article;
 			if (!this.article) {
 
-				//console.log('new article');
 				// we want to create a new article / gallery
 				this.article = this.options.model === 'articles' ? new Article() : new Gallery();
 				this.article.static = true;
@@ -146,7 +143,7 @@ steal(
 				comments: this.options.articleComments,
 				//photos: Photo.findAll(),
 				relatedArticles: this.article.id ? Article.getRelatedArticles(this.article.id) : [],
-				listing: this.article.id ? Listing.getListingByArticle({articleId: this.article.id}) : {},
+				listings: this.article.id ? Listing.getListingByArticle({articleId: this.article.id}) : [],
 				galleryitem: this.article.id && self.options.model === 'galleries' ? GalleryItem.getRelated(this.article.id) : {},
 				model: self.options.model
 			} ).then(function( frag ){
@@ -158,7 +155,7 @@ steal(
 				$('.enable_comments').chosen({allow_single_deselect:true});
 
 				// ajax autocomplete for category/listings
-				$.each([$('#category'), $('#listing')], function () {
+				$.each([$('#category'), $('.listing-name')], function () {
 					this.ajaxChosen({
 						type: 'GET',
 						url: BASE_URL + '/category/?',
@@ -173,8 +170,6 @@ steal(
 						});
 
 						return results;
-					}, {
-						"allow_single_deselect": true
 					});
 				});
 
@@ -365,8 +360,6 @@ steal(
 
 			var target = $(ev.target),
 				name = $(ev.target).attr('name');
-
-			//console.log('change', target, name);
 		},
 
 		/**
@@ -483,9 +476,6 @@ steal(
 		 * @return {[type]} [description]
 		 */
 		createArticle: function() {
-
-			//console.log('create');
-
 			var form = $('form.article'),
 				values = form.serialize();
 			values = can.deparam(values);
@@ -531,8 +521,6 @@ steal(
 				delete values.main_tag;
 			}
 
-			//console.log('save', values);
-
 			values['app_data'] = {'ella':
 				{'without_photo': Boolean(values['without_photo'])}
 			}
@@ -553,8 +541,6 @@ steal(
 			form.find('.control-group').removeClass('error');
 			form.find('.help-inline').empty();
 
-			//console.log(this.article);
-
 			// check for errors (validation)
 			var errors = this.article.errors();
 
@@ -562,23 +548,14 @@ steal(
 			if (errors === null) {
 				// save article
 				this.article.save(function(){
-					//console.log('ok');
 				}, function(xhr){
-					//console.log('error');
 					alert('Error occured, try again later.');
 					return false;
 				});
 
-				// listing - must be saved when article exists
-				if (values['listing']) {
-					if (!this.article.id) {
-						alert('Side category (listing) error - probably article is not saved');
-					}
-					else {
-						this.saveListing(this.article, values);
-					}
-				}
+				this.saveListing();
 
+				return false;
 				return true;
 			}
 			else {
@@ -613,16 +590,32 @@ steal(
 		 * save listing - side category for article
 		 * it is saved as relation between article and category, also with publish_from
 		 * https://github.com/SanomaCZ/ella-hub/blob/master/doc/api.rst#listing
-		 * @param {model} article - instance of article
 		 * @param {array} values - object w/ values for article
 		 */
-		saveListing: function(article, values) {
+		saveListing: function() {
 
-			// prepare object for Listing model
 			var listingAttrs = {
-				publishable: article.resource_uri,
-				category: values['listing']
+				publishable: this.article.resource_uri
 			};
+
+			var listings = $("#side_categories").find('.js-removable-item');
+
+			$.each(listings, function(one) {
+
+				var listingOne = new Listing();
+				listingOne.category = $(one).find('input[name=category]')
+				listingOne.publish_from = $(one).find('input[name=category]')
+
+				var publish_to = $(one).find('input[name=listing_publish_from_date]').val();
+
+				//TODO - go on here
+				listingOne.publish_to = $(one).find('input[name=category]')
+
+			});
+
+
+
+
 
 			if (values['listing_publish_from_date'] && values['listing_publish_from_time']) {
 				listingAttrs.publish_from = values['listing_publish_from_date']+'T'+values['listing_publish_from_time'];
@@ -636,28 +629,6 @@ steal(
 
 			listingAttrs.commercial = Boolean(values['listing_commercial']);
 
-			// check if current article has already saved listing
-			Listing.getListingByArticle({articleId: article.id}, function(data){
-
-				// create new Listing
-				// if id is present, it will update the existing one
-				var listing = new Listing(listingAttrs);
-
-				//console.log('listing id', listing.id);
-
-				// if listing exists, update it
-				// if it does not exists, create it
-				if (data.length && data[0].id) {
-					listing.id = data[0].id;
-				}
-
-				//console.log(listing);
-
-				// create or update - based on existing id
-				listing.save(function(data){
-					$('#listing').data('id', data.id);
-				});
-			});
 		},
 
 		/**
@@ -1766,6 +1737,46 @@ steal(
 		 */
 		'.snippet-cancel click' : function(el, ev) {
 			$('#box-snippet').empty();
+		},
+
+		'.add-side-category click': function (el, ev) {
+			ev.preventDefault();
+
+			var renderForm = can.view.render('//app/articles/views/inline-side-category.ejs', {
+				listing: {}
+			});
+
+			var sideCats = $("#side_categories");
+
+			sideCats.append(renderForm);
+
+			sideCats.find(".listing-name").ajaxChosen({
+				type: 'GET',
+				url: BASE_URL + '/category/?',
+				jsonTermKey: 'title__icontains',
+				dataType: 'json'
+			}, function (data) {
+				var results = [];
+
+				$.each(data, function (i, val) {
+					results.push({ value: val.resource_uri, text: val.full_title });
+				});
+
+				return results;
+			});
+		},
+
+		'.js-remove-item click': function(el, ev) {
+
+			ev.preventDefault();
+
+			var itemSpace = $(el).closest('.js-removable-item');
+			var instance = $(itemSpace).data('instance');
+
+			instance = new Listing(instance);
+			instance.destroy(function() {
+				itemSpace.fadeOut().remove();
+			});
 		},
 
 		/**

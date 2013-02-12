@@ -236,8 +236,7 @@ steal("can/util")
 	
 			// See if we got passed any deferreds.
 			var deferreds = getDeferreds(data);
-	
-	
+
 			if ( deferreds.length ) { // Does data contain any deferreds?
 				// The deferred that resolves into the rendered content...
 				var deferred = new can.Deferred();
