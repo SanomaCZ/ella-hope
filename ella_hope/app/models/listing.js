@@ -2,7 +2,18 @@ steal(
 	'can/model',
 	function($) {
 		Listing = can.Model({
-
+			init : function(){
+				this.validate("publish_from", function (val){
+					if (val === null || val === '') {
+						return $.t('This field can not be empty');
+					}
+				});
+				this.validate("category", function (val){
+					if (val === null || val === '') {
+						return $.t('This field can not be empty');
+					}
+				});
+			},
 			findAll: 'GET ' + BASE_URL + '/listing/',
 			findOne: 'GET ' + BASE_URL + '/listing/{id}/',
 
@@ -45,7 +56,10 @@ steal(
 			}
 
 
-		}, {});
+		}, {
+			prefix: 'listing'
+
+		});
 
 	}
 );

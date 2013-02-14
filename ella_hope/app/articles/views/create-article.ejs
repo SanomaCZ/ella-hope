@@ -115,7 +115,7 @@
 
 		<!-- non-required fields -->
 
-        <h4><%= $.t('articles.side_categories')%></h4>
+        <h3><%= $.t('articles.side_categories')%></h3>
         <div id="side_categories" class="row">
             <% $.each(listings || [], function(i, g) { %>
                 <%== can.view.render('//app/articles/views/inline-side-category.ejs', {
@@ -123,6 +123,7 @@
                 }) %>
             <% }) %>
         </div>
+
         <div class="control-group row">
             <button class="btn add-side-category"><%= $.t('add another side category') %></button>
         </div>

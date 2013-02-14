@@ -1,4 +1,4 @@
-<div class="hero-unit hero-nested js-removable-item" <%= (el) -> el.data( 'instance', listing ) %>>
+<div class="hero-unit hero-nested js-removable-item" <%= (el) -> el.data( 'instance', listing ) %> data-model="<%= listing.prefix %>">
     <button class="close js-remove-item">
         &times;
     </button>
@@ -24,52 +24,53 @@
 
     %>
     <div class="row">
-        <div class="span4 pull-left">
-            <label class="control-label required" for="listing"><%= $.t('articles.side_category')%></label>
-            <select data-id="<%= listing.id %>" name="listing" class="listing-name listing" data-placeholder="<%= $.t('articles.choose_side_category')%>">
+        <div class="span4 pull-left control-group">
+            <label class="control-label required"><%= $.t('articles.side_category')%></label>
+            <select data-id="<%= listing.id %>" name="listing_category" class="listing-name listing" data-placeholder="<%= $.t('articles.choose_side_category')%>">
                 <option></option>
                 <% if (listing.category) { %>
                     <option value="<%= listing.category.resource_uri %>" selected="selected"><%= listing.category.full_title %></option>
                 <% } %>
             </select>
+
             <span class="help-inline"></span>
         </div>
-        <div class="span4 pull-left">
+
+        <div class="span4 pull-left  control-group">
             <label class="checkbox"><%= $.t('articles.side_category_commercial')%></label>
-            <input class="listing_commercial" type="checkbox" name="listing_commercial" <%= listing.commercial ? 'checked=checked' : '' %> value="true" />
+            <input class="commercial" type="checkbox" name="listing_commercial" <%= listing.commercial ? 'checked=checked' : '' %> value="true" />
+
             <span class="help-inline"></span>
         </div>
+
     </div>
 
     <div class="row">
-        <div class="span4 pull-left">
+        <div class="span4 pull-left control-group">
             <label class="control-label required" for="listing_publish_from"><%= $.t('articles.side_category_publish_from')%></label>
 
             <div class="controls">
-                <input class="span2 listing_publish_from" type="datetime-local" name="listing_publish_from_date" value="<%= publish_from_date %>"/>
+                <input class="span2 publish_from" type="datetime-local" name="listing_publish_from_date" value="<%= publish_from_date %>"/>
 
                 <input type="text" class="timepicker-default span1 listing_publish_from" name="listing_publish_from_time" value="<%= publish_from_time %>"/>
 
-                <button class="btn btn-normal set-date-now" data-target-date="listing_publish_from_date"><%= $.t('articles.today') %>
+                <button class="btn btn-normal set-date-now" data-target-date="listing_publish_from_date">
+                    <%= $.t('articles.today') %>
                 </button>
-                <button class="btn btn-normal set-datetime-now" data-target-date="listing_publish_from_date"
-                        data-target-time="listing_publish_from_time"><%= $.t('articles.now') %>
+                <button class="btn btn-normal set-datetime-now" data-target-date="listing_publish_from_date" data-target-time="listing_publish_from_time">
+                        <%= $.t('articles.now') %>
                 </button>
 
                 <span class="help-inline"></span>
             </div>
-            <div>
-                <%= $.t('articles.correct_days')%>
-            </div>
         </div>
 
-
-        <div class="pull-left">
+        <div class="pull-left control-group">
             <div class="span4 pull-left">
-                <label class="control-label" for="listing_publish_to"><%= $.t('articles.side_category_publish_from')%></label>
+                <label class="control-label" for="listing_publish_to"><%= $.t('articles.side_category_publish_to')%></label>
 
                 <div class="controls">
-                    <input class="span2 listing_publish_to" type="datetime-local" name="listing_publish_to_date" value="<%= publish_to_date %>"/>
+                    <input class="span2 publish_to" type="datetime-local" name="listing_publish_to_date" value="<%= publish_to_date %>"/>
 
                     <input type="text" class="timepicker-default span1 listing_publish_to" name="listing_publish_to_time" value="<%= publish_to_time %>"/>
 

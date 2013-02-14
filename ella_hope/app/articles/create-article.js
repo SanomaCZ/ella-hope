@@ -81,7 +81,7 @@ steal(
 			this.initPhotosPagination();
 
 			// initialize autosave
-			this.initAutosave(this.options.autosaveInterval);
+			// this.initAutosave(this.options.autosaveInterval);
 		},
 
 		/**
@@ -434,8 +434,7 @@ steal(
 		 */
 		save: function() {
 
-			var self = this,
-				autosaveLink = $('a.autosave'),
+			var autosaveLink = $('a.autosave'),
 				buttonNormalText = autosaveLink.data('normal'),
 				buttonSavingText = autosaveLink.data('saving'),
 				buttonNormalCss = 'btn-info',
@@ -462,13 +461,12 @@ steal(
 			if (errors === true) {
 				// there are no errors
 				this.deleteDraft();
-				return true;
 			}
 			else {
 				// there are some errors, save article as a draft and send errors back
 				this.saveDraft();
-				return errors;
 			}
+			return errors;
 		},
 
 		/**
@@ -476,7 +474,8 @@ steal(
 		 * @return {[type]} [description]
 		 */
 		createArticle: function() {
-			var form = $('form.article'),
+			var self = this,
+				form = $('form.article'),
 				values = form.serialize();
 			values = can.deparam(values);
 
@@ -543,25 +542,25 @@ steal(
 
 			// check for errors (validation)
 			var errors = this.article.errors();
-
-			// no errors
-			if (errors === null) {
-				// save article
-				this.article.save(function(){
-				}, function(xhr){
-					alert('Error occured, try again later.');
-					return false;
-				});
-
-				this.saveListing();
-
-				return false;
-				return true;
-			}
-			else {
-				//this.article.destroy();
+			if (errors !== null) {
 				return errors;
 			}
+
+			this.article.save(function () {
+			}, function (xhr) {
+				alert('Error occured, try again later.');
+				return false;
+			});
+
+			var foreignKeys = $("form.article").find('.js-removable-item');
+			var success = true;
+			$.each(foreignKeys, function () {
+				var model = $(this).data('model');
+				success = success && self['save_' + model](this);
+			});
+
+			return false;
+			return success;
 		},
 
 		/**
@@ -569,11 +568,10 @@ steal(
 		 * @param  {[type]} errors [description]
 		 * @return {[type]}        [description]
 		 */
-		showErrors: function(errors) {
+		showErrors: function(errors, block) {
 
 			if (errors && errors !== true) {
 				$.each(errors, function(e){
-					//console.log(e);
 					$('.'+e).closest('.control-group')
 						.addClass('error')
 						.find('.help-inline').html(errors[e][0]);
@@ -592,43 +590,36 @@ steal(
 		 * https://github.com/SanomaCZ/ella-hub/blob/master/doc/api.rst#listing
 		 * @param {array} values - object w/ values for article
 		 */
-		saveListing: function() {
-
+		saveListing: function(wrapper) {
 			var listingAttrs = {
-				publishable: this.article.resource_uri
+				publishable: this.article.resource_uri,
+				category: $(wrapper).find('input[name=category]').val(),
+				commercial: $(wrapper).find('input[name=listing_commercial]').val()
 			};
 
-			var listings = $("#side_categories").find('.js-removable-item');
+			var from_date = $(wrapper).find('input[name=listing_publish_from_date]').val();
+			var from_time = $(wrapper).find('input[name=listing_publish_from_time]').val();
 
-			$.each(listings, function(one) {
-
-				var listingOne = new Listing();
-				listingOne.category = $(one).find('input[name=category]')
-				listingOne.publish_from = $(one).find('input[name=category]')
-
-				var publish_to = $(one).find('input[name=listing_publish_from_date]').val();
-
-				//TODO - go on here
-				listingOne.publish_to = $(one).find('input[name=category]')
-
-			});
-
-
-
-
-
-			if (values['listing_publish_from_date'] && values['listing_publish_from_time']) {
-				listingAttrs.publish_from = values['listing_publish_from_date']+'T'+values['listing_publish_from_time'];
+			if (from_date && from_time) {
+				listingAttrs.publish_from = from_date + 'T' + from_time;
 			} else {
+				listingAttrs.publish_from = null
+			}
+
+			var to_date = $(wrapper).find('input[name=listing_publish_to_date]').val();
+			var to_time = $(wrapper).find('input[name=listing_publish_to_time]').val();
+
+			if (to_date && to_time) {
+				listingAttrs.publish_to = to_date + 'T' + to_time;
+			}
+
+			var listing = new Listing(listingAttrs);
+			var errors = listing.errors()
+			if (errors) {
+				this.showErrors(errors, wrapper);
 				return false;
 			}
-
-			if (values['listing_publish_to_date']) {
-				listingAttrs.publish_to = values['listing_publish_to_date']+'T'+values['listing_publish_to_time'];
-			}
-
-			listingAttrs.commercial = Boolean(values['listing_commercial']);
-
+			return true;
 		},
 
 		/**
@@ -1743,7 +1734,7 @@ steal(
 			ev.preventDefault();
 
 			var renderForm = can.view.render('//app/articles/views/inline-side-category.ejs', {
-				listing: {}
+				listing: new Listing()
 			});
 
 			var sideCats = $("#side_categories");
