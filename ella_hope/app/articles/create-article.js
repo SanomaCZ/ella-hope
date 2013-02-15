@@ -119,7 +119,6 @@ steal(
 			this.article.bind('photo', function(ev){
 
 				var photo = self.article.photo;
-				// //console.log('photo: ', photo);
 
 				if (!photo) {
 					$('.title-photo img').attr('src', '');
@@ -155,7 +154,7 @@ steal(
 				$('.enable_comments').chosen({allow_single_deselect:true});
 
 				// ajax autocomplete for category/listings
-				$.each([$('#category'), $('.listing-name')], function () {
+				$.each([$('#category'), $('.listing_category')], function () {
 					this.ajaxChosen({
 						type: 'GET',
 						url: BASE_URL + '/category/?',
@@ -552,14 +551,13 @@ steal(
 				return false;
 			});
 
-			var foreignKeys = $("form.article").find('.js-removable-item');
 			var success = true;
+			var foreignKeys = $("form.article").find('.js-removable-item');
 			$.each(foreignKeys, function () {
 				var model = $(this).data('model');
 				success = success && self['save_' + model](this);
 			});
 
-			return false;
 			return success;
 		},
 
@@ -568,11 +566,13 @@ steal(
 		 * @param  {[type]} errors [description]
 		 * @return {[type]}        [description]
 		 */
-		showErrors: function(errors, block) {
+		showErrors: function(instance, nested_block) {
+			var input_prefix = nested_block ? (instance.prefix + "_"): "";
+			var errors = instance.errors();
 
-			if (errors && errors !== true) {
-				$.each(errors, function(e){
-					$('.'+e).closest('.control-group')
+			if (errors) {
+				$.each(errors, function (e) {
+					$('.' + input_prefix + e, nested_block).closest('.control-group')
 						.addClass('error')
 						.find('.help-inline').html(errors[e][0]);
 				});
@@ -590,11 +590,12 @@ steal(
 		 * https://github.com/SanomaCZ/ella-hub/blob/master/doc/api.rst#listing
 		 * @param {array} values - object w/ values for article
 		 */
-		saveListing: function(wrapper) {
+		save_listing: function(wrapper) {
 			var listingAttrs = {
 				publishable: this.article.resource_uri,
-				category: $(wrapper).find('input[name=category]').val(),
-				commercial: $(wrapper).find('input[name=listing_commercial]').val()
+				category: $(wrapper).find('select[name=listing_category]').val(),
+				commercial: $(wrapper).find('input[name=listing_commercial]').is(':checked'),
+				id: $(wrapper).find('input[name=listing_id]').val()
 			};
 
 			var from_date = $(wrapper).find('input[name=listing_publish_from_date]').val();
@@ -614,11 +615,12 @@ steal(
 			}
 
 			var listing = new Listing(listingAttrs);
-			var errors = listing.errors()
-			if (errors) {
-				this.showErrors(errors, wrapper);
+			if (listing.errors()) {
+				this.showErrors(listing, wrapper);
 				return false;
 			}
+
+			listing.save();
 			return true;
 		},
 
@@ -714,7 +716,7 @@ steal(
 				can.route.attr({page: page}, true);
 			}
 			else {
-				this.showErrors(errors);
+				this.showErrors(this.article);
 			}
 		},
 		'.autosave click' : function(el, ev) {
@@ -1741,7 +1743,7 @@ steal(
 
 			sideCats.append(renderForm);
 
-			sideCats.find(".listing-name").ajaxChosen({
+			sideCats.find(".listing_category").ajaxChosen({
 				type: 'GET',
 				url: BASE_URL + '/category/?',
 				jsonTermKey: 'title__icontains',
@@ -1764,7 +1766,6 @@ steal(
 			var itemSpace = $(el).closest('.js-removable-item');
 			var instance = $(itemSpace).data('instance');
 
-			instance = new Listing(instance);
 			instance.destroy(function() {
 				itemSpace.fadeOut().remove();
 			});

@@ -9,7 +9,7 @@ steal(
 					}
 				});
 				this.validate("category", function (val){
-					if (val === null || val === '') {
+					if (val === null || val === '' || typeof val == 'undefined') {
 						return $.t('This field can not be empty');
 					}
 				});

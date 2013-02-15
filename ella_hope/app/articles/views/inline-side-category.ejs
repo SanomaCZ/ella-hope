@@ -2,6 +2,7 @@
     <button class="close js-remove-item">
         &times;
     </button>
+    <input type="hidden" name="<%= listing.prefix %>_id" value="<%= listing.id %>"/>
 
     <%
 
@@ -26,7 +27,7 @@
     <div class="row">
         <div class="span4 pull-left control-group">
             <label class="control-label required"><%= $.t('articles.side_category')%></label>
-            <select data-id="<%= listing.id %>" name="listing_category" class="listing-name listing" data-placeholder="<%= $.t('articles.choose_side_category')%>">
+            <select data-id="<%= listing.id %>" name="<%= listing.prefix %>_category" class="listing_category" data-placeholder="<%= $.t('articles.choose_side_category')%>">
                 <option></option>
                 <% if (listing.category) { %>
                     <option value="<%= listing.category.resource_uri %>" selected="selected"><%= listing.category.full_title %></option>
@@ -36,9 +37,9 @@
             <span class="help-inline"></span>
         </div>
 
-        <div class="span4 pull-left  control-group">
+        <div class="span4 pull-left control-group">
             <label class="checkbox"><%= $.t('articles.side_category_commercial')%></label>
-            <input class="commercial" type="checkbox" name="listing_commercial" <%= listing.commercial ? 'checked=checked' : '' %> value="true" />
+            <input type="checkbox" name="<%= listing.prefix %>_commercial" <%= listing.commercial ? 'checked=checked' : '' %> value="true" />
 
             <span class="help-inline"></span>
         </div>
@@ -50,9 +51,9 @@
             <label class="control-label required" for="listing_publish_from"><%= $.t('articles.side_category_publish_from')%></label>
 
             <div class="controls">
-                <input class="span2 publish_from" type="datetime-local" name="listing_publish_from_date" value="<%= publish_from_date %>"/>
+                <input class="span2 publish_from" type="datetime-local" name="<%= listing.prefix %>_publish_from_date" value="<%= publish_from_date %>"/>
 
-                <input type="text" class="timepicker-default span1 listing_publish_from" name="listing_publish_from_time" value="<%= publish_from_time %>"/>
+                <input type="text" class="timepicker-default span1 listing_publish_from" name="<%= listing.prefix %>_publish_from_time" value="<%= publish_from_time %>"/>
 
                 <button class="btn btn-normal set-date-now" data-target-date="listing_publish_from_date">
                     <%= $.t('articles.today') %>
@@ -70,9 +71,9 @@
                 <label class="control-label" for="listing_publish_to"><%= $.t('articles.side_category_publish_to')%></label>
 
                 <div class="controls">
-                    <input class="span2 publish_to" type="datetime-local" name="listing_publish_to_date" value="<%= publish_to_date %>"/>
+                    <input class="span2 publish_to" type="datetime-local" name="<%= listing.prefix %>_publish_to_date" value="<%= publish_to_date %>"/>
 
-                    <input type="text" class="timepicker-default span1 listing_publish_to" name="listing_publish_to_time" value="<%= publish_to_time %>"/>
+                    <input type="text" class="timepicker-default span1 listing_publish_to" name="<%= listing.prefix %>_publish_to_time" value="<%= publish_to_time %>"/>
 
                     <button class="btn btn-normal set-date-now" data-target-date="listing_publish_to_date">
                         <%= $.t('articles.today') %>

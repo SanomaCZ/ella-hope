@@ -119,7 +119,7 @@
         <div id="side_categories" class="row">
             <% $.each(listings || [], function(i, g) { %>
                 <%== can.view.render('//app/articles/views/inline-side-category.ejs', {
-                    listing: g
+                    listing: new Listing(g)
                 }) %>
             <% }) %>
         </div>
