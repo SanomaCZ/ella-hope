@@ -22,7 +22,7 @@ steal(
 	/* @static */
 	{
 		defaults: {
-			autosaveInterval: 60 * 1000,	// how ofter is draft automatically saved
+			autosaveInterval: 120 * 1000,	// how ofter is draft automatically saved
 			markitupSettings: {
 				previewParserPath:	'',
 				onShiftEnter:		{keepDefault:false, openWith:'\n\n'},

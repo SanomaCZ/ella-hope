@@ -70,7 +70,8 @@ steal(
 
 			// enable datepicker for publishFrom and publishTo
 			// https://github.com/eternicode/bootstrap-datepicker
-			$("input[name=publish_from], input[name=publish_to]", ".filter-form")
+			var filter_form = $(".filter-form");
+			filter_form.find("input[name=publish_from], input[name=publish_to]")
 				.datepicker(self.options.dateOptions)
 				.on('changeDate',function (ev) {
 					self.filterArticles();
@@ -81,7 +82,7 @@ steal(
 					}
 				});
 
-			$(".filter-form select").on('change', function(ev){
+			filter_form.find("select").on('change', function(ev){
 				self.filterArticles();
 			});
 

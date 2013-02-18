@@ -67,7 +67,8 @@ steal(
 	function(){							// configure your application
 
 		// when user succesfully logs in
-		$('body').on('user-logged', function(){
+		var body = $('body');
+		body.on('user-logged', function(){
 
 			// steal the rest files
 			steal(
@@ -103,7 +104,7 @@ steal(
 		});
 		// when everything important is initialized, update the route so that
 		// controls waiting for route change can set the right state
-		$('body').on('navbar-ready', function(){
+		body.on('navbar-ready', function(){
 			can.route.ready(true);
 			$('body').off('navbar-ready');	// cancel listening
 		});
