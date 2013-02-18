@@ -46,6 +46,7 @@ function getBackends() {
 
 (function () {
 	window.HOPECFG = {
-		'COOKIE_FILTER': 'HOPE_filter_form'
+		COOKIE_FILTER: 'HOPE_filter_form'
+		, RAVEN_DSN: false
 	}
 })();

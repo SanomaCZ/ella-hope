@@ -3,6 +3,7 @@ steal(
 	, 'can/control/route'					// enable routing
 	, './login/login.js'				// login module
 	, '//config/config.js'
+	, '//raven/raven-0.5.2.min.js'
 )
 .then(
 	'./resources/js/jquery.jsperanto.js'	// translation library
@@ -53,6 +54,13 @@ steal(
 				api_url: getBackends()
 			});
 		});
+
+		if (window.HOPECFG.RAVEN_DSN) {
+			Raven.config(window.HOPECFG.RAVEN_DSN);
+			try {
+				window.onerror = Raven.process;
+			} catch (e) {}
+		}
 	}
 )
 .then(
