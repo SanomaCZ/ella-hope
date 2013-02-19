@@ -408,6 +408,7 @@ steal(
 		//TODO - optimise (set each order * 2 to allow injecting items to empty spaces
 		// w/o need to reorder the whole set
 		setGalleryOrder: function (sortable) {
+			if (!sortable) { return; }
 
 			//don't trust in natural elements order, let jQuery serialize their order
 			var itemsOrder = sortable.sortable('toArray', { 'attribute': 'data-resource_id'});//.reverse();
@@ -707,6 +708,7 @@ steal(
 			var errors = this.save();
 
 			if (errors === true) {
+				this.setGallerySaveTimeout(0);
 
 				// stop autosave when leaving article
 				this.stopAutosave();
@@ -1530,6 +1532,7 @@ steal(
 				parent.data('label', title);
 				update_attrs = {};
 				update_attrs[parent.data('attr')] = title;
+				console.log('updating item 2')
 				GalleryItem.update(parent.parent('li').data('resource_id'), update_attrs);
 			}
 		},
@@ -1795,8 +1798,6 @@ steal(
 		},
 
 		destroy: function() {
-
-			this.setGallerySaveTimeout(0);
 
 			// clear timer
 			this.stopAutosave();
