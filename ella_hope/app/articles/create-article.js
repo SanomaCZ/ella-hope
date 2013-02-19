@@ -596,8 +596,12 @@ steal(
 				publishable: this.article.resource_uri,
 				category: $(wrapper).find('select[name=listing_category]').val(),
 				commercial: $(wrapper).find('input[name=listing_commercial]').is(':checked'),
-				id: $(wrapper).find('input[name=listing_id]').val()
 			};
+
+			var id = $(wrapper).find('input[name=listing_id]').val()
+			if (id) {
+				listingAttrs['id'] = id;
+			}
 
 			var from_date = $(wrapper).find('input[name=listing_publish_from_date]').val();
 			var from_time = $(wrapper).find('input[name=listing_publish_from_time]').val();
