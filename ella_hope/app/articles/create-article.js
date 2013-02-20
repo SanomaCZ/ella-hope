@@ -286,36 +286,40 @@ steal(
 					}
 				}).disableSelection();
 
-				// gallery - gallery items - enable drag&drop between two lists
-				$( "#found-recent-photos, #chosen-recent-photos" ).sortable({
-					connectWith: "#chosen-recent-photos",
-					// when new article is dropped to related articles
-					receive: function(event, ui) {
-						var el = $(ui.item[0]),
-							receivedID = el.data('photo-id'),
-							articleID = self.article.resource_uri;
+					if (self.options.model === 'galleries') {
 
-						// save new relation
-						var item = new GalleryItem({
-							gallery: articleID,
-							photo: receivedID,
-							title: el.find('.photo-title').data('label'),
-							text: el.find('.photo-description').data('label'),
-							order: 0
-						});
+						// gallery - gallery items - enable drag&drop between two lists
+						$("#found-recent-photos, #chosen-recent-photos").sortable({
+							connectWith: "#chosen-recent-photos",
+							// when new article is dropped to related articles
+							receive: function (event, ui) {
+								if (!self.article.id) {
+									console.log('callbackiung 1')
+									self.save(function() {
+										console.log('callbackiung 2')
+										self.receiveGalleryItem(ui)
+									})
+								} else {
+									console.log('direct save');
+									self.receiveGalleryItem(ui)
+								}
+							},
+							update: function (event, ui) {
+								self.setGallerySaveTimeout();
+							}
+						}).disableSelection();
 
-						item.save(function (model) {
-							//jQuery UI's sortable serialize() returns value via attr()
-							// so make it reachable via attr() [.data() isn't]
-							el.attr('data-resource_id', model.id);
-							el.data('order', item.order);
-							self.setGallerySaveTimeout();
-						});
-					},
-					update: function(event, ui) {
-						self.setGallerySaveTimeout();
+						if (!self.article.id) {
+							$("#found-recent-photos, #chosen-recent-photos").sortable("disable");
+
+							self.article.bind('id', function (ev, newVal, oldVal) {
+								if (newVal > 0) {
+									$("#found-recent-photos, #chosen-recent-photos").sortable("enable");
+									$(".unsaved-article").hide();
+								}
+							})
+						}
 					}
-				}).disableSelection();
 
 				// here we check for user privileges
 				// users have different roles and they can edit different form fields
@@ -347,6 +351,30 @@ steal(
 			});
 
 			this.element.slideDown(200);
+		},
+
+		receiveGalleryItem: function (ui) {
+			var self = this;
+			var el = $(ui.item[0]),
+				receivedID = el.data('photo-id'),
+				articleID = self.article.resource_uri;
+
+			// save new relation
+			var item = new GalleryItem({
+				gallery: articleID,
+				photo: receivedID,
+				title: el.find('.photo-title').data('label'),
+				text: el.find('.photo-description').data('label'),
+				order: 0
+			});
+
+			item.save(function (model) {
+				//jQuery UI's sortable serialize() returns value via attr()
+				// so make it reachable via attr() [.data() isn't]
+				el.attr('data-resource_id', model.id);
+				el.data('order', item.order);
+				self.setGallerySaveTimeout();
+			});
 		},
 
 		/**
@@ -409,7 +437,6 @@ steal(
 		// w/o need to reorder the whole set
 		setGalleryOrder: function (sortable) {
 			if (!sortable) { return; }
-
 			//don't trust in natural elements order, let jQuery serialize their order
 			var itemsOrder = sortable.sortable('toArray', { 'attribute': 'data-resource_id'});//.reverse();
 			var current;
@@ -418,6 +445,7 @@ steal(
 				current = sortable.find('li[data-resource_id=' + itemsOrder[one] + ']');
 				if ($(current).data('order') * 1 != one) {
 					$(current).data('order', one);
+
 					try {
 						GalleryItem.update($(current).data('resource_id'), {order: one});
 					} catch (e) {
@@ -432,7 +460,7 @@ steal(
 		 * are filled correctly
 		 * @return {[type]} [description]
 		 */
-		save: function() {
+		save: function(cb) {
 
 			var autosaveLink = $('a.autosave'),
 				buttonNormalText = autosaveLink.data('normal'),
@@ -456,7 +484,7 @@ steal(
 			}, 2000);
 
 			// try to save the article and handle errors if there are any
-			var errors = this.createArticle();
+			var errors = this.createArticle(cb);
 
 			if (errors === true) {
 				// there are no errors
@@ -473,7 +501,7 @@ steal(
 		 * create article model from form values
 		 * @return {[type]} [description]
 		 */
-		createArticle: function() {
+		createArticle: function(cb) {
 			var self = this,
 				form = $('form.article'),
 				values = form.serialize();
@@ -546,20 +574,24 @@ steal(
 				return errors;
 			}
 
+			var success = true;
 			this.article.save(function () {
+
+				if (cb) {
+					cb()
+				}
+
+				var foreignKeys = $("form.article").find('.js-removable-item');
+				$.each(foreignKeys, function () {
+					var model = $(this).data('model');
+					success = success && self['save_' + model](this);
+				});
+
 			}, function (xhr) {
 				alert('Error occured, try again later.');
 				return false;
 			});
-
-			var success = true;
-			var foreignKeys = $("form.article").find('.js-removable-item');
-			$.each(foreignKeys, function () {
-				var model = $(this).data('model');
-				success = success && self['save_' + model](this);
-			});
-
-			return success;
+			return true;
 		},
 
 		/**
@@ -593,9 +625,9 @@ steal(
 		 */
 		save_listing: function(wrapper) {
 			var listingAttrs = {
-				publishable: this.article.resource_uri,
-				category: $(wrapper).find('select[name=listing_category]').val(),
-				commercial: $(wrapper).find('input[name=listing_commercial]').is(':checked'),
+				publishable: this.article.resource_uri
+				, category: $(wrapper).find('select[name=listing_category]').val()
+				, commercial: $(wrapper).find('input[name=listing_commercial]').is(':checked')
 			};
 
 			var id = $(wrapper).find('input[name=listing_id]').val()
@@ -718,8 +750,10 @@ steal(
 				this.stopAutosave();
 
 				// redirect to list
-				var page = this.options.model === 'articles' ? 'articles' : 'galleries';
-				can.route.attr({page: page}, true);
+				if (!$(el).data('stay')) {
+					var page = this.options.model === 'articles' ? 'articles' : 'galleries';
+					can.route.attr({page: page}, true);
+				}
 			}
 			else {
 				this.showErrors(this.article);
@@ -1536,7 +1570,6 @@ steal(
 				parent.data('label', title);
 				update_attrs = {};
 				update_attrs[parent.data('attr')] = title;
-				console.log('updating item 2')
 				GalleryItem.update(parent.parent('li').data('resource_id'), update_attrs);
 			}
 		},
