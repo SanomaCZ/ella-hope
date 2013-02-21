@@ -29,8 +29,13 @@ steal(
 				format: 'yyyy-mm-dd',
 				weekStart: 1,
 				autoclose: true
-			},
-			model: 'articles'
+			}
+			, timeOptions: {
+				minuteStep: 1,
+				showSeconds: false,
+				showMeridian: false
+			}
+			, model: 'articles'
 		}
 	},
 	/* @prototype */
@@ -188,6 +193,7 @@ steal(
 								articleStates: self.options.articleStates,
 								articleComments: self.options.articleComments,
 								dateOptions: self.options.dateOptions,
+								timeOptions: self.options.timeOptions,
 								model: 'articles'
 							});
 						});
@@ -200,6 +206,7 @@ steal(
 								articleStates: self.options.articleStates,
 								articleComments: self.options.articleComments,
 								dateOptions: self.options.dateOptions,
+								timeOptions: self.options.timeOptions,
 								model: 'galleries'
 							});
 						});
@@ -215,6 +222,7 @@ steal(
 							articleStates: self.options.articleStates,
 							articleComments: self.options.articleComments,
 							dateOptions: self.options.dateOptions
+							, timeOptions: self.options.timeOptions
 						});
 					});
 				}

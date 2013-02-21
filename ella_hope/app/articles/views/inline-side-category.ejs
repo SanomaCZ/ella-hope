@@ -46,12 +46,12 @@
 
     </div>
 
-    <div class="row">
+    <div class="row js-datepicker-group">
         <div class="span4 pull-left control-group">
             <label class="control-label required" for="listing_publish_from"><%= $.t('articles.side_category_publish_from')%></label>
 
             <div class="controls">
-                <input class="span2 publish_from" type="datetime-local" name="<%= listing.prefix %>_publish_from_date" value="<%= publish_from_date %>"/>
+                <input class="span2 publish_from datepicker-default" type="datetime-local" name="<%= listing.prefix %>_publish_from_date" value="<%= publish_from_date %>"/>
 
                 <input type="text" class="timepicker-default span1 listing_publish_from" name="<%= listing.prefix %>_publish_from_time" value="<%= publish_from_time %>"/>
 
@@ -71,7 +71,7 @@
                 <label class="control-label" for="listing_publish_to"><%= $.t('articles.side_category_publish_to')%></label>
 
                 <div class="controls">
-                    <input class="span2 publish_to" type="datetime-local" name="<%= listing.prefix %>_publish_to_date" value="<%= publish_to_date %>"/>
+                    <input class="span2 publish_to datepicker-default" type="datetime-local" name="<%= listing.prefix %>_publish_to_date" value="<%= publish_to_date %>"/>
 
                     <input type="text" class="timepicker-default span1 listing_publish_to" name="<%= listing.prefix %>_publish_to_time" value="<%= publish_to_time %>"/>
 

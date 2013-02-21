@@ -4,19 +4,11 @@ steal(
 	, '//app/resources/plugins/markitup/skins/markitup/style.css'
 	, '//app/resources/plugins/markitup/sets/markdown/style.css'
 	, '//app/resources/js/slug.js'
-	, '//app/resources/js/jquery-ui/jquery.ui.core.js'
-	, '//app/resources/js/jquery-ui/jquery.ui.widget.js'
-	, '//app/resources/css/jquery-ui/base/jquery-ui.css'
-	, '//app/resources/css/jquery-ui/ui-lightness/jquery-ui.css'
+	, '//app/resources/js/jquery-ui/jquery-ui-1.10.1.custom.min.js'
+	, '//app/resources/css/jquery-ui/cupertino/jquery-ui-1.10.1.custom.min.css'
 	, '//app/resources/js/ajax-chosen.js'	// https://github.com/meltingice/ajax-chosen
 )
 .then(
-	'//app/resources/js/jquery-ui/jquery.ui.mouse.js'
-)
-.then(
-	'//app/resources/js/jquery-ui/jquery.ui.draggable.js',
-	'//app/resources/js/jquery-ui/jquery.ui.droppable.js',
-	'//app/resources/js/jquery-ui/jquery.ui.sortable.js',
 
 	ArticleCreate = can.Control(
 	/* @static */
@@ -237,14 +229,28 @@ steal(
 				$("textarea").markItUp(self.options.markitupSettings);
 
 				// enable datepicker for publishFrom and publishTo
-				$("#publish_from, #publish_to").datepicker(self.options.dateOptions)
+					$(".js-datepicker-group").find(".datepicker-default").datepicker(self.options.dateOptions)
 					.on('changeDate', function(ev){
-						var from = $("#publish_from").val(),
-							to = $("#publish_to").val();
-						if (to && from > to){
-							$('#date-alert').show();
+						var inputName = $(this).attr('name');
+						var isTo = /_to($|_)/;
+						var isFrom = /_from($|_)/;
+						var wrapper = $(this).closest('.js-datepicker-group');
+
+						if (isTo.test(inputName) && $(this).val()){
+							var toVal = $(this).val()
+							var fromVal = wrapper.find('input[name*=_from_].datepicker-default').val()
+						} else if (isFrom.test(inputName) && $(this).val()){
+							var fromVal = $(this).val();
+							var toVal = wrapper.find('input[name*=_to_].datepicker-default').val()
 						} else {
-							$('#date-alert').hide();
+							fromVal = toVal = 0;
+						}
+
+						if (toVal && fromVal > toVal) {
+							wrapper.find('.help-inline').html($.t('fix chronology of items')).show();
+
+						} else {
+							wrapper.find('.help-inline').html("").hide();
 						}
 					});
 
@@ -262,13 +268,7 @@ steal(
 					});
 
 				// enable timepicker for publishFrom and publishTo
-				var timeOptions = {
-					minuteStep: 1,
-					showSeconds: false,
-					defaultTime: false, // 'value',
-					showMeridian: false // enable 24 hours mode
-				};
-				$("#publish_from_time, #publish_to_time, #listing_publish_from_time, #listing_publish_to_time").timepicker(timeOptions);
+				$(".timepicker-default").timepicker(self.options.timeOptions);
 
 				// connected articles - enable drag&drop between two lists
 				$( "#found-related-articles, #chosen-related-articles" ).sortable({
@@ -1773,6 +1773,7 @@ steal(
 		},
 
 		'.add-side-category click': function (el, ev) {
+			var self = this;
 			ev.preventDefault();
 
 			var renderForm = can.view.render('//app/articles/views/inline-side-category.ejs', {
@@ -1797,11 +1798,27 @@ steal(
 
 				return results;
 			});
+
+			sideCats.find(".publish_from, .publish_to").datepicker(self.options.dateOptions)
+				.on('changeDate', function (ev) {
+					var from = sideCats.find(".publish_from").val(),
+						to = sideCats.find(".publish_to").val();
+					if (to && from > to) {
+						sideCats.find('.date-alert').show();
+					} else {
+						sideCats.find('.date-alert').hide();
+					}
+				});
+			sideCats.find('.timepicker-default').timepicker(self.options.timeOptions);
+
 		},
 
 		'.js-remove-item click': function(el, ev) {
 
 			ev.preventDefault();
+
+			var orly = confirm($.t('Do you really want to remove given item?'))
+			if (!orly) { return; }
 
 			var itemSpace = $(el).closest('.js-removable-item');
 			var instance = $(itemSpace).data('instance');
