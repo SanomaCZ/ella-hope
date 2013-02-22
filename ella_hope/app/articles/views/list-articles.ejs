@@ -33,7 +33,9 @@
 				<td><a href="<%== editUrl %>"><%= article.title %></a></td>
 				<td>
 					<% if (article.photo && article.photo.public_url) { %>
-						<img src="<%= article.photo.public_url %>" height="40" />
+					    <div class="thumbnail">
+						    <img src="<%= article.photo.public_url %>" style="height:40px;" />
+						</div>
 					<% } %>
 				</td>
 				<td><%= article.category.title %></td>
