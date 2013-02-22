@@ -657,7 +657,9 @@ steal(
 				return false;
 			}
 
-			listing.save();
+			listing.save(function(instance) {
+				$(wrapper).find('input[name=listing_id]').val(instance.id);
+			});
 			return true;
 		},
 

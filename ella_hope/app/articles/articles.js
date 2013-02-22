@@ -33,7 +33,8 @@ steal(
 			, timeOptions: {
 				minuteStep: 1,
 				showSeconds: false,
-				showMeridian: false
+				showMeridian: false,
+				defaultTime: false
 			}
 			, model: 'articles'
 		}
