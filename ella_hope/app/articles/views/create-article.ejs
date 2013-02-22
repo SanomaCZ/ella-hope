@@ -32,11 +32,12 @@
 		<div class="control-group row">
 			<label class="control-label required" for="slug"><%= $.t('articles.slug')%></label>
 			<div class="controls">
-				<input class="slug" type="text" name="slug" id="slug" placeholder="<%= $.t('articles.slug_press')%>"
-				value="<%= article.attr('slug') %>" >
-				<span class="help-inline"></span>
-				<button class="btn btn-normal slug-from-title"><%= $.t('articles.slug_from_title')%></button>
-			</div>
+                <div class="input-append">
+                    <input class="slug" type="text" name="slug" id="slug" placeholder="<%= $.t('articles.slug_press')%>" value="<%= article.attr('slug') %>" >
+                    <button class="btn btn-normal slug-from-title"><%= $.t('articles.slug_from_title')%></button>
+                </div>
+                <span class="help-inline"></span>
+            </div>
 		</div>
 
 		<div class="control-group row">
@@ -83,28 +84,29 @@
             <div class="span4 pull-left" style="margin-left: 0">
                 <label class="control-label required" for="publish_from"><%= $.t('articles.publish_from')%></label>
                 <div class="controls">
-                    <input class="span2 publish_from datepicker-default" type="datetime-local" name="publish_from_date" id="publish_from" value="<%= article.publish_from_date %>" />
-
-                    <input type="text" class="timepicker-default span1 publish_from" name="publish_from_time" id="publish_from_time" value="<%= article.publish_from_time %>" />
-
-                    <button class="btn btn-normal set-date-now" data-target-date="publish_from_date"><%= $.t('articles.today') %></button>
-                    <button class="btn btn-normal set-datetime-now" data-target-date="publish_from_date"
-                        data-target-time="publish_from_time"><%= $.t('articles.now') %></button>
-
+                    <div class="input-append">
+                        <input class="span2 publish_from datepicker-default" type="datetime-local" name="publish_from_date" id="publish_from" value="<%= article.publish_from_date %>" />
+                        <button class="btn set-date-now" data-target-date="publish_from_date"><%= $.t('articles.today') %></button>
+                    </div>
+                    <div class="input-append">
+                        <input type="text" class="timepicker-default span1 publish_from" name="publish_from_time" id="publish_from_time" value="<%= article.publish_from_time %>" />
+                        <button class="btn set-datetime-now" data-target-date="publish_from_date" data-target-time="publish_from_time"><%= $.t('articles.now') %></button>
+                    </div>
                     <span class="help-inline"></span>
                 </div>
             </div>
             <div class="span4 pull-left">
                 <label class="control-label" for="publish_to"><%= $.t('articles.publish_to')%></label>
                 <div class="controls">
-                    <input class="span2 publish_to datepicker-default" type="datetime-local" name="publish_to_date" id="publish_to" value="<%= article.publish_to_date %>" />
-
-                    <input type="text" class="timepicker-default span1" name="publish_to_time" id="publish_to_time" value="<%= article.publish_to_time %>" />
-
-                    <button class="btn btn-normal set-date-now" data-target-date="publish_to_date"><%= $.t('articles.today') %></button>
-                    <button class="btn btn-normal set-datetime-now" data-target-date="publish_to_date"
-                        data-target-time="publish_to_time"><%= $.t('articles.now') %></button>
-
+                    <div class="input-append">
+                        <input class="span2 publish_to datepicker-default" type="datetime-local" name="publish_to_date" id="publish_to" value="<%= article.publish_to_date %>" />
+                        <button class="btn btn-normal set-date-now" data-target-date="publish_to_date"><%= $.t('articles.today') %></button>
+                    </div>
+                    <div class="input-append">
+                        <input type="text" class="timepicker-default span1" name="publish_to_time" id="publish_to_time" value="<%= article.publish_to_time %>" />
+                        <button class="btn btn-normal set-datetime-now" data-target-date="publish_to_date"
+                            data-target-time="publish_to_time"><%= $.t('articles.now') %></button>
+                    </div>
                     <span class="help-inline"></span>
                 </div>
             </div>
@@ -220,10 +222,11 @@
 					</div>
 					&nbsp;
 					<p>or</p>
-					<div class="control-group row" style="margin:0">
-						<input type="text" class="span2 pull-left" name="related-name" placeholder="<%= $.t('articles.name') %>" />
-						&nbsp;
-						<button class="btn btn-normal get-photos-by-name"><%= $.t('articles.find_by_name')%></button>
+					<div class="control-group row">
+					    <div class="input-append">
+						    <input type="text" class="span2 pull-left related-name" name="related-name" placeholder="<%= $.t('articles.find_by_name') %>" />
+						    <button class="btn related-name-action photos-action"><%= $.t('articles.find')%></button>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -256,11 +259,11 @@
 						<%= $.t('articles.get_related_articles')%>
 					</button>
 				</div>
-				&nbsp;
-				<div class="control-group row" style="margin:0">
-					<input type="text" class="span2 pull-left" name="related-name" placeholder="<%= $.t('articles.name') %>" />
-					&nbsp;
-					<button class="btn btn-normal get-articles-by-name"><%= $.t('articles.find_by_name')%></button>
+                &nbsp;
+                <p>or</p>
+				<div class="input-append">
+					<input type="text" class="span2 pull-left related-name" name="related-name" placeholder="<%= $.t('articles.find_by_name') %>" />
+					<button class="btn related-name-action articles-action"><%= $.t('articles.find')%></button>
 				</div>
 			</div>
 		</div>
@@ -393,9 +396,10 @@
 			<input type="text" name="name" />
 
 			<label for="slug"><%= $.t('articles.slug') %></label>
-			<input type="text" name="slug" />
-
-			<button class="btn btn-normal slug-from-name"><%= $.t('articles.slug_from_name')%></button>
+			<div class="input-append">
+			    <input type="text" name="slug" />
+			    <button class="btn btn-normal slug-from-name"><%= $.t('articles.slug_from_name')%></button>
+			</div>
 		</form>
 	</div>
 	<div class="modal-footer">

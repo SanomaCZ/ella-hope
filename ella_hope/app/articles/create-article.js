@@ -294,13 +294,10 @@ steal(
 							// when new article is dropped to related articles
 							receive: function (event, ui) {
 								if (!self.article.id) {
-									console.log('callbackiung 1')
 									self.save(function() {
-										console.log('callbackiung 2')
 										self.receiveGalleryItem(ui)
 									})
 								} else {
-									console.log('direct save');
 									self.receiveGalleryItem(ui)
 								}
 							},
@@ -730,13 +727,6 @@ steal(
 			}
 		},
 
-		'.article input keyup': function(el, ev) {
-			ev.preventDefault();
-
-			if(ev.keyCode == 13){
-				this.save();
-			}
-		},
 		'.article-save click' : function(el, ev){
 
 			ev.preventDefault();
@@ -1184,6 +1174,13 @@ steal(
 			this.setDate(el);
 		},
 
+		'.related-name keyup': function(el, ev) {
+			console.log('triggering')
+			if (ev.keyCode == 13) {
+				can.trigger($(el).siblings('.related-name-action'), 'click');
+				return false;
+			}
+		},
 
 		/**
 		 * set today's date to given input
@@ -1453,8 +1450,7 @@ steal(
 		 * @param  {[type]} ev [description]
 		 * @return {[type]}    [description]
 		 */
-		'.get-articles-by-name click': function(el, ev) {
-
+		'.related-name-action.articles-action click': function(el, ev) {
 			ev.preventDefault();
 
 			// name that should be searched
@@ -1510,7 +1506,7 @@ steal(
 		 * @param  {[type]} ev [description]
 		 * @return {[type]}    [description]
 		 */
-		'.get-photos-by-name click': function(el, ev) {
+		'.related-name-action.photos-action click': function(el, ev) {
 
 			var self = this;
 

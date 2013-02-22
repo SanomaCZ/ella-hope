@@ -51,17 +51,18 @@
             <label class="control-label required" for="listing_publish_from"><%= $.t('articles.side_category_publish_from')%></label>
 
             <div class="controls">
-                <input class="span2 publish_from datepicker-default" type="datetime-local" name="<%= listing.prefix %>_publish_from_date" value="<%= publish_from_date %>"/>
-
-                <input type="text" class="timepicker-default span1 listing_publish_from" name="<%= listing.prefix %>_publish_from_time" value="<%= publish_from_time %>"/>
-
-                <button class="btn btn-normal set-date-now" data-target-date="listing_publish_from_date">
-                    <%= $.t('articles.today') %>
-                </button>
-                <button class="btn btn-normal set-datetime-now" data-target-date="listing_publish_from_date" data-target-time="listing_publish_from_time">
-                        <%= $.t('articles.now') %>
-                </button>
-
+                <div class="input-append">
+                    <input class="span2 publish_from datepicker-default" type="datetime-local" name="<%= listing.prefix %>_publish_from_date" value="<%= publish_from_date %>"/>
+                    <button class="btn btn-normal set-date-now" data-target-date="listing_publish_from_date">
+                        <%= $.t('articles.today') %>
+                    </button>
+                </div>
+                <div class="input-append">
+                    <input type="text" class="timepicker-default span1 listing_publish_from" name="<%= listing.prefix %>_publish_from_time" value="<%= publish_from_time %>"/>
+                    <button class="btn btn-normal set-datetime-now" data-target-date="listing_publish_from_date" data-target-time="listing_publish_from_time">
+                            <%= $.t('articles.now') %>
+                    </button>
+                </div>
                 <span class="help-inline"></span>
             </div>
         </div>
@@ -71,17 +72,18 @@
                 <label class="control-label" for="listing_publish_to"><%= $.t('articles.side_category_publish_to')%></label>
 
                 <div class="controls">
-                    <input class="span2 publish_to datepicker-default" type="datetime-local" name="<%= listing.prefix %>_publish_to_date" value="<%= publish_to_date %>"/>
-
-                    <input type="text" class="timepicker-default span1 listing_publish_to" name="<%= listing.prefix %>_publish_to_time" value="<%= publish_to_time %>"/>
-
-                    <button class="btn btn-normal set-date-now" data-target-date="listing_publish_to_date">
-                        <%= $.t('articles.today') %>
-                    </button>
-                    <button class="btn btn-normal set-datetime-now" data-target-date="listing_publish_to_date" data-target-time="listing_publish_to_time">
-                        <%= $.t('articles.now') %>
-                    </button>
-
+                    <div class="input-append">
+                        <input class="span2 publish_to datepicker-default" type="datetime-local" name="<%= listing.prefix %>_publish_to_date" value="<%= publish_to_date %>"/>
+                        <button class="btn btn-normal set-date-now" data-target-date="listing_publish_to_date">
+                            <%= $.t('articles.today') %>
+                        </button>
+                    </div>
+                    <div class="input-append">
+                        <input type="text" class="timepicker-default span1 listing_publish_to" name="<%= listing.prefix %>_publish_to_time" value="<%= publish_to_time %>"/>
+                        <button class="btn btn-normal set-datetime-now" data-target-date="listing_publish_to_date" data-target-time="listing_publish_to_time">
+                            <%= $.t('articles.now') %>
+                        </button>
+                    </div>
                     <span class="help-inline"></span>
                 </div>
             </div>
