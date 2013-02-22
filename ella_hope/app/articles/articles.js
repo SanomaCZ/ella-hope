@@ -3,7 +3,6 @@ steal(
 	'./create-article.js'
 	, './article.css'
 	, '//app/resources/js/bootstrap.min.js'
-	, '//app/resources/js/bootbox.min.js'	// alert, confirm, flexible dialogs
 	, '//app/resources/js/date.js'	// date parse
 	, '//app/resources/js/bootstrap-datepicker.js'	// datepicker js
 	, '//app/resources/css/bootstrap-datepicker.css'	// datepicker css
@@ -281,15 +280,14 @@ steal(
 		 * @return {[type]}    [description]
 		 */
 		'.delete click': function(el, ev){
-
 			ev.preventDefault();
 
-			bootbox.confirm(el.data('confirm'), function(confirmed) {
-				if (confirmed) {
-					el.data('article').destroy();
-					el.closest('tr').slideUp(200);
-				}
-			});
+			var orly = confirm(el.data('confirm'));
+			if (orly) {
+				el.data('article').destroy(function() {
+					el.closest('tr').remove()
+				});
+			}
 		},
 
 		/**
