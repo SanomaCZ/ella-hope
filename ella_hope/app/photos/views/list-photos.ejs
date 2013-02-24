@@ -13,7 +13,11 @@
 			var editUrl = can.route.url({ page: 'photos', action: 'edit', id: photo.id });
 			%>
 			<tr>
-				<td><a href="<%== editUrl %>"><img height="60" src="<%= photo.public_url %>" /></a></td>
+				<td>
+				    <a class="thumbnail" href="<%== editUrl %>">
+				        <img style="height:60px;" src="<%= photo.public_url %>" />
+				    </a>
+				</td>
 				<td><a href="<%== editUrl %>"><%= photo.title %></a></td>
 				<td><%= photo.description %></td>
 				<td>

@@ -3,7 +3,11 @@
 	<% if (!this.insideArticle) { %>
 		<td><input class="pick" type="radio" name="photo" /></td>
 
-		<td><img class="pick" src="<%= photo.public_url %>" height="50" /></td>
+		<td>
+		    <div class="thumbnail">
+		        <img class="pick" src="<%= photo.public_url %>" style="height:50px" />
+		    </div>
+		</td>
 
 		<td><%= photo.title %></td>
 	<% } %>

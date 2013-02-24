@@ -1175,8 +1175,8 @@ steal(
 		},
 
 		'.related-name keyup': function(el, ev) {
-			console.log('triggering')
 			if (ev.keyCode == 13) {
+				ev.preventDefault();
 				can.trigger($(el).siblings('.related-name-action'), 'click');
 				return false;
 			}
