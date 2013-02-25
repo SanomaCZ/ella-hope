@@ -1,39 +1,27 @@
 ==================================
-Ella-hope frontend for `ella-hub`_
+New admin for `Ella CMS`_
 ==================================
 
-.. _`ella-hub`: https://github.com/SanomaCZ/ella-hub
+License
+-------
+
+Ella-hope is free and open source software distributed under the BSD License.
 
 
 Requirements
 ------------
 
-1. ella-hope
-	git clone https://github.com/SanomaCZ/ella-hope.git
+API endpoint provided by `ella-hub`_
 
-2. `ella-hub`_ is running somewhere
-
-
-
-Start server
-------------
-
-::
-
-	cd ella-hope
-	python -m SimpleHTTPServer
 
 
 Configuration
 -------------
 
-Default configuration is saved in 'config' directory.
-Overwrite those configuration directly in files or
-create an alias for given directory in webserver.
+Configuration sample is stored in 'config' directory.
+You can overwrite it in place or create an alias for `/config/` directory in your webserver.
 
 
-Contacts
---------
-	vladimir.brigant@business-factory.cz
 
-	michal.belica@business-factory.cz
+.. _`ella-hub`: https://github.com/SanomaCZ/ella-hub
+.. _`Ella CMS`: https://github.com/ella/ella
