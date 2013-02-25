@@ -438,15 +438,13 @@ steal(
 		 * @param  {[type]} ev [description]
 		 * @return {[type]}    [description]
 		 */
-		'.filter-articles click' : function(el, ev) {
-
+		'.filter-items click' : function(el, ev) {
 			ev.preventDefault();
-
 			$('.filter-form').toggle();
+			$(el).toggleClass('dropup').toggleClass('dropdown');
 
 			var old_val = $.cookie(window.HOPECFG.COOKIE_FILTER) || 'false';
 			$.cookie(window.HOPECFG.COOKIE_FILTER, old_val == 'true' ? 'false': 'true', {path: '/'});
-			el.html(old_val == 'false' ? $.t('Hide filter') : $.t('Show filter'));
 		},
 
 		'.reset-filter click': function(el, ev) {

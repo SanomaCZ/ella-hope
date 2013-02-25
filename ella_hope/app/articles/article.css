@@ -131,3 +131,11 @@ button.add-author, button.add-tag {
 	width: 90px;
 	margin: 10px 0;
 }
+
+.filter-items.dropdown .label-hide {
+	display: none;
+}
+
+.filter-items.dropup .label-show {
+	display: none;
+}

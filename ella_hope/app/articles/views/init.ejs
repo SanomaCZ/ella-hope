@@ -16,12 +16,12 @@
 		</div>
 	</form>
 </div>
-
-<div class="pull-right">
-	<button type="submit" class="btn filter-articles">
-		<%= ($.cookie(window.HOPECFG.COOKIE_FILTER) == 'true') ? $.t('articles.hide_filter') : $.t('articles.show_filter') %>
-	</button>
-	&nbsp;
+<div class="pull-right span2">
+    <button class="btn filter-items <%= ($.cookie(window.HOPECFG.COOKIE_FILTER) == 'true') ? 'dropup' : 'dropdown' %>">
+        <span class="label-show"><%= $.t('articles.show_filter') %></span>
+        <span class="label-hide"><%= $.t('articles.hide_filter') %></span>
+        <span class="caret"></span>
+    </button>
 </div>
 
 <div class="filter-form" style="<%= ($.cookie(window.HOPECFG.COOKIE_FILTER) == 'true') ? 'display:block' : 'display:none' %>">

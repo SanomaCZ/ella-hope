@@ -256,19 +256,16 @@ steal(
 
 		/**
 		 * show/hide filtering form
-		 * @param  {[type]} el [description]
-		 * @param  {[type]} ev [description]
-		 * @return {[type]}    [description]
 		 */
-		'.filter-photos click' : function(el, ev) {
-
+		'.filter-items click' : function(el, ev) {
 			ev.preventDefault();
-
-			// show/hide filtering form
 			$('.filter-form').toggle();
+			$(el).toggleClass('dropup').toggleClass('dropdown');
+
 			var old_val = $.cookie(window.HOPECFG.COOKIE_FILTER) || 'false';
 			$.cookie(window.HOPECFG.COOKIE_FILTER, old_val == 'true' ? 'false': 'true', {path: '/'});
 		},
+
 
 		/**
 		 * reset filter form values
