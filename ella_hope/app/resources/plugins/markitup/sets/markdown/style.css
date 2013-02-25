@@ -56,3 +56,7 @@
 .markItUp .markItUpButton13.markItUpwikiRef a{
 	background-image:url('images/wiki.png');
 }
+
+.markItUp .markItUpButton14.markItUpGalleryRef a{
+	background-image:url('images/gallery.png');
+}

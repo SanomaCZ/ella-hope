@@ -37,7 +37,9 @@ steal(
 					//{name:'Picture', key:'P', replaceWith:'![[![Alternative text]!]]([![Url:!:http://]!] "[![Title]!]")'},
 					{name:'Picture', key:'P', closeWith:function(markItUp) { return ArticleCreate.prototype.insertPhoto(); }},
 					{name:'Link', key:'L', openWith:'[', closeWith:']([![Url:!:http://]!] "[![Title]!]")', placeHolder:'Your text to link here...' },
-                    {name: 'Wiki', key: 'W', closeWith: function (markItUp) { return ArticleCreate.prototype.insertWikiRef(); }, className: 'markItUpwikiRef'}
+                    {name:'Wiki', key: 'W', closeWith: function (markItUp) { return ArticleCreate.prototype.insertWikiRef(markItUp.textarea); }, className: 'markItUpwikiRef'}
+					, {name:'Gallery', key: 'G', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertGalleryRef(markItUp.textarea); }, className: 'markItUpGalleryRef'}
+
 					//{separator:'---------------'},
 					//{name:'Quotes', openWith:'> '},
 					//{name:'Code Block / Code', openWith:'(!(\t|!|`)!)', closeWith:'(!(`)!)'},
@@ -117,8 +119,7 @@ steal(
 					//$('form.article').find('input[name=photo]').val('');
 					$('.title-photo-empty').show();
 					$('.title-photo').hide();
-				}
-				else {
+				} else {
 					$('.title-photo img').attr('src', photo.public_url);
 					//$('form.article').find('input[name=photo]').val(photo.resource_uri);
 					$('.title-photo-empty').hide();
@@ -1232,13 +1233,19 @@ steal(
 		generateSnippet: function(contentType, object, params) {
 			if (contentType == 'ella_wikipages.wikipage') {
 				var snippetData = [
-					'{% box inline_wiki_reference for ' + contentType + ' with slug "' + params.slug + '" %}',
-					'title:' + params.title,
+					'{% box inline_reference for ' + contentType + ' with slug "' + params.slug + '" %}',
+					'title:' + params.item_title,
+					'{% endbox %}'
+				]
+			} else if (contentType == 'ella_galleries.gallery') {
+				var snippetData = [
+					'{% box inline_reference for ' + contentType + ' with pk ' + params.id + ' %}',
+					'title:' + params.item_title,
 					'{% endbox %}'
 				]
 			} else if (contentType == 'photos.photo') {
 				var snippetData = [
-					"{% box inline_"+params.size+"_"+params.format+" for "+contentType+" with pk "+object.id+" %}",
+					"{% box inline_" + params.size + "_" + params.format + " for " + contentType + " with pk " + object.id + " %}",
 					params.align === 'none' ? "" : "align:"+params.align,
 					'show_title:' + (params.title ? 1 : 0),
 					'show_description:' + (params.description ? 1 : 0),
@@ -1267,13 +1274,15 @@ steal(
 			$('#photos-modal').modal('show');
 		},
 
-		insertWikiRef: function (snippetInfo) {
+		insertWikiRef: function (el, snippetInfo) {
 			snippetInfo = snippetInfo || {};
-			var renderForm = can.view.render('//app/articles/views/list-wikipage-item.ejs', {
+			var renderForm = can.view.render('//app/articles/views/snippet-wikipage.ejs', {
 				data: snippetInfo
 			});
 
-			$('#box-snippet')
+			var boxSnippet = $(el).closest('.js-textrea-box').find('.box-snippet');
+
+			boxSnippet
 				.empty()
 				.append(renderForm)
 				.find(".wikiref-name").ajaxChosen({
@@ -1292,17 +1301,31 @@ steal(
 				});
 		},
 
-		'#wikiref-modal .insert-wikiref click': function(el, ev) {
-			ev.preventDefault();
+		insertGalleryRef: function (el, snippetInfo) {
+			snippetInfo = snippetInfo || {};
+			var renderForm = can.view.render('//app/articles/views/snippet-gallery.ejs', {
+				data: snippetInfo
+			});
 
-			var values = $('#wikiref-modal').find('form').serialize();
-			values = can.deparam(values);
+			var boxSnippet = $(el).closest('.js-textrea-box').find('.box-snippet');
 
-			var snippet = this.generateSnippet('ella_wikipages.wikipage', null, values);
+			boxSnippet
+				.empty()
+				.append(renderForm)
+				.find(".item-name").ajaxChosen({
+					type: 'GET',
+					url: BASE_URL + '/gallery/?',
+					jsonTermKey: 'title__icontains',
+					dataType: 'json'
+				}, function (data) {
+					var results = [];
 
-			$.markItUp( { replaceWith: snippet } );
+					$.each(data, function (i, val) {
+						results.push({ value: val.id, text: val.title });
+					});
 
-			$("#wikiref-modal").modal('hide');
+					return results;
+				});
 		},
 
 		/**
@@ -1616,8 +1639,7 @@ steal(
 			}
 
 			// container where snippet can be edited
-			var snippetBox = $('#box-snippet');
-
+			var snippetBox = $(el).closest('.js-textrea-box').find('.box-snippet');
 			snippetBox.empty();
 
 			if (foundIndex == null) {
@@ -1660,7 +1682,13 @@ steal(
 				WikiPage.findOne({slug: snippetInfo.lookup_value.substring(1, snippetInfo.lookup_value.length-1)}, function(wikiPage) {
 					snippetInfo.lookup_object = wikiPage[0];
 					snippetInfo.snippetPosition = foundSnippetPosition;
-					self.insertWikiRef(snippetInfo)
+					self.insertWikiRef(el, snippetInfo)
+				})
+			} else if (snippetInfo.type == 'ella_galleries.gallery') {
+				Gallery.findOne({id: snippetInfo.lookup_value}, function(instance) {
+					snippetInfo.lookup_object = instance[0];
+					snippetInfo.snippetPosition = foundSnippetPosition;
+					self.insertGalleryRef(el, snippetInfo)
 				})
 			}
 		},
@@ -1735,7 +1763,7 @@ steal(
 
 			ev.preventDefault();
 
-			var snippetBox = $('#box-snippet'),
+			var snippetBox = $(el).closest('.js-textrea-box').find('.box-snippet'),
 				oldSnippetStart = el.data('snippet-start'),
 				oldSnippetEnd = el.data('snippet-end'),
 				textarea = el.closest('.control-group').find('textarea'),
@@ -1746,8 +1774,10 @@ steal(
 
 			var boxType = form.data('content');
 			if (boxType == 'photos.photo') {
-				snippetObject = snippetBox.find('tr').eq(0).data('photo');
+				snippetObject = snippetBox.find('tr:first').data('photo');
 			} else if (boxType == 'ella_wikipages.wikipage') {
+				//pass
+			} else if (boxType == 'ella_galleries.gallery') {
 
 			}
 
@@ -1767,7 +1797,7 @@ steal(
 		 * @return {[type]}    [description]
 		 */
 		'.snippet-cancel click' : function(el, ev) {
-			$('#box-snippet').empty();
+			$('.box-snippet').empty();
 		},
 
 		'.add-side-category click': function (el, ev) {

@@ -71,13 +71,13 @@
 			</div>
 		</div>
 
-		<div class="control-group row">
+		<div class="control-group row js-textrea-box">
 			<label class="control-label required" for="content"><%= $.t('articles.content')%></label>
 			<div class="controls pull-left">
 				<textarea class="content" rows="10" name="content" placeholder="<%= $.t('articles.add_content')%>"><%= article.content %></textarea>
 				<span class="help-inline"></span>
 			</div>
-			<div id="box-snippet"></div>
+			<div class="box-snippet hero-unit pull-right"></div>
 		</div>
 
         <div class="js-datepicker-group row">
@@ -124,7 +124,10 @@
         </div>
 
         <div class="control-group row">
-            <button class="btn add-side-category"><%= $.t('add another side category') %></button>
+            <button class="btn add-side-category">
+                <i class="icon icon-plus"></i>
+                <%= $.t('add another side category') %>
+            </button>
         </div>
 
 		<div class="control-group row">
@@ -144,12 +147,13 @@
 
 		<div class="control-group row" id="photos-preview"></div>
 
-		<div class="control-group row">
+		<div class="control-group row js-textrea-box">
 			<label class="control-label" for="description"><%= $.t('articles.description')%></label>
-			<div class="controls">
+			<div class="controls pull-left">
 				<textarea class="description" name="description" id="description" placeholder="<%= $.t('articles.add_description')%>"><%= article.description %></textarea>
 				<span class="help-inline"></span>
 			</div>
+			<div class="box-snippet hero-unit pull-right"></div>
 		</div>
 
 		<div class="control-group row">

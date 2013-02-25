@@ -47,13 +47,6 @@
 	padding: 0 20px 0 0;
 }
 
-#box-snippet {
-	top: 10px;
-	position: relative;
-	margin-left: 730px;
-}
-
-
 button.add-author, button.add-tag {
 	position: relative;
 	top: -16px;
@@ -100,10 +93,6 @@ button.add-author, button.add-tag {
 	display: none;
 }
 
-#wikiref-modal .modal-body {
-	min-height: 150px;
-}
-
 .hero-nested {
 	background-color: #DDDDDD;
 	padding: 30px;
@@ -137,5 +126,9 @@ button.add-author, button.add-tag {
 }
 
 .filter-items.dropup .label-show {
+	display: none;
+}
+
+.box-snippet:empty {
 	display: none;
 }
