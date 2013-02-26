@@ -260,7 +260,6 @@ steal(
 					.on('changeDate', function(ev){
 						var from = $("#listing_publish_from").val(),
 							to = $("#listing_publish_to").val();
-						//console.log('change', from, to);
 						if (to && from > to){
 							$('#listing-date-alert').show();
 						} else {
@@ -338,11 +337,9 @@ steal(
 							else {
 								$el.attr('readonly', true);
 							}
-							//console.log('setting ' + name + ' to readonly');
 						}
 						if (value._data.disabled === true) {
 							$('.'+name).parent('.row').remove();
-							//console.log('hiding ' + name);
 						}
 					}
 				});
@@ -1275,7 +1272,13 @@ steal(
 		},
 
 		insertWikiRef: function (el, snippetInfo) {
-			snippetInfo = snippetInfo || {};
+			snippetInfo = snippetInfo || {
+				snippetPosition: {
+					start: $(el).getCursorPosition()
+					, end: $(el).getCursorPosition()
+				}
+			}
+
 			var renderForm = can.view.render('//app/articles/views/snippet-wikipage.ejs', {
 				data: snippetInfo
 			});
@@ -1302,7 +1305,13 @@ steal(
 		},
 
 		insertGalleryRef: function (el, snippetInfo) {
-			snippetInfo = snippetInfo || {};
+			snippetInfo = snippetInfo || {
+				snippetPosition: {
+					start: $(el).getCursorPosition()
+					, end: $(el).getCursorPosition()
+				}
+			}
+
 			var renderForm = can.view.render('//app/articles/views/snippet-gallery.ejs', {
 				data: snippetInfo
 			});
@@ -1610,9 +1619,11 @@ steal(
 		'textarea click' : function(el, ev) {
 			var self = this;
 
+			var snippetBox = $(el).closest('.js-textrea-box').find('.box-snippet');
+			snippetBox.empty();
+
 			// get current cursor position
 			var position = el.getCursorPosition();
-			//console.log(position);
 
 			// current text in textarea
 			var str = el.val();
@@ -1638,10 +1649,6 @@ steal(
 				}
 			}
 
-			// container where snippet can be edited
-			var snippetBox = $(el).closest('.js-textrea-box').find('.box-snippet');
-			snippetBox.empty();
-
 			if (foundIndex == null) {
 				return;
 			}
@@ -1659,6 +1666,7 @@ steal(
 
 			// parse snippet to get info about it
 			var snippetInfo = this.getSnippetInfo(snippet);
+			snippetInfo.snippetPosition = foundSnippetPosition;
 
 			// snippet contains photos.photo resource
 			if (!snippetInfo.lookup_name) {
@@ -1680,14 +1688,12 @@ steal(
 				});
 			} else if (snippetInfo.type == 'ella_wikipages.wikipage') {
 				WikiPage.findOne({slug: snippetInfo.lookup_value.substring(1, snippetInfo.lookup_value.length-1)}, function(wikiPage) {
-					snippetInfo.lookup_object = wikiPage[0];
-					snippetInfo.snippetPosition = foundSnippetPosition;
+					snippetInfo.lookup_object = wikiPage;
 					self.insertWikiRef(el, snippetInfo)
 				})
 			} else if (snippetInfo.type == 'ella_galleries.gallery') {
 				Gallery.findOne({id: snippetInfo.lookup_value}, function(instance) {
-					snippetInfo.lookup_object = instance[0];
-					snippetInfo.snippetPosition = foundSnippetPosition;
+					snippetInfo.lookup_object = instance;
 					self.insertGalleryRef(el, snippetInfo)
 				})
 			}
@@ -1776,15 +1782,18 @@ steal(
 			if (boxType == 'photos.photo') {
 				snippetObject = snippetBox.find('tr:first').data('photo');
 			} else if (boxType == 'ella_wikipages.wikipage') {
-				//pass
+				snippetObject = params.slug
 			} else if (boxType == 'ella_galleries.gallery') {
+				snippetObject = params.id;
+			}
 
+			if (!snippetObject) {
+				return false;
 			}
 
 			var newSnippet = this.generateSnippet(boxType, snippetObject, params);
 			// replace old snippet with new snippet in textarea
-			var oldSnippet = text.substr(oldSnippetStart, oldSnippetEnd - oldSnippetStart);
-			textarea.val(text.replace(oldSnippet, newSnippet));
+			textarea.val(text.substr(0, oldSnippetStart) + newSnippet + text.substr(oldSnippetEnd))
 
 			// hide editing box
 			snippetBox.empty();

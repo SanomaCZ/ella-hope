@@ -1,12 +1,15 @@
 <form data-content="ella_wikipages.wikipage">
-
     <div class="row">
+        <h4><%= $.t('wikipage link') %></h4>
         <select class="wikiref-name input-medium" name="slug" data-placeholder="<%= $.t('Wikipage title') %>">
             <option></option>
+            <% console.log(data) %>
             <% if (data.lookup_object) { %>
-                <option value="<%= data.lookup_object.slug %>">
+                <option value="<%= data.lookup_object.slug %>" selected="selected">
                     <%= data.lookup_object.title %>
                 </option>
+            <% } else { %>
+                <option></option>
             <% } %>
         </select>
     </div>
@@ -15,12 +18,7 @@
         <input type="text" name="item_title" value="<%= data.title %>" />
     </div>
 
-    <button class="btn btn-primary snippet-update"
-        <% if (data.lookup_object) { %>
-            data-snippet-start=<%= data.snippetPosition.start %>
-            data-snippet-end=<%= data.snippetPosition.end %>
-        <% } %>
-    >
+    <button class="btn btn-primary snippet-update" data-snippet-start=<%= data.snippetPosition.start %> data-snippet-end=<%= data.snippetPosition.end %>>
         <%= $.t('articles.insert') %>
     </button>
     <button class="btn snippet-cancel"><%= $.t('cancel') %></button>
