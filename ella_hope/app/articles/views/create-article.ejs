@@ -85,11 +85,11 @@
                 <label class="control-label required" for="publish_from"><%= $.t('articles.publish_from')%></label>
                 <div class="controls">
                     <div class="input-append">
-                        <input class="span2 publish_from datepicker-default" type="datetime-local" name="publish_from_date" id="publish_from" value="<%= article.publish_from_date %>" />
+                        <input class="span2 publish_from datepicker-default" type="text" autocomplete="on" name="publish_from_date" id="publish_from" value="<%= article.publish_from_date %>" />
                         <button class="btn set-date-now" data-target-date="publish_from_date"><%= $.t('articles.today') %></button>
                     </div>
                     <div class="input-append">
-                        <input type="text" class="timepicker-default span1 publish_from" name="publish_from_time" id="publish_from_time" value="<%= article.publish_from_time %>" />
+                        <input type="text" class="timepicker-default span1 publish_from" autocomplete="on" name="publish_from_time" id="publish_from_time" value="<%= article.publish_from_time %>" />
                         <button class="btn set-datetime-now" data-target-date="publish_from_date" data-target-time="publish_from_time"><%= $.t('articles.now') %></button>
                     </div>
                     <span class="help-inline"></span>
@@ -99,7 +99,7 @@
                 <label class="control-label" for="publish_to"><%= $.t('articles.publish_to')%></label>
                 <div class="controls">
                     <div class="input-append">
-                        <input class="span2 publish_to datepicker-default" type="datetime-local" name="publish_to_date" id="publish_to" value="<%= article.publish_to_date %>" />
+                        <input class="span2 publish_to datepicker-default" type="text" name="publish_to_date" id="publish_to" value="<%= article.publish_to_date %>" />
                         <button class="btn btn-normal set-date-now" data-target-date="publish_to_date"><%= $.t('articles.today') %></button>
                     </div>
                     <div class="input-append">

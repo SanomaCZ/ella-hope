@@ -52,7 +52,7 @@
 
             <div class="controls">
                 <div class="input-append">
-                    <input class="span2 publish_from datepicker-default" type="datetime-local" name="<%= listing.prefix %>_publish_from_date" value="<%= publish_from_date %>"/>
+                    <input class="span2 publish_from datepicker-default" type="text" name="<%= listing.prefix %>_publish_from_date" value="<%= publish_from_date %>"/>
                     <button class="btn btn-normal set-date-now" data-target-date="listing_publish_from_date">
                         <%= $.t('articles.today') %>
                     </button>
@@ -73,7 +73,7 @@
 
                 <div class="controls">
                     <div class="input-append">
-                        <input class="span2 publish_to datepicker-default" type="datetime-local" name="<%= listing.prefix %>_publish_to_date" value="<%= publish_to_date %>"/>
+                        <input class="span2 publish_to datepicker-default" type="text" name="<%= listing.prefix %>_publish_to_date" value="<%= publish_to_date %>"/>
                         <button class="btn btn-normal set-date-now" data-target-date="listing_publish_to_date">
                             <%= $.t('articles.today') %>
                         </button>

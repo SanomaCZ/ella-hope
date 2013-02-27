@@ -752,12 +752,13 @@ steal(
 		'.autosave click' : function(el, ev) {
 			this.save();
 		},
+
 		'.preview click' : function(el, ev) {
 			this.setGallerySaveTimeout(0);
 			this.showPreview();
 		},
-		'.cancel click' : function(){
 
+		'.cancel click' : function(el, ev){
 			this.stopAutosave();
 
 			this.deleteDraft();
@@ -1236,7 +1237,7 @@ steal(
 				]
 			} else if (contentType == 'ella_galleries.gallery') {
 				var snippetData = [
-					'{% box inline_reference for ' + contentType + ' with pk ' + params.id + ' %}',
+					'{% box inline for ' + contentType + ' with pk ' + params.id + ' %}',
 					'title:' + params.item_title,
 					'{% endbox %}'
 				]
@@ -1806,6 +1807,7 @@ steal(
 		 * @return {[type]}    [description]
 		 */
 		'.snippet-cancel click' : function(el, ev) {
+			ev.preventDefault();
 			$('.box-snippet').empty();
 		},
 

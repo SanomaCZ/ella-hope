@@ -19,7 +19,7 @@ function getBackends() {
 	return [
 		{
 			'name': "Localhost",
-			'url': 'http://localhost:8000/admin-api'
+			'url': 'http://10.11.8.13:8000/admin-api'
 		},
 		{
 			'name': "DaZ",
