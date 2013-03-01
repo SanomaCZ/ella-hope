@@ -58,7 +58,7 @@ steal(
 		gallery: null,			// if current article is gallery
 		previousDraftValues: null,	// use this for comparison of old and new draft values
 		autosaveTimer: null,	// timer for autosave, we need this to stop timer
-		photoPaginator: null,	// paginator for photos
+		listFilter: null,
 
 		init: function() {
 
@@ -71,8 +71,6 @@ steal(
 				this.article = this.options.article;
 				this.show(this.article);
 			}
-
-			this.initPhotosPagination();
 
 			// initialize autosave
 			// this.initAutosave(this.options.autosaveInterval);
@@ -1343,39 +1341,15 @@ steal(
 		 * @return {[type]} [description]
 		 */
 		renderPhotosList: function(data) {
-			var self = this;
             data = data || {};
-
-			if (!this.photoPaginator) {
-				this.initPhotosPagination();
-			}
-
-			var setFilter = {
-				order_by: '-id',
-				offset: self.photoPaginator.attr('offset'),
-				limit: self.photoPaginator.attr('limit')
-			};
-
-			var title = self.photoPaginator.attr('title') || $('#photos-modal .filter input[name=title]').val();
-			if (title) {
-				setFilter['title__icontains'] = title;
-			}
 
 			// render list
 			can.view( '//app/articles/views/list-photos.ejs', {
-				photos: Photo.findAll(setFilter),
+				photos: Photo.findAll({}),//TODO this.listFilter.getVals()),
 				data: data
 			} ).then(function( frag ){
 				$('#photos-modal .photos-list').html(frag);
 			});
-		},
-
-		'#photos-modal .filter submit': function (el, ev) {
-			//reset offset
-			this.photoPaginator.attr('offset', 0);
-            this.photoPaginator.attr('title', $('#photos-modal .filter input[name=title]').val());
-
-			return false;
 		},
 
 		/**
@@ -1388,7 +1362,7 @@ steal(
 
 			var self = this;
 
-			// hide list of photos
+			// hide list of photosf
 			var photosTable = el.closest('.modal-body').find('table');
 			photosTable.hide();
 
@@ -1410,25 +1384,6 @@ steal(
 				photosTable.show();
 			});
 		},
-
-		/**
-         * pagination for photo list
-         * @return {[type]} [description]
-         */
-        initPhotosPagination: function() {
-
-			var self = this;
-			this.photoPaginator = new can.Observe({
-				limit: 20,
-				offset: 0,
-                title: null
-			});
-
-			// when paginator attribute changes, reload articles list
-			this.photoPaginator.bind('change', function(ev, attr, how, newVal, oldVal) {
-				self.renderPhotosList();
-			});
-        },
 
         /**
          * pagination item is clicked - update paginator
