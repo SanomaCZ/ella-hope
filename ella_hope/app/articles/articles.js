@@ -64,8 +64,9 @@ steal(
 			var self = this;
 			if (!this.filterControl) {
 				this.filterControl = new ListFilter($("#filter"), {
-					owner: self,
-					model: self.modelClass
+					owner: self
+					, model: self.modelClass
+					, dateOptions: self.options.dateOptions
 				});
 
 				cb()
@@ -206,12 +207,18 @@ steal(
 			data.limit = this.paginator.attr('limit');
 			data.offset = this.paginator.attr('offset');
 
+			if (data.tag) {
+				var articles = self.modelClass.getArticlesByTag([data.tag])
+			} else {
+				var articles = self.modelClass.findAll(data)
+			}
+
 			can.view('//app/articles/views/list-articles.ejs', {
-				articles: self.modelClass.findAll(data),
+				articles: articles,
 				model: self.options.model
 			}).then(function (frag) {
-					$("#inner-content").html(frag);
-				});
+				$("#inner-content").html(frag);
+			});
 		},
 
 		/**

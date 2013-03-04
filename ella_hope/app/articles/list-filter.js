@@ -12,9 +12,12 @@ steal(
 		init: function (el, options) {
 			var self = this;
 
-			this.vals = new can.Observe.List([]);
+			this.resetting = false;
+			this.vals = new can.Observe();
 			this.vals.bind('change', function () {
-				self.options.owner.listItems()
+				if (!this.resetting) {
+					self.options.owner.listItems()
+				}
 			});
 
 			this.element.find('.category-filter').ajaxChosen({
@@ -74,27 +77,25 @@ steal(
 
 			this.element.find("input[name=publish_from], input[name=publish_to]")
 				.datepicker(self.options.dateOptions)
-				.on('change', function () {
-
+				.on('change', function (ev) {
+					self.updateItem($(this).attr('name'), this.value)
 				});
 
 			this.element.find("select").on('change', function (ev, el) {
-				//TODO
-				self.vals.attr(ev.target.name, el.selected);
+				self.updateItem($(this).attr('name'), this.value)
 			});
 		},
 
-		getVals: function () {
-			console.log(this.vals.serialize());
-			return this.vals.serialize()
+		updateItem: function(name, value) {
+			if (!value) {
+				this.vals.removeAttr(name)
+			} else {
+				this.vals.attr(name, value);
+			}
 		},
 
-		filterArticlesByTag: function (data) {
-			can.view('//app/articles/views/list-articles.ejs', {
-				articles: Article.getArticlesByTag(data)
-			}).then(function (frag) {
-					$("#inner-content").html(frag);
-				});
+		getVals: function () {
+			return this.vals.attr()
 		},
 
 		'.list-filter submit': function (el, ev) {
@@ -112,85 +113,21 @@ steal(
 			$.cookie(window.HOPECFG.COOKIE_FILTER, old_val == 'true' ? 'false' : 'true', {path: '/'});
 		},
 
-		'.filter-items click': function (el, ev) {
-			ev.preventDefault();
-
-			// get search term
-			var search = el.siblings('input.search-query').val();
-
-			if ($("select[name=category]").val()) {
-				data.category__id = $("select[name=category]").val();
-			}
-
-			if ($("input[name=publish_from]").val()) {
-				data.publish_from__gte = $("input[name=publish_from]").val();
-			}
-
-			if ($("input[name=publish_to]").val()) {
-				data.publish_to__lte = $("input[name=publish_to]").val();
-			}
-
-			if ($("select[name=published]").val()) {
-				var published = $("select[name=published]").val();
-
-				var today = new Date();
-				today = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-
-				var yesterday = new Date();
-				yesterday.setDate(yesterday.getDate() - 1);
-				yesterday = yesterday.getFullYear() + '-' + (yesterday.getMonth() + 1) + '-' + yesterday.getDate();
-
-				var weekBefore = new Date();
-				weekBefore.setDate(weekBefore.getDate() - 7);
-				weekBefore = weekBefore.getFullYear() + '-' + (weekBefore.getMonth() + 1) + '-' + weekBefore.getDate();
-
-				var monthBefore = new Date();
-				monthBefore.setDate(monthBefore.getDate() - 31);
-				monthBefore = monthBefore.getFullYear() + '-' + (monthBefore.getMonth() + 1) + '-' + monthBefore.getDate();
-
-				switch (published) {
-					case 'today' :
-						data.publish_from__exact = today;
-						break;
-					case 'yesterday' :
-						data.publish_from__exact = yesterday;
-						break;
-					case 'week' :
-					{
-						data.publish_from__gte = weekBefore;
-						data.publish_from__lte = today;
-					}
-						break;
-					case 'month' :
-					{
-						data.publish_from__gte = monthBefore;
-						data.publish_from__lte = today;
-					}
-						break;
-				}
-			}
-
-			if ($("select[name=state]").val()) {
-				data.state = $("select[name=state]").val();
-			}
-
-			if ($("select[name=author]").val()) {
-				data.authors__id = $("select[name=author]").val();
-			}
-
-			// tag - must be different function call, filtering by tags is separate
-			if ($("select[name=tag]").val()) {
-				this.filterArticlesByTag([$("select[name=tag]").val()]);
-				return false;
-			}
-		},
-
 		'.reset-filter click': function (el, ev) {
+			var self = this;
 			ev.preventDefault();
 
-			$('.filter-form').find('input, select').each(function () {
+			$('#filter').find('input, select').each(function () {
 				$(this).val(null).trigger('liszt:updated');
-			})
+			});
+
+			self.resetting = true;
+			self.vals.each(function(val, name) {
+				if (Object.keys(self.vals).length == 1) {
+					self.resetting = false;
+				}
+				self.vals.removeAttr(name);
+			});
 		}
 	})
-	)
+)
