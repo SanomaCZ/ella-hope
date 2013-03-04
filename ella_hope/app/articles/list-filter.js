@@ -4,9 +4,14 @@ steal(
 
 ).then(ListFilter = can.Control({
 		defaults: {
-			order_by: '-id',
-			model: null,
-			owner: null
+			order_by: '-id'
+			, model: null
+			, owner: null
+			, transformator: {
+				title: 'title__icontains'
+				, author: 'authors__id'
+				, category: 'category__id'
+			}
 		}
 	}, {
 		init: function (el, options) {
@@ -15,7 +20,7 @@ steal(
 			this.resetting = false;
 			this.vals = new can.Observe();
 			this.vals.bind('change', function () {
-				if (!this.resetting) {
+				if (!self.resetting) {
 					self.options.owner.listItems()
 				}
 			});
@@ -87,6 +92,17 @@ steal(
 		},
 
 		updateItem: function(name, value) {
+			console.log('update')
+			if (!name) {
+				return;
+			}
+
+			if (name in this.options.transformator) {
+				name = this.options.transformator[name];
+			}
+
+			console.log('update ' + name)
+
 			if (!value) {
 				this.vals.removeAttr(name)
 			} else {
@@ -98,15 +114,34 @@ steal(
 			return this.vals.attr()
 		},
 
-		'.list-filter submit': function (el, ev) {
+		batchReset: function(worker) {
+			var self = this;
+			self.resetting = true;
+
+			worker();
+
+			self.resetting = false;
+			self.options.owner.listItems();
+		},
+
+		'.filter-items click': function (el, ev) {
 			ev.preventDefault();
-			this.options.owner.resetPaginator();
+			var self = this;
+
+			self.batchReset(function() {
+				self.element.find('input[type=text]').each(function () {
+					self.updateItem($(this).attr('name'), $(this).val())
+				});
+
+				self.options.owner.resetPaginator();
+			});
+
 			return false;
 		},
 
 		'.toggle-advanced click': function (el, ev) {
 			ev.preventDefault();
-			$(el).toggleClass('dropup').toggleClass('dropdown')
+			$(el).toggleClass('dropup').toggleClass('dropdown');
 			this.element.find('.filter-advanced').toggle();
 
 			var old_val = $.cookie(window.HOPECFG.COOKIE_FILTER) || 'false';
@@ -121,13 +156,11 @@ steal(
 				$(this).val(null).trigger('liszt:updated');
 			});
 
-			self.resetting = true;
-			self.vals.each(function(val, name) {
-				if (Object.keys(self.vals).length == 1) {
-					self.resetting = false;
-				}
-				self.vals.removeAttr(name);
-			});
+			self.batchReset(function () {
+				self.vals.each(function (val, name) {
+					self.vals.removeAttr(name);
+				});
+			})
 		}
 	})
 )

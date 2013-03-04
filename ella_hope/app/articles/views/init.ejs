@@ -6,7 +6,7 @@
 	<%= $.t('Create new item') %>
 </a>
 
-<form class="form-horizontal" id="filter">
+<form class="form-horizontal list-filter" id="filter">
 	<div class="filter-basic controls-row">
 		<div class="pull-right">
 			&nbsp; &nbsp;
@@ -15,26 +15,25 @@
 				<span class="label-hide"><%= $.t('Hide advanced') %></span>
 				<span class="caret"></span>
 			</button>
-			<button class="btn btn-inverse reset-filter">
+			<button type="button" class="btn btn-inverse reset-filter">
 				<%= $.t('articles.reset_filter'); %>
 			</button>
 		</div>
 
 		<div class="input-append pull-right">
-			<input type="text" class="input-medium" placeholder="<%= $.t('search by title') %>" />
+			<input type="text" name="title" class="input-medium" placeholder="<%= $.t('search by title') %>" />
 			<button type="submit" class="btn filter-items"><%= $.t('articles.search')%></button>
 		</div>
 	</div>
 
 	<div class="filter-advanced controls-row" style="<%= ($.cookie(window.HOPECFG.COOKIE_FILTER) == 'true') ? 'display:block' : 'display:none' %>">
 		<div class="pull-right" style="padding:15px;">
-			<select class="input-medium category-filter" name="category__id" data-placeholder="<%= $.t('articles.category')%>">
+			<input class="input-small" name="publish_from" type="text" placeholder="<%= $.t('articles.publish_from') %>" />
+			<input class="input-small" name="publish_to" type="text" placeholder="<%= $.t('articles.publish_to') %>" />
+
+			<select class="input-medium category-filter" name="category" data-placeholder="<%= $.t('articles.category')%>">
 				<option></option>
 			</select>
-
-			<input class="input-small" name="publish_from" type="text" placeholder="<%= $.t('articles.publish_from') %>" />
-
-			<input class="input-small" name="publish_to" type="text" placeholder="<%= $.t('articles.publish_to') %>" />
 
 			<select class="input-small chzn-select" name="published" data-placeholder="<%= $.t('articles.published') %>">
 				<option></option>
@@ -53,7 +52,7 @@
 				<% } %>
 			</select>
 
-			<select class="input-medium author-filter" name="authors__id" data-placeholder="<%= $.t('articles.author')%>">
+			<select class="input-medium author-filter" name="author" data-placeholder="<%= $.t('articles.author')%>">
 				<option></option>
 			</select>
 			|

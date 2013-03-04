@@ -1,6 +1,5 @@
 steal(
 	'./create-article.js'
-	, './list-filter.js'
 	, './article.css'
 	, '//app/resources/js/bootstrap.min.js'
 	, '//app/resources/js/date.js'	// date parse
@@ -10,6 +9,7 @@ steal(
 	, '//app/resources/css/bootstrap-timepicker.css'	// timepicker css
 	, '//app/resources/js/jquery.chosen.js'	// select list js
 	, '//app/resources/css/jquery.chosen.css'	// select list css
+	, './list-filter.js'
 
 ).then(Articles = can.Control({
 		defaults: {
@@ -35,7 +35,7 @@ steal(
 		init: function (element, options) {
 			var self = this;
 
-			self.modelClass = (self.options.model == 'articles' ? Article : Galleries)
+			self.modelClass = (self.options.model == 'articles' ? Article : Gallery)
 
 			// destroy articleCreate control if it was created
 			// this is useful if we i.e. edit an article and without saving or canceling
@@ -190,9 +190,7 @@ steal(
 		 */
 		'.delete click': function (el, ev) {
 			ev.preventDefault();
-
-			var orly = confirm(el.data('confirm'));
-			if (orly) {
+			if (confirm(el.data('confirm'))) {
 				el.data('article').destroy(function () {
 					el.closest('tr').remove()
 				});
