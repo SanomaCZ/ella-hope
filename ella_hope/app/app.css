@@ -14,3 +14,7 @@ form .required:after {
 .chzn-container-multi .chzn-choices .search-field input {
 	width: auto !important;
 }
+
+body {
+    padding-top: 60px;
+}
