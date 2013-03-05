@@ -132,3 +132,8 @@ button.add-author, button.add-tag {
 .box-snippet:empty {
 	display: none;
 }
+
+img.max200 {
+    max-height: 200px !important;
+    max-width: 200px !important;
+}

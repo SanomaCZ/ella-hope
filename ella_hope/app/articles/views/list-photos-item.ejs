@@ -62,6 +62,8 @@
 
 
 	<% if (this.insideArticle) { %>
-		<td valign="top"><img class="pick" src="<%= photo.public_url %>" /></td>
+		<td>
+			<img class="max200" src="<%= photo.public_url %>" />
+		</td>
 	<% } %>
 </tr>
