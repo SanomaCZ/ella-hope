@@ -291,12 +291,14 @@ steal(
 							connectWith: "#chosen-recent-photos",
 							// when new article is dropped to related articles
 							receive: function (event, ui) {
+								var el = ui.item;
+
 								if (!self.article.id) {
 									self.save(function() {
-										self.receiveGalleryItem(ui)
+										self.receiveGalleryItem(el, ui.item.index())
 									})
 								} else {
-									self.receiveGalleryItem(ui)
+									self.receiveGalleryItem(el, ui.item.index())
 								}
 							},
 							update: function (event, ui) {
@@ -346,11 +348,11 @@ steal(
 			this.element.slideDown(200);
 		},
 
-		receiveGalleryItem: function (ui) {
+		receiveGalleryItem: function (el, order) {
+			console.log(order);
 			var self = this;
-			var el = $(ui.item[0]),
-				receivedID = el.data('photo-id'),
-				articleID = self.article.resource_uri;
+			var receivedID = el.data('photo-id');
+			var articleID = self.article.resource_uri;
 
 			// save new relation
 			var item = new GalleryItem({
@@ -358,14 +360,14 @@ steal(
 				photo: receivedID,
 				title: el.find('.photo-title').data('label'),
 				text: el.find('.photo-description').data('label'),
-				order: 0
+				order: order
 			});
 
 			item.save(function (model) {
 				//jQuery UI's sortable serialize() returns value via attr()
 				// so make it reachable via attr() [.data() isn't]
-				el.attr('data-resource_id', model.id);
-				el.data('order', item.order);
+				el.attr('data-resource_id', model.id)
+					.data('order', order);
 				self.setGallerySaveTimeout();
 			});
 		},
@@ -426,12 +428,14 @@ steal(
 			this.autosaveTimer = null;
 		},
 
-		//TODO - optimise (set each order * 2 to allow injecting items to empty spaces
-		// w/o need to reorder the whole set
+		/*
+		 * TODO - optimise (set each order * 2 to allow injecting items to empty spaces
+		 * w/o need to reorder the whole set
+		 */
 		setGalleryOrder: function (sortable) {
 			if (!sortable) { return; }
 			//don't trust in natural elements order, let jQuery serialize their order
-			var itemsOrder = sortable.sortable('toArray', { 'attribute': 'data-resource_id'});//.reverse();
+			var itemsOrder = sortable.sortable('toArray', { 'attribute': 'data-resource_id'});
 			var current;
 
 			for (var one in itemsOrder) {
@@ -1526,6 +1530,7 @@ steal(
 				el.append(can.view.render('//app/articles/views/inline-gallery-item.ejs', {
 					photo: photo
 				}));
+				return false;
 			});
 		},
 
@@ -1559,6 +1564,21 @@ steal(
 				GalleryItem.update(parent.parent('li').data('resource_id'), update_attrs);
 			}
 		},
+
+		'#gallery-items .js-add-ALL-the-items click': function(el, ev) {
+			ev.preventDefault();
+			var self = this;
+			var items = $("#found-recent-photos").find('li');
+			var target = $("#chosen-recent-photos");
+			var existsCount = $("#chosen-recent-photos").find('li').length;
+
+
+			$.each(items, function(i) {
+				$(target).append(this);
+				self.receiveGalleryItem($(this), existsCount + 1 + i);
+			})
+		},
+
 
 		/**
 		 * find snippets in textarea so that images etc. can be handled comfortably
