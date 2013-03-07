@@ -59,6 +59,7 @@ steal(
 		previousDraftValues: null,	// use this for comparison of old and new draft values
 		autosaveTimer: null,	// timer for autosave, we need this to stop timer
 		listFilter: null,
+		photoPaginator: null,
 
 		init: function() {
 
@@ -71,6 +72,8 @@ steal(
 				this.article = this.options.article;
 				this.show(this.article);
 			}
+
+			this.initPhotosPagination();
 
 			// initialize autosave
 			// this.initAutosave(this.options.autosaveInterval);
@@ -1344,15 +1347,39 @@ steal(
 		 * @return {[type]} [description]
 		 */
 		renderPhotosList: function(data) {
+			var self = this;
             data = data || {};
+
+			if (!this.photoPaginator) {
+				this.initPhotosPagination();
+			}
+
+			var setFilter = {
+				order_by: '-id',
+				offset: self.photoPaginator.attr('offset'),
+				limit: self.photoPaginator.attr('limit')
+			};
+
+			var title = self.photoPaginator.attr('title') || $('#photos-modal .filter input[name=title]').val();
+			if (title) {
+				setFilter['title__icontains'] = title;
+			}
 
 			// render list
 			can.view( '//app/articles/views/list-photos.ejs', {
-				photos: Photo.findAll({}),//TODO this.listFilter.getVals()),
+				photos: Photo.findAll(setFilter),
 				data: data
 			} ).then(function( frag ){
 				$('#photos-modal .photos-list').html(frag);
 			});
+		},
+
+		'#photos-modal .filter submit': function (el, ev) {
+			//reset offset
+			this.photoPaginator.attr('offset', 0);
+			this.photoPaginator.attr('title', $('#photos-modal .filter input[name=title]').val());
+
+			return false;
 		},
 
 		/**
@@ -1365,7 +1392,7 @@ steal(
 
 			var self = this;
 
-			// hide list of photosf
+			// hide list of photos
 			var photosTable = el.closest('.modal-body').find('table');
 			photosTable.hide();
 
@@ -1411,6 +1438,24 @@ steal(
 			}
 			this.photoPaginator.attr('offset', newOffset);
         },
+
+		/**
+		 * pagination for photo list
+		 * @return {[type]} [description]
+		 */
+		initPhotosPagination: function () {
+			var self = this;
+			this.photoPaginator = new can.Observe({
+				limit: 20,
+				offset: 0,
+				title: null
+			});
+
+			// when paginator attribute changes, reload articles list
+			this.photoPaginator.bind('change', function (ev, attr, how, newVal, oldVal) {
+				self.renderPhotosList();
+			});
+		},
 
 		/**
 		 * find related articles based on currently selected tags
@@ -1835,9 +1880,11 @@ steal(
 			var itemSpace = $(el).closest('.js-removable-item');
 			var instance = $(itemSpace).data('instance');
 
-			instance.destroy(function() {
-				itemSpace.fadeOut().remove();
-			});
+			if (instance) {
+				instance.destroy(function () {
+					itemSpace.fadeOut().remove();
+				});
+			}
 		},
 
 		/**
