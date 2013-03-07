@@ -2,7 +2,6 @@
     <div class="row">
         <h4><%= $.t('gallery link') %></h4>
         <select class="item-name input-large" name="id" data-placeholder="<%= $.t('Gallery title') %>">
-            <% console.log(data) %>
             <% if (data.lookup_object) { %>
                 <option value="<%= data.lookup_object.id %>" selected="selected">
                     <%= data.lookup_object.title %>

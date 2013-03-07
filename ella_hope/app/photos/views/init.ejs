@@ -1,49 +1,49 @@
 <div class="page-header">
-	<h1><%= $.t('photos.heading') %></h1>
+	<h1><%= this.model %></h1>
 </div>
 
-<a href="<%= can.route.url({ page: 'photos', action: 'new-photos' })%>" class="btn btn-primary"><%= $.t('photos.new_photo') %></a>
-<a href="<%= can.route.url({ page: 'photos', action: 'new-videos' })%>" class="btn btn-primary"><%= $.t('photos.new_video') %></a>
+<a href="<%= can.route.url({ page: 'photos', action: 'new-photos' })%>" class="btn btn-primary">
+	<%= $.t('photos.new_photo') %>
+</a>
+<a href="<%= can.route.url({ page: 'photos', action: 'new-videos' })%>" class="btn btn-primary">
+	<%= $.t('photos.new_video') %>
+</a>
 
-<div class="pull-right">
-	<form class="form-search pull-left">
-	    <div class="input-append">
-		    <input type="text" class="input-medium search-query" placeholder="<%= $.t('photos.search_by_title') %>" />
-		    <button type="submit" class="btn search-photos"><%= $.t('photos.search')%></button>
-        </div>
-	</form>
-</div>
+<form class="form-horizontal list-filter" id="filter">
+	<div class="filter-basic controls-row">
+		<div class="pull-right">
+			&nbsp; &nbsp;
+			<button type="button" class="btn toggle-advanced <%= ($.cookie(window.HOPECFG.COOKIE_FILTER) == 'true') ? 'dropup' : 'dropdown' %>">
+				<span class="label-show"><%= $.t('Show advanced') %></span>
+				<span class="label-hide"><%= $.t('Hide advanced') %></span>
+				<span class="caret"></span>
+			</button>
+			<button type="button" class="btn btn-inverse reset-filter">
+				<%= $.t('articles.reset_filter'); %>
+			</button>
+		</div>
 
-<div class="pull-right span2">
-    <button class="btn filter-items <%= ($.cookie(window.HOPECFG.COOKIE_FILTER) == 'true') ? 'dropup' : 'dropdown' %>">
-        <span class="label-show"><%= $.t('articles.show_filter') %></span>
-        <span class="label-hide"><%= $.t('articles.hide_filter') %></span>
-        <span class="caret"></span>
-    </button>
-</div>
+		<div class="input-append pull-right">
+			<input type="text" name="title" class="input-medium" placeholder="<%= $.t('search by title') %>" />
+			<button type="submit" class="btn filter-items"><%= $.t('articles.search')%></button>
+		</div>
+	</div>
 
-<div class="filter-form" style="<% if ($.cookie(window.HOPECFG.COOKIE_FILTER) == 'true') { %>display:block<% } else { %>display:none<% } %>">
-	<div class="clearfix"></div>
-	<form class="form-inline pull-right filter">
+	<div class="filter-advanced controls-row" style="<%= ($.cookie(window.HOPECFG.COOKIE_FILTER) == 'true') ? 'display:block' : 'display:none' %>">
+		<div class="pull-right" style="padding:15px;">
 
-		<select class="input-medium author-filter" name="author" data-placeholder="<%= $.t('photos.author')%>">
-			<option></option>
-		</select>
+			<select class="input-medium author-filter" name="author" data-placeholder="<%= $.t('photos.author')%>">
+				<option></option>
+			</select>
 
-		<select class="input-medium tag-filter" name="tag" data-placeholder="<%= $.t('photos.tag')%>">
-			<option></option>
-		</select>
+			<select class="input-medium tag-filter" name="tag" data-placeholder="<%= $.t('photos.tag')%>">
+				<option></option>
+			</select>
+		</div>
+	</div>
+</form>
 
-		|
-
-		<button class="btn btn-small btn-inverse reset-filter">
-			<%= $.t('photos.reset_filter'); %>
-		</button>
-	</form>
-	<div class="clearfix"></div>
-</div>
-
-<hr>
+<hr/>
 
 <div id="inner-content"></div>
 

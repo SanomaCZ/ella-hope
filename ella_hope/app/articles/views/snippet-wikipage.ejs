@@ -3,7 +3,6 @@
         <h4><%= $.t('wikipage link') %></h4>
         <select class="wikiref-name input-medium" name="slug" data-placeholder="<%= $.t('Wikipage title') %>">
             <option></option>
-            <% console.log(data) %>
             <% if (data.lookup_object) { %>
                 <option value="<%= data.lookup_object.slug %>" selected="selected">
                     <%= data.lookup_object.title %>

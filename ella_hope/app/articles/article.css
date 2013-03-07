@@ -121,11 +121,11 @@ button.add-author, button.add-tag {
 	margin: 10px 0;
 }
 
-.filter-items.dropdown .label-hide {
+.toggle-advanced.dropdown .label-hide {
 	display: none;
 }
 
-.filter-items.dropup .label-show {
+.toggle-advanced.dropup .label-show {
 	display: none;
 }
 

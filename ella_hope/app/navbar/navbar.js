@@ -35,11 +35,6 @@ steal(
 			$('.dropdown-toggle').dropdown();
 		},
 
-		/**
-		 * router
-		 * @param  {[type]} data [description]
-		 * @return {[type]}      [description]
-		 */
 		"{can.route} page set": function( selector, event, newVal, oldVal ) {
 
 			//console.log('page set ' + newVal);

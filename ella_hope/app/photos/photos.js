@@ -11,89 +11,49 @@ steal(
 	, '//app/resources/js/jquery.chosen.js'	// select list js
 	, '//app/resources/css/jquery.chosen.css'	// select list css
 	, '//app/resources/js/jquery.cookie.js'
-)
-.then(
-
-	/**
-	 * Shows the photos.
-	 * @tag controllers
-	 */
-	Photos = can.Control(
-	/* @static */
-	{
+	, '../articles/list-filter.js'
+).then(Photos = can.Control({
 		defaults: {
-			initView : "//app/photos/views/init.ejs"
-		}
-	},
-	/* @prototype */
-	{
-		photosUpload: null,
-		paginator: null,	// articles paginator
+			initView: "//app/photos/views/init.ejs",
+			dateOptions: {	// https://github.com/eternicode/bootstrap-datepicker
+				format: 'yyyy-mm-dd',
+				weekStart: 1,
+				autoclose: true
+			},
+			timeOptions: {
+				minuteStep: 1,
+				showSeconds: false,
+				showMeridian: false,
+				defaultTime: false
+			},
+			model: 'photos'
 
-		/**
-		 * Initializes a new instance of Articles container.
-		 * @codestart
-		 * $(selector).skimapnet_search_result({
-		 *	modelType : skimapnet.Models.Google,
-		 *  listenTo : $('#searchBox')
-		 * })
-		 * @codeend
-		 */
-		init: function(element, options){
+		}
+	}, { //prototype
+
+		photosUpload: null,
+		paginator: null,	// paginator
+		filterControl: null,
+
+		init: function (element, options) {
 
 			var self = this;
 
 			// render init view
-			this.element.html(can.view(this.options.initView, {}));
-
-			$(".filter-form select").on('change', function(ev){
-				self.filterPhotos();
+			can.view(this.options.initView, {}, function (html) {
+				self.element.html(html);
+				self.initFilter();
+				self.initPagination();
+				self.listItems();
 			});
-
-			// ajax autocomplete for author
-			$('.author-filter').ajaxChosen({
-				type: 'GET',
-				url: BASE_URL+'/author/?',
-				jsonTermKey: 'name__icontains',
-				dataType: 'json'
-			}, function (data) {
-
-				var results = [];
-
-				$.each(data, function (i, val) {
-					results.push({ value: val.id, text: val.name });
-				});
-
-				return results;
-			}, {
-				"allow_single_deselect": true
-			});
-
-			// ajax autocomplete for tags
-			$('.tag-filter').ajaxChosen({
-				type: 'GET',
-				url: BASE_URL+'/tag/?',
-				jsonTermKey: 'tags__in',
-				dataType: 'json'
-			}, function (data) {
-
-				var results = [];
-
-				$.each(data, function (i, val) {
-					results.push({ value: val.id, text: val.name });
-				});
-
-				return results;
-			}, {
-				"allow_single_deselect": true
-			});
-
-			this.initPagination();
-
-			this.listPhotos( {} );
 		},
 
-		':page route': function( data ) {
+		resetPaginator: function () {
+			this.paginator.attr('offset', 0);
+			this.paginator.attr('limit', 20);
+		},
+
+		':page route': function (data) {
 
 			if (data.page == 'photos') {
 				if (this.element && this.element.children().length) {
@@ -102,7 +62,7 @@ steal(
 			}
 		},
 
-		':page/:action route': function( data ) {
+		':page/:action route': function (data) {
 
 			if (data.action == 'new-photos') {
 				if (this.photosUpload) {
@@ -113,53 +73,39 @@ steal(
 			}
 		},
 
-		':page/:action/:id route': function( data ) {
-
-			var self = this;
-
-			if (data.action == 'edit') {
-				if (data.id > 0) {
-					Photo.findOne({id: data.id}, function(photo){
-						if (self.photosUpload) {
-							self.photosUpload.destroy();
-							self.photosUpload = null;
-						}
-						self.photosUpload = new PhotosUpload(self.element, {
-							photo: photo
-						});
-					});
-				}
+		':page/:action/:id route': function (data) {
+			if (!data.id > 0) {
+				return;
 			}
-        },
-
-        /**
-         * pagination for articles list
-         * @return {[type]} [description]
-         */
-        initPagination: function() {
 
 			var self = this;
+			if (data.action == 'edit') {
+				Photo.findOne({id: data.id}, function (photo) {
+					if (self.photosUpload) {
+						self.photosUpload.destroy();
+						self.photosUpload = null;
+					}
+					self.photosUpload = new PhotosUpload(self.element, {
+						photo: photo
+					});
+				});
+			}
+		},
 
+		initPagination: function () {
+			var self = this;
 			this.paginator = new can.Observe({
 				limit: 20,
 				offset: 0
 			});
 
 			// when paginator attribute changes, reload articles list
-			this.paginator.bind('change', function(ev, attr, how, newVal, oldVal) {
-				//console.log('change', attr, newVal);
-				self.listPhotos();
+			this.paginator.bind('change', function (ev, attr, how, newVal, oldVal) {
+				self.listItems();
 			});
-        },
+		},
 
-        /**
-         * pagination item is clicked - update paginator
-         * @param  {[type]} el [description]
-         * @param  {[type]} ev [description]
-         * @return {[type]}    [description]
-         */
-        '.pagination li a click': function(el, ev) {
-
+		'.pagination li a click': function (el, ev) {
 			ev.preventDefault();
 
 			var newOffset;
@@ -174,123 +120,56 @@ steal(
 				newOffset = this.paginator.attr('offset') + this.paginator.attr('limit');
 			}
 			this.paginator.attr('offset', newOffset);
-        },
+		},
 
-		/**
-		 * delete article
-		 * @param  {[type]} el [description]
-		 * @param  {[type]} ev [description]
-		 * @return {[type]}    [description]
-		 */
-		'.delete click': function(el, ev){
+		'.delete click': function (el, ev) {
 			ev.preventDefault();
 
-			var orly = confirm(el.data('confirm'));
-			if (orly) {
-				el.data('photo').destroy(function() {
+			if (confirm(el.data('confirm'))) {
+				el.data('photo').destroy(function () {
 					el.closest('tr').remove()
 				});
 			}
 		},
 
-		/**
-		 * list photos
-		 * @return {[type]} [description]
-		 */
-		'listPhotos': function(data) {
-			data = data || {};
-			data.order_by = '-id';
+		listItems: function (data) {
+			var self = this;
+			data = data || self.filterControl.getVals();
 
-			// pagination
+			data.order_by = '-id';
 			data.limit = this.paginator.attr('limit');
 			data.offset = this.paginator.attr('offset');
 
 			can.view('//app/photos/views/list-photos.ejs', {
 				photos: Photo.findAll(data)
-			}).then(function( frag ){
-				$("#inner-content").html( frag );
+			}).then(function (frag) {
+				$("#inner-content").html(frag);
 			});
 		},
 
-		/**
-		 * search photos based on title
-		 * @param  {[type]} el [description]
-		 * @param  {[type]} ev [description]
-		 * @return {[type]}    [description]
-		 */
-		'.search-photos click' : function(el, ev) {
-
-			ev.preventDefault();
-
-			// get search term
-			var search = el.siblings('input.search-query').val();
-
-			// search articles containing search term in title
-			this.listPhotos({
-				title__icontains: search
-			});
-		},
-
-		/**
-		 * filter photos
-		 * @return {[type]} [description]
-		 */
-		filterPhotos : function() {
-
-			// data from filter form
-			var data = {};
-
-			// author
-			if ($("select[name=author]").val()) {
-				data.authors__id = $("select[name=author]").val();
+		initFilter: function () {
+			var self = this;
+			if (!this.filterControl) {
+				this.filterControl = new ListFilter($("#filter"), {
+					owner: self, model: self.modelClass, dateOptions: self.options.dateOptions
+				});
 			}
-
-			// tag
-			if ($("select[name=tag]").val()) {
-				data.tags__id = $("select[name=tag]").val();
-			}
-
-			// show photos based on filter data
-			this.listPhotos(data);
 		},
 
 		/**
-		 * show/hide filtering form
+		 * destructor, triggered automatically
 		 */
-		'.filter-items click' : function(el, ev) {
-			ev.preventDefault();
-			$('.filter-form').toggle();
-			$(el).toggleClass('dropup').toggleClass('dropdown');
-
-			var old_val = $.cookie(window.HOPECFG.COOKIE_FILTER) || 'false';
-			$.cookie(window.HOPECFG.COOKIE_FILTER, old_val == 'true' ? 'false': 'true', {path: '/'});
-		},
-
-
-		/**
-		 * reset filter form values
-		 * @param  {[type]} el [description]
-		 * @param  {[type]} ev [description]
-		 * @return {[type]}    [description]
-		 */
-		'.reset-filter click': function(el, ev) {
-
-			ev.preventDefault();
-
-			$('.filter-form').find('input, select').each(function() {
-				$(this).val(null).trigger('liszt:updated');
-			});
-
-			this.listPhotos();
-		},
-
-		destroy: function() {
+		destroy: function () {
 			if (this.photosUpload) {
 				this.photosUpload.destroy();
 			}
 
-			can.Control.prototype.destroy.call( this );
+			if (this.filterControl) {
+				this.filterControl.destroy();
+			}
+
+			can.Control.prototype.destroy.call(this);
 		}
 
 	})
-);
+	);

@@ -1,5 +1,4 @@
 steal(
-	//'./css/search_result.css'
 	'./create-article.js'
 	, './article.css'
 	, '//app/resources/js/bootstrap.min.js'
@@ -10,53 +9,33 @@ steal(
 	, '//app/resources/css/bootstrap-timepicker.css'	// timepicker css
 	, '//app/resources/js/jquery.chosen.js'	// select list js
 	, '//app/resources/css/jquery.chosen.css'	// select list css
-)
-.then(
+	, './list-filter.js'
 
-	/**
-	 * Shows the articles.
-	 * @tag controllers, home
-	 */
-	Articles = can.Control(
-	/* @static */
-	{
+).then(Articles = can.Control({
 		defaults: {
-			initView : "//app/articles/views/init.ejs",
+			initView: "//app/articles/views/init.ejs",
 			articleStates: ["added", "ready", "approved", "published", "deleted"], // "postponed"
 			articleComments: ["all", "registered", "nobody"],
 			dateOptions: {	// https://github.com/eternicode/bootstrap-datepicker
 				format: 'yyyy-mm-dd',
 				weekStart: 1,
 				autoclose: true
-			}
-			, timeOptions: {
+			}, timeOptions: {
 				minuteStep: 1,
 				showSeconds: false,
 				showMeridian: false,
 				defaultTime: false
-			}
-			, model: 'articles'
+			}, model: 'articles'
 		}
-	},
-	/* @prototype */
-	{
-		articleCreate: null,	// control for creating/editing an article
-		paginator: null,	// articles paginator
+	}, {
+		articleCreate: null,
+		paginator: null,
+		filterControl: null,
 
-		/**
-		 * Initializes a new instance of Articles container.
-		 * @codestart
-		 * $(selector).skimapnet_search_result({
-		 *	modelType : skimapnet.Models.Google,
-		 *  listenTo : $('#searchBox')
-		 * })
-		 * @codeend
-		 */
-		init: function(element, options){
-
-			//console.log(this.options);
-
+		init: function (element, options) {
 			var self = this;
+
+			self.modelClass = (self.options.model == 'articles' ? Article : Gallery)
 
 			// destroy articleCreate control if it was created
 			// this is useful if we i.e. edit an article and without saving or canceling
@@ -65,104 +44,40 @@ steal(
 				this.articleCreate.destroy();
 			}
 
-			this.initPagination();
-
 			// render init view
-			this.element.html(can.view('//app/articles/views/init.ejs', {
+			can.view('//app/articles/views/init.ejs', {
 				states: this.options.articleStates,
 				model: self.options.model
-			}));
+			}, function (html) {
+				self.element.html(html);
 
-			// enable datepicker for publishFrom and publishTo
-			// https://github.com/eternicode/bootstrap-datepicker
-			var filter_form = $(".filter-form");
-			filter_form.find("input[name=publish_from], input[name=publish_to]")
-				.datepicker(self.options.dateOptions)
-				.on('changeDate',function (ev) {
-					self.filterArticles();
-				})
-				.on('change', function () {
-					if (!this.value) {
-						$(this).trigger('changeDate');
-					}
+				//FUUUUUUUUUUUU
+				self.initFilter(function () {
+					self.initPagination(function () {
+						self.listItems();
+					});
 				});
-
-			filter_form.find("select").on('change', function(ev){
-				self.filterArticles();
 			});
-
-			// ajax autocomplete for category
-			$('.category-filter').ajaxChosen({
-				type: 'GET',
-				url: BASE_URL+'/category/?',
-				jsonTermKey: 'title__icontains',
-				dataType: 'json'
-			}, function (data) {
-
-				var results = [];
-
-				$.each(data, function (i, val) {
-					results.push({ value: val.id, text: val.full_title });
-				});
-
-				return results;
-			}, {
-				"allow_single_deselect": true
-			});
-
-			// ajax autocomplete for author
-			$('.author-filter').ajaxChosen({
-				type: 'GET',
-				url: BASE_URL+'/author/?',
-				jsonTermKey: 'name__icontains',
-				dataType: 'json'
-			}, function (data) {
-
-				var results = [];
-
-				$.each(data, function (i, val) {
-					results.push({ value: val.id, text: val.name });
-				});
-
-				return results;
-			}, {
-				"allow_single_deselect": true
-			});
-
-			// ajax autocomplete for tags
-			$('.tag-filter').ajaxChosen({
-				type: 'GET',
-				url: BASE_URL+'/tag/?',
-				jsonTermKey: 'name__icontains',
-				dataType: 'json'
-			}, function (data) {
-
-				var results = [];
-
-				$.each(data, function (i, val) {
-					results.push({ value: val.resource_uri, text: val.name });
-				});
-
-				return results;
-			}, {
-				"allow_single_deselect": true
-			});
-
-			// enable chosen select for authors
-			// http://harvesthq.github.com/chosen/
-			$('.chzn-select').chosen({allow_single_deselect:true});
-
-			// list articles
-			this.listArticles({});
 		},
 
+		initFilter: function (cb) {
+			var self = this;
+			if (!this.filterControl) {
+				this.filterControl = new ListFilter($("#filter"), {
+					owner: self
+					, model: self.modelClass
+					, dateOptions: self.options.dateOptions
+				});
+
+				cb()
+			}
+		},
+
+
 		/**
-		 * this route is called when we i.e. edit an articles
-		 * and then click on Articles in menu
-		 * @param  {[type]} data [description]
-		 * @return {[type]}      [description]
+		 * this route is called when we i.e. edit an articles and then click on Articles in menu
 		 */
-		':page route': function( data ) {
+		':page route': function (data) {
 			if (data.page == 'articles' || data.page == 'galleries') {
 				// if there are children, control needs to be initialized
 				// it's because there was something else in the element and
@@ -173,68 +88,62 @@ steal(
 			}
 		},
 
-		':page/:action route': function( data ) {
+		':page/:action route': function (data) {
 			if (data.action == 'new') {
 				this.articleCreate = new ArticleCreate(this.element, this.options);
 			}
 		},
 
-		':page/:action/:id route': function( data ) {
+		':page/:action/:id route': function (data) {
+			if (!data.id || !data.id > 0) {
+				return;
+			}
 
 			var self = this;
-
 			if (data.action == 'edit') {
-				if (data.id > 0) {
-					if (data.page === 'articles') {
-						Article.findOne({id: data.id}, function(article){
-							self.articleCreate = new ArticleCreate(self.element, {
-								type: 'article',
-								article: article,
-								articleStates: self.options.articleStates,
-								articleComments: self.options.articleComments,
-								dateOptions: self.options.dateOptions,
-								timeOptions: self.options.timeOptions,
-								model: 'articles'
-							});
-						});
-					}
-					else if (data.page === 'galleries') {
-						Gallery.findOne({id: data.id}, function(article){
-							self.articleCreate = new ArticleCreate(self.element, {
-								type: 'article',
-								article: article,
-								articleStates: self.options.articleStates,
-								articleComments: self.options.articleComments,
-								dateOptions: self.options.dateOptions,
-								timeOptions: self.options.timeOptions,
-								model: 'galleries'
-							});
-						});
-					}
-				}
-			}
-			else if (data.action == 'edit-draft') {
-				if (data.id > 0) {
-					Draft.findOne({id: data.id}, function(draft){
+				if (data.page === 'articles') {
+					Article.findOne({id: data.id}, function (article) {
 						self.articleCreate = new ArticleCreate(self.element, {
-							type: 'draft',
-							article: draft,
+							type: 'article',
+							article: article,
 							articleStates: self.options.articleStates,
 							articleComments: self.options.articleComments,
-							dateOptions: self.options.dateOptions
-							, timeOptions: self.options.timeOptions
+							dateOptions: self.options.dateOptions,
+							timeOptions: self.options.timeOptions,
+							model: 'articles'
+						});
+					});
+				} else if (data.page === 'galleries') {
+					Gallery.findOne({id: data.id}, function (article) {
+						self.articleCreate = new ArticleCreate(self.element, {
+							type: 'article',
+							article: article,
+							articleStates: self.options.articleStates,
+							articleComments: self.options.articleComments,
+							dateOptions: self.options.dateOptions,
+							timeOptions: self.options.timeOptions,
+							model: 'galleries'
 						});
 					});
 				}
+			} else if (data.action == 'edit-draft') {
+				Draft.findOne({id: data.id}, function (draft) {
+					self.articleCreate = new ArticleCreate(self.element, {
+						type: 'draft',
+						article: draft,
+						articleStates: self.options.articleStates,
+						articleComments: self.options.articleComments,
+						dateOptions: self.options.dateOptions, timeOptions: self.options.timeOptions
+					});
+				});
 			}
-        },
+		},
 
-        /**
-         * pagination for articles list
-         * @return {[type]} [description]
-         */
-        initPagination: function() {
-
+		/**
+		 * pagination for articles list
+		 * @return {[type]} [description]
+		 */
+		initPagination: function (cb) {
 			var self = this;
 
 			this.paginator = new can.Observe({
@@ -243,19 +152,22 @@ steal(
 			});
 
 			// when paginator attribute changes, reload articles list
-			this.paginator.bind('change', function(ev, attr, how, newVal, oldVal) {
-				//console.log('change', attr, newVal);
-				self.listArticles();
+			this.paginator.bind('change', function (ev, attr, how, newVal, oldVal) {
+				self.listItems();
 			});
-        },
 
-        /**
-         * pagination item is clicked - update paginator
-         * @param  {[type]} el [description]
-         * @param  {[type]} ev [description]
-         * @return {[type]}    [description]
-         */
-        '.pagination-articles li a click': function(el, ev) {
+			cb();
+		},
+
+		resetPaginator: function () {
+			this.paginator.attr('offset', 0);
+			this.paginator.attr('limit', 20);
+		},
+
+		/**
+		 * pagination item is clicked - update paginator
+		 */
+		'.pagination-articles li a click': function (el, ev) {
 
 			ev.preventDefault();
 
@@ -271,206 +183,58 @@ steal(
 				newOffset = this.paginator.attr('offset') + this.paginator.attr('limit');
 			}
 			this.paginator.attr('offset', newOffset);
-        },
+		},
 
 		/**
 		 * delete article
-		 * @param  {[type]} el [description]
-		 * @param  {[type]} ev [description]
-		 * @return {[type]}    [description]
 		 */
-		'.delete click': function(el, ev){
+		'.delete click': function (el, ev) {
 			ev.preventDefault();
-
-			var orly = confirm(el.data('confirm'));
-			if (orly) {
-				el.data('article').destroy(function() {
+			if (confirm(el.data('confirm'))) {
+				el.data('article').destroy(function () {
 					el.closest('tr').remove()
 				});
 			}
 		},
 
-		/**
-		 * list articles
-		 * @return {[type]} [description]
-		 */
-		'listArticles': function(data) {
-
+		listItems: function () {
+			console.info('listing items')
 			var self = this;
-
-			if (data) {
-				data.order_by = '-publish_from';
-			}
-			else {
-				data = {
-					order_by: '-publish_from'
-				};
-			}
-
-			// pagination
+			var data = self.filterControl.getVals();
+			data.order_by = '-publish_from';
 			data.limit = this.paginator.attr('limit');
 			data.offset = this.paginator.attr('offset');
 
+			if (data.tag) {
+				var articles = self.modelClass.getArticlesByTag([data.tag])
+			} else {
+				var articles = self.modelClass.findAll(data)
+			}
+
 			can.view('//app/articles/views/list-articles.ejs', {
-				articles: self.options.model === 'articles' ? Article.findAll(data) : Gallery.findAll(data),
-				model: self.options.model
-			}).then(function( frag ){
-				$("#inner-content").html( frag );
+				articles: articles
+				, model: self.options.model
+			}).then(function (frag) {
+					console.info('listing items end')
+				$("#inner-content").html(frag);
 			});
 		},
 
 		/**
-		 * search articles based on title
-		 * @param  {[type]} el [description]
-		 * @param  {[type]} ev [description]
-		 * @return {[type]}    [description]
+		 * destructor, triggered automatically
 		 */
-		'.search-articles click' : function(el, ev) {
-
-			ev.preventDefault();
-
-			// get search term
-			var search = el.siblings('input.search-query').val();
-
-			// search articles containing search term in title
-			this.listArticles({
-				title__icontains: search
-			});
-		},
-
-		/**
-		 * filter articles
-		 * @return {[type]} [description]
-		 */
-		filterArticles : function() {
-
-			// data from filter form
-			var data = {};
-
-			//console.log('change');
-
-			// category
-			if ($("select[name=category]").val()) {
-				data.category__id = $("select[name=category]").val();
-			}
-
-			// publish_from
-			if ($("input[name=publish_from]").val()) {
-				data.publish_from__gte = $("input[name=publish_from]").val();
-			}
-
-			// publish_to
-			if ($("input[name=publish_to]").val()) {
-				data.publish_to__lte = $("input[name=publish_to]").val();
-			}
-
-			// published
-			if ($("select[name=published]").val()) {
-				var published = $("select[name=published]").val();
-
-				var today = new Date();
-				today = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-
-				var yesterday = new Date();
-				yesterday.setDate(yesterday.getDate() - 1);
-				yesterday = yesterday.getFullYear()+'-'+(yesterday.getMonth()+1)+'-'+yesterday.getDate();
-
-				var weekBefore = new Date();
-				weekBefore.setDate(weekBefore.getDate() - 7);
-				weekBefore = weekBefore.getFullYear()+'-'+(weekBefore.getMonth()+1)+'-'+weekBefore.getDate();
-
-				var monthBefore = new Date();
-				monthBefore.setDate(monthBefore.getDate() - 31);
-				monthBefore = monthBefore.getFullYear()+'-'+(monthBefore.getMonth()+1)+'-'+monthBefore.getDate();
-
-				switch (published) {
-					case 'today' : data.publish_from__exact = today; break;
-					case 'yesterday' : data.publish_from__exact = yesterday; break;
-					case 'week' : {
-						data.publish_from__gte = weekBefore;
-						data.publish_from__lte = today;
-					} break;
-					case 'month' : {
-						data.publish_from__gte = monthBefore;
-						data.publish_from__lte = today;
-					} break;
-				}
-			}
-
-			// state
-			if ($("select[name=state]").val()) {
-				data.state = $("select[name=state]").val();
-			}
-
-			// author
-			if ($("select[name=author]").val()) {
-				data.authors__id = $("select[name=author]").val();
-			}
-
-			// tag - must be different function call, filtering by tags is separate
-			if ($("select[name=tag]").val()) {
-				this.filterArticlesByTag([$("select[name=tag]").val()]);
-				return false;
-			}
-
-			// show articles based on filter data
-			this.listArticles(data);
-		},
-
-		/**
-		 * find articles based on assigned tags
-		 * filtering by tags cannot be grouped with other filtering fields
-		 * because of Tastypie
-		 * @param  {[type]} data [description]
-		 * @return {[type]}      [description]
-		 */
-		filterArticlesByTag: function(data) {
-			can.view('//app/articles/views/list-articles.ejs', {
-				articles: Article.getArticlesByTag(data)
-			}).then(function( frag ){
-				$("#inner-content").html( frag );
-			});
-		},
-
-		/**
-		 * show/hide filtering form
-		 * @param  {[type]} el [description]
-		 * @param  {[type]} ev [description]
-		 * @return {[type]}    [description]
-		 */
-		'.filter-items click' : function(el, ev) {
-			ev.preventDefault();
-			$('.filter-form').toggle();
-			$(el).toggleClass('dropup').toggleClass('dropdown');
-
-			var old_val = $.cookie(window.HOPECFG.COOKIE_FILTER) || 'false';
-			$.cookie(window.HOPECFG.COOKIE_FILTER, old_val == 'true' ? 'false': 'true', {path: '/'});
-		},
-
-		'.reset-filter click': function(el, ev) {
-
-			ev.preventDefault();
-
-			$('.filter-form').find('input, select').each(function() {
-				$(this).val(null).trigger('liszt:updated');
-			})
-
-			this.filterArticles();
-
-		},
-
-		/**
-		 * destroy this control
-		 * @return {[type]} [description]
-		 */
-		destroy: function() {
+		destroy: function () {
 
 			// if this.articleCreate exist, call its destroy method
 			if (this.articleCreate) {
 				this.articleCreate.destroy();
 			}
 
-			can.Control.prototype.destroy.call( this );
+			if (this.filterControl) {
+				this.filterControl.destroy();
+			}
+
+			can.Control.prototype.destroy.call(this);
 		}
 	})
-);
+	);
