@@ -801,28 +801,6 @@ steal(
 		},
 
 		/**
-		 * encyclopedia is special type of article
-		 * set category, date_puclished and published automatically
-		 * @param  {[type]} el [description]
-		 * @param  {[type]} ev [description]
-		 * @return {[type]}    [description]
-		 */
-		'.encyclopedia click' : function(el, ev) {
-
-			ev.preventDefault();
-
-			// set category to Encyclopedia
-			Category.getEncyclopediaCategory({}, function(cat){
-				$('select[name=category]')
-					.val(cat[0].resource_uri)
-					.trigger('liszt:updated');	// update chosen select
-			});
-
-			// set historical publish date
-			$('input[name=publish_from_date]').val('2000-01-01');
-		},
-
-		/**
 		 * prefill article form with draft/template values
 		 * @param  {[type]} el [description]
 		 * @param  {[type]} ev [description]
