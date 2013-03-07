@@ -349,7 +349,6 @@ steal(
 		},
 
 		receiveGalleryItem: function (el, order) {
-			console.log(order);
 			var self = this;
 			var receivedID = el.data('photo-id');
 			var articleID = self.article.resource_uri;
@@ -1530,7 +1529,6 @@ steal(
 				el.append(can.view.render('//app/articles/views/inline-gallery-item.ejs', {
 					photo: photo
 				}));
-				return false;
 			});
 		},
 
@@ -1575,7 +1573,7 @@ steal(
 
 			$.each(items, function(i) {
 				$(target).append(this);
-				self.receiveGalleryItem($(this), existsCount + 1 + i);
+				self.receiveGalleryItem($(this), existsCount + i);
 			})
 		},
 
