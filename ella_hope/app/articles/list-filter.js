@@ -11,6 +11,33 @@ steal(
 				title: 'title__icontains'
 				, author: 'authors__id'
 				, category: 'category__id'
+				, publish_from: 'publish_from__gte'
+				, publish_until: 'publish_from__lte'
+				, published: function(value) {
+
+					var isoDate = function (dateObj) {
+						var yyyy = dateObj.getFullYear().toString();
+						var mm = (dateObj.getMonth() + 1).toString();
+						var dd = dateObj.getDate().toString();
+						return yyyy + '-' + (mm[1] ? mm : "0" + mm[0]) + '-' + (dd[1] ? dd : "0" + dd[0]);
+					  };
+
+					var someDate = new Date();
+					if (value == 'today') {
+						return ['publish_from__exact', isoDate(someDate)];
+					} else if (value == 'yesterday') {
+						someDate.setDate(someDate.getDate() - 1)
+						return ['publish_from__exact', isoDate(someDate)];
+					} else if (value == 'week') {
+						someDate.setDate(someDate.getDate() - 7);
+						return ['publish_from__gte', isoDate(someDate)];
+					} else if (value == 'month') {
+						someDate.setDate(someDate.getDate() - 30);
+						return ['publish_from__gte', isoDate(someDate)];
+					} else {
+						return ['publish_from', false];
+					}
+				}
 			}
 		}
 	}, {
@@ -80,7 +107,7 @@ steal(
 
 			$('.chzn-select').chosen({allow_single_deselect: true});
 
-			this.element.find("input[name=publish_from], input[name=publish_to]")
+			this.element.find("input[name=publish_from], input[name=publish_until]")
 				.datepicker(self.options.dateOptions)
 				.on('change', function (ev) {
 					self.updateItem($(this).attr('name'), this.value)
@@ -91,17 +118,38 @@ steal(
 			});
 		},
 
-		updateItem: function(name, value) {
-			console.log('update')
+		updateItem: function (name, value) {
+			var self = this;
 			if (!name) {
 				return;
 			}
 
 			if (name in this.options.transformator) {
 				name = this.options.transformator[name];
+				if (typeof name == 'function') {
+					var ret = name(value);
+					name = ret[0];
+					value = ret[1];
+				}
 			}
 
-			console.log('update ' + name)
+			var baseResetName = name;
+			if (name.indexOf('__') != -1) {
+				baseResetName = name.substr(0, name.indexOf('__'))
+			}
+
+			var origResetting = self.resetting;
+			self.resetting = true;
+			self.vals.each(function (eachVal, eachName) {
+				if (eachName === name) { // exact match, item will be affected anyway
+
+				} else if (eachName.indexOf(baseResetName + '__') == 0) {
+					//some filter with given name, but with extra stuff like __lte __gte __exact etc.
+					self.vals.removeAttr(eachName);
+				}
+			})
+
+			self.resetting = origResetting;
 
 			if (!value) {
 				this.vals.removeAttr(name)

@@ -33,7 +33,6 @@ steal(
 		// when translations are ready, we can initialize modules which then may be translated
 		$.jsperanto.init(
 			function(t){
-				//console.log($.t('france'));
 
 				// performs login
 				$('body').trigger('show-login');

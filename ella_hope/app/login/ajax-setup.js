@@ -6,7 +6,6 @@ $.ajaxSetup({
 	contentType: "application/x-www-form-urlencoded; charset=UTF-8",
 	crossDomain: true,
 	beforeSend: function(jqXHR, settings) {
-		//console.log(USER.attr('username'));
 		jqXHR.withCredentials = true;
 		if (USER.attr('api_key')) {
 			jqXHR.setRequestHeader("Authorization", "ApiKey " + USER.attr('username') + ":" + USER.attr('api_key'));

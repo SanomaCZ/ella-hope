@@ -197,10 +197,10 @@ steal(
 			}
 		},
 
-		listItems: function (data) {
+		listItems: function () {
+			console.info('listing items')
 			var self = this;
-
-			data = data || self.filterControl.getVals();
+			var data = self.filterControl.getVals();
 			data.order_by = '-publish_from';
 			data.limit = this.paginator.attr('limit');
 			data.offset = this.paginator.attr('offset');
@@ -212,9 +212,10 @@ steal(
 			}
 
 			can.view('//app/articles/views/list-articles.ejs', {
-				articles: articles,
-				model: self.options.model
+				articles: articles
+				, model: self.options.model
 			}).then(function (frag) {
+					console.info('listing items end')
 				$("#inner-content").html(frag);
 			});
 		},
