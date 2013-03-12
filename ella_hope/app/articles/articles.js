@@ -222,14 +222,9 @@ steal(
 		 * destructor, triggered automatically
 		 */
 		destroy: function () {
-
 			// if this.articleCreate exist, call its destroy method
 			if (this.articleCreate) {
 				this.articleCreate.destroy();
-			}
-
-			if (this.filterControl) {
-				this.filterControl.destroy();
 			}
 
 			can.Control.prototype.destroy.call(this);

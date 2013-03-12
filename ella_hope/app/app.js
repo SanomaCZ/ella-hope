@@ -9,11 +9,18 @@ steal(
 )
 .then(
 	function(){	// configure your application
+		if (window.HOPECFG.RAVEN_DSN) {
+			Raven.config(window.HOPECFG.RAVEN_DSN);
+			try {
+				window.onerror = Raven.process;
+			} catch (e) {
+			}
+		}
 
 		// BASE_URL will be set when user logs in
 		BASE_URL = '';
 
-		// language settings
+		/*
 		var lang,
 			supportedLangs = ['cs', 'de', 'en', 'es', 'fr', 'gb', 'it'];
 
@@ -24,9 +31,9 @@ steal(
 		// if the language is not supported, english is defautl
 		if (jQuery.inArray(lang, supportedLangs) == -1)
 			lang = 'en';
-
+		*/
 		// temporary language fixed settings
-		lang = 'en';
+		var lang = 'en';
 
 		// jsperanto initialization - translations
 		// when translations are ready, we can initialize modules which then may be translated
@@ -37,8 +44,8 @@ steal(
 				$('body').trigger('show-login');
 			},
 			{
-				"dicoPath":"resources/locales",
-				"lang":lang // language is determined from browser settings by default
+				"dicoPath": "resources/locales",
+				"lang": lang
 			}
 		);
 
@@ -47,22 +54,16 @@ steal(
 
 			// hide navbar
 			$("#navbar").empty();
+
 			// login controller
-			var login = new Login($("#content"), {
+			new Login($("#content"), {
 				api_url: getBackends()
 			});
 		});
-
-		if (window.HOPECFG.RAVEN_DSN) {
-			Raven.config(window.HOPECFG.RAVEN_DSN);
-			try {
-				window.onerror = Raven.process;
-			} catch (e) {}
-		}
 	}
 )
 .then(
-	function(){							// configure your application
+	function(){
 
 		// when user succesfully logs in
 		var body = $('body');

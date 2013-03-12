@@ -1,6 +1,5 @@
 steal(
-	'./navbar.css'
-	, 'can/view/ejs'
+	'can/view/ejs'
 	, 'can/observe/delegate'	// enables listening for specific property in route change
 )
 .then(
@@ -36,9 +35,6 @@ steal(
 		},
 
 		"{can.route} page set": function( selector, event, newVal, oldVal ) {
-
-			//console.log('page set ' + newVal);
-
 			// remove all binded events of the current control
 			if (this.currentControl) {
 				this.currentControl.destroy();

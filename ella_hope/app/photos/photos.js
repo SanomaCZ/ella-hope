@@ -164,10 +164,6 @@ steal(
 				this.photosUpload.destroy();
 			}
 
-			if (this.filterControl) {
-				this.filterControl.destroy();
-			}
-
 			can.Control.prototype.destroy.call(this);
 		}
 
