@@ -1,6 +1,5 @@
 steal(
-	'./app.css'					// application CSS file
-	, 'can/control/route'					// enable routing
+	'can/control/route'					// enable routing
 	, './login/login.js'				// login module
 	, '//config/config.js'
 	, '//raven/raven-0.5.2.min.js'
