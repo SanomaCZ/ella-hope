@@ -59,7 +59,7 @@
 		"remove_photo": "Remove photo",
 		"tags": "Tag(s)",
 		"choose_tags": "Choose tags",
-		"related_articles": "Related articles (save before adding an article)",
+		"related_articles": "Related articles",
 		"articles_can_be_added_related": "Articles that can be added as related",
 		"relation_is_evaluated_by_tags": "relation is evaluated by tags",
 		"get_related_articles": "get related articles",

@@ -231,17 +231,17 @@ steal(
 				$("textarea").markItUp(self.options.markitupSettings);
 
 				// enable datepicker for publishFrom and publishTo
-					$(".js-datepicker-group").find(".datepicker-default").datepicker(self.options.dateOptions)
-					.on('changeDate', function(ev){
+				$(".js-datepicker-group").find(".datepicker-default").datepicker(self.options.dateOptions)
+					.on('changeDate', function (ev) {
 						var inputName = $(this).attr('name');
 						var isTo = /_to($|_)/;
 						var isFrom = /_from($|_)/;
 						var wrapper = $(this).closest('.js-datepicker-group');
 
-						if (isTo.test(inputName) && $(this).val()){
-							var toVal = $(this).val()
+						if (isTo.test(inputName) && $(this).val()) {
+							var toVal = $(this).val();
 							var fromVal = wrapper.find('input[name*=_from_].datepicker-default').val()
-						} else if (isFrom.test(inputName) && $(this).val()){
+						} else if (isFrom.test(inputName) && $(this).val()) {
 							var fromVal = $(this).val();
 							var toVal = wrapper.find('input[name*=_to_].datepicker-default').val()
 						} else {
@@ -287,39 +287,44 @@ steal(
 					}
 				}).disableSelection();
 
-					if (self.options.model === 'galleries') {
+				if (self.options.model === 'galleries') {
 
-						// gallery - gallery items - enable drag&drop between two lists
-						$("#found-recent-photos, #chosen-recent-photos").sortable({
-							connectWith: "#chosen-recent-photos",
-							// when new article is dropped to related articles
-							receive: function (event, ui) {
-								var el = ui.item;
+					// gallery - gallery items - enable drag&drop between two lists
+					$("#found-recent-photos, #chosen-recent-photos").sortable({
+						connectWith: "#chosen-recent-photos",
+						// when new article is dropped to related articles
+						receive: function (event, ui) {
+							var el = ui.item;
 
-								if (!self.article.id) {
-									self.save(function() {
-										self.receiveGalleryItem(el, ui.item.index())
-									})
-								} else {
+							if (!self.article.id) {
+								self.save(function() {
 									self.receiveGalleryItem(el, ui.item.index())
-								}
-							},
-							update: function (event, ui) {
-								self.setGallerySaveTimeout();
+								})
+							} else {
+								self.receiveGalleryItem(el, ui.item.index())
 							}
-						}).disableSelection();
-
-						if (!self.article.id) {
-							$("#found-recent-photos, #chosen-recent-photos").sortable("disable");
-
-							self.article.bind('id', function (ev, newVal, oldVal) {
-								if (newVal > 0) {
-									$("#found-recent-photos, #chosen-recent-photos").sortable("enable");
-									$(".unsaved-article").hide();
-								}
-							})
+						},
+						update: function (event, ui) {
+							self.setGallerySaveTimeout();
 						}
-					}
+					}).disableSelection();
+
+				}
+
+				if (!self.article.id) {
+					$("#found-related-articles, #chosen-related-articles").sortable('disable');
+					$("#found-recent-photos, #chosen-recent-photos").sortable("disable");
+
+					self.article.bind('id', function (ev, newVal, oldVal) {
+						if (newVal > 0) {
+							$("#found-recent-photos, #chosen-recent-photos").sortable("enable");
+							$("#found-related-articles, #chosen-related-articles").sortable('enable');
+
+							$(".unsaved-article").hide();
+						}
+					})
+				}
+
 
 				// here we check for user privileges
 				// users have different roles and they can edit different form fields

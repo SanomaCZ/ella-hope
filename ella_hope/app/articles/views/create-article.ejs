@@ -193,9 +193,12 @@
 		<% if (this.model === 'galleries') { %>
 			<div id="gallery-items" class="control-group row hero-unit">
 				<h4><%= $.t('articles.gallery_items')%></h4>
-				<br/>
 				<% if (!article.id) { %>
-					<label class="label label-warning unsaved-article"><%= $.t('articles.save_before_adding')%></label>
+					<div class="unsaved-article row">
+						<label class="label label-warning">
+							<%= $.t('articles.save_before_adding')%>
+						</label>
+					</div>
 				<% } %>
 				<div class="span4 pull-left" style="margin-left: 0">
 					<label class="control-label"><%= $.t('articles.chosen_items')%></label>
@@ -209,7 +212,7 @@
 					</ul>
 				</div>
 
-				<div class="span4 pull-left">
+				<div class="span4 pull-left" style="margin-left: 0">
 					<label><%= $.t('articles.available_items')%></label>
 					<ul id="found-recent-photos" class="connectedSortable">
 					</ul>
@@ -236,27 +239,33 @@
 			</div>
 		<% } %>
 
-		<div class="control-group row">
+		<div class="control-group row hero-unit">
+			<h4><%= $.t('articles.related_articles')%></h4>
+			<% if (!article.id) { %>
+				<div class="unsaved-article row">
+					<label class="label label-warning">
+						<%= $.t('articles.save_before_adding')%>
+					</label>
+				</div>
+			<% } %>
 			<div class="span4 pull-left" style="margin-left: 0">
-				<label class="control-label"><%= $.t('articles.related_articles')%></label>
+				<label class="control-label"><%= $.t('articles.chosen_items')%></label>
 				<ul id="chosen-related-articles" class="connectedSortable">
-					<% if (relatedArticles.length) { %>
-						<% $.each(relatedArticles, function(i, a) { %>
-							<li data-resource_id="<%= a.id %>">
-								<%= a.related.title %> <i class="icon-remove pull-right remove-related"></i>
-							</li>
-						<% }); %>
-					<% } %>
+					<% $.each(relatedArticles || [], function(i, a) { %>
+						<li data-resource_id="<%= a.id %>">
+							<%= a.related.title %> <i class="icon-remove pull-right remove-related"></i>
+						</li>
+					<% }); %>
 				</ul>
 			</div>
 
-			<div class="span4 pull-left">
-				<label><%= $.t('articles.articles_can_be_added_related')%></label>
+			<div class="span4 pull-left" style="margin-left: 0">
+				<label><%= $.t('articles.available_items')%></label>
 				<ul id="found-related-articles" class="connectedSortable">
 				</ul>
 			</div>
 
-			<div class="span pull-left">
+			<div class="span2 pull-left">
 				<label>&nbsp;</label>
 				<div class="control-group row" style="margin:0">
 					<button class="btn btn-normal get-related-articles" title="<%= $.t('articles.relation_is_evaluated_by_tags') %>">
