@@ -132,9 +132,10 @@ steal(
 			}
 		},
 
-		listItems: function (data) {
+		listItems: function (cb) {
 			var self = this;
-			data = data || self.filterControl.getVals();
+			$("#load-state").show();
+			data = self.filterControl.getVals();
 
 			data.order_by = '-id';
 			data.limit = this.paginator.attr('limit');
@@ -144,6 +145,12 @@ steal(
 				photos: Photo.findAll(data)
 			}).then(function (frag) {
 				$("#inner-content").html(frag);
+
+				if (cb) {
+					cb();
+				}
+
+				$("#load-state").hide();
 			});
 		},
 

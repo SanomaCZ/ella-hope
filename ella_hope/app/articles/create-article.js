@@ -346,6 +346,9 @@ steal(
 						}
 					}
 				});
+
+				$("#load-state").hide();
+
 			});
 
 			this.element.slideDown(200);

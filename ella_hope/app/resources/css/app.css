@@ -18,3 +18,12 @@ form .required:after {
 body {
     padding-top: 60px;
 }
+
+#load-state {
+    background-image: url('../img/load.gif');
+    background-repeat: no-repeat;
+    background-position: bottom center;
+    width: 43px;
+    height: 25px;
+    
+}

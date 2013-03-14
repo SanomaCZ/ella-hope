@@ -149,8 +149,6 @@ steal(
 						});
 						USER.attr(user);
 
-						//console.log(USER);
-
 						// check if api_key is valid
 						if (self.validateApiKey()) {
 							// key is valid, let's start the application

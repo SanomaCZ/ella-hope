@@ -70,6 +70,10 @@ steal(
 					$('.nav .dashboard').addClass('active');
 					break;
 			}
-  		}
+  		},
+
+		'#load-state click': function(el, ev) {
+			$(el).hide();
+		}
 	})
 )

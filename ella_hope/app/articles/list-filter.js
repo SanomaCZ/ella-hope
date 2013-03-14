@@ -116,6 +116,9 @@ steal(
 			this.element.find("select").on('change', function (ev, el) {
 				self.updateItem($(this).attr('name'), this.value)
 			});
+
+			$(".filter-items").button();
+
 		},
 
 		updateItem: function (name, value) {
@@ -162,6 +165,11 @@ steal(
 			return this.vals.attr()
 		},
 
+		/**
+		 * wrapper for resetting more items without triggering listing update
+		 *
+		 * @param worker - function to do items modification
+		 */
 		batchReset: function(worker) {
 			var self = this;
 			self.resetting = true;
@@ -169,12 +177,16 @@ steal(
 			worker();
 
 			self.resetting = false;
-			self.options.owner.listItems();
+			self.options.owner.listItems(function () {
+				$('.filter-items').button('reset')
+			})
 		},
 
 		'.filter-items click': function (el, ev) {
 			ev.preventDefault();
 			var self = this;
+
+			$(el).button('loading');
 
 			self.batchReset(function() {
 				self.element.find('input[type=text]').each(function () {

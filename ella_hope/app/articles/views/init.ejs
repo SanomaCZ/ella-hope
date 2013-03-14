@@ -21,8 +21,9 @@
 		</div>
 
 		<div class="input-append pull-right">
-			<input type="text" name="titleslug" class="input-medium" placeholder="<%= $.t('search by title or slug') %>" />
-			<button type="submit" class="btn filter-items"><%= $.t('articles.search')%></button>
+			<input type="text" name="titleslug" class="input-medium" placeholder="<%= $.t('title or slug (might not work yet)') %>" />
+			<input type="text" name="title" class="input-medium" placeholder="<%= $.t('search by title') %>" />
+			<button type="button" class="btn filter-items" data-loading-text="Searching..."><%= $.t('articles.search')%></button>
 		</div>
 	</div>
 

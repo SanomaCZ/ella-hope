@@ -101,6 +101,9 @@ steal(
 
 			var self = this;
 			if (data.action == 'edit') {
+
+				$("#load-state").show();
+
 				if (data.page === 'articles') {
 					Article.findOne({id: data.id}, function (article) {
 						self.articleCreate = new ArticleCreate(self.element, {
@@ -110,7 +113,7 @@ steal(
 							articleComments: self.options.articleComments,
 							dateOptions: self.options.dateOptions,
 							timeOptions: self.options.timeOptions,
-							model: 'articles'
+							model: data.page
 						});
 					});
 				} else if (data.page === 'galleries') {
@@ -122,7 +125,7 @@ steal(
 							articleComments: self.options.articleComments,
 							dateOptions: self.options.dateOptions,
 							timeOptions: self.options.timeOptions,
-							model: 'galleries'
+							model: data.page
 						});
 					});
 				}
@@ -197,8 +200,11 @@ steal(
 			}
 		},
 
-		listItems: function () {
+		listItems: function (cb) {
 			var self = this;
+
+			$("#load-state").show();
+
 			var data = self.filterControl.getVals();
 			data.order_by = '-publish_from';
 			data.limit = this.paginator.attr('limit');
@@ -215,6 +221,12 @@ steal(
 				, model: self.options.model
 			}).then(function (frag) {
 				$("#inner-content").html(frag);
+
+				if (cb) {
+					cb();
+				}
+
+				$("#load-state").hide();
 			});
 		},
 
