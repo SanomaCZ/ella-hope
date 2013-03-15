@@ -4,8 +4,8 @@ steal(
 	, '//app/resources/plugins/markitup/skins/markitup/style.css'
 	, '//app/resources/plugins/markitup/sets/markdown/style.css'
 	, '//app/resources/js/slug.js'
-	, '//app/resources/js/jquery-ui/jquery-ui-1.10.1.custom.min.js'
-	, '//app/resources/css/jquery-ui/cupertino/jquery-ui-1.10.1.custom.min.css'
+	, '//app/resources/js/jquery-ui/jquery-ui-1.10.2.custom.min.js'
+	, '//app/resources/css/jquery-ui/cupertino/jquery-ui-1.10.2.custom.min.css'
 	, '//app/resources/js/ajax-chosen.js'	// https://github.com/meltingice/ajax-chosen
 )
 .then(
