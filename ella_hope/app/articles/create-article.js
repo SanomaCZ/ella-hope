@@ -277,7 +277,7 @@ steal(
 					// when new article is dropped to related articles
 					receive: function(event, ui) {
 						var el = $(ui.item[0]),
-							receivedID = el.data('article-id'),
+							receivedID = el.data('related-id'),
 							articleID = self.article.id;
 						// save new relation
 						Article.addRelatedArticle(articleID, receivedID, function(data){
@@ -1450,20 +1450,37 @@ steal(
 		 * @return {[type]}    [description]
 		 */
 		'.get-related-articles click': function(el, ev) {
-
 			ev.preventDefault();
 
-			// selected tags
-			var tags = $('.article .article-tags').val();
-			if (!tags) {
+			var self = this;
+			var inputData = {
+				'tags': $('.article .article-tags').val(),
+				'assigned': self.getRelatedIds()
+			}
+
+			if (!inputData.tags) {
                 alert($.t("Related articles are being found by tags, however current article has no tags assigned."));
 				return;
 			}
-			Article.getArticlesByTag(tags, function(data){
+
+			Article.getArticlesByTag(inputData, function(data){
 				$.each(data, function(i, article){
-					$('#found-related-articles').append('<li data-article-id="'+article.id+'">'+article.title+'</li>');
+					$('#found-related-articles').append('<li data-related-id="'+article.id+'">'+article.title+'</li>');
 				});
 			});
+		},
+
+		getRelatedIds: function() {
+			var related = [];
+			if (this.article.id) {
+				related.push(this.article.id)
+			}
+
+			$("#chosen-related-articles li, #found-related-articles li").each(function() {
+				related.push( $(this).data('related-id') );
+			});
+
+			return related;
 		},
 
 		/**
@@ -1486,7 +1503,7 @@ steal(
 				$('#found-related-articles').empty();
 
 				$.each(articles, function(i, article){
-					$('#found-related-articles').append('<li data-article-id="'+article.id+'">'+article.title+'</li>');
+					$('#found-related-articles').append('<li data-related-id="'+article.id+'">'+article.title+'</li>');
 				});
 			});
 		},

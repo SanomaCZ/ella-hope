@@ -97,7 +97,7 @@ steal(
 
 				// from resource_uri we need to get only resource id
 				// ["/admin-api/tag/3/"] -> 3
-				$.each(data, function(i, t) {
+				$.each(data.tags, function(i, t) {
 					// get id of given resource
 					matchId = t.match(reId);
 					if (matchId[1]) {
@@ -110,6 +110,10 @@ steal(
 
 				return $.ajax({
 					url: BASE_URL+'/tag/related/article/'+tags+'/',
+					data: {
+						'exclude': data.assigned || []
+					},
+					traditional: true,
 					type: 'GET',
 					async: true,
 					dataType: "json",
@@ -180,16 +184,6 @@ steal(
 					error: error
 				});
 			}
-
-			// (08:45:27 PM) miso.belica@jabbim.sk: Malo by to fungovať ako všetko ostatné.
-				// /admin-api/related/?publishable__id=<id> ti vráti tie všetky pripojené related k danému článku.
-				// (08:46:09 PM) miso.belica@jabbim.sk: A keď chceš tú reláciu znamazť tak pošleš
-				// DELETE na /admin-api/related/<id_related_objektu>/
-				// (08:46:47 PM) mr.pohoda@jabber.cz/744855381352898658915983: na uložení relace pošlu POST
-				// a na to řazení se teda vykašleme?
-				// (08:47:09 PM) miso.belica@jabbim.sk: Repektíve ty keď získaš related objekty z
-				// admin-api/related/?publishable__id=<id> tak každý ten related obekt má resource_uri,
-				// na ktoré keď pošleš DELETE tak ho zmažeš.
 
 		}, {});
 

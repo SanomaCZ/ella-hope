@@ -211,7 +211,7 @@ steal(
 			data.offset = this.paginator.attr('offset');
 
 			if (data.tag) {
-				var articles = self.modelClass.getArticlesByTag([data.tag])
+				var articles = self.modelClass.getArticlesByTag({tags: [data.tag]})
 			} else {
 				var articles = self.modelClass.findAll(data)
 			}
