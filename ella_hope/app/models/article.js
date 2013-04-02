@@ -36,8 +36,19 @@ steal(
 					//<%= $.t('The end date can not be less then the start date') %>
 				});
 			},
-
-			findAll: 'GET ' + BASE_URL + '/article/',
+			findAll: function(params, success, error) {
+				return $.ajax({
+					url: BASE_URL+'/article/',
+					data: params,
+					traditional: true,
+					type: 'GET',
+					async: true,
+					dataType: "json",
+					success: success,
+					error: error
+				});
+			},
+			//findAll: 'GET ' + BASE_URL + '/article/',
 
 			// this worked if returned json was not ideal for findAll
 			// ideal means there should be an array of items in the first level of json

@@ -1163,7 +1163,7 @@ steal(
 			this.setDate(el);
 		},
 
-		'.related-name keyup': function(el, ev) {
+		'.related-name keydown': function(el, ev) {;
 			if (ev.keyCode == 13) {
 				ev.preventDefault();
 				can.trigger($(el).siblings('.related-name-action'), 'click');
@@ -1470,15 +1470,21 @@ steal(
 			});
 		},
 
-		getRelatedIds: function() {
+		getRelatedIds: function(onlyAssigned) {
 			var related = [];
 			if (this.article.id) {
 				related.push(this.article.id)
 			}
 
-			$("#chosen-related-articles li, #found-related-articles li").each(function() {
-				related.push( $(this).data('related-id') );
+			$("#chosen-related-articles li").each(function () {
+				related.push($(this).data('related-id'));
 			});
+
+			if (typeof onlyAssigned == 'undefined' || !onlyAssigned) {
+				$("#found-related-articles li").each(function () {
+					related.push($(this).data('related-id'));
+				})
+			}
 
 			return related;
 		},
@@ -1492,11 +1498,14 @@ steal(
 		'.related-name-action.articles-action click': function(el, ev) {
 			ev.preventDefault();
 
-			// name that should be searched
+			var self = this;
 			var search = el.siblings('input[name=related-name]').val();
 
 			// search in title
-			var data = "title__icontains=" + search;
+			var data = {
+				"title__icontains": search,
+				'excluded_ids': self.getRelatedIds(true)
+			};
 
 			Article.findAll(data, function(articles){
 				// empty list with articles if there are any
