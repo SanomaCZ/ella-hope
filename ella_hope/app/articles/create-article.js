@@ -1915,10 +1915,12 @@ steal(
 			var errors = this.save();
 
 			if (errors === true) {
-				window.open(getBaseUrl(BASE_URL) + 'preview/'+ this.article.id +'/');
+				//TODO - cleaner
+				var url = getBaseUrl(BASE_URL) + 'preview/' + this.article.id + '/?user=' + USER.attr('user_id') + '&hash=' + USER.attr('api_key').substr(0, 8)
+				window.open(url);
 			}
 			else {
-				this.showErrors(errors);
+				this.showErrors(this.article);
 			}
 		},
 

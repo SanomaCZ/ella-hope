@@ -21,17 +21,12 @@ steal(
 					dataType: 'json',
 					async: false,
 					success : function(data, textStatus, xmlHttpRequest){
-						// console.log('success');
-						//console.log(data);
-						// console.log(textStatus);
-						// console.log(xmLHttpRequest);
-						// $.cookie('api_key', data.api_key);
-						// $.cookie('username', user);
 
 						USER.attr({
 							loggedIn: true,
 							api_key: data.api_key,
 							username: userData.username,
+							user_id: data.user_id,
 							auth_tree: data.auth_tree,
 							base_url: BASE_URL
 						});
