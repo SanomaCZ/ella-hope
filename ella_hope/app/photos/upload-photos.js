@@ -190,9 +190,6 @@ steal(
 				files = document.getElementById("file").files,
 				nFiles = files.length;
 
-			//console.log(files);
-			//console.log(files.length);
-
 			// hide message box from previous upload
 			$('.response_msg').hide();
 
@@ -462,7 +459,6 @@ steal(
 
 						// there are no errors
 						if (errors === null) {
-							//console.log('no errors');
 							return true;
 						}
 						else {
@@ -480,10 +476,6 @@ steal(
 					return false;
 				},
 				uploadProgress: function(ev, position, total, percentComplete) {
-					// console.log(ev);
-					// console.log(position);
-					// console.log(total);
-					// console.log(percentComplete);
 					el.find('.progress .bar').css('width', percentComplete+'%');
 				},
 				success: function() {
@@ -629,7 +621,6 @@ steal(
 
 			if (errors && errors !== true) {
 				$.each(errors, function(e){
-					//console.log(e);
 					$('.'+e).closest('.control-group')
 						.addClass('error')
 						.find('.help-inline').html(errors[e][0]);

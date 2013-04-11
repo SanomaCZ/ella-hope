@@ -31,8 +31,6 @@
 			<label class="control-label required" for="authors"><%= $.t('photos.authors')%></label>
 			<select name="authors[]"  data-placeholder="<%= $.t('photos.choose_authors')%>" class="span4 authors-photo authors" multiple="multiple">
 				<option></option>
-				<% console.log(photo.author) %>
-				<% console.log(photo.authors) %>
 				<% $.each(author || [], function(i, a) { %>
 					<option value="<%= a.resource_uri %>" selected="selected"><%= a.name %></option>
 				<% }); %>
