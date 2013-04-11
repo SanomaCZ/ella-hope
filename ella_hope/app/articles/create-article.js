@@ -927,7 +927,6 @@ steal(
 					.append('<option value="'+data.resource_uri+'" selected="selected">'+data.name+'</option>')
 					// update chosen select
 					.trigger('liszt:updated')
-					;
 			});
 
 			$('.author-modal-articles').modal('hide');
@@ -981,7 +980,6 @@ steal(
 					.append('<option value="'+data.resource_uri+'" selected="selected">'+data.name+'</option>')
 					// update chosen select
 					.trigger('liszt:updated')
-					;
 			});
 
 			$('.source-modal-articles').modal('hide');
@@ -1049,7 +1047,6 @@ steal(
 					.append('<option value="'+data.resource_uri+'" selected="selected">'+data.name+'</option>')
 					// update chosen select
 					.trigger('liszt:updated')
-					;
 			});
 
 			$('.tag-modal-articles').modal('hide');

@@ -1,12 +1,11 @@
-<%# console.log(file);%>
 <div class="upload-image">
-    <div class="form">
-        <input type="hidden" name="filename" class="filename" value="<%= file ? file.name : '' %>" />
-        <input type="hidden" name="important_top"  value="<%= photo ? photo.important_top : '' %>" />
-        <input type="hidden" name="important_right"  value="<%= photo ? photo.important_right : '' %>" />
-        <input type="hidden" name="important_bottom"  value="<%= photo ? photo.important_bottom : '' %>" />
-        <input type="hidden" name="important_left"  value="<%= photo ? photo.important_left : '' %>" />
-        <input type="hidden" name="rotate" value="0" />
+	<div class="form">
+		<input type="hidden" name="filename" class="filename" value="<%= file ? file.name : '' %>" />
+		<input type="hidden" name="important_top"  value="<%= photo ? photo.important_top : '' %>" />
+		<input type="hidden" name="important_right"  value="<%= photo ? photo.important_right : '' %>" />
+		<input type="hidden" name="important_bottom"  value="<%= photo ? photo.important_bottom : '' %>" />
+		<input type="hidden" name="important_left"  value="<%= photo ? photo.important_left : '' %>" />
+		<input type="hidden" name="rotate" value="0" />
 
 		<div class="control-group row">
 			<label class="control-label" for="source"><%= $.t('photos.source')%></label>
@@ -23,56 +22,51 @@
 			</div>
 		</div>
 
-        <div class="row control-group">
-            <label class="control-label" for="title"><%= $.t('photos.title')%></label>
-            <input class="span4 title" type="text" id="title" name="title" placeholder="<%= $.t('photos.add_title')%>"
-                value="<%= photo.title %>" <%= photo.title ? "" : "" %>>
-            <span class="help-inline"></span>
-        </div>
+		<div class="row control-group">
+			<label class="control-label" for="title"><%= $.t('photos.title')%></label>
+			<input class="span4 title" type="text" id="title" name="title" placeholder="<%= $.t('photos.add_title')%>" value="<%= photo.title %>"/>
+			<span class="help-inline"></span>
+		</div>
+		<div class="row control-group">
+			<label class="control-label required" for="authors"><%= $.t('photos.authors')%></label>
+			<select name="authors[]"  data-placeholder="<%= $.t('photos.choose_authors')%>" class="span4 authors-photo authors" multiple="multiple">
+				<option></option>
+				<% console.log(photo.author) %>
+				<% console.log(photo.authors) %>
+				<% $.each(author || [], function(i, a) { %>
+					<option value="<%= a.resource_uri %>" selected="selected"><%= a.name %></option>
+				<% }); %>
+			</select>
+			<button class="btn btn-mini add-author-photos"><%= $.t('photos.add_new_author')%></button>
+			<span class="help-inline"></span>
+		</div>
 
-        <div class="row control-group">
-            <label class="control-label required" for="authors"><%= $.t('photos.authors')%></label>
-            <select name="authors[]"  data-placeholder="<%= $.t('photos.choose_authors')%>" class="span4 authors-photo authors" multiple>
-                <option></option>
-                <% if (author) { %>
-                    <% can.each(author, function(a, i) { %>
-                        <% if (typeof a !==  'undefined') { %>
-                            <option value="<%= a.resource_uri %>" selected="selected"><%= a.name %></option>
-                        <% } %>
-                    <% }); %>
-                <% } %>
-            </select>
-            <button class="btn btn-mini add-author-photos"><%= $.t('photos.add_new_author')%></button>
-            <span class="help-inline"></span>
-        </div>
+		<div class="row control-group">
+			<label for="description"><%= $.t('photos.description')%></label>
+			<textarea class="span4 description" name="description" placeholder="<%= $.t('photos.add_description')%>" <%= photo.description ? "" : "class='empty'" %>><%= photo.description %></textarea>
+		</div>
 
-        <div class="row control-group">
-            <label for="description"><%= $.t('photos.description')%></label>
-            <textarea class="span4 description" name="description" placeholder="<%= $.t('photos.add_description')%>" <%= photo.description ? "" : "class='empty'" %>><%= photo.description %></textarea>
-        </div>
-
-        <div class="row control-group">
-            <label class="control-label" for="tags"><%= $.t('photos.tags')%></label>
-            <div class="controls">
-                <select name="tags[]" data-placeholder="<%= $.t('photos.choose_tags')%>" class="photo-tags span4" multiple>
-                	<% if (photo.tags) { %>
+		<div class="row control-group">
+			<label class="control-label" for="tags"><%= $.t('photos.tags')%></label>
+			<div class="controls">
+				<select name="tags[]" data-placeholder="<%= $.t('photos.choose_tags')%>" class="photo-tags span4" multiple>
+					<% if (photo.tags) { %>
 						<% for (var i = 0; i < photo.tags.length; i++) { %>
 							<% var t = photo.tags[i]; %>
 							<option value="<%= t.resource_uri %>" selected="selected"><%= t.name %></option>
 						<% } %>
 					<% } %>
-                </select>
-                <span class="help-inline"></span>
-                <button class="btn btn-mini add-tag-photos" data-target="photo-tags"><%= $.t('photos.add_new_tag')%></button>
-            </div>
-        </div>
+				</select>
+				<span class="help-inline"></span>
+				<button class="btn btn-mini add-tag-photos" data-target="photo-tags"><%= $.t('photos.add_new_tag')%></button>
+			</div>
+		</div>
+	</div>
 
-        <%
-            var file = file || '';
-        %>
-    </div>
-
-    <div class="important-part">
+	<div class="important-part">
+		<%
+			var file = file || '';
+		%>
         <%= file.name ? file.name : '' %>
         <%= file.size ? '('+file.size/1000+"kB"+')' : '' %>
 

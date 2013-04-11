@@ -68,6 +68,9 @@ steal(
 				}, {
 					"allow_single_deselect": true
 				});
+
+				$(this).trigger("liszt:updated");
+
 			});
 
 				// ajax autocomplete for source

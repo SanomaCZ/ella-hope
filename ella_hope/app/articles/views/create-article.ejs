@@ -53,7 +53,7 @@
 		<div class="control-group row">
 			<label class="control-label required" for="authors"><%= $.t('articles.authors')%></label>
 			<div class="controls">
-				<select name="authors[]" data-placeholder="<%= $.t('articles.choose_authors')%>" class="authors-article authors" multiple>
+				<select name="authors[]" data-placeholder="<%= $.t('articles.choose_authors')%>" class="authors-article authors" multiple="multiple">
 					<option></option>
 					<% if (article.authors) { %>
 						<% for (var i = 0; i < article.authors.length; i++) { %>
