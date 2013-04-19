@@ -42,15 +42,22 @@
 				<td><%= articleDate %> <%= articleTime %></td>
 				<td><%= article.state %></td>
 				<td>
-					<!-- Edit -->
-					<a <%= (el) -> el.data( 'article', article ) %> href="<%= editUrl %>" class="btn btn-mini edit-article">
-						<%= $.t('Edit');%> <i class="icon-pencil"></i>
-					</a>
+					<div class="btn-group">
+						<!-- Preview -->
+						<a <%= (el) -> el.data('article', article) %> href="#" class="btn btn-mini preview-article">
+							<%= $.t('Preview');%> <i class="icon-eye-open"></i>
+						</a>
 
-					<!-- Delete -->
-					<a <%= (el) -> el.data( 'article', article ) %> href="javascript://" class="btn btn-mini btn-danger delete" data-confirm="<%= $.t('articles.confirm_delete_article') %>">
-						<%= $.t('Delete');%> <i class="icon-trash icon-white"></i>
-					</a>
+						<!-- Edit -->
+						<a <%= (el) -> el.data( 'article', article ) %> href="<%= editUrl %>" class="btn btn-mini edit-article">
+							<%= $.t('Edit');%> <i class="icon-pencil"></i>
+						</a>
+
+						<!-- Delete -->
+						<a <%= (el) -> el.data( 'article', article ) %> href="javascript://" class="btn btn-mini btn-danger delete" data-confirm="<%= $.t('articles.confirm_delete_article') %>">
+							<%= $.t('Delete');%> <i class="icon-trash icon-white"></i>
+						</a>
+					</div>
 				</td>
 			</tr>
 		<% } ) %>

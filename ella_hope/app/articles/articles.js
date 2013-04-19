@@ -200,6 +200,18 @@ steal(
 			}
 		},
 
+		'.preview-article click': function(el, ev) {
+			ev.preventDefault();
+
+			function getBaseUrl(url) {
+				var parser = document.createElement('a');
+				parser.href = url;
+				return parser.protocol + '//' + parser.host + '/';
+			}
+			var url = getBaseUrl(BASE_URL) + 'preview/' + $(el).data('article').id + '/?user=' + USER.attr('user_id') + '&hash=' + USER.attr('api_key').substr(0, 8)
+			window.open(url);
+		},
+
 		listItems: function (cb) {
 			var self = this;
 
