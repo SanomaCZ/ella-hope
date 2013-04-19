@@ -2,7 +2,7 @@ steal(
 	'can/control/route'					// enable routing
 	, './login/login.js'				// login module
 	, '//config/config.js'
-	, '//raven/raven-0.5.2.min.js'
+	, '//raven/raven.min.js'
 )
 .then(
 	'./resources/js/jquery.jsperanto.js'	// translation library
