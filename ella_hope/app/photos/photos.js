@@ -39,6 +39,8 @@ steal(
 
 			var self = this;
 
+			self.modelClass = Photo;
+
 			// render init view
 			can.view(this.options.initView, {}, function (html) {
 				self.element.html(html);
@@ -141,8 +143,15 @@ steal(
 			data.limit = this.paginator.attr('limit');
 			data.offset = this.paginator.attr('offset');
 
+			if (data.tag) {
+				var items = self.modelClass.getByTag({tags: [data.tag]})
+			} else {
+				var items = self.modelClass.findAll(data)
+			}
+
+
 			can.view('//app/photos/views/list-photos.ejs', {
-				photos: Photo.findAll(data)
+				photos: items
 			}).then(function (frag) {
 				$("#inner-content").html(frag);
 
