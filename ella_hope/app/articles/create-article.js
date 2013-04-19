@@ -85,16 +85,13 @@ steal(
 		 * @return {[type]}         [description]
 		 */
 		show: function(article){
-
 			var self = this;
 
-			this.article = article;
-			if (!this.article) {
-
-				// we want to create a new article / gallery
-				this.article = this.options.model === 'articles' ? new Article() : new Gallery();
-				this.article.static = true;
+			if (!article) {
+				article = (this.options.model == 'articles' ? new Article() : new Gallery());
+				article.static = true;
 			}
+			this.article = article;
 
 			// parse publishFrom date
 			var publishFrom = Date.parse(this.article.publish_from);

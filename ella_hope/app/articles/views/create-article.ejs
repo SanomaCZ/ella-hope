@@ -68,7 +68,11 @@
 		</div>
 
 		<div class="control-group row js-textrea-box">
-			<label class="control-label required" for="content"><%= $.t('articles.content')%></label>
+			<% if (this.model === 'galleries') { %>
+				<label class="control-label" for="content"><%= $.t('articles.content') %></label>
+			<% } else { %>
+				<label class="control-label required" for="content"><%= $.t('articles.content') %></label>
+			<% } %>
 			<div class="controls pull-left">
 				<textarea class="content" rows="10" name="content" placeholder="<%= $.t('articles.add_content')%>"><%= article.content %></textarea>
 				<span class="help-inline"></span>

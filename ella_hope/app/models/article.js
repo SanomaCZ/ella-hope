@@ -1,44 +1,24 @@
 steal(
 	'can/model',
-	function($) {
+	function ($) {
 		Article = can.Model({
-			init : function(){
-				this.validate("content", function (val){
-					if (val === null || val === '') {
-						return $.t('This field can not be empty');
-					}
-				});
-				this.validate("category", function (val){
-					if (val === null || val === '') {
-						return $.t('This field can not be empty');
-					}
-				});
-				this.validate("title", function (val){
-					if (val === null || val === '') {
-						return $.t('This field can not be empty');
-					}
-				});
-				this.validate("slug", function (val){
-					if (val === null || val === '') {
-						return $.t('This field can not be empty');
-					}
-				});
-				this.validate("authors", function (val){
-					if (val === null || val === '') {
-						return $.t('This field can not be empty');
-					}
-				});
-				this.validate("publish_from", function (val){
-					if (val === null || val === '') {
-						return $.t('This field can not be empty');
-					}
-					// TODO - compare dates se that publish_from is not later then publish_to
-					//<%= $.t('The end date can not be less then the start date') %>
-				});
+			init: function () {
+				var self = this;
+
+				$.each(self.prototype.required, function () {
+					self.validate(this, function (val) {
+						if (val === null || val === '') {
+							return $.t('This field can not be empty');
+						}
+					});
+				})
+
+				// TODO - compare dates se that publish_from is not later then publish_to
+				//<%= $.t('The end date can not be less then the start date') %>
 			},
-			findAll: function(params, success, error) {
+			findAll: function (params, success, error) {
 				return $.ajax({
-					url: BASE_URL+'/article/',
+					url: BASE_URL + '/article/',
 					data: params,
 					traditional: true,
 					type: 'GET',
@@ -70,9 +50,9 @@ steal(
 
 			findOne: 'GET ' + BASE_URL + '/article/{id}/',
 
-			create : function(attrs){
+			create: function (attrs) {
 				return $.ajax({
-					url: BASE_URL+'/article/',
+					url: BASE_URL + '/article/',
 					type: 'POST',
 					async: false,
 					dataType: 'json',
@@ -81,9 +61,9 @@ steal(
 				});
 			},
 
-			update : function(id, attrs){
+			update: function (id, attrs) {
 				return $.ajax({
-					url: BASE_URL+'/article/'+id+'/',
+					url: BASE_URL + '/article/' + id + '/',
 					type: 'PATCH',
 					async: false,
 					dataType: 'json',
@@ -100,7 +80,7 @@ steal(
 			 * @param  {array} data array of resource_uri
 			 * @return {[type]}      [description]
 			 */
-			getArticlesByTag : function(data, success, error) {
+			getArticlesByTag: function (data, success, error) {
 
 				var tagsArray = [],
 					reId = /\/(\d+)\/$/,
@@ -108,7 +88,7 @@ steal(
 
 				// from resource_uri we need to get only resource id
 				// ["/admin-api/tag/3/"] -> 3
-				$.each(data.tags, function(i, t) {
+				$.each(data.tags, function (i, t) {
 					// get id of given resource
 					matchId = t.match(reId);
 					if (matchId[1]) {
@@ -120,7 +100,7 @@ steal(
 				var tags = tagsArray.join(';');
 
 				return $.ajax({
-					url: BASE_URL+'/tag/related/article/'+tags+'/',
+					url: BASE_URL + '/tag/related/article/' + tags + '/',
 					data: {
 						'exclude': data.assigned || []
 					},
@@ -140,10 +120,10 @@ steal(
 			 * @param  {[type]} error     [description]
 			 * @return {[type]}           [description]
 			 */
-			getRelatedArticles : function(articleID, success, error) {
+			getRelatedArticles: function (articleID, success, error) {
 
 				return $.ajax({
-					url: BASE_URL+'/related/?publishable__id='+articleID,
+					url: BASE_URL + '/related/?publishable__id=' + articleID,
 					type: 'GET',
 					async: true,
 					dataType: "json",
@@ -159,15 +139,15 @@ steal(
 			 * @param {[type]} success   [description]
 			 * @param {[type]} error     [description]
 			 */
-			addRelatedArticle : function(articleID, relatedID, success, error) {
+			addRelatedArticle: function (articleID, relatedID, success, error) {
 
 				return $.ajax({
-					url: BASE_URL+'/related/',
+					url: BASE_URL + '/related/',
 					type: 'POST',
 					async: true,
 					data: JSON.stringify({
-						publishable: "/admin-api/article/"+articleID+"/",
-						related: "/admin-api/article/"+relatedID+"/"
+						publishable: "/admin-api/article/" + articleID + "/",
+						related: "/admin-api/article/" + relatedID + "/"
 					}),
 					dataType: 'json',
 					contentType: 'application/json',
@@ -183,10 +163,10 @@ steal(
 			 * @param  {[type]} error   [description]
 			 * @return {[type]}         [description]
 			 */
-			deleteRelatedArticle : function(id, success, error) {
+			deleteRelatedArticle: function (id, success, error) {
 
 				return $.ajax({
-					url: BASE_URL+'/related/'+id+'/',
+					url: BASE_URL + '/related/' + id + '/',
 					type: 'DELETE',
 					async: true,
 					dataType: 'json',
@@ -196,37 +176,8 @@ steal(
 				});
 			}
 
-		}, {});
-
-		// article schema (when authorized)
-		// curl --dump-header - -H "Content-Type: application/json" -H "Authorization: ApiKey mrpohoda:9ae83bcf3b11d6995d636acc6b87d82ec344e688" -X GET http://crawler.bfhost.cz:12345/admin-api/article/schema/?format=json
-
-		// create article
-		// curl --dump-header - -H "Content-Type: application/json" -H "Authorizkey:799eec8734b2b300f1710d4e67de08f388a63f12" -X POST --data '{"announced": false, "app_data": "{}", "authors": [{"description": "", "email": "", "id": 1, "name": "Seocity", "resource_uri": "/admin-api/author/1/", "slug": "seocity", "text": ""}], "category": {"app_data": "{}", "content": "", "description": "", "id": 1, "resource_uri": "/admin-api/category/1/", "slug": "category", "template": "category.html", "title": "Category", "tree_path": ""}, "content": "ěšířáš řčíáýšěřé", "description": "","last_updated": "2012-08-02T00:00:00", "listings": [], "photo": null, "publish_from": "2012-08-02T00:00:00", "publish_to": null, "published": true, "slug": "ajtatitle", "static": false, "title": "Ajta"}' http://crawler.bfhost.cz:12345/admin-api/article/
-
-		// update article
-		// curl --dump-header - -H "Content-Type: application/json"X H "Authorization: ApiKey mrpohoda:5fe3435159771c589839f07e4446fd32df4a619d" -X PATCH --data '{"content": "Nějaký pěkný utf-8 kontent :-)"}' http://crawler.bfhost.cz:12345/admin-api/article/1/
-
-		// get articles
-		//can.fixture('GET ' + BASE_URL + '/article/', '//app/models/fixtures/articles.json');
-
-		// create
-		// var id= 4;
-		// can.fixture("POST /articles/create", function(){
-		// 	// just need to send back a new id
-		// 	return {id: (id++)}
-		// });
-
-		// // update
-		// can.fixture("PUT /contacts/{id}", function(){
-		// 	// just send back success
-		// 	return {};
-		// });
-
-		// // destroy
-		// can.fixture("DELETE /contacts/{id}", function(){
-		// 	// just send back success
-		// 	return {};
-		// });
+		}, {
+			required: ['content', 'category', 'title', 'slug', 'authors', 'publish_from']
+		});
 	}
 );
