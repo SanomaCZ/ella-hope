@@ -44,9 +44,11 @@ steal(
 			// render init view
 			can.view(this.options.initView, {}, function (html) {
 				self.element.html(html);
-				self.initFilter();
-				self.initPagination();
-				self.listItems();
+				self.initFilter(function () {
+					self.initPagination(function () {
+						self.listItems();
+					});
+				});
 			});
 		},
 
@@ -94,7 +96,7 @@ steal(
 			}
 		},
 
-		initPagination: function () {
+		initPagination: function (cb) {
 			var self = this;
 			this.paginator = new can.Observe({
 				limit: 20,
@@ -105,6 +107,8 @@ steal(
 			this.paginator.bind('change', function (ev, attr, how, newVal, oldVal) {
 				self.listItems();
 			});
+
+			cb();
 		},
 
 		'.pagination li a click': function (el, ev) {
@@ -163,13 +167,13 @@ steal(
 			});
 		},
 
-		initFilter: function () {
+		initFilter: function (cb) {
 			var self = this;
-			if (!this.filterControl) {
-				this.filterControl = new ListFilter($("#filter"), {
-					owner: self, model: self.modelClass, dateOptions: self.options.dateOptions
-				});
-			}
+			this.filterControl = new ListFilter($("#filter"), {
+				owner: self, model: self.modelClass, dateOptions: self.options.dateOptions
+			});
+
+			cb();
 		},
 
 		/**

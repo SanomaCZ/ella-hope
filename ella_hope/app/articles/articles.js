@@ -62,15 +62,13 @@ steal(
 
 		initFilter: function (cb) {
 			var self = this;
-			if (!this.filterControl) {
-				this.filterControl = new ListFilter($("#filter"), {
-					owner: self
-					, model: self.modelClass
-					, dateOptions: self.options.dateOptions
-				});
+			this.filterControl = new ListFilter($("#filter"), {
+				owner: self
+				, model: self.modelClass
+				, dateOptions: self.options.dateOptions
+			});
 
-				cb()
-			}
+			cb()
 		},
 
 
