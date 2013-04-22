@@ -20,7 +20,19 @@ steal(
 				});
 			},
 
-			findAll: 'GET ' + BASE_URL + '/photo/',
+			findAll: function (params, success, error) {
+				return $.ajax({
+					url: BASE_URL + '/photo/',
+					data: params,
+					traditional: true,
+					type: 'GET',
+					async: true,
+					dataType: "json",
+					success: success,
+					error: error
+				});
+			},
+
 			findOne: 'GET ' + BASE_URL + '/photo/{id}/',
 			update: function (id, attrs) {
 				return $.ajax({

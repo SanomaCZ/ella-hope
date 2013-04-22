@@ -279,7 +279,7 @@ steal(
 						// save new relation
 						Article.addRelatedArticle(articleID, receivedID, function(data){
 							// add resource_uri to an element so that it can be deleted
-                            el.data('resource_id', data.id).append('<i class="icon-remove pull-right remove-related"></i>');
+                            el.data('resource-id', data.id).append('<i class="icon-remove pull-right remove-related"></i>');
 						});
 					}
 				}).disableSelection();
@@ -291,15 +291,7 @@ steal(
 						connectWith: "#chosen-recent-photos",
 						// when new article is dropped to related articles
 						receive: function (event, ui) {
-							var el = ui.item;
-
-							if (!self.article.id) {
-								self.save(function() {
-									self.receiveGalleryItem(el, ui.item.index())
-								})
-							} else {
-								self.receiveGalleryItem(el, ui.item.index())
-							}
+							self.receiveGalleryItem(ui.item, ui.item.index());
 						},
 						update: function (event, ui) {
 							self.setGallerySaveTimeout();
@@ -373,7 +365,8 @@ steal(
 			item.save(function (model) {
 				//jQuery UI's sortable serialize() returns value via attr()
 				// so make it reachable via attr() [.data() isn't]
-				el.attr('data-resource_id', model.id)
+				el.attr('data-resource-id', model.id)
+				el.attr('data-photo-id', model.photo.id)
 					.data('order', order);
 				self.setGallerySaveTimeout();
 			});
@@ -442,16 +435,16 @@ steal(
 		setGalleryOrder: function (sortable) {
 			if (!sortable) { return; }
 			//don't trust in natural elements order, let jQuery serialize their order
-			var itemsOrder = sortable.sortable('toArray', { 'attribute': 'data-resource_id'});
+			var itemsOrder = sortable.sortable('toArray', { 'attribute': 'data-resource-id'});
 			var current;
 
 			for (var one in itemsOrder) {
-				current = sortable.find('li[data-resource_id=' + itemsOrder[one] + ']');
+				current = sortable.find('li[data-resource-id=' + itemsOrder[one] + ']');
 				if ($(current).data('order') * 1 != one) {
 					$(current).data('order', one);
 
 					try {
-						GalleryItem.update($(current).data('resource_id'), {order: one});
+						GalleryItem.update($(current).data('resource-id'), {order: one});
 					} catch (e) {
 						return;
 					}
@@ -1483,6 +1476,21 @@ steal(
 			return related;
 		},
 
+		getAssignedPhotos: function(onlyAssigned) {
+			var related = [];
+			$("#chosen-recent-photos li").each(function() {
+				related.push($(this).data('photo-id'));
+			})
+
+			if (typeof onlyAssigned == 'undefined' || !onlyAssigned) {
+				$("#chosen-recent-photos li").each(function () {
+					related.push($(this).data('photo-id'));
+				})
+			}
+
+			return related;
+		},
+
 		/**
 		 * find articles by name se that they can be added as related articles
 		 * @param  {[type]} el [description]
@@ -1501,11 +1509,11 @@ steal(
 				'excluded_ids': self.getRelatedIds(true)
 			};
 
-			Article.findAll(data, function(articles){
+			Article.findAll(data, function (articles) {
 				// empty list with articles if there are any
 				$('#found-related-articles').empty();
 
-				$.each(articles, function(i, article){
+				$.each(articles, function (i, article) {
 					$('#found-related-articles').append('<li data-related-id="'+article.id+'">'+article.title+'</li>');
 				});
 			});
@@ -1519,7 +1527,7 @@ steal(
 		 */
 		'.remove-related click' : function(el, ev) {
 
-			Article.deleteRelatedArticle(el.parent().data('resource_id'), function(data) {
+			Article.deleteRelatedArticle(el.parent().data('resource-id'), function(data) {
 				el.parent().fadeOut().remove();
 			});
 		},
@@ -1531,13 +1539,17 @@ steal(
 		 * @return {[type]}    [description]
 		 */
 		'.get-recent-photos click': function(el, ev) {
-
 			ev.preventDefault();
 
 			var self = this;
+			var data = {
+				'excluded_ids': self.getAssignedPhotos(true)
+			}
+
+			console.log(data);
 
 			// TODO find all photos
-			Photo.findAll({}, function(photos){
+			Photo.findAll(data, function(photos){
 				self.renderRecentPhotos(photos);
 			});
 		},
@@ -1558,7 +1570,10 @@ steal(
 			var search = el.siblings('input[name=related-name]').val();
 
 			// search in title
-			var data = "title__icontains=" + search;
+			var data = {
+				"title__icontains": search,
+				'excluded_ids': self.getAssignedPhotos(true)
+			};
 
 			Photo.findAll(data, function(photos){
 				self.renderRecentPhotos(photos);
@@ -1590,8 +1605,7 @@ steal(
 		 * @return {[type]}    [description]
 		 */
 		'.remove-recent-photo click' : function(el, ev) {
-
-			GalleryItem.destroy(el.parent().data('resource_id'));
+			GalleryItem.destroy(el.parent().data('resource-id'));
 			el.parent().fadeOut().remove();
 		},
 
@@ -1610,7 +1624,7 @@ steal(
 				parent.data('label', title);
 				update_attrs = {};
 				update_attrs[parent.data('attr')] = title;
-				GalleryItem.update(parent.parent('li').data('resource_id'), update_attrs);
+				GalleryItem.update(parent.parent('li').data('resource-id'), update_attrs);
 			}
 		},
 
