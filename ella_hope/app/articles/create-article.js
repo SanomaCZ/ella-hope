@@ -1546,8 +1546,6 @@ steal(
 				'excluded_ids': self.getAssignedPhotos(true)
 			}
 
-			console.log(data);
-
 			// TODO find all photos
 			Photo.findAll(data, function(photos){
 				self.renderRecentPhotos(photos);

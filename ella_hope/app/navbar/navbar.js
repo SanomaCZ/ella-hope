@@ -57,7 +57,6 @@ steal(
 					$('.nav .dashboard').addClass('active');
 					break;
 				case 'photos':
-					console.log('photos')
 					this.currentControl = new Photos($("#content"), {});
 					$('.nav .photos').addClass('active');
 					break;
