@@ -141,7 +141,7 @@ steal(
 		listItems: function (cb) {
 			var self = this;
 			$("#load-state").show();
-			data = self.filterControl.getVals();
+			var data = self.filterControl.getVals();
 
 			data.order_by = '-id';
 			data.limit = this.paginator.attr('limit');
