@@ -278,7 +278,7 @@ steal(
 							articleID = self.article.id;
 						// save new relation
 						Article.addRelatedArticle(articleID, receivedID, function(data){
-							// add resource_uri to an element so that it can be deleted
+							// add resource_uri to the element so we know what to delete (if needed)
                             el.data('resource-id', data.id).append('<i class="icon-remove pull-right remove-related"></i>');
 						});
 					}
@@ -350,7 +350,7 @@ steal(
 
 		receiveGalleryItem: function (el, order) {
 			var self = this;
-			var receivedID = el.data('photo-id');
+			var receivedID = el.data('photo-uri');
 			var articleID = self.article.resource_uri;
 
 			// save new relation
@@ -366,7 +366,6 @@ steal(
 				//jQuery UI's sortable serialize() returns value via attr()
 				// so make it reachable via attr() [.data() isn't]
 				el.attr('data-resource-id', model.id)
-				el.attr('data-photo-id', model.photo.id)
 					.data('order', order);
 				self.setGallerySaveTimeout();
 			});
@@ -1478,13 +1477,15 @@ steal(
 
 		getAssignedPhotos: function(onlyAssigned) {
 			var related = [];
+			var reId = /\/(\d+)\/$/; // /admin-api/photo/123/ -> 123
+
 			$("#chosen-recent-photos li").each(function() {
-				related.push($(this).data('photo-id'));
+				related.push($(this).data('photo-uri').match(reId)[1]);
 			})
 
 			if (typeof onlyAssigned == 'undefined' || !onlyAssigned) {
 				$("#chosen-recent-photos li").each(function () {
-					related.push($(this).data('photo-id'));
+					related.push($(this).data('photo-uri').match(reId)[1]);
 				})
 			}
 

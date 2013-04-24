@@ -2,12 +2,12 @@
 	title = item.title;
 	description = item.text;
 	%>
-	<li <%= (el) -> el.data('photo-id', item.photo.id) %> data-resource-id="<%= item.id %>" data-order="<%= item.order %>" class="row">
+	<li <%= (el) -> el.data('photo-uri', item.photo.resource_uri) %> data-resource-id="<%= item.id %>" data-order="<%= item.order %>" class="row">
 <% } else {
 	title = photo.title;
 	description = photo.description;
 	%>
-	<li data-photo-id="<%= photo.id %>" class="row">
+	<li data-photo-uri="<%= photo.resource_uri %>" class="row">
 <% } %>
 	<i class="icon-remove pull-right remove-recent-photo"></i>
 	<div class="pull-left">
