@@ -1320,7 +1320,7 @@ steal(
 		 */
 		renderPhotosList: function(data) {
 			var self = this;
-            data = data || {};
+			data = data || {};
 
 			if (!this.photoPaginator) {
 				this.initPhotosPagination();
