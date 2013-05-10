@@ -2,30 +2,36 @@
     height: 18px;
     background: green;
 }
+
 .form {
-	float: left;
-	margin-right: 20px;
+    float: left;
+    margin-right: 20px;
 }
+
 .upload-buttons, .progress {
-	display: none;
-	margin-bottom: 10px;
+    display: none;
 }
+
 .important-part {
-	float: left;
+    float: left;
 }
+
 .important-part td {
-	text-align: center;
+    text-align: center;
 }
+
 .photo-preview {
-	max-height: 550px;
-	max-width: 550px;
-	position: relative;
+    max-height: 550px;
+    max-width: 550px;
+    position: relative;
 }
+
 .photo-preview img {
-	max-height: 550px;
-	max-width: 550px;
-	position: absolute;
+    max-height: 550px;
+    max-width: 550px;
+    position: absolute;
 }
+
 #photosRemoveAll {
-	display: none;
+    display: none;
 }

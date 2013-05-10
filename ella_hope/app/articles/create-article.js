@@ -1226,7 +1226,7 @@ steal(
 					'show_authors:' + (params.authors ? 1 : 0),
 					'show_source:' + (params.source ? 1 : 0),
 					'show_detail:' + (params.detail ? 1 : 0),
-					"{% endbox %}"
+					"{% endbox %} "
 					]
 			} else {
 				alert('invalid widget type: ' + contentType);
@@ -1318,7 +1318,7 @@ steal(
 		 * render photos in dialog so that user can choose photo
 		 * @return {[type]} [description]
 		 */
-		renderPhotosList: function(data) {
+		renderPhotosList: function (data) {
 			var self = this;
 			data = data || {};
 

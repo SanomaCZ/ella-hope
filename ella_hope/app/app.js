@@ -10,8 +10,8 @@ steal(
 .then(
 	function(){	// configure your application
 		if (window.HOPECFG.RAVEN_DSN) {
-			Raven.config(window.HOPECFG.RAVEN_DSN);
 			try {
+				Raven.config(window.HOPECFG.RAVEN_DSN);
 				window.onerror = Raven.process;
 			} catch (e) {
 			}

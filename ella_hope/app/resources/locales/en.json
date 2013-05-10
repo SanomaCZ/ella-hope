@@ -162,7 +162,8 @@
 		"use_filename": "Use filename as...",
 		"file": "File",
 		"upload": "Upload",
-		"remove_all": "Remove all photos"
+		"remove_all": "Remove all photos",
+		"save_and_leave": "Save and leave"
 	},
 	"dashboard": {
 		"heading": "D&Z admin"

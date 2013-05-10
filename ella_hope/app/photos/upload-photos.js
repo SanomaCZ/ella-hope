@@ -119,8 +119,7 @@ steal(
 					var x = self.photo.important_left,
 						y = self.photo.important_top,
 						x2 = self.photo.important_right,
-						y2 = self.photo.important_bottom
-						;
+						y2 = self.photo.important_bottom;
 
 					// we need to wait till image is loaded so we can get real dimensions
 					// EDIT: we don't need real dimensions, Jcrop can handle this for us
@@ -160,11 +159,6 @@ steal(
 			this.element.slideDown(200);
 		},
 
-		'#file change': function(){
-			this.fileChange();
-			$('#photosRemoveAll').show();
-		},
-
 		/**
 		 * get coordinates from Jcrop and update form fields
 		 * @param  {[type]} element [description]
@@ -184,113 +178,77 @@ steal(
 		 * when user selects file(s) to upload
 		 * @return {[type]} [description]
 		 */
-		'fileChange': function(){
-
+		'#file change': function () {
 			var self = this,
-				files = document.getElementById("file").files,
-				nFiles = files.length;
+				files = document.getElementById("file").files;
 
 			// hide message box from previous upload
 			$('.response_msg').hide();
 
-			// show upload button
-			$('.upload-buttons').show();
-
 			// show progress bar
 			$('.progress').show().find('.bar').css('width', '0px');
 
+			var defs = self.getDefaults();
 			var j = 0;
 			var f = function() {
 				setTimeout(function(){
-					if (j < nFiles) {
+					if (j < files.length) {
 						self.createNewImage(files[j], defs);
 						f();
 						j++;
 					}
-					else {
-						self.applyDefaultValues();
-					}
 				}, 1000);
 			};
 
-			var defs = {};
-
-			self.getDefaultAuthor(function(instance) {
-				defs.author = instance;
-				f();
-			})
+			f();
 		},
 
-		getDefaultAuthor: function (cb) {
-			var val = $(".author-default").val();
-			var id = val && val.match(/\/(\d+)\/$/);
-			if (!id) {
-				cb();
-				return null;
-			}
-
-			return Author.findOne({id: id[1]}, cb);
+		'#fooobar click': function() {
+			this.getDefaults();
 		},
 
-		/**
-		 * apply chosen select and default values
-		 * @return {[type]} [description]
-		 */
-		applyDefaultValues: function() {
+		getDefaults: function () {
+			var defWrap = $(".default-values");
 
-			var $defaults = $('.defaults'),
-				$images = $('#images');
-
-			// get default values
-			var defaultTitle = $defaults.find('input[name=default_title]').val();
-			var defaultDescription = $defaults.find('input[name=default_description]').val();
-
-			// set default values
-			if (defaultTitle) {
-				$images.find('input[name=title]').val(defaultTitle);
-			}
-			if (defaultDescription) {
-				$images.find('textarea[name=description]').val(defaultDescription);
+			var res = {
+				title: defWrap.find('input.title').val(),
+				description: defWrap.find('.description').val()
 			}
 
-			// if filename should be used as default value for any field
-			var filenameDefault = $defaults.find('select[name=filename_default]').val();
-			if (filenameDefault) {
-				$images.find('.upload-image').each(function(i, v){
-					var filename = $(v).find('input[name=filename]').val();
-					filename = filename.substr(0, filename.lastIndexOf('.')) || filename;
-					$(v).find('.'+filenameDefault).val(filename);
-				});
+			var authors = defWrap.find("select.authors").val();
+			if (authors) {
+				var id = authors.match(/\/(\d+)\/$/);
+				res.author = Author.findOne({id: id[1]})
 			}
 
-			// enable chosen select for authors
-			// http://harvesthq.github.com/chosen/
-			$('.chzn-select').chosen();
+			var source = defWrap.find("select.source").val();
+			if (source) {
+				var id = source.match(/\/(\d+)\/$/);
+				res.source = Source.findOne({id: id[1]})
+			}
+
+			return res;
 		},
 
-		/**
-		 * create container for each image
-		 * @param  {[type]} file [description]
-		 * @return {[type]}      [description]
-		 */
-		createNewImage: function(file, defaults) {
+		//create container for each image
+		createNewImage: function (file, defaults) {
 			defaults = defaults || {};
-			// append new image
-			// with .find(':last') we can get lastly appended element
-			// we need to do this because ajaxChosen needs to be initialized on each input separately
-			var image = $('#images').append(can.view('//app/photos/views/photo.ejs', {
-				file: file,
-				photo: {},
-				author: (typeof defaults.author != 'undefined' ? [defaults.author] : [])
-			})).find(':last');
 
-			// get uploaded image div
-			var uploadImage = $(image.closest('.modal').prevAll('.upload-image').eq(0));
+			// append new image
+			// we need to do this because ajaxChosen needs to be initialized on each input separately
+			var image = can.view('//app/photos/views/photo.ejs', {
+				file: file,
+				photo: defaults,
+				author: (typeof defaults.author != 'undefined' ? [defaults.author] : []),
+				isPlaceholder: false
+			});
+
+			var lastImage = $("#images").append(image).find("div.upload-image:last");
 
 			// ajax autocomplete for author
-			uploadImage.find('.authors-photo').ajaxChosen({
+			lastImage.find('.authors-photo').ajaxChosen({
 				type: 'GET',
-				url: BASE_URL+'/author/?',
+				url: BASE_URL + '/author/?',
 				jsonTermKey: 'name__icontains',
 				dataType: 'json'
 			}, function (data) {
@@ -305,13 +263,13 @@ steal(
 			});
 
 			// ajax autocomplete for source
-			uploadImage.find('.photo-source').ajaxChosen({
+			lastImage.find('.photo-source').ajaxChosen({
 				type: 'GET',
-				url: BASE_URL+'/source/?',
+				url: BASE_URL + '/source/?',
 				jsonTermKey: 'name__icontains',
-				dataType: 'json'
+				dataType: 'json',
+				file: false
 			}, function (data) {
-
 				var results = [];
 
 				$.each(data, function (i, val) {
@@ -322,9 +280,9 @@ steal(
 			});
 
 			// ajax autocomplete for tags
-			uploadImage.find('.photo-tags').ajaxChosen({
+			lastImage.find('.photo-tags').ajaxChosen({
 				type: 'GET',
-				url: BASE_URL+'/tag/?',
+				url: BASE_URL + '/tag/?',
 				jsonTermKey: 'name__icontains',
 				dataType: 'json'
 			}, function (data) {
@@ -379,15 +337,16 @@ steal(
 			}, 1000);
 		},
 
-		// bind to the form's submit event
-		'.uploadForm submit': function(el, ev) {
+		// create a new photo
+		'.photo-create click': function(el, ev) {
+			ev.preventDefault();
 
+			var el = $('.uploadForm');
 			var self = this;
 			var objects = [];
 
 			// compose resource_data object from all selected files
-			$('.uploadForm').find('.upload-image').each(function(){
-
+			el.find('.formItem').each(function(){
 				var important_top = $(this).find('input[name=important_top]').val(),
 					important_left = $(this).find('input[name=important_left]').val(),
 					important_bottom = $(this).find('input[name=important_bottom]').val(),
@@ -433,8 +392,7 @@ steal(
 			var options = {
 				type: "PATCH",
 				method: "PATCH",
-				url: BASE_URL + '/photo/?username='+USER.attr('username')+'&api_key='+USER.attr('api_key'),
-				//url: 'http://localhost/test.php',
+				url: BASE_URL + '/photo/?username=' + USER.attr('username') + '&api_key=' + USER.attr('api_key'),
 				data: {
 					resource_data: JSON.stringify({
 						objects: objects
@@ -442,6 +400,8 @@ steal(
 				},
 				clearForm: true,
 				beforeSubmit: function(arr, $form, options) {
+
+					console.log('before submit')
 
 					// remove all error markup
 					$('.uploadForm .control-group').removeClass('error');
@@ -459,16 +419,17 @@ steal(
 
 						// there are no errors
 						if (errors === null) {
+							console.log('ok')
 							return true;
-						}
-						else {
-
+						} else {
+							console.log(errors);
 							$('.response_msg')
 								.show()
 								.addClass('alert-error')
 								.find('span').html($.t('<strong>Stop!</strong> There were some errors. Try to correct them.'));
 
 							self.showErrors(errors);
+							console.log('err')
 							return false;
 						}
 					}
@@ -476,16 +437,16 @@ steal(
 					return false;
 				},
 				uploadProgress: function(ev, position, total, percentComplete) {
+					console.log('progress')
 					el.find('.progress .bar').css('width', percentComplete+'%');
 				},
 				success: function() {
+					console.log('success')
 					setTimeout(function(){
 						// empty file input so that new files can be chosen
 						self.clearFileInput();
 						// hide all uploaded images
 						$('.upload-image').remove();
-						// show upload button
-						$('.upload-buttons').hide();
 						// show progress bar
 						$('.progress').hide();
 
@@ -493,11 +454,13 @@ steal(
 						// i.e. when user uploads photo directly from an article
 						self.element.trigger('photos-uploaded');
 					}, 500);
+
 					$('.response_msg')
 						.show()
 						.addClass('alert-success')
 						.find('span').html($.t('<strong>Well done!</strong> Photo uploaded.'));
 				},
+
 				error: function(xhr, error) {
 					self.clearFileInput();
 					$('.response_msg')
@@ -513,6 +476,9 @@ steal(
 
 			// !!! Important !!!
 			// always return false to prevent standard browser submit and page navigation
+			//return false;
+
+			can.route.attr({page:'photos'}, true);
 			return false;
 		},
 
@@ -546,9 +512,6 @@ steal(
 
 		/**
 		 * update photo
-		 * @param  {[type]} el [description]
-		 * @param  {[type]} ev [description]
-		 * @return {[type]}    [description]
 		 */
 		'.photo-save click': function(el, ev) {
 
@@ -621,7 +584,7 @@ steal(
 
 			if (errors && errors !== true) {
 				$.each(errors, function(e){
-					$('.'+e).closest('.control-group')
+					$('.formItem .'+e).closest('.control-group')
 						.addClass('error')
 						.find('.help-inline').html(errors[e][0]);
 				});
@@ -641,7 +604,7 @@ steal(
 		 * @param  {[type]} ev [description]
 		 * @return {[type]}    [description]
 		 */
-		'.rotate-image click' : function(el, ev) {
+		'.rotate-image click': function (el, ev) {
 
 			var $img = el.closest('.important-part').children('.photo-preview').children('img'),
 				rotation = el.data('rotation') || 0;
@@ -692,28 +655,8 @@ steal(
 			}
 		},
 
-		'.cancel-upload click' : function(){
-
-			this.clearFileInput();
-			can.route.attr({page:'photos'}, true);
-		},
-
-		'#photosRemoveAll click': function(el, ev){
-			ev.preventDefault();
-
-			this.clearFileInput();
-
-			// hide all images
-			$('.upload-image').remove();
-			// show upload button
-			$('.upload-buttons').hide();
-			// show progress bar
-			$('.progress').hide();
-		},
-
 		clearFileInput: function() {
 			$('#file').replaceWith('<input type="file" id="file" name="attached_object" multiple />');
-			$('#photosRemoveAll').hide();
 		},
 
 		/**
@@ -799,7 +742,6 @@ steal(
 		 * @return {[type]}    [description]
 		 */
 		'.tag-modal-photos .slug-from-name click' : function(el, ev) {
-
 			ev.preventDefault();
 
 			var name = el.siblings('input[name=name]').val();
@@ -813,12 +755,11 @@ steal(
 		 * @return {[type]}    [description]
 		 */
 		'.tag-modal-photos .insert-tag click' : function(el, ev) {
-
 			ev.preventDefault();
 
 			// target input where new tag should be inserted
 			var target = el.data('target'),
-				targetEl = $('.'+target);
+				targetEl = $('.' + target);
 
 			// form values
 			var values = $('.tag-modal-photos').find('form').serialize();
@@ -830,10 +771,8 @@ steal(
 			tag.save(function(data){
 				targetEl
 					// append new tag to tags list and make it selected
-					.append('<option value="'+data.resource_uri+'" selected="selected">'+data.name+'</option>')
-					// update chosen select
-					.trigger('liszt:updated')
-					;
+					.append('<option value="' + data.resource_uri + '" selected="selected">' + data.name + '</option>')
+					.trigger('liszt:updated');
 			});
 
 			$('.tag-modal-photos').modal('hide');

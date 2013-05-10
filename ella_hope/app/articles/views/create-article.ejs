@@ -337,19 +337,11 @@
 			<div class="controls">
 				<select name="enable_comments" data-placeholder="<%= $.t('articles.article_comments')%>" class="enable_comments">
 					<option></option>
-					<% if (comments) { %>
-						<% $.each(comments, function(i, comment){ %>
-						<%
-							var selected = false;
-							if (article.enable_comments == comment) {
-								selected = true;
-							}
-						%>
-							<option value="<%= comment %>" <%= selected ? "selected=selected" : "" %>>
-								<%= comment %>
-							</option>
-						<% }) %>
-					<% } %>
+					<% $.each(comments || [], function(i, comment){ %>
+						<option value="<%= comment %>" <%= (article.enable_comments == comment) ? "selected=selected" : "" %>>
+							<%= comment %>
+						</option>
+					<% }) %>
 				</select>
 				<span class="help-inline"></span>
 			</div>
@@ -359,19 +351,11 @@
 			<label class="control-label" for="state"><%= $.t('articles.state')%></label>
 			<div class="controls">
 				<select name="state" id="state" data-placeholder="<%= $.t('articles.choose_state')%>" class="chzn-select state">
-				<% if (states) { %>
-					<% $.each(states, function(i, state){ %>
-					<%
-						var selected = false;
-						if (article.state == state) {
-							selected = true;
-						}
-					%>
-						<option value="<%= state %>" <%= selected ? "selected=selected" : "" %>>
+					<% $.each(states || [], function(i, state){ %>
+						<option value="<%= state %>" <%= (article.state == state) ? "selected=selected" : "" %>>
 							<%= state %>
 						</option>
 					<% }) %>
-				<% } %>
 				</select>
 				<span class="help-inline"></span>
 			</div>
@@ -431,10 +415,10 @@
 		<h3 id="photos-modal-label"><%= $.t('articles.insert_image') %></h3>
 	</div>
 	<div class="modal-body">
-        <form class="filter">
-            <input type="text" name="title" />
-            <input type="submit" class="btn" value="<%= $.t('filter') %>" />
-        </form>
+		<form class="filter">
+			<input type="text" name="title"/>
+			<input type="submit" class="btn" value="<%= $.t('filter') %>"/>
+		</form>
 
 		<div class="control-group">
 			<button class="btn btn-primary new-photo"><%= $.t('articles.new_photo') %></button>
