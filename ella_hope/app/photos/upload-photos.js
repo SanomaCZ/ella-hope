@@ -216,15 +216,19 @@ steal(
 			}
 
 			var authors = defWrap.find("select.authors").val();
-			if (authors) {
-				var id = authors.match(/\/(\d+)\/$/);
-				res.author = Author.findOne({id: id[1]})
+			if (authors.length) {
+				var id = authors[0].match(/\/(\d+)\/$/);
+				Author.findOne({id: id[1]}).done(function(dato) {
+					res.author = dato;
+				})
 			}
 
 			var source = defWrap.find("select.source").val();
 			if (source) {
 				var id = source.match(/\/(\d+)\/$/);
-				res.source = Source.findOne({id: id[1]})
+				Source.findOne({id: id[1]}).done(function(dato) {
+					res.source = dato;
+				})
 			}
 
 			return res;
