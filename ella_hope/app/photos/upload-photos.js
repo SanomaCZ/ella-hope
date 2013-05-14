@@ -216,7 +216,7 @@ steal(
 			}
 
 			var authors = defWrap.find("select.authors").val();
-			if (authors.length) {
+			if (authors && authors.length) {
 				var id = authors[0].match(/\/(\d+)\/$/);
 				Author.findOne({id: id[1]}).done(function(dato) {
 					res.author = dato;
@@ -404,12 +404,10 @@ steal(
 				},
 				clearForm: true,
 				beforeSubmit: function(arr, $form, options) {
-
-					console.log('before submit')
-
 					// remove all error markup
 					$('.uploadForm .control-group').removeClass('error');
 					$('.uploadForm .help-inline').empty();
+
 					$('.response_msg').removeClass('alert-error').hide();
 
 					// create model from each photo so that it can be validated
@@ -423,17 +421,14 @@ steal(
 
 						// there are no errors
 						if (errors === null) {
-							console.log('ok')
 							return true;
 						} else {
-							console.log(errors);
 							$('.response_msg')
 								.show()
 								.addClass('alert-error')
 								.find('span').html($.t('<strong>Stop!</strong> There were some errors. Try to correct them.'));
 
 							self.showErrors(errors);
-							console.log('err')
 							return false;
 						}
 					}
@@ -441,11 +436,9 @@ steal(
 					return false;
 				},
 				uploadProgress: function(ev, position, total, percentComplete) {
-					console.log('progress')
 					el.find('.progress .bar').css('width', percentComplete+'%');
 				},
 				success: function() {
-					console.log('success')
 					setTimeout(function(){
 						// empty file input so that new files can be chosen
 						self.clearFileInput();

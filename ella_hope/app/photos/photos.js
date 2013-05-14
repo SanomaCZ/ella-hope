@@ -1,6 +1,7 @@
 steal(
 	//'./css/search_result.css'
-	'./upload-photos.js'
+	'//app/models/models.js'
+	, './upload-photos.js'
 	, './photos.css'
 	, '//app/resources/js/bootstrap.min.js'
 	, '//app/resources/js/date.js'	// date parse
