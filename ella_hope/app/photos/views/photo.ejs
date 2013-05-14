@@ -41,7 +41,7 @@
 			</label>
 			<select name="authors[]" data-placeholder="<%= $.t('photos.choose_authors')%>" class="span4 authors-photo authors" multiple="multiple">
 				<option></option>
-				<% $.each(author || [], function(i, a) { %>
+				<% $.each(photo.authors || [], function(i, a) { %>
 					<option value="<%= a.resource_uri %>" selected="selected"><%= a.name %></option>
 				<% }); %>
 			</select>
@@ -61,10 +61,10 @@
 			<div class="controls">
 				<select name="tags[]" data-placeholder="<%= $.t('photos.choose_tags')%>" class="photo-tags span4" multiple>
 					<% if (photo.tags) { %>
-					<% for (var i = 0; i < photo.tags.length; i++) { %>
-					<% var t = photo.tags[i]; %>
-					<option value="<%= t.resource_uri %>" selected="selected"><%= t.name %></option>
-					<% } %>
+						<% for (var i = 0; i < photo.tags.length; i++) { %>
+							<% var t = photo.tags[i]; %>
+							<option value="<%= t.resource_uri %>" selected="selected"><%= t.name %></option>
+						<% } %>
 					<% } %>
 				</select>
 				<span class="help-inline"></span>

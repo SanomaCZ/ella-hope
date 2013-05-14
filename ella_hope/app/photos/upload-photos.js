@@ -217,10 +217,13 @@ steal(
 
 			var authors = defWrap.find("select.authors").val();
 			if (authors && authors.length) {
-				var id = authors[0].match(/\/(\d+)\/$/);
-				Author.findOne({id: id[1]}).done(function(dato) {
-					res.author = dato;
-				})
+				res.authors = [];
+				for (var i = 0; i < authors.length; i++) {
+					var id = authors[i].match(/\/(\d+)\/$/);
+					Author.findOne({id: id[1]}).done(function (dato) {
+						res.authors.push(dato)
+					})
+				}
 			}
 
 			var source = defWrap.find("select.source").val();
@@ -231,6 +234,16 @@ steal(
 				})
 			}
 
+			var tags = defWrap.find("select.photo-tags").val();
+			if (tags && tags.length) {
+				res.tags = [];
+				for (var i = 0; i < tags.length; i++) {
+					var id = tags[i].match(/\/(\d+)\/$/);
+					Tag.findOne({id: id[1]}).done(function (dato) {
+						res.tags.push(dato)
+					})
+				}
+			}
 			return res;
 		},
 
