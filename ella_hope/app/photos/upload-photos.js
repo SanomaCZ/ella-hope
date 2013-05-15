@@ -431,11 +431,8 @@ steal(
 
 						// check if there are any errors
 						var errors = photo.errors();
-
 						// there are no errors
-						if (errors === null) {
-							return true;
-						} else {
+						if (errors !== null) {
 							$('.response_msg')
 								.show()
 								.addClass('alert-error')
@@ -445,8 +442,7 @@ steal(
 							return false;
 						}
 					}
-					// return false to cancel submit
-					return false;
+					return true;
 				},
 				uploadProgress: function(ev, position, total, percentComplete) {
 					el.find('.progress .bar').css('width', percentComplete+'%');
@@ -484,11 +480,6 @@ steal(
 			// wrap it in a jQuery object and then invoke ajaxSubmit
 			el.ajaxSubmit(options);
 
-			// !!! Important !!!
-			// always return false to prevent standard browser submit and page navigation
-			//return false;
-
-			can.route.attr({page:'photos'}, true);
 			return false;
 		},
 
