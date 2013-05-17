@@ -203,10 +203,6 @@ steal(
 			f();
 		},
 
-		'#fooobar click': function() {
-			this.getDefaults();
-		},
-
 		getDefaults: function () {
 			var defWrap = $(".default-values");
 
@@ -216,6 +212,7 @@ steal(
 			}
 
 			var authors = defWrap.find("select.authors").val();
+            console.log(authors)
 			if (authors && authors.length) {
 				res.authors = [];
 				for (var i = 0; i < authors.length; i++) {
