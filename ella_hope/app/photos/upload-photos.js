@@ -212,7 +212,6 @@ steal(
 			}
 
 			var authors = defWrap.find("select.authors").val();
-            console.log(authors)
 			if (authors && authors.length) {
 				res.authors = [];
 				for (var i = 0; i < authors.length; i++) {
@@ -253,7 +252,6 @@ steal(
 			var image = can.view('//app/photos/views/photo.ejs', {
 				file: file,
 				photo: defaults,
-				author: (typeof defaults.author != 'undefined' ? [defaults.author] : []),
 				isPlaceholder: false
 			});
 
