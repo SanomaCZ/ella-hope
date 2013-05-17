@@ -188,6 +188,8 @@ steal(
 			// show progress bar
 			$('.progress').show().find('.bar').css('width', '0px');
 
+            jQuery.ajaxSetup({async:false});
+
 			var defs = self.getDefaults();
 			var j = 0;
 			var f = function() {
@@ -201,6 +203,8 @@ steal(
 			};
 
 			f();
+
+            jQuery.ajaxSetup({async:true});
 		},
 
 		getDefaults: function () {
@@ -245,8 +249,6 @@ steal(
 
 		//create container for each image
 		createNewImage: function (file, defaults) {
-			defaults = defaults || {};
-
 			// append new image
 			// we need to do this because ajaxChosen needs to be initialized on each input separately
 			var image = can.view('//app/photos/views/photo.ejs', {
