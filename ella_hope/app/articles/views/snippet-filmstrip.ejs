@@ -1,0 +1,23 @@
+<form data-content="filmstrips.filmstrip">
+    <div class="row">
+        <h4><%= $.t('filmstrip link') %></h4>
+        <select class="item-name input-large" name="id" data-placeholder="<%= $.t('Filmstrip title') %>">
+            <% if (data.lookup_object) { %>
+                <option value="<%= data.lookup_object.id %>" selected="selected">
+                    <%= data.lookup_object.title %>
+                </option>
+            <% } else { %>
+                <option></option>
+            <% } %>
+        </select>
+    </div>
+    <div class="row">
+        <label class="control-label" for="item_title"><%= $.t('Link title') %></label>
+        <input type="text" name="item_title" value="<%= data.title %>" class="input-large" />
+    </div>
+
+    <button class="btn btn-primary snippet-update" data-snippet-start=<%= data.snippetPosition.start %> data-snippet-end=<%= data.snippetPosition.end %>>
+        <%= $.t('articles.insert') %>
+    </button>
+    <button class="btn snippet-cancel"><%= $.t('cancel') %></button>
+</form>

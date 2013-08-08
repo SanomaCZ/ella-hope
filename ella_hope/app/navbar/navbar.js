@@ -64,6 +64,10 @@ steal(
 					this.currentControl = new Galleries($("#content"), {});
 					$('.nav .galleries').addClass('active');
 					break;
+				case 'filmstrips':
+					this.currentControl = new Filmstrips($("#content"), {});
+					$('.nav .filmstrips').addClass('active');
+					break;
 				case 'user':
 				default:
 					this.currentControl = new Dashboard($("#content"), {});

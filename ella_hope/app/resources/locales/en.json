@@ -3,6 +3,7 @@
 		"home": "Home",
 		"articles": "Articles",
 		"galleries": "Galleries",
+		"filmstrips": "Filmstrips",
 		"photos_videos": "Photos/videos",
 		"contests": "Contests",
 		"quiz": "Quiz",
@@ -20,6 +21,7 @@
 	"articles": {
 		"articles": "Articles",
 		"galleries": "Galleries",
+		"filmstrips": "Filmstrips",
 		"edit": "Edit",
 		"drafts_tepmplates": "Drafts / Templates",
 		"title": "Title",

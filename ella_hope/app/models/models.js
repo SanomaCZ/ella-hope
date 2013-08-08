@@ -19,4 +19,5 @@ steal(
 )
 .then(	// following models inherit from previous models - must be loaded later
 	"./gallery.js"
+	, "./filmstrip.js"
 );

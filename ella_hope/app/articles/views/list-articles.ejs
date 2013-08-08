@@ -23,6 +23,10 @@
 					var editUrl = can.route.url({ page: 'galleries', action: 'edit', id: article.id });
 					var deleteUrl = can.route.url({ page: 'galleries', action: 'delete', id: article.id });
 				}
+				else if (model === 'filmstrips') {
+					var editUrl = can.route.url({ page: 'filmstrips', action: 'edit', id: article.id });
+					var deleteUrl = can.route.url({ page: 'filmstrips', action: 'delete', id: article.id });
+				}
 
 			var timestamp = Date.parse(article.publish_from);
 			var articleDate = timestamp.toString('yyyy-MM-dd');

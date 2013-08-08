@@ -39,6 +39,7 @@ steal(
 					{name:'Link', key:'L', openWith:'[', closeWith:']([![Url:!:http://]!] "[![Title]!]")', placeHolder:'Your text to link here...' },
                     {name:'Wiki', key: 'W', closeWith: function (markItUp) { return ArticleCreate.prototype.insertWikiRef(markItUp.textarea); }, className: 'markItUpwikiRef'}
 					, {name:'Gallery', key: 'G', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertGalleryRef(markItUp.textarea); }, className: 'markItUpGalleryRef'}
+					, {name:'Filmstrip', key: 'F', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertFilmstripRef(markItUp.textarea); }, className: 'markItUpFilmstripRef'}
 
 					//{separator:'---------------'},
 					//{name:'Quotes', openWith:'> '},
@@ -88,7 +89,7 @@ steal(
 			var self = this;
 
 			if (!article) {
-				article = (this.options.model == 'articles' ? new Article() : new Gallery());
+				article = (this.options.model == 'articles' ? new Article() : this.options.model == 'filmstrips' ? new Filmstrip() : new Gallery());
 				article.static = true;
 			}
 			this.article = article;
@@ -688,7 +689,7 @@ steal(
 			// this is how draft should look like
 			var obj = {
 				//"user": "/admin-api/user/6/",
-				"content_type": this.options.model === 'articles' ? 'article' : 'gallery',
+				"content_type": this.options.model === 'articles' ? 'article' : this.options.model === 'filmstrips' ? 'filmstrip' : 'gallery',
 				"data" : values
 			};
 
@@ -742,7 +743,7 @@ steal(
 
 				// redirect to list
 				if (!$(el).data('stay')) {
-					var page = this.options.model === 'articles' ? 'articles' : 'galleries';
+					var page = this.options.model === 'articles' ? 'articles' : this.options.model === 'filmstrips' ? 'filmstrips' : 'galleries';
 					can.route.attr({page: page}, true);
 				}
 			}
@@ -764,7 +765,7 @@ steal(
 
 			this.deleteDraft();
 
-			var page = this.options.model === 'articles' ? 'articles' : 'galleries';
+			var page = this.options.model === 'articles' ? 'articles' : this.options.model === 'filmstrips' ? 'filmstrips' : 'galleries';
 			can.route.attr({page: page}, true);
 		},
 
@@ -1217,6 +1218,12 @@ steal(
 					'title:' + params.item_title,
 					'{% endbox %}'
 				]
+			} else if (contentType == 'filmstrips.filmstrip') {
+				var snippetData = [
+					'{% box inline for ' + contentType + ' with pk ' + params.id + ' %}',
+					'title:' + params.item_title,
+					'{% endbox %}'
+				]
 			} else if (contentType == 'photos.photo') {
 				var snippetData = [
 					"{% box inline_" + params.size + "_" + params.format + " for " + contentType + " with pk " + object.id + " %}",
@@ -1301,6 +1308,39 @@ steal(
 				.find(".item-name").ajaxChosen({
 					type: 'GET',
 					url: BASE_URL + '/gallery/?',
+					jsonTermKey: 'title__icontains',
+					dataType: 'json'
+				}, function (data) {
+					var results = [];
+
+					$.each(data, function (i, val) {
+						results.push({ value: val.id, text: val.title });
+					});
+
+					return results;
+				});
+		},
+
+		insertFilmstripRef: function (el, snippetInfo) {
+			snippetInfo = snippetInfo || {
+				snippetPosition: {
+					start: $(el).getCursorPosition()
+					, end: $(el).getCursorPosition()
+				}
+			}
+
+			var renderForm = can.view.render('//app/articles/views/snippet-filmstrip.ejs', {
+				data: snippetInfo
+			});
+
+			var boxSnippet = $(el).closest('.js-textrea-box').find('.box-snippet');
+
+			boxSnippet
+				.empty()
+				.append(renderForm)
+				.find(".item-name").ajaxChosen({
+					type: 'GET',
+					url: BASE_URL + '/filmstrip/?',
 					jsonTermKey: 'title__icontains',
 					dataType: 'json'
 				}, function (data) {
@@ -1734,6 +1774,11 @@ steal(
 					snippetInfo.lookup_object = instance;
 					self.insertGalleryRef(el, snippetInfo)
 				})
+			} else if (snippetInfo.type == 'filmstrips.filmstrip') {
+				Filmstrip.findOne({id: snippetInfo.lookup_value}, function(instance) {
+					snippetInfo.lookup_object = instance;
+					self.insertFilmstripRef(el, snippetInfo)
+				})
 			}
 		},
 
@@ -1821,7 +1866,7 @@ steal(
 				snippetObject = snippetBox.find('tr:first').data('photo');
 			} else if (boxType == 'ella_wikipages.wikipage') {
 				snippetObject = params.slug
-			} else if (boxType == 'ella_galleries.gallery') {
+			} else if (boxType == 'ella_galleries.gallery' || boxType == 'filmstrips.filmstrip') {
 				snippetObject = params.id;
 			}
 

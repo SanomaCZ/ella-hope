@@ -79,6 +79,7 @@ steal(
 			)
 			.then(
 				'./galleries/galleries.js',		// galleries module
+				'./filmstrips/filmstrips.js',		//filmstrips module
 
 				// run the application
 				function(){

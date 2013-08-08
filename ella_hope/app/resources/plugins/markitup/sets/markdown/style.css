@@ -60,3 +60,7 @@
 .markItUp .markItUpButton14.markItUpGalleryRef a{
 	background-image:url('images/gallery.png');
 }
+
+.markItUp .markItUpButton14.markItUpFilmstripRef a{
+        background-image:url('images/gallery.png');
+}

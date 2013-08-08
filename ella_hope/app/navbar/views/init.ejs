@@ -18,6 +18,10 @@
 					<li class="galleries"><%== can.route.link( $.t('navigation.galleries'), { page: 'galleries' }, {}, false); %></li>
 				<% } %>
 
+				<% if (1 || USER.auth_tree.filmstrips) { %>
+					<li class="filmstrips"><%== can.route.link( $.t('navigation.filmstrips'), { page: 'filmstrips' }, {}, false); %></li>
+				<% } %>
+
 				<% if (1 || USER.auth_tree.photo) { %>
 					<li class="photos"><%== can.route.link( $.t('navigation.photos_videos'), { page: 'photos' }, {}, false); %></li>
 				<% } %>
