@@ -1,0 +1,33 @@
+<li data-resource-id="<% if (item !== null) { %><%= item.id %><% } %>" class="row">
+	<i class="icon-remove pull-right remove-filmstrip-frame"></i>
+	<label class="control-label"><%= $.t('articles.frame_number')%> <%= index + 1 %></label>
+
+	<div class="row">
+		<label class="control-label" for="photo<%= index %>"><%= $.t('articles.photo')%></label>
+		<div class="controls photo<%= index %>">
+			<%
+			var titlePhotoInserted = false;
+			if (item && item.photo && item.photo.public_url) {
+				titlePhotoInserted = true;
+			} %>
+			<div class="title-photo-empty<%= index %>" <%= titlePhotoInserted === false ? '' : 'style=display:none' %>>
+				<button class="btn btn-normal add-filmstrip-frame-photo" data-filmstrip-frame-index="<%= index %>" ><%= $.t('articles.add_photo')%></button>
+			</div>
+			<div class="title-photo<%= index %> title-photo-img" <%= titlePhotoInserted === true ? '' : 'style=display:none' %>>
+				<img src="<%= item && item.photo ? item.photo.public_url : '' %>" />
+				<button class="btn btn-normal remove-filmstrip-frame-photo" data-filmstrip-frame-index="<%= index %>"><%= $.t('articles.remove_photo')%></button>
+			</div>
+			<input type="hidden" name="photo<%= index %>" value="<%= item && item.photo ? item.photo.resource_uri : '' %>" />
+			<span class="help-inline"></span>
+		</div>
+	</div>
+
+	<div class="row js-textrea-box">
+		<label class="control-label required" for="content"><%= $.t('articles.content') %></label>
+		<div class="controls pull-left">
+			<textarea class="content" rows="10" name="content<%= index %>" placeholder="<%= $.t('articles.add_content')%>"><% if (item !== null) { %><%= item.content %><% } %></textarea>
+			<span class="help-inline"></span>
+		</div>
+		<div class="box-snippet hero-unit pull-right"></div>
+	</div>
+</li>

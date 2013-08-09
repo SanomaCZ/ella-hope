@@ -136,6 +136,7 @@ steal(
 				relatedArticles: this.article.id ? Article.getRelatedArticles(this.article.id) : [],
 				listings: this.article.id ? Listing.getListingByArticle({articleId: this.article.id}) : [],
 				galleryitem: this.article.id && self.options.model === 'galleries' ? GalleryItem.getRelated(this.article.id) : {},
+				filmstripframes: this.article.id && self.options.model === 'filmstrips' ? FilmstripFrame.getRelated(this.article.id) : {},
 				model: self.options.model
 			} ).then(function( frag ){
 				self.element.html(frag);
@@ -1076,6 +1077,42 @@ steal(
 		},
 
 		/**
+		 * open a dialog where filmstrip frame photo can be added
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'.add-filmstrip-frame-photo click' : function(el, ev) {
+
+			ev.preventDefault();
+			$('#filmstrip-frame-photo-index').attr('value', $(el).attr('data-filmstrip-frame-index'));
+			// render list where title photo can be picked
+			this.renderPhotosList({title: true});
+
+			// show modal dialog
+			$('#photos-modal').modal('show');
+		},
+
+		insertFilmstripFramePhoto: function(photo) {
+			var el = $('#filmstrip-frame-photo-index');
+			var ind = $(el).attr('value');
+			$('form.article').find('input[name=photo' + ind + ']').val(photo.resource_uri);
+			$(el).attr('value', '');
+			$('.title-photo' + ind + ' img').attr('src', photo.public_url);
+			$('.title-photo-empty' + ind).hide();
+			$('.title-photo' + ind).show();
+		},
+
+		'.remove-filmstrip-frame-photo click': function(el, ev) {
+			ev.preventDefault();
+			var ind = $(el).attr('data-filmstrip-frame-index');
+			$('form.article').find('input[name=photo' + ind + ']').val('');
+			$('.title-photo' + ind + ' img').attr('src', '');
+			$('.title-photo-empty' + ind).show();
+			$('.title-photo' + ind).hide();
+		},
+
+		/**
 		 * when user clicks on table row (radio, image), check the radio button on that row
 		 * show form with additional parameter
 		 * @param  {[type]} el [description]
@@ -1112,8 +1149,14 @@ steal(
 				params = tr.find('.snippet-params'),
 				format = can.deparam(params.serialize());
 
+			//used for flimstrip frame photo
+			var el = $('#filmstrip-frame-photo-index');
 			// insert title photo
-			if (data && data.title) {
+			if (el.length > 0 && $(el).attr('value')) {
+				this.insertFilmstripFramePhoto(photo);
+				$('#photos-modal').modal('hide');
+			}
+			else if (data && data.title) {
 				this.insertTitlePhoto(photo);
 				$('#photos-modal').modal('hide');
 			}
@@ -1141,6 +1184,8 @@ steal(
 		 */
 		'#photos-modal .close-photo click':function(el, ev) {
 			ev.preventDefault();
+			var el = $('#filmstrip-frame-photo-index');
+			if (el.length > 0) $(el).attr('value', '');
 			$('#photos-modal').modal('hide');
 		},
 
@@ -1680,7 +1725,31 @@ steal(
 				self.receiveGalleryItem($(this), existsCount + i);
 			})
 		},
+		
+		/**
+		 * remove connected photo in gallery
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'.remove-filmstrip-frame click' : function(el, ev) {
+			var r = confirm($.t('Do you really want to remove given item?'))
+			if (!r) { return; }
+			var resourceId = el.parent().data('resource-id');
+			if (resourceId != "") FilmstripFrame.destroy(el.parent().data('resource-id'));
+			el.parent().fadeOut().remove();
+		},
 
+		'.add-filmstrip-frame click': function(el, ev) {
+			ev.preventDefault();
+			var el = $('#filmstrip-frames-list-id');
+			var ind = $(el).children('li').length;
+			el.append(can.view.render('//app/articles/views/inline-filmstrip-frame.ejs', {
+				item: null,
+				index: ind
+			}));
+			$(el).children('li:last').find('textarea').markItUp(this.options.markitupSettings);
+		},
 
 		/**
 		 * find snippets in textarea so that images etc. can be handled comfortably

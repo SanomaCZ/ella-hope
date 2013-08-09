@@ -9,6 +9,7 @@ steal(
 	, "./draft.js"
 	, "./category.js"
 	, "./galleryitem.js"
+	, "./filmstripframe.js"
 	, "./listing.js"
 	, "./photo.js"
 	, "./photo-format.js"

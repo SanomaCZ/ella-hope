@@ -1,0 +1,24 @@
+<div id="filmstrip-frames" class="control-group row hero-unit">
+	<h4><%= $.t('articles.filmstrip_frames')%></h4>
+	<span class="btn btn-primary add-filmstrip-frame"><%= $.t('articles.add_filmstrip_frame') %></span>
+	<% if (!article.id) { %>
+		<div class="unsaved-article row">
+			<label class="label label-warning">
+				<%= $.t('articles.save_before_adding')%>
+			</label>
+		</div>
+	<% } %>
+		
+	<div class="span12 pull-left" style="margin-left: 0">
+		<input type="hidden" name="filmstrip-frame-photo-index" id="filmstrip-frame-photo-index" value="">
+		<ul class="filmstrip-frames-list" id="filmstrip-frames-list-id">
+			<% $.each(filmstripframes || [], function(i, f) { %>
+				<%== can.view.render('//app/articles/views/inline-filmstrip-frame.ejs', {
+					item: f,
+					index: i
+				}) %>
+			<% }); %>
+		</ul>
+		<span class="btn btn-primary add-filmstrip-frame"><%= $.t('articles.add_filmstrip_frame') %></span>
+	</div>
+</div>

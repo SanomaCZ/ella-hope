@@ -245,6 +245,13 @@
 			</div>
 		<% } %>
 
+		<% if (this.model === 'filmstrips') { %>
+			<%== can.view.render('//app/articles/views/filmstrip-frames.ejs', {
+					article: article,
+					filmstripframes: filmstripframes
+			}) %>
+		<% } %>
+
 		<div class="control-group row hero-unit">
 			<h4><%= $.t('articles.related_articles')%></h4>
 			<% if (!article.id) { %>
