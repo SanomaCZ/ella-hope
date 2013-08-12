@@ -2050,6 +2050,60 @@ steal(
 			}
 		},
 
+		'.save-filmstrip-frames click': function(el, ev) {
+			var self = this;
+			if (self.article.id) {
+				ev.preventDefault();
+				var autosaveLink = $('.save-filmstrip-frames'),
+					buttonNormalText = autosaveLink.data('normal'),
+					buttonSavingText = autosaveLink.data('saving'),
+					buttonNormalCss = 'btn-info',
+					buttonSavingCss = 'btn-warning';
+	
+				// set different text and class on button while saving
+				autosaveLink
+					.removeClass(buttonNormalCss)
+					.addClass(buttonSavingCss)
+					.html(buttonSavingText);
+	
+				// return button to normal state after a while
+				setTimeout(function(){
+					// restore text and class on button while saving
+					autosaveLink
+						.removeClass(buttonSavingCss)
+						.addClass(buttonNormalCss)
+						.html(buttonNormalText);
+				}, 2000);
+
+				var el = $('#filmstrip-frames-list-id');
+				var items = $(el).children('li');
+				$.each(items, function(i) {
+					self.receiveFilmstripFrameItem($(this), i);
+				})
+			}
+		},
+
+		receiveFilmstripFrameItem: function (el, ind) {
+			var self = this;
+			var receivedID = el.find('input[name=photo' + ind +']').val();
+			var articleID = self.article.resource_uri;
+			var resourceID = el.data('resource-id');
+
+			// save new relation
+			var item = new FilmstripFrame({
+				filmstrip: articleID,
+				content: el.find('textarea.content').val()
+			});
+			if (receivedID != '') item.attr('photo', receivedID);
+			if (resourceID != '') item.attr('id', resourceID);
+			
+
+			item.save(function (model) {
+				el.attr('data-resource-id', model.id);
+				//self.setFilmstripSaveTimeout();
+			});
+		},
+
 		/**
 		 * shows article preview
 		 * @return {[type]} [description]

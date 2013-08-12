@@ -23,7 +23,7 @@
 	</div>
 
 	<div class="row js-textrea-box">
-		<label class="control-label required" for="content"><%= $.t('articles.content') %></label>
+		<label class="control-label required" for="content<%= index %>"><%= $.t('articles.content') %></label>
 		<div class="controls pull-left">
 			<textarea class="content" rows="10" name="content<%= index %>" placeholder="<%= $.t('articles.add_content')%>"><% if (item !== null) { %><%= item.content %><% } %></textarea>
 			<span class="help-inline"></span>

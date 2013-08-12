@@ -1,6 +1,7 @@
 <div id="filmstrip-frames" class="control-group row hero-unit">
 	<h4><%= $.t('articles.filmstrip_frames')%></h4>
 	<span class="btn btn-primary add-filmstrip-frame"><%= $.t('articles.add_filmstrip_frame') %></span>
+	<span class="btn btn-primary save-filmstrip-frames" data-normal="<%= $.t('articles.save_filmstrip_frames')%>" data-saving="<%= $.t('articles.saving')%>"><%= $.t('articles.save_filmstrip_frames') %></span>
 	<% if (!article.id) { %>
 		<div class="unsaved-article row">
 			<label class="label label-warning">
@@ -20,5 +21,6 @@
 			<% }); %>
 		</ul>
 		<span class="btn btn-primary add-filmstrip-frame"><%= $.t('articles.add_filmstrip_frame') %></span>
+		<span class="btn btn-primary save-filmstrip-frames" data-normal="<%= $.t('articles.save_filmstrip_frames')%>" data-saving="<%= $.t('articles.saving')%>"><%= $.t('articles.save_filmstrip_frames') %></span>
 	</div>
 </div>
