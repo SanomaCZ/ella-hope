@@ -40,7 +40,10 @@ steal(
                     {name:'Wiki', key: 'W', closeWith: function (markItUp) { return ArticleCreate.prototype.insertWikiRef(markItUp.textarea); }, className: 'markItUpwikiRef'}
 					, {name:'Gallery', key: 'G', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertGalleryRef(markItUp.textarea); }, className: 'markItUpGalleryRef'}
 					, {name:'Filmstrip', key: 'F', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertFilmstripRef(markItUp.textarea); }, className: 'markItUpFilmstripRef'}
-
+					, {name:'InfoBox', key: 'X', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertInfoboxRef(markItUp.textarea); }, className: 'markItUpInfoboxRef'}
+					, {name:'EditorsTip', key: 'T', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertEditorsTipRef(markItUp.textarea); }, className: 'markItUpEditorsTipRef'}
+					, {name:'RelatedBox', key: 'R', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertRelatedBoxRef(markItUp.textarea); }, className: 'markItUpRelatedBoxRef'}
+					
 					//{separator:'---------------'},
 					//{name:'Quotes', openWith:'> '},
 					//{name:'Code Block / Code', openWith:'(!(\t|!|`)!)', closeWith:'(!(`)!)'},
@@ -1150,9 +1153,9 @@ steal(
 				format = can.deparam(params.serialize());
 
 			//used for flimstrip frame photo
-			var el = $('#filmstrip-frame-photo-index');
+			var elFilmstripFrameIndex = $('#filmstrip-frame-photo-index');
 			// insert title photo
-			if (el.length > 0 && $(el).attr('value')) {
+			if (elFilmstripFrameIndex.length > 0 && $(elFilmstripFrameIndex).attr('value')) {
 				this.insertFilmstripFramePhoto(photo);
 				$('#photos-modal').modal('hide');
 			}
@@ -1162,10 +1165,10 @@ steal(
 			}
 			else if (photo) {
 				var snippet = this.generateSnippet('photos.photo', photo, format);
-
 				$('#photos-modal').modal('hide');
 
 				// insert snippet into textarea
+				console.log(el.data('progress'));
 				if (now == el.data('progress')) {
 					$.markItUp( { replaceWith: snippet } );
 				}
@@ -1184,8 +1187,8 @@ steal(
 		 */
 		'#photos-modal .close-photo click':function(el, ev) {
 			ev.preventDefault();
-			var el = $('#filmstrip-frame-photo-index');
-			if (el.length > 0) $(el).attr('value', '');
+			var elFilmstripFrameIndex = $('#filmstrip-frame-photo-index');
+			if (elFilmstripFrameIndex.length > 0) $(elFilmstripFrameIndex).attr('value', '');
 			$('#photos-modal').modal('hide');
 		},
 
@@ -1397,6 +1400,33 @@ steal(
 
 					return results;
 				});
+		},
+
+		insertStaticBoxRef: function(el, result) {
+			var textarea = $(el)
+				, text = textarea.val()
+				, start = textarea.getCursorPosition()
+				, end = textarea.getCursorPosition();
+
+			textarea.val(text.substr(0, start) + result + text.substr(end));
+		},
+
+		insertInfoboxRef: function (el) {
+			var self = this;
+			var result = '\n[[[infobox\n\n' + '\n\n]]]\n';
+			self.insertStaticBoxRef(el, result);
+		},
+
+		insertEditorsTipRef: function (el) {
+			var self = this;
+			var result = '\n[[[editorstip\n' + '### Tip redakce\n\n' + '\n\n]]]\n';
+			self.insertStaticBoxRef(el, result);
+		},
+
+		insertRelatedBoxRef: function (el) {
+			var self = this;
+			var result = '\n[[[related\n' + '### Mohlo by vás zajímat\n\n' + '\n\n]]]\n';
+			self.insertStaticBoxRef(el, result);
 		},
 
 		/**

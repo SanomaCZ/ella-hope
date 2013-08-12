@@ -62,5 +62,17 @@
 }
 
 .markItUp .markItUpButton15.markItUpFilmstripRef a{
-        background-image:url('images/gallery.png');
+        background-image:url('images/filmstrip.png');
+}
+
+.markItUp .markItUpButton16.markItUpInfoboxRef a{
+        background-image:url('images/infobox.png');
+}
+
+.markItUp .markItUpButton17.markItUpEditorsTipRef a{
+        background-image:url('images/editorstip.png');
+}
+
+.markItUp .markItUpButton18.markItUpRelatedBoxRef a{
+        background-image:url('images/related.png');
 }
