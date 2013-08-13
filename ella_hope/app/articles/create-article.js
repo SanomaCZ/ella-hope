@@ -588,10 +588,18 @@ steal(
 					success = success && self['save_' + model](this);
 				});
 
+				//used only for filmstrip type this save frame of filmstip
+				//TODO: ifs are not good, please refactor code and use something
+				//as multiple inheritence
+				if (self.options.model === 'filmstrips' && self.article.id) {
+					return self.saveFilmstripFrames();
+				}
+
 			}, function (xhr) {
 				alert('Error occured, try again later.');
 				return false;
 			});
+			
 			return true;
 		},
 
@@ -600,13 +608,14 @@ steal(
 		 * @param  {[type]} errors [description]
 		 * @return {[type]}        [description]
 		 */
-		showErrors: function(instance, nested_block) {
+		showErrors: function(instance, nested_block, idSelector) {
 			var input_prefix = nested_block ? (instance.prefix + "_"): "";
 			var errors = instance.errors();
 
 			if (errors) {
 				$.each(errors, function (e) {
-					$('.' + input_prefix + e, nested_block).closest('.control-group')
+						$(idSelector ? '#' + idSelector : '.' + input_prefix + e, nested_block)
+						.closest('.control-group')
 						.addClass('error')
 						.find('.help-inline').html(errors[e][0]);
 				});
@@ -1168,7 +1177,6 @@ steal(
 				$('#photos-modal').modal('hide');
 
 				// insert snippet into textarea
-				console.log(el.data('progress'));
 				if (now == el.data('progress')) {
 					$.markItUp( { replaceWith: snippet } );
 				}
@@ -2050,40 +2058,36 @@ steal(
 			}
 		},
 
-		'.save-filmstrip-frames click': function(el, ev) {
+		saveFilmstripFrames: function() {
 			var self = this;
-			if (self.article.id) {
-				ev.preventDefault();
-				var autosaveLink = $('.save-filmstrip-frames'),
-					buttonNormalText = autosaveLink.data('normal'),
-					buttonSavingText = autosaveLink.data('saving'),
-					buttonNormalCss = 'btn-info',
-					buttonSavingCss = 'btn-warning';
-	
-				// set different text and class on button while saving
-				autosaveLink
-					.removeClass(buttonNormalCss)
-					.addClass(buttonSavingCss)
-					.html(buttonSavingText);
-	
-				// return button to normal state after a while
-				setTimeout(function(){
-					// restore text and class on button while saving
-					autosaveLink
-						.removeClass(buttonSavingCss)
-						.addClass(buttonNormalCss)
-						.html(buttonNormalText);
-				}, 2000);
-
-				var el = $('#filmstrip-frames-list-id');
-				var items = $(el).children('li');
-				$.each(items, function(i) {
-					self.receiveFilmstripFrameItem($(this), i);
-				})
+			var el = $('#filmstrip-frames-list-id');
+			var items = $(el).children('li');
+			var framesForSave = [];
+			for (var i = 0; i < items.length; i++) {
+				var frame = self.fillFilmstripFrameItem($(items[i]), i);
+				framesForSave.push(frame);
+				if (frame.errors()) {
+					this.showErrors(frame, null, 'filmstrip-frame-content' + i);
+					return false;
+				}
 			}
+			
+			for (var i = 0; i < framesForSave.length; i++) framesForSave[i].save();
+			
+			$(el).empty();
+			FilmstripFrame.getRelated(self.article.id, function(data) {
+				$.each(data, function(i, f) {
+					el.append(can.view.render('//app/articles/views/inline-filmstrip-frame.ejs', {
+                        item: f,
+                        index: i
+                	}));
+                	$(el).children('li:last').find('textarea').markItUp(self.options.markitupSettings);
+				});
+			});
+			return true;
 		},
 
-		receiveFilmstripFrameItem: function (el, ind) {
+		fillFilmstripFrameItem: function (el, ind) {
 			var self = this;
 			var receivedID = el.find('input[name=photo' + ind +']').val();
 			var articleID = self.article.resource_uri;
@@ -2098,10 +2102,7 @@ steal(
 			if (resourceID != '') item.attr('id', resourceID);
 			
 
-			item.save(function (model) {
-				el.attr('data-resource-id', model.id);
-				//self.setFilmstripSaveTimeout();
-			});
+			return item
 		},
 
 		/**

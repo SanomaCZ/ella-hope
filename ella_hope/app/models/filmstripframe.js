@@ -2,6 +2,17 @@ steal(
 	'can/model',
 	function($) {
 		FilmstripFrame = can.Model({
+			init: function () {
+				var self = this;
+
+				$.each(self.prototype.required, function () {
+					self.validate(this, function (val) {
+						if (val === null || val === '') {
+							return $.t('This field can not be empty');
+						}
+					});
+				})
+			},
 
 			findAll: 'GET ' + BASE_URL + '/frame/',
 
@@ -51,7 +62,9 @@ steal(
 					error: error
 				});
 			}
-		}, {});
+		}, {
+			required: ['content']
+		});
 
 	}
 );

@@ -108,7 +108,10 @@
 		"show_filter": "Show filter",
 		"published": "Published",
 		"tags_filter": "Tag (separate filter)",
-		"reset_filter": "Reset filter"
+		"reset_filter": "Reset filter",
+		"filmstrip_frames": "Frames",
+		"frame_number": "Frame number",
+		"add_filmstrip_frame": "Add frame"
 	},
 	"gallaries": {
 		"change_title": "Change photo's title",
