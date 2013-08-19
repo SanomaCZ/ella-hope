@@ -1421,19 +1421,19 @@ steal(
 
 		insertInfoboxRef: function (el) {
 			var self = this;
-			var result = '\n[[[infobox\n\n' + '\n\n]]]\n';
+			var result = '\n[[[infobox\n\n' + 'place content here' + '\n\n]]]\n\n';
 			self.insertStaticBoxRef(el, result);
 		},
 
 		insertEditorsTipRef: function (el) {
 			var self = this;
-			var result = '\n[[[editorstip\n' + '### Tip redakce\n\n' + '\n\n]]]\n';
+			var result = '\n[[[editorstip\n' + '### Tip redakce\n\n' + 'place content here' + '\n\n]]]\n\n';
 			self.insertStaticBoxRef(el, result);
 		},
 
 		insertRelatedBoxRef: function (el) {
 			var self = this;
-			var result = '\n[[[related\n' + '### Mohlo by vás zajímat\n\n' + '\n\n]]]\n';
+			var result = '\n[[[related\n' + '### Mohlo by vás zajímat\n\n' + 'place content here' + '\n\n]]]\n\n';
 			self.insertStaticBoxRef(el, result);
 		},
 
@@ -2055,6 +2055,9 @@ steal(
 				instance.destroy(function () {
 					itemSpace.fadeOut().remove();
 				});
+			}
+			else {
+				itemSpace.fadeOut().remove();
 			}
 		},
 
