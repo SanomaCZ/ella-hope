@@ -1,4 +1,4 @@
-<div class="hero-unit hero-nested js-removable-item" <%= (el) -> el.data( 'instance', listing ) %> data-model="<%= listing.prefix %>">
+<div class="hero-unit hero-nested js-removable-item js-listing-items-group" <%= (el) -> el.data( 'instance', listing ) %> data-model="<%= listing.prefix %>">
     <button class="close js-remove-item">
         &times;
     </button>
@@ -84,6 +84,11 @@
                             <%= $.t('articles.now') %>
                         </button>
                     </div>
+                    <div class="">
+	                    <button class="btn btn-info pull-right js-copy-dates-from-publishable">
+	                    	<%= $.t('articles.copy_dates') %>
+	                    </button>
+	                </div>
                     <span class="help-inline"></span>
                 </div>
             </div>

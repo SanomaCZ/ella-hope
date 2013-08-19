@@ -111,7 +111,8 @@
 		"reset_filter": "Reset filter",
 		"filmstrip_frames": "Frames",
 		"frame_number": "Frame number",
-		"add_filmstrip_frame": "Add frame"
+		"add_filmstrip_frame": "Add frame",
+		"copy_dates": "copy from base publication"
 	},
 	"gallaries": {
 		"change_title": "Change photo's title",

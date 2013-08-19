@@ -2108,6 +2108,28 @@ steal(
 			return item
 		},
 
+		'.js-copy-dates-from-publishable click': function(el, ev) {
+
+			ev.preventDefault();
+
+			var mainDiv = $(el).closest('.js-listing-items-group');
+			var publishFromVal = $('#publish_from').attr('value');
+			var publishFromTimeVal = $('#publish_from_time').attr('value');
+			var publishToVal = $('#publish_to').attr('value');
+			var publishToTimeVal = $('#publish_to_time').attr('value');
+
+			var categoryListing = $(mainDiv).find('select[name=listing_category]');
+			var publishFromListing = $(mainDiv).find('input[name=listing_publish_from_date]');
+			var publishFromTimeListing = $(mainDiv).find('input[name=listing_publish_from_time]');
+			var publishToListing = $(mainDiv).find('input[name=listing_publish_to_date]');
+			var publishToTimeListing = $(mainDiv).find('input[name=listing_publish_to_time]');
+
+			publishFromListing.attr('value', publishFromVal);
+			publishFromTimeListing.attr('value', publishFromTimeVal);
+			publishToListing.attr('value', publishToVal);
+			publishToTimeListing.attr('value', publishToTimeVal);
+		},
+
 		/**
 		 * shows article preview
 		 * @return {[type]} [description]
