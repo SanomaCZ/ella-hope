@@ -39,7 +39,6 @@ steal(
 					{name:'Link', key:'L', openWith:'[', closeWith:']([![Url:!:http://]!] "[![Title]!]")', placeHolder:'Your text to link here...' },
                     {name:'Wiki', key: 'W', closeWith: function (markItUp) { return ArticleCreate.prototype.insertWikiRef(markItUp.textarea); }, className: 'markItUpwikiRef'}
 					, {name:'Gallery', key: 'G', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertGalleryRef(markItUp.textarea); }, className: 'markItUpGalleryRef'}
-					, {name:'Filmstrip', key: 'F', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertFilmstripRef(markItUp.textarea); }, className: 'markItUpFilmstripRef'}
 					, {name:'InfoBox', key: 'X', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertInfoboxRef(markItUp.textarea); }, className: 'markItUpInfoboxRef'}
 					, {name:'EditorsTip', key: 'T', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertEditorsTipRef(markItUp.textarea); }, className: 'markItUpEditorsTipRef'}
 					, {name:'RelatedBox', key: 'R', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertRelatedBoxRef(markItUp.textarea); }, className: 'markItUpRelatedBoxRef'}
@@ -66,6 +65,8 @@ steal(
 		photoPaginator: null,
 
 		init: function() {
+			if (USER !== undefined && USER.auth_tree.articles !== undefined && USER.auth_tree.articles.filmstrip) 
+				this.options.markitupSettings.markupSet.push({name:'Filmstrip', key: 'F', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertFilmstripRef(markItUp.textarea); }, className: 'markItUpFilmstripRef'});
 
 			// show draft or article
 			if (this.options.type == 'draft') {

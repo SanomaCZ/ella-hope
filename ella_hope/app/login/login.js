@@ -239,10 +239,14 @@ steal(
 							USER.attr({
 								loggedIn: false
 							});
-							setTimeout(function(){
-								can.route.attr({page: 'user', action: 'login'}, true);
+							//FIXME: Use better solution of redir
+							//but commented code bellow does not work correct
+							//if you legged again without refresh page
+							window.location = '/'
+							//setTimeout(function(){
+							//	can.route.attr({page: 'user', action: 'login'}, true);
 								//$('body').trigger('show-login');
-							}, 500);
+							//}, 500);
 							//$('body').trigger('show-login');
 						}
 						else {

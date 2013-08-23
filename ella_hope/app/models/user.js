@@ -73,9 +73,7 @@ steal(
 						result = false;
 					}
 				});
-				//return result;
-				// temporary, because of some network Error exception
-				return true;
+				return result;
 			}
 		}, {});
 	}

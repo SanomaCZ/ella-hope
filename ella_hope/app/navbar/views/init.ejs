@@ -18,7 +18,7 @@
 					<li class="galleries"><%== can.route.link( $.t('navigation.galleries'), { page: 'galleries' }, {}, false); %></li>
 				<% } %>
 
-				<% if (1 || USER.auth_tree.filmstrips) { %>
+				<% if (USER.auth_tree.articles !== undefined && USER.auth_tree.articles.filmstrip) { %>
 					<li class="filmstrips"><%== can.route.link( $.t('navigation.filmstrips'), { page: 'filmstrips' }, {}, false); %></li>
 				<% } %>
 
