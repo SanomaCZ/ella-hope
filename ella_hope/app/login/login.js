@@ -136,6 +136,7 @@ steal(
 			if (user && user['api_key'] && user['base_url']) {
 
 				BASE_URL = user['base_url'];
+				BACKEND_NAME = getBackendName(BASE_URL, self.options.api_url);
 
 				// steal User model so that login can be performed
 				steal('//app/models/user.js', '//app/login/ajax-setup.js')

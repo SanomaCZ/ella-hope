@@ -1,7 +1,7 @@
 <!-- Main hero unit for a primary marketing message or call to action -->
 <div class="hero-unit">
   <h1>
-  	<% if (BACKEND_NAME !== undefined && BACKEND_NAME) { %>
+  	<% if (BACKEND_NAME !== undefined || BACKEND_NAME) { %>
   		<%= BACKEND_NAME %>
   	<% } else { %>
   		<%= $.t('project.unknown') %>

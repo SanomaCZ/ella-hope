@@ -6,7 +6,7 @@
 			<span class="icon-bar"></span>
 		</a>
 		<a class="brand" href="<%== can.route.url({ page: 'dashboard' }); %>">
-			<% if (BACKEND_NAME !== undefined && BACKEND_NAME) { %>
+			<% if (BACKEND_NAME !== undefined || BACKEND_NAME) { %>
 				<%= BACKEND_NAME %>
 			<% } else { %>
 				<%= $.t('project.unknown') %>
