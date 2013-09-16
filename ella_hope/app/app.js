@@ -18,6 +18,7 @@ steal(
 
 		// BASE_URL will be set when user logs in
 		BASE_URL = '';
+		var BACKEND_NAME;
 
 		/*
 		var lang,

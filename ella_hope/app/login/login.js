@@ -1,6 +1,7 @@
 steal(
 	'./login.css'
 	, 'can/view/ejs'
+	, '//app/backends.js'
 )
 .then(
 	/**
@@ -70,6 +71,7 @@ steal(
 			// set BASE_URL based on user input
 			// user can select predefined url or enter a new one
 			BASE_URL = data.api_url_custom ? data.api_url_custom : data.api_url;
+			BACKEND_NAME = getBackendName(BASE_URL, self.options.api_url);
 
 			// authentication data
 			var userData = {

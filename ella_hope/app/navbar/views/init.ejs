@@ -5,7 +5,13 @@
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 		</a>
-		<a class="brand" href="<%== can.route.url({ page: 'dashboard' }); %>">D&amp;Z</a>
+		<a class="brand" href="<%== can.route.url({ page: 'dashboard' }); %>">
+			<% if (BACKEND_NAME !== undefined && BACKEND_NAME) { %>
+				<%= BACKEND_NAME %>
+			<% } else { %>
+				<%= $.t('project.unknown') %>
+			<% } %>
+		</a>
 		<div class="nav-collapse">
 			<ul class="nav">
 				<li class="dashboard"><%== can.route.link( $.t('navigation.home'), { page: 'dashboard' }, {}, false); %></li>

@@ -176,6 +176,9 @@
 	"dashboard": {
 		"heading": "D&Z admin"
 	},
+	"project": {
+		"unknown": "No name"
+	},
 	"login": {
 		"error": "Error",
 		"wrong_user_pass": "Wrong username or password.",
