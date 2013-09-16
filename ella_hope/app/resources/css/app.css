@@ -27,3 +27,7 @@ body {
     height: 25px;
     display: none;
 }
+
+.pagination .current a:empty {
+    display: none;
+}

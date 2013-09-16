@@ -47,20 +47,24 @@ steal(
 			/**
 			 * get frames related (connected) to a given filmstrip
 			 * @param  {[type]} filmstripID [description]
-			 * @param  {[type]} success   [description]
-			 * @param  {[type]} error     [description]
 			 * @return {[type]}           [description]
 			 */
-			getRelated : function(filmstripID, success, error) {
-
+			getRelated : function(filmstripID) {
+				var res = [];
 				return $.ajax({
 					url: BASE_URL+'/frame/?filmstrip__id='+filmstripID+'&order_by=id',
 					type: 'GET',
 					async: true,
 					dataType: "json",
-					success: success,
-					error: error
+					success: function(data) {
+						if ('meta' in data) {
+							res = data.data;
+						} else {
+							res = data;
+						}
+					}
 				});
+				return res;
 			}
 		}, {
 			required: ['content']

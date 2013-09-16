@@ -43,18 +43,24 @@ steal(
 
 			destroy: 'DELETE ' + BASE_URL + '/listing/{id}/',
 
-			getListingByArticle: function(data, success, error) {
-				return $.ajax({
+			getListingByArticle: function(data) {
+				var res = [];
+				$.ajax({
 					url: BASE_URL + '/listing/?publishable__id=' + data.articleId,
 					type: 'GET',
-					async: true,
+					async: false,
 					dataType: 'json',
 					contentType: 'application/json',	// this is neccessary
-					success: success,
-					error: error
+					success: function(data) {
+						if ('meta' in data) {
+							res = data.data;
+						} else {
+							res = data;
+						}
+					}
 				});
+				return res;
 			}
-
 
 		}, {
 			prefix: 'listing'

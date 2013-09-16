@@ -158,6 +158,9 @@ steal(
 						jsonTermKey: 'title__icontains',
 						dataType: 'json'
 					}, function (data) {
+						if ('meta' in data) {
+							data = data.data;
+						}
 
 						var results = [];
 
@@ -176,7 +179,9 @@ steal(
 					jsonTermKey: 'name__icontains',
 					dataType: 'json'
 				}, function (data) {
-
+					if ('meta' in data) {
+						data = data.data;
+					}
 					var results = [];
 
 					$.each(data, function (i, val) {
@@ -195,7 +200,9 @@ steal(
 					jsonTermKey: 'name__icontains',
 					dataType: 'json'
 				}, function (data) {
-
+					if ('meta' in data) {
+						data = data.data;
+					}
 					var results = [];
 
 					$.each(data, function (i, val) {
@@ -215,7 +222,9 @@ steal(
 						jsonTermKey: 'name__icontains',
 						dataType: 'json'
 					}, function (data) {
-
+						if ('meta' in data) {
+							data = data.data;
+						}
 						var results = [];
 
 						$.each(data, function (i, val) {
@@ -823,6 +832,7 @@ steal(
 				draft = $selected.data('article'),
 				label = $selected.data('label'),
 				urlDelete = $selected.data('url-delete');
+			console.log(urlDelete)
 
 			el.siblings('.selected-draft')
 				.append(label)
@@ -903,9 +913,9 @@ steal(
 		'.author-modal-articles .slug-from-name click' : function(el, ev) {
 
 			ev.preventDefault();
-
-			var name = el.siblings('input[name=name]').val();
-			el.siblings('input[name=slug]').val(slug(name));
+			var form = el.closest('form')
+			var name = form.find('input[name=name]').val();
+			form.find('input[name=slug]').val(slug(name));
 		},
 
 		/**
@@ -1335,6 +1345,9 @@ steal(
 					jsonTermKey: 'title__icontains',
 					dataType: 'json'
 				}, function (data) {
+					if ('meta' in data) {
+						data = data.data;
+					}
 					var results = [];
 
 					$.each(data, function (i, val) {
@@ -1368,6 +1381,9 @@ steal(
 					jsonTermKey: 'title__icontains',
 					dataType: 'json'
 				}, function (data) {
+					if ('meta' in data) {
+						data = data.data;
+					}
 					var results = [];
 
 					$.each(data, function (i, val) {
@@ -1401,6 +1417,9 @@ steal(
 					jsonTermKey: 'title__icontains',
 					dataType: 'json'
 				}, function (data) {
+					if ('meta' in data) {
+						data = data.data;
+					}
 					var results = [];
 
 					$.each(data, function (i, val) {
@@ -1694,8 +1713,9 @@ steal(
 
 			// search in title
 			var data = {
-				"title__icontains": search,
-				'excluded_ids': self.getAssignedPhotos(true)
+				"title__icontains": search
+				, 'excluded_ids': self.getAssignedPhotos(true)
+				, 'order_by': '-id'
 			};
 
 			Photo.findAll(data, function(photos){
@@ -1709,7 +1729,6 @@ steal(
 		 * @return {[type]}        [description]
 		 */
 		renderRecentPhotos: function(photos) {
-
 			// empty list with photos if there are any
 			var el = $('#found-recent-photos');
 			el.empty();
@@ -2019,6 +2038,9 @@ steal(
 				jsonTermKey: 'title__icontains',
 				dataType: 'json'
 			}, function (data) {
+				if ('meta' in data) {
+					data = data.data;
+				}
 				var results = [];
 
 				$.each(data, function (i, val) {
