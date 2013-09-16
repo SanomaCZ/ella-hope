@@ -154,11 +154,21 @@ steal(
 				var items = self.modelClass.findAll(data)
 			}
 
-
 			can.view('//app/photos/views/list-photos.ejs', {
 				photos: items
 			}).then(function (frag) {
 				$("#inner-content").html(frag);
+
+				items.then(function(items) {
+					if ('meta' in items) {
+						var m = items.meta;
+						var offset = Math.min((1+ m.offset), m.total_count);
+						var limit = Math.min((m.offset + m.limit), m.total_count)
+						$(".pagination .current a").html(
+							offset + '-' + limit + ' / ' + m.total_count
+						)
+					}
+				});
 
 				if (cb) {
 					cb();

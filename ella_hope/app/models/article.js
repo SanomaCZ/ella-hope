@@ -116,20 +116,25 @@ steal(
 			/**
 			 * get articles related (connected) to a given article
 			 * @param  {[type]} articleID [description]
-			 * @param  {[type]} success   [description]
-			 * @param  {[type]} error     [description]
 			 * @return {[type]}           [description]
 			 */
-			getRelatedArticles: function (articleID, success, error) {
-
-				return $.ajax({
+			getRelatedArticles: function (articleID) {
+				var res = [];
+				$.ajax({
 					url: BASE_URL + '/related/?publishable__id=' + articleID,
 					type: 'GET',
-					async: true,
+					//async: true,
 					dataType: "json",
-					success: success,
-					error: error
-				});
+					success: function(data) {
+						if ('meta' in data) {
+							res = data.data;
+						} else {
+							//backward compatibility for datasource w/o metadata
+							res = data;
+						}
+					}
+				})
+				return res;
 			},
 
 			/**

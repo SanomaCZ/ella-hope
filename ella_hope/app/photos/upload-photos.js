@@ -355,6 +355,8 @@ steal(
 		'.photo-create click': function(el, ev) {
 			ev.preventDefault();
 
+			$("#load-state").show();
+
 			var el = $('.uploadForm');
 			var self = this;
 			var objects = [];
@@ -466,10 +468,19 @@ steal(
 
 				error: function(xhr, error) {
 					self.clearFileInput();
-					$('.response_msg')
+					var $canvas = $('.response_msg');
+
+					$canvas
 						.show()
 						.addClass('alert-error')
 						.find('span').html(xhr.statusText + '<br><small>' + xhr.responseText + '</small>');
+
+					('html, body').animate({
+						scrollTop: $canvas.offset().top + 'px'
+					}, 'fast');
+				},
+				complete: function() {
+					$("#load-state").hide();
 				}
 			};
 

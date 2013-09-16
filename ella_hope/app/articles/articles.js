@@ -221,16 +221,27 @@ steal(
 			data.offset = this.paginator.attr('offset');
 
 			if (data.tag) {
-				var articles = self.modelClass.getArticlesByTag({tags: [data.tag]})
+				var items = self.modelClass.getArticlesByTag({tags: [data.tag]})
 			} else {
-				var articles = self.modelClass.findAll(data)
+				var items = self.modelClass.findAll(data)
 			}
 
 			can.view('//app/articles/views/list-articles.ejs', {
-				articles: articles
+				articles: items
 				, model: self.options.model
 			}).then(function (frag) {
 				$("#inner-content").html(frag);
+
+				items.then(function (items) {
+					if ('meta' in items) {
+						var m = items.meta;
+						var offset = Math.min((1+ m.offset), m.total_count);
+						var limit = Math.min((m.offset + m.limit), m.total_count)
+						$(".pagination .current a").html(
+							offset + '-' + limit + ' / ' + m.total_count
+						)
+					}
+				});
 
 				if (cb) {
 					cb();

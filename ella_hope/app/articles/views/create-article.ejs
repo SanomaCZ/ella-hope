@@ -255,8 +255,10 @@
 			<div class="span4 pull-left" style="margin-left: 0">
 				<label class="control-label"><%= $.t('articles.chosen_items')%></label>
 				<ul id="chosen-related-articles" class="connectedSortable">
+					<% console.log(relatedArticles) %>
 					<% $.each(relatedArticles || [], function(i, a) { %>
 						<li data-resource-id="<%= a.id %>" data-related-id="<%= a.related_id %>">
+
 							<%= a.related.title %> <i class="icon-remove pull-right remove-related"></i>
 						</li>
 					<% }); %>

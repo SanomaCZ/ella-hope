@@ -36,20 +36,24 @@ steal(
 			/**
 			 * get photos related (connected) to a given gallery
 			 * @param  {[type]} articleID [description]
-			 * @param  {[type]} success   [description]
-			 * @param  {[type]} error     [description]
 			 * @return {[type]}           [description]
 			 */
-			getRelated : function(galleryID, success, error) {
-
+			getRelated : function(galleryID) {
+				var res = [];
 				return $.ajax({
-					url: BASE_URL+'/galleryitem/?gallery__id='+galleryID+'&order_by=order',
+					url: BASE_URL + '/galleryitem/?gallery__id=' + galleryID + '&order_by=order',
 					type: 'GET',
-					async: true,
+					//async: true,
 					dataType: "json",
-					success: success,
-					error: error
+					success: function(data) {
+						if ('meta' in data) {
+							res = data.data;
+						} else {
+							res = data;
+						}
+					}
 				});
+				return res;
 			}
 		}, {});
 
