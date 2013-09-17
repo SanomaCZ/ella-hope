@@ -60,6 +60,30 @@ steal(
 				api_url: getBackends()
 			});
 		});
+
+		//hide overlay layer handler
+		$('body').on('hide-overlay', function(){
+			$('div.overlay').hide();
+		});
+
+		//show overlay layer handler
+		$('body').on('show-overlay', function(){
+			$('div.overlay').show();
+		});
+
+		$( document ).ajaxSend(function(event, xhr, settings) {
+			
+			if (settings.type == 'POST' || settings.type == 'PUT' ||
+				settings.type == 'PATCH' || (settings.type == 'GET' && settings.url.match(/order_by=/))) {
+				console.log(settings);
+				$('body').trigger('show-overlay');
+			}
+		});
+
+		$( document ).ajaxComplete(function() {
+			$('body').trigger('hide-overlay');
+		});
+		
 	}
 )
 .then(
