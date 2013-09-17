@@ -9,13 +9,6 @@
 			<input type="hidden" name="id" id="id" value="<%= article.id  %>" />
 		<% } %>
 
-		<div class="pull-right row">
-
-			<% if (drafts.length) { %>
-				<button class="btn btn-normal draft-select"><%= $.t('articles.drafts_templates')%></button>
-			<% } %>
-		</div>
-
 		<div class="control-group row">
 			<label class="control-label required" for="title"><%= $.t('articles.title')%></label>
 			<div class="controls">
@@ -264,7 +257,6 @@
 			<div class="span4 pull-left" style="margin-left: 0">
 				<label class="control-label"><%= $.t('articles.chosen_items')%></label>
 				<ul id="chosen-related-articles" class="connectedSortable">
-					<% console.log(relatedArticles) %>
 					<% $.each(relatedArticles || [], function(i, a) { %>
 						<li data-resource-id="<%= a.id %>" data-related-id="<%= a.related_id %>">
 
@@ -383,6 +375,12 @@
 	</form>
 
 	<div class="form-buttons span2">
+		<% if (drafts.length) { %>
+			<a class="btn btn-warning draft-select">
+				<%= $.t('articles.drafts_templates')%>
+			</a>
+		<% } %>
+
 		<a href="javascript://" class="btn btn-info autosave"
 			data-normal="<%= $.t('articles.quicksave')%>"
 			data-saving="<%= $.t('articles.saving')%>">
@@ -489,7 +487,7 @@
 <div id="draft-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		<h3 id="myModalLabel"><%= $.t('articles.drafts_tepmplates') %></h3>
+		<h3 id="myModalLabel"><%= $.t('articles.drafts_templates') %></h3>
 	</div>
 	<div class="modal-body">
 		<% if (drafts.length) { %>

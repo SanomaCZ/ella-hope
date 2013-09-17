@@ -832,7 +832,6 @@ steal(
 				draft = $selected.data('article'),
 				label = $selected.data('label'),
 				urlDelete = $selected.data('url-delete');
-			console.log(urlDelete)
 
 			el.siblings('.selected-draft')
 				.append(label)

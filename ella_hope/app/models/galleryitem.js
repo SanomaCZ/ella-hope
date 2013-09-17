@@ -40,10 +40,10 @@ steal(
 			 */
 			getRelated : function(galleryID) {
 				var res = [];
-				return $.ajax({
+				$.ajax({
 					url: BASE_URL + '/galleryitem/?gallery__id=' + galleryID + '&order_by=order',
 					type: 'GET',
-					//async: true,
+					async: false,
 					dataType: "json",
 					success: function(data) {
 						if ('meta' in data) {
