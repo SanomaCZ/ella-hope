@@ -75,7 +75,6 @@ steal(
 			
 			if (settings.type == 'POST' || settings.type == 'PUT' ||
 				settings.type == 'PATCH' || (settings.type == 'GET' && settings.url.match(/order_by=/))) {
-				console.log(settings);
 				$('body').trigger('show-overlay');
 			}
 		});
