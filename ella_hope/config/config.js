@@ -8,7 +8,6 @@
 	- backend servers
 	- key-value configuration object
 */
-var HOPE_VERSION = "";
 /*
 	Example login backends for Hope
 
@@ -35,10 +34,13 @@ function getBackends() {
 	Store them in window.HOPECFG as an key-value object
  */
 
+// don't mess with line below, its parsed and updated by fabfile
+var HOPE_VERSION = "";
+
 (function () {
 	window.HOPECFG = {
-		APP_ROOT: '//app' + HOPE_VERSION ,
-		COOKIE_FILTER: 'HOPE_filter_form'
+		APP_ROOT: '//app' + HOPE_VERSION
+		, COOKIE_FILTER: 'HOPE_filter_form'
 		, RAVEN_DSN: false
 	}
 })();
