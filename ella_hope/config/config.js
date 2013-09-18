@@ -34,7 +34,10 @@ function getBackends() {
 	Store them in window.HOPECFG as an key-value object
  */
 
-// don't mess with line below, its parsed and updated by fabfile
+/*
+ replace empty string with any numeric value in production (empty value is used for localhost dev)
+ don't change line's format in any other way, its parsed and updated by fabfile
+*/
 var HOPE_VERSION = "";
 
 (function () {
