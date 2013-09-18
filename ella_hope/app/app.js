@@ -1,11 +1,11 @@
 steal(
 	'can/control/route'					// enable routing
-	, './login/login.js'				// login module
 	, '//config/config.js'
 	, '//raven/raven.min.js'
 )
 .then(
-	'./resources/js/jquery.jsperanto.js'	// translation library
+	'./login/login.js'				// login module
+	, './resources/js/jquery.jsperanto.js'	// translation library
 )
 .then(
 	function(){	// configure your application
