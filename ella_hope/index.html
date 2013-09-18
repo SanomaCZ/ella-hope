@@ -1,1 +1,13 @@
-<meta http-equiv="refresh" content="0;url=./app/index.html"> 
+<html>
+<head>
+	<script>
+		var config = document.createElement('script');
+		config.src = '/config/config.js';
+		config.type = 'text/javascript';
+		config.onload = function () {
+			document.location.href = window.HOPECFG.APP_ROOT.slice(1) + '/index.html';
+		}
+		document.head.appendChild(config);
+	</script>
+</head>
+</html>

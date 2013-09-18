@@ -12,7 +12,7 @@ steal(
 	/* @static */
 	{
 		defaults: {
-			initView : "//app/login/views/init.ejs",
+			initView : window.HOPECFG.APP_ROOT + "/login/views/init.ejs",
 			loginPageClass: "login-page",
 			api_url: [
 				{
@@ -79,8 +79,8 @@ steal(
 
 			// steal User model so that login can be performed
 			steal(
-				'//app/models/user.js',
-				'//app/login/ajax-setup.js'
+				window.HOPECFG.APP_ROOT + '/models/user.js',
+				window.HOPECFG.APP_ROOT + '/login/ajax-setup.js'
 			)
 			.then(
 				function(){
@@ -136,7 +136,9 @@ steal(
 				BASE_URL = user['base_url'];
 
 				// steal User model so that login can be performed
-				steal('//app/models/user.js', '//app/login/ajax-setup.js')
+				steal(
+					window.HOPECFG.APP_ROOT + '/models/user.js',
+					window.HOPECFG.APP_ROOT + '/login/ajax-setup.js')
 				.then(
 					function(){
 

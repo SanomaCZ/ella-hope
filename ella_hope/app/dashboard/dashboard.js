@@ -11,7 +11,7 @@ steal(
 	/* @static */
 	{
 		defaults: {
-			initView : "//app/dashboard/views/init.ejs"
+			initView : window.HOPECFG.APP_ROOT + "/dashboard/views/init.ejs"
 		}
 	},
 	/* @prototype */
@@ -24,7 +24,7 @@ steal(
 
 			var self = this;
 
-			can.view("//app/dashboard/views/init.ejs", {
+			can.view(window.HOPECFG.APP_ROOT + "/dashboard/views/init.ejs", {
 				articles: Article.findAll({
 					limit: 5
 					//order_by: '-id' // -<field> means we want descending order
