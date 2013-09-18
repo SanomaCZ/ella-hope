@@ -1,5 +1,6 @@
 steal(
 	'./login.css'
+	, '//config/config.js'
 	, 'can/view/ejs'
 )
 .then(
