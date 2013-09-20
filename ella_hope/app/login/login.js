@@ -98,6 +98,10 @@ steal(
 					// if login is not successful
 					if (loginResult && loginResult.error) {
 						$("#login-error").show();
+						//FIXME: Use better solution but for now we use this
+						//becouse of else multiple controllers is in action
+						//and ajax are performed multiple times
+						window.location = '/'
 					}
 					else {
 						self.loginSuccess();
@@ -247,7 +251,7 @@ steal(
 							//if you legged again without refresh page
 							window.location = '/'
 							//setTimeout(function(){
-							//	can.route.attr({page: 'user', action: 'login'}, true);
+								//can.route.attr({page: 'user', action: 'login'}, true);
 								//$('body').trigger('show-login');
 							//}, 500);
 							//$('body').trigger('show-login');
