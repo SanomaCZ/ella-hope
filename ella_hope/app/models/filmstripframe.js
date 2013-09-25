@@ -51,10 +51,10 @@ steal(
 			 */
 			getRelated : function(filmstripID) {
 				var res = [];
-				return $.ajax({
+				$.ajax({
 					url: BASE_URL+'/frame/?filmstrip__id='+filmstripID+'&order_by=id',
 					type: 'GET',
-					async: true,
+					async: false,
 					dataType: "json",
 					success: function(data) {
 						if ('meta' in data) {
