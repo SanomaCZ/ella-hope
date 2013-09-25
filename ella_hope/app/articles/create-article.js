@@ -2110,15 +2110,15 @@ steal(
 			for (var i = 0; i < framesForSave.length; i++) framesForSave[i].save();
 			
 			$(el).empty();
-			FilmstripFrame.getRelated(self.article.id, function(data) {
-				$.each(data, function(i, f) {
-					el.append(can.view.render(window.HOPECFG.APP_ROOT + '/articles/views/inline-filmstrip-frame.ejs', {
-                        item: f,
-                        index: i
-                	}));
-                	$(el).children('li:last').find('textarea').markItUp(self.options.markitupSettings);
-				});
+
+			$.each(FilmstripFrame.getRelated(self.article.id), function(i, f) {
+				el.append(can.view.render(window.HOPECFG.APP_ROOT + '/articles/views/inline-filmstrip-frame.ejs', {
+                    item: f,
+                    index: i
+            	}));
+            	$(el).children('li:last').find('textarea').markItUp(self.options.markitupSettings);
 			});
+			
 			return true;
 		},
 
