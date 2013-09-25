@@ -1,5 +1,5 @@
 <div class="page-header">
-	<h1><%= this.model === 'articles' ? $.t('articles.articles') : $.t('articles.galleries') %> - <%= $.t('articles.edit') %></h1>
+	<h1><%= this.model === 'articles' ? $.t('articles.articles') : this.model === 'filmstrips' ? $.t('articles.filmstrips') : $.t('articles.galleries') %> - <%= $.t('articles.edit') %></h1>
 </div>
 
 <div class="formbg">
@@ -8,13 +8,6 @@
 		<% if (article.id) { %>
 			<input type="hidden" name="id" id="id" value="<%= article.id  %>" />
 		<% } %>
-
-		<div class="pull-right row">
-
-			<% if (drafts.length) { %>
-				<button class="btn btn-normal draft-select"><%= $.t('articles.drafts_templates')%></button>
-			<% } %>
-		</div>
 
 		<div class="control-group row">
 			<label class="control-label required" for="title"><%= $.t('articles.title')%></label>
@@ -67,18 +60,20 @@
 			</div>
 		</div>
 
-		<div class="control-group row js-textrea-box">
-			<% if (this.model === 'galleries') { %>
-				<label class="control-label" for="content"><%= $.t('articles.content') %></label>
-			<% } else { %>
-				<label class="control-label required" for="content"><%= $.t('articles.content') %></label>
-			<% } %>
-			<div class="controls pull-left">
-				<textarea class="content" rows="10" name="content" placeholder="<%= $.t('articles.add_content')%>"><%= article.content %></textarea>
-				<span class="help-inline"></span>
+		<% if (this.model !== 'filmstrips') { %>
+			<div class="control-group row js-textrea-box">
+				<% if (this.model === 'galleries') { %>
+					<label class="control-label" for="content"><%= $.t('articles.content') %></label>
+				<% } else { %>
+					<label class="control-label required" for="content"><%= $.t('articles.content') %></label>
+				<% } %>
+				<div class="controls pull-left">
+					<textarea class="content" rows="10" name="content" placeholder="<%= $.t('articles.add_content')%>"><%= article.content %></textarea>
+					<span class="help-inline"></span>
+				</div>
+				<div class="box-snippet hero-unit pull-right"></div>
 			</div>
-			<div class="box-snippet hero-unit pull-right"></div>
-		</div>
+		<% } %>
 
 		<div class="js-datepicker-group row">
 			<div class="span4 pull-left" style="margin-left: 0">
@@ -243,6 +238,13 @@
 			</div>
 		<% } %>
 
+		<% if (this.model === 'filmstrips') { %>
+			<%== can.view.render(window.HOPECFG.APP_ROOT + '/articles/views/filmstrip-frames.ejs', {
+					article: article,
+					filmstripframes: filmstripframes
+			}) %>
+		<% } %>
+
 		<div class="control-group row hero-unit">
 			<h4><%= $.t('articles.related_articles')%></h4>
 			<% if (!article.id) { %>
@@ -374,6 +376,12 @@
 	</form>
 
 	<div class="form-buttons span2">
+		<% if (drafts.length) { %>
+			<a class="btn btn-warning draft-select">
+				<%= $.t('articles.drafts_templates')%>
+			</a>
+		<% } %>
+
 		<a href="javascript://" class="btn btn-info autosave"
 			data-normal="<%= $.t('articles.quicksave')%>"
 			data-saving="<%= $.t('articles.saving')%>">
@@ -480,7 +488,7 @@
 <div id="draft-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		<h3 id="myModalLabel"><%= $.t('articles.drafts_tepmplates') %></h3>
+		<h3 id="myModalLabel"><%= $.t('articles.drafts_templates') %></h3>
 	</div>
 	<div class="modal-body">
 		<% if (drafts.length) { %>

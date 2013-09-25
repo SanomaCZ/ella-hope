@@ -4,15 +4,15 @@ steal(
 .then(
 
 	/**
-	 * Shows the galeries.
+	 * Shows the filmstrips.
 	 * This control inherits almost everything from Articles control.
 	 * @tag controllers, home
 	 */
-	Galleries = Articles(
+	Filmstrips = Articles(
 	/* @static */
 	{
 		defaults: {
-			model: 'galleries'
+			model: 'filmstrips'
 		}
 	},
 	/* @prototype */

@@ -57,6 +57,9 @@ steal(
 					jsonTermKey: 'name__icontains',
 					dataType: 'json'
 				}, function (data) {
+					if ('meta' in data) {
+						data = data.data;
+					}
 
 					var results = [];
 
@@ -80,7 +83,9 @@ steal(
 					jsonTermKey: 'name__icontains',
 					dataType: 'json'
 				}, function (data) {
-
+					if ('meta' in data) {
+						data = data.data;
+					}
 					var results = [];
 
 					$.each(data, function (i, val) {
@@ -99,6 +104,9 @@ steal(
 					jsonTermKey: 'name__icontains',
 					dataType: 'json'
 				}, function (data) {
+					if ('meta' in data) {
+						data = data.data;
+					}
 
 					var results = [];
 
@@ -266,6 +274,9 @@ steal(
 				jsonTermKey: 'name__icontains',
 				dataType: 'json'
 			}, function (data) {
+				if ('meta' in data) {
+					data = data.data;
+				}
 
 				var results = [];
 
@@ -284,6 +295,10 @@ steal(
 				dataType: 'json',
 				file: false
 			}, function (data) {
+				if ('meta' in data) {
+					data = data.data;
+				}
+
 				var results = [];
 
 				$.each(data, function (i, val) {
@@ -300,6 +315,9 @@ steal(
 				jsonTermKey: 'name__icontains',
 				dataType: 'json'
 			}, function (data) {
+				if ('meta' in data) {
+					data = data.data;
+				}
 
 				var results = [];
 

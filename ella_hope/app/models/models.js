@@ -9,6 +9,7 @@ steal(
 	, "./draft.js"
 	, "./category.js"
 	, "./galleryitem.js"
+	, "./filmstripframe.js"
 	, "./listing.js"
 	, "./photo.js"
 	, "./photo-format.js"
@@ -19,4 +20,5 @@ steal(
 )
 .then(	// following models inherit from previous models - must be loaded later
 	"./gallery.js"
+	, "./filmstrip.js"
 );

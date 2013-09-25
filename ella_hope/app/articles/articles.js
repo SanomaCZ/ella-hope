@@ -35,7 +35,7 @@ steal(
 		init: function (element, options) {
 			var self = this;
 
-			self.modelClass = (self.options.model == 'articles' ? Article : Gallery)
+			self.modelClass = (self.options.model == 'articles' ? Article : self.options.model == 'galleries' ? Gallery : Filmstrip)
 
 			// destroy articleCreate control if it was created
 			// this is useful if we i.e. edit an article and without saving or canceling
@@ -76,7 +76,7 @@ steal(
 		 * this route is called when we i.e. edit an articles and then click on Articles in menu
 		 */
 		':page route': function (data) {
-			if (data.page == 'articles' || data.page == 'galleries') {
+			if (data.page == 'articles' || data.page == 'galleries' || data.page == 'filmstrips') {
 				// if there are children, control needs to be initialized
 				// it's because there was something else in the element and
 				// we need to initialize it with current control
@@ -102,20 +102,8 @@ steal(
 
 				$("#load-state").show();
 
-				if (data.page === 'articles') {
-					Article.findOne({id: data.id}, function (article) {
-						self.articleCreate = new ArticleCreate(self.element, {
-							type: 'article',
-							article: article,
-							articleStates: self.options.articleStates,
-							articleComments: self.options.articleComments,
-							dateOptions: self.options.dateOptions,
-							timeOptions: self.options.timeOptions,
-							model: data.page
-						});
-					});
-				} else if (data.page === 'galleries') {
-					Gallery.findOne({id: data.id}, function (article) {
+				if (data.page == 'articles' || data.page == 'galleries' || data.page == 'filmstrips') {
+					self.modelClass.findOne({id: data.id}, function (article) {
 						self.articleCreate = new ArticleCreate(self.element, {
 							type: 'article',
 							article: article,

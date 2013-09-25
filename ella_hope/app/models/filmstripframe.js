@@ -1,15 +1,26 @@
 steal(
 	'can/model',
 	function($) {
-		GalleryItem = can.Model({
+		FilmstripFrame = can.Model({
+			init: function () {
+				var self = this;
 
-			findAll: 'GET ' + BASE_URL + '/galleryitem/',
+				$.each(self.prototype.required, function () {
+					self.validate(this, function (val) {
+						if (val === null || val === '') {
+							return $.t('This field can not be empty');
+						}
+					});
+				})
+			},
 
-			findOne: 'GET ' + BASE_URL + '/galleryitem/{id}/',
+			findAll: 'GET ' + BASE_URL + '/frame/',
+
+			findOne: 'GET ' + BASE_URL + '/frame/{id}/',
 
 			create : function(attrs){
 				return $.ajax({
-					url: BASE_URL+'/galleryitem/',
+					url: BASE_URL+'/frame/',
 					type: 'POST',
 					async: false,
 					dataType: 'json',
@@ -20,7 +31,7 @@ steal(
 
 			update : function(id, attrs){
 				return $.ajax({
-					url: BASE_URL+'/galleryitem/'+id+'/',
+					url: BASE_URL+'/frame/'+id+'/',
 					type: 'PATCH',
 					async: false,
 					dataType: 'json',
@@ -29,20 +40,19 @@ steal(
 				});
 			},
 
-			destroy: 'DELETE ' + BASE_URL + '/galleryitem/{id}/',
+			destroy: 'DELETE ' + BASE_URL + '/frame/{id}/',
 
 
 
 			/**
-			 * get photos related (connected) to a given gallery
-			 * @param  {[type]} articleID [description]
+			 * get frames related (connected) to a given filmstrip
+			 * @param  {[type]} filmstripID [description]
 			 * @return {[type]}           [description]
 			 */
-			getRelated : function(galleryID) {
+			getRelated : function(filmstripID) {
 				var res = [];
-
 				$.ajax({
-					url: BASE_URL + '/galleryitem/?gallery__id=' + galleryID + '&order_by=order',
+					url: BASE_URL+'/frame/?filmstrip__id='+filmstripID+'&order_by=id',
 					type: 'GET',
 					async: false,
 					dataType: "json",
@@ -56,7 +66,9 @@ steal(
 				});
 				return res;
 			}
-		}, {});
+		}, {
+			required: ['content']
+		});
 
 	}
 );

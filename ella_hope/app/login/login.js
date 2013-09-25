@@ -1,6 +1,7 @@
 steal(
 	'./login.css'
 	, 'can/view/ejs'
+	, window.HOPECFG.APP_ROOT + '/backends.js'
 )
 .then(
 	/**
@@ -70,6 +71,7 @@ steal(
 			// set BASE_URL based on user input
 			// user can select predefined url or enter a new one
 			BASE_URL = data.api_url_custom ? data.api_url_custom : data.api_url;
+			BACKEND_NAME = getBackendName(BASE_URL, self.options.api_url);
 
 			// authentication data
 			var userData = {
@@ -138,6 +140,7 @@ steal(
 			if (user && user['api_key'] && user['base_url']) {
 
 				BASE_URL = user['base_url'];
+				BACKEND_NAME = getBackendName(BASE_URL, self.options.api_url);
 
 				// steal User model so that login can be performed
 				steal(

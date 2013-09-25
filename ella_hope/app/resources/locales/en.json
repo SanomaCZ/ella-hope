@@ -3,6 +3,7 @@
 		"home": "Home",
 		"articles": "Articles",
 		"galleries": "Galleries",
+		"filmstrips": "Filmstrips",
 		"photos_videos": "Photos/videos",
 		"contests": "Contests",
 		"quiz": "Quiz",
@@ -20,8 +21,9 @@
 	"articles": {
 		"articles": "Articles",
 		"galleries": "Galleries",
+		"filmstrips": "Filmstrips",
 		"edit": "Edit",
-		"drafts_tepmplates": "Drafts / Templates",
+		"drafts_templates": "Drafts",
 		"title": "Title",
 		"add_title": "Add title",
 		"slug": "Slug",
@@ -106,7 +108,11 @@
 		"show_filter": "Show filter",
 		"published": "Published",
 		"tags_filter": "Tag (separate filter)",
-		"reset_filter": "Reset filter"
+		"reset_filter": "Reset filter",
+		"filmstrip_frames": "Frames",
+		"frame_number": "Frame number",
+		"add_filmstrip_frame": "Add frame",
+		"copy_dates": "copy from base publication"
 	},
 	"gallaries": {
 		"change_title": "Change photo's title",
@@ -169,6 +175,9 @@
 	},
 	"dashboard": {
 		"heading": "D&Z admin"
+	},
+	"project": {
+		"unknown": "No name"
 	},
 	"login": {
 		"error": "Error",

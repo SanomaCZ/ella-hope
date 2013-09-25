@@ -39,7 +39,10 @@ steal(
 					{name:'Link', key:'L', openWith:'[', closeWith:']([![Url:!:http://]!] "[![Title]!]")', placeHolder:'Your text to link here...' },
                     {name:'Wiki', key: 'W', closeWith: function (markItUp) { return ArticleCreate.prototype.insertWikiRef(markItUp.textarea); }, className: 'markItUpwikiRef'}
 					, {name:'Gallery', key: 'G', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertGalleryRef(markItUp.textarea); }, className: 'markItUpGalleryRef'}
-
+					, {name:'InfoBox', key: 'X', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertInfoboxRef(markItUp.textarea); }, className: 'markItUpInfoboxRef'}
+					, {name:'EditorsTip', key: 'T', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertEditorsTipRef(markItUp.textarea); }, className: 'markItUpEditorsTipRef'}
+					, {name:'RelatedBox', key: 'R', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertRelatedBoxRef(markItUp.textarea); }, className: 'markItUpRelatedBoxRef'}
+					
 					//{separator:'---------------'},
 					//{name:'Quotes', openWith:'> '},
 					//{name:'Code Block / Code', openWith:'(!(\t|!|`)!)', closeWith:'(!(`)!)'},
@@ -62,6 +65,8 @@ steal(
 		photoPaginator: null,
 
 		init: function() {
+			if (USER !== undefined && USER.auth_tree.articles !== undefined && USER.auth_tree.articles.filmstrip) 
+				this.options.markitupSettings.markupSet.push({name:'Filmstrip', key: 'F', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertFilmstripRef(markItUp.textarea); }, className: 'markItUpFilmstripRef'});
 
 			// show draft or article
 			if (this.options.type == 'draft') {
@@ -88,7 +93,7 @@ steal(
 			var self = this;
 
 			if (!article) {
-				article = (this.options.model == 'articles' ? new Article() : new Gallery());
+				article = (this.options.model == 'articles' ? new Article() : this.options.model == 'filmstrips' ? new Filmstrip() : new Gallery());
 				article.static = true;
 			}
 			this.article = article;
@@ -135,6 +140,7 @@ steal(
 				relatedArticles: this.article.id ? Article.getRelatedArticles(this.article.id) : [],
 				listings: this.article.id ? Listing.getListingByArticle({articleId: this.article.id}) : [],
 				galleryitem: this.article.id && self.options.model === 'galleries' ? GalleryItem.getRelated(this.article.id) : {},
+				filmstripframes: this.article.id && self.options.model === 'filmstrips' ? FilmstripFrame.getRelated(this.article.id) : {},
 				model: self.options.model
 			} ).then(function( frag ){
 				self.element.html(frag);
@@ -596,10 +602,18 @@ steal(
 					success = success && self['save_' + model](this);
 				});
 
+				//used only for filmstrip type this save frame of filmstip
+				//TODO: ifs are not good, please refactor code and use something
+				//as multiple inheritence
+				if (self.options.model === 'filmstrips' && self.article.id) {
+					return self.saveFilmstripFrames();
+				}
+
 			}, function (xhr) {
 				alert('Error occured, try again later.');
 				return false;
 			});
+			
 			return true;
 		},
 
@@ -608,13 +622,14 @@ steal(
 		 * @param  {[type]} errors [description]
 		 * @return {[type]}        [description]
 		 */
-		showErrors: function(instance, nested_block) {
+		showErrors: function(instance, nested_block, idSelector) {
 			var input_prefix = nested_block ? (instance.prefix + "_"): "";
 			var errors = instance.errors();
 
 			if (errors) {
 				$.each(errors, function (e) {
-					$('.' + input_prefix + e, nested_block).closest('.control-group')
+						$(idSelector ? '#' + idSelector : '.' + input_prefix + e, nested_block)
+						.closest('.control-group')
 						.addClass('error')
 						.find('.help-inline').html(errors[e][0]);
 				});
@@ -701,7 +716,7 @@ steal(
 			// this is how draft should look like
 			var obj = {
 				//"user": "/admin-api/user/6/",
-				"content_type": this.options.model === 'articles' ? 'article' : 'gallery',
+				"content_type": this.options.model === 'articles' ? 'article' : this.options.model === 'filmstrips' ? 'filmstrip' : 'gallery',
 				"data" : values
 			};
 
@@ -755,7 +770,7 @@ steal(
 
 				// redirect to list
 				if (!$(el).data('stay')) {
-					var page = this.options.model === 'articles' ? 'articles' : 'galleries';
+					var page = this.options.model === 'articles' ? 'articles' : this.options.model === 'filmstrips' ? 'filmstrips' : 'galleries';
 					can.route.attr({page: page}, true);
 				}
 			}
@@ -777,7 +792,7 @@ steal(
 
 			this.deleteDraft();
 
-			var page = this.options.model === 'articles' ? 'articles' : 'galleries';
+			var page = this.options.model === 'articles' ? 'articles' : this.options.model === 'filmstrips' ? 'filmstrips' : 'galleries';
 			can.route.attr({page: page}, true);
 		},
 
@@ -1089,6 +1104,42 @@ steal(
 		},
 
 		/**
+		 * open a dialog where filmstrip frame photo can be added
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'.add-filmstrip-frame-photo click' : function(el, ev) {
+
+			ev.preventDefault();
+			$('#filmstrip-frame-photo-index').attr('value', $(el).attr('data-filmstrip-frame-index'));
+			// render list where title photo can be picked
+			this.renderPhotosList({title: true});
+
+			// show modal dialog
+			$('#photos-modal').modal('show');
+		},
+
+		insertFilmstripFramePhoto: function(photo) {
+			var el = $('#filmstrip-frame-photo-index');
+			var ind = $(el).attr('value');
+			$('form.article').find('input[name=photo' + ind + ']').val(photo.resource_uri);
+			$(el).attr('value', '');
+			$('.title-photo' + ind + ' img').attr('src', photo.public_url);
+			$('.title-photo-empty' + ind).hide();
+			$('.title-photo' + ind).show();
+		},
+
+		'.remove-filmstrip-frame-photo click': function(el, ev) {
+			ev.preventDefault();
+			var ind = $(el).attr('data-filmstrip-frame-index');
+			$('form.article').find('input[name=photo' + ind + ']').val('');
+			$('.title-photo' + ind + ' img').attr('src', '');
+			$('.title-photo-empty' + ind).show();
+			$('.title-photo' + ind).hide();
+		},
+
+		/**
 		 * when user clicks on table row (radio, image), check the radio button on that row
 		 * show form with additional parameter
 		 * @param  {[type]} el [description]
@@ -1125,14 +1176,19 @@ steal(
 				params = tr.find('.snippet-params'),
 				format = can.deparam(params.serialize());
 
+			//used for flimstrip frame photo
+			var elFilmstripFrameIndex = $('#filmstrip-frame-photo-index');
 			// insert title photo
-			if (data && data.title) {
+			if (elFilmstripFrameIndex.length > 0 && $(elFilmstripFrameIndex).attr('value')) {
+				this.insertFilmstripFramePhoto(photo);
+				$('#photos-modal').modal('hide');
+			}
+			else if (data && data.title) {
 				this.insertTitlePhoto(photo);
 				$('#photos-modal').modal('hide');
 			}
 			else if (photo) {
 				var snippet = this.generateSnippet('photos.photo', photo, format);
-
 				$('#photos-modal').modal('hide');
 
 				// insert snippet into textarea
@@ -1154,6 +1210,8 @@ steal(
 		 */
 		'#photos-modal .close-photo click':function(el, ev) {
 			ev.preventDefault();
+			var elFilmstripFrameIndex = $('#filmstrip-frame-photo-index');
+			if (elFilmstripFrameIndex.length > 0) $(elFilmstripFrameIndex).attr('value', '');
 			$('#photos-modal').modal('hide');
 		},
 
@@ -1226,6 +1284,12 @@ steal(
 					'{% endbox %}'
 				]
 			} else if (contentType == 'ella_galleries.gallery') {
+				var snippetData = [
+					'{% box inline for ' + contentType + ' with pk ' + params.id + ' %}',
+					'title:' + params.item_title,
+					'{% endbox %}'
+				]
+			} else if (contentType == 'filmstrips.filmstrip') {
 				var snippetData = [
 					'{% box inline for ' + contentType + ' with pk ' + params.id + ' %}',
 					'title:' + params.item_title,
@@ -1322,10 +1386,12 @@ steal(
 					jsonTermKey: 'title__icontains',
 					dataType: 'json',
 					async: false
+
 				}, function (data) {
 					if ('meta' in data) {
 						data = data.data;
 					}
+
 					var results = [];
 
 					$.each(data, function (i, val) {
@@ -1334,6 +1400,71 @@ steal(
 
 					return results;
 				});
+		},
+
+		insertFilmstripRef: function (el, snippetInfo) {
+			snippetInfo = snippetInfo || {
+				snippetPosition: {
+					start: $(el).getCursorPosition()
+					, end: $(el).getCursorPosition()
+				}
+			}
+
+			var renderForm = can.view.render(window.HOPECFG.APP_ROOT + '/articles/views/snippet-filmstrip.ejs', {
+				data: snippetInfo
+			});
+
+			var boxSnippet = $(el).closest('.js-textrea-box').find('.box-snippet');
+
+			boxSnippet
+				.empty()
+				.append(renderForm)
+				.find(".item-name").ajaxChosen({
+					type: 'GET',
+					url: BASE_URL + '/filmstrip/?',
+					jsonTermKey: 'title__icontains',
+					dataType: 'json'
+
+				}, function (data) {
+					if ('meta' in data) {
+						data = data.data;
+					}
+
+					var results = [];
+
+					$.each(data, function (i, val) {
+						results.push({ value: val.id, text: val.title });
+					});
+
+					return results;
+				});
+		},
+
+		insertStaticBoxRef: function(el, result) {
+			var textarea = $(el)
+				, text = textarea.val()
+				, start = textarea.getCursorPosition()
+				, end = textarea.getCursorPosition();
+
+			textarea.val(text.substr(0, start) + result + text.substr(end));
+		},
+
+		insertInfoboxRef: function (el) {
+			var self = this;
+			var result = '\n[[[infobox\n\n' + 'place content here' + '\n\n]]]\n\n';
+			self.insertStaticBoxRef(el, result);
+		},
+
+		insertEditorsTipRef: function (el) {
+			var self = this;
+			var result = '\n[[[editorstip\n' + '### Tip redakce\n\n' + 'place content here' + '\n\n]]]\n\n';
+			self.insertStaticBoxRef(el, result);
+		},
+
+		insertRelatedBoxRef: function (el) {
+			var self = this;
+			var result = '\n[[[related\n' + '### Mohlo by vás zajímat\n\n' + 'place content here' + '\n\n]]]\n\n';
+			self.insertStaticBoxRef(el, result);
 		},
 
 		/**
@@ -1662,7 +1793,31 @@ steal(
 				self.receiveGalleryItem($(this), existsCount + i);
 			})
 		},
+		
+		/**
+		 * remove connected photo in gallery
+		 * @param  {[type]} el [description]
+		 * @param  {[type]} ev [description]
+		 * @return {[type]}    [description]
+		 */
+		'.remove-filmstrip-frame click' : function(el, ev) {
+			var r = confirm($.t('Do you really want to remove given item?'))
+			if (!r) { return; }
+			var resourceId = el.parent().data('resource-id');
+			if (resourceId != "") FilmstripFrame.destroy(el.parent().data('resource-id'));
+			el.parent().fadeOut().remove();
+		},
 
+		'.add-filmstrip-frame click': function(el, ev) {
+			ev.preventDefault();
+			var el = $('#filmstrip-frames-list-id');
+			var ind = $(el).children('li').length;
+			el.append(can.view.render(window.HOPECFG.APP_ROOT + '/articles/views/inline-filmstrip-frame.ejs', {
+				item: null,
+				index: ind
+			}));
+			$(el).children('li:last').find('textarea').markItUp(this.options.markitupSettings);
+		},
 
 		/**
 		 * find snippets in textarea so that images etc. can be handled comfortably
@@ -1756,6 +1911,11 @@ steal(
 					snippetInfo.lookup_object = instance;
 					self.insertGalleryRef(el, snippetInfo)
 				})
+			} else if (snippetInfo.type == 'filmstrips.filmstrip') {
+				Filmstrip.findOne({id: snippetInfo.lookup_value}, function(instance) {
+					snippetInfo.lookup_object = instance;
+					self.insertFilmstripRef(el, snippetInfo)
+				})
 			}
 		},
 
@@ -1843,7 +2003,7 @@ steal(
 				snippetObject = snippetBox.find('tr:first').data('photo');
 			} else if (boxType == 'ella_wikipages.wikipage') {
 				snippetObject = params.slug
-			} else if (boxType == 'ella_galleries.gallery') {
+			} else if (boxType == 'ella_galleries.gallery' || boxType == 'filmstrips.filmstrip') {
 				snippetObject = params.id;
 			}
 
@@ -1930,6 +2090,78 @@ steal(
 					itemSpace.fadeOut().remove();
 				});
 			}
+			else {
+				itemSpace.fadeOut().remove();
+			}
+		},
+
+		saveFilmstripFrames: function() {
+			var self = this;
+			var el = $('#filmstrip-frames-list-id');
+			var items = $(el).children('li');
+			var framesForSave = [];
+			for (var i = 0; i < items.length; i++) {
+				var frame = self.fillFilmstripFrameItem($(items[i]), i);
+				framesForSave.push(frame);
+				if (frame.errors()) {
+					this.showErrors(frame, null, 'filmstrip-frame-content' + i);
+					return false;
+				}
+			}
+			
+			for (var i = 0; i < framesForSave.length; i++) framesForSave[i].save();
+			
+			$(el).empty();
+
+			$.each(FilmstripFrame.getRelated(self.article.id), function(i, f) {
+				el.append(can.view.render(window.HOPECFG.APP_ROOT + '/articles/views/inline-filmstrip-frame.ejs', {
+                    item: f,
+                    index: i
+            	}));
+            	$(el).children('li:last').find('textarea').markItUp(self.options.markitupSettings);
+			});
+			
+			return true;
+		},
+
+		fillFilmstripFrameItem: function (el, ind) {
+			var self = this;
+			var receivedID = el.find('input[name=photo' + ind +']').val();
+			var articleID = self.article.resource_uri;
+			var resourceID = el.data('resource-id');
+
+			// save new relation
+			var item = new FilmstripFrame({
+				filmstrip: articleID,
+				content: el.find('textarea.content').val()
+			});
+			if (receivedID != '') item.attr('photo', receivedID);
+			if (resourceID != '') item.attr('id', resourceID);
+			
+
+			return item
+		},
+
+		'.js-copy-dates-from-publishable click': function(el, ev) {
+
+			ev.preventDefault();
+
+			var mainDiv = $(el).closest('.js-listing-items-group');
+			var publishFromVal = $('#publish_from').attr('value');
+			var publishFromTimeVal = $('#publish_from_time').attr('value');
+			var publishToVal = $('#publish_to').attr('value');
+			var publishToTimeVal = $('#publish_to_time').attr('value');
+
+			var categoryListing = $(mainDiv).find('select[name=listing_category]');
+			var publishFromListing = $(mainDiv).find('input[name=listing_publish_from_date]');
+			var publishFromTimeListing = $(mainDiv).find('input[name=listing_publish_from_time]');
+			var publishToListing = $(mainDiv).find('input[name=listing_publish_to_date]');
+			var publishToTimeListing = $(mainDiv).find('input[name=listing_publish_to_time]');
+
+			publishFromListing.attr('value', publishFromVal);
+			publishFromTimeListing.attr('value', publishFromTimeVal);
+			publishToListing.attr('value', publishToVal);
+			publishToTimeListing.attr('value', publishToTimeVal);
 		},
 
 		/**

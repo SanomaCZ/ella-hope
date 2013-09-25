@@ -56,10 +56,19 @@ button.add-author, button.add-tag {
 	display: none;
 }
 
-.title-photo img {
+.title-photo  img {
 	max-height: 100px;
 }
+
+.title-photo-img img {
+	max-height: 100px;
+}
+
 .remove-photo {
+	vertical-align: bottom;
+}
+
+.remove-filmstrip-frame-photo {
 	vertical-align: bottom;
 }
 
@@ -80,6 +89,11 @@ button.add-author, button.add-tag {
     line-height: 20px;
     font-size: 15px;
 }
+
+.filmstrip-frames-list {
+    list-style-type: none;
+}
+
 .icon-pencil:hover,
 .icon-remove:hover {
 	background-color: rgb(245, 245, 245);
@@ -138,4 +152,17 @@ button.add-author, button.add-tag {
 img.max200 {
     max-height: 200px !important;
     max-width: 200px !important;
+}
+
+.remove-filmstrip-frame {
+	margin-right: 40%;
+	margin-top: 10px;
+	
+}
+
+.bordered {
+	border-bottom: 1px solid #cccccc;
+	width: 55%;
+	margin-left: -40px;
+	padding-right: 100px;
 }
