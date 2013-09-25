@@ -13,7 +13,7 @@
 		<input type="hidden" name="filmstrip-frame-photo-index" id="filmstrip-frame-photo-index" value="">
 		<ul class="filmstrip-frames-list" id="filmstrip-frames-list-id">
 			<% $.each(filmstripframes || [], function(i, f) { %>
-				<%== can.view.render('//app/articles/views/inline-filmstrip-frame.ejs', {
+				<%== can.view.render(window.HOPECFG.APP_ROOT + '/articles/views/inline-filmstrip-frame.ejs', {
 					item: f,
 					index: i
 				}) %>

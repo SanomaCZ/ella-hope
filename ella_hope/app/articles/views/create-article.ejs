@@ -239,7 +239,7 @@
 		<% } %>
 
 		<% if (this.model === 'filmstrips') { %>
-			<%== can.view.render('//app/articles/views/filmstrip-frames.ejs', {
+			<%== can.view.render(window.HOPECFG.APP_ROOT + '/articles/views/filmstrip-frames.ejs', {
 					article: article,
 					filmstripframes: filmstripframes
 			}) %>

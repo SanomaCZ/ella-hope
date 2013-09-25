@@ -1,7 +1,7 @@
 steal(
 	'./login.css'
 	, 'can/view/ejs'
-	, '//app/backends.js'
+	, window.HOPECFG.APP_ROOT + '/backends.js'
 )
 .then(
 	/**

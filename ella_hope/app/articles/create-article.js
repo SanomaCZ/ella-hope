@@ -1403,7 +1403,7 @@ steal(
 				}
 			}
 
-			var renderForm = can.view.render('//app/articles/views/snippet-filmstrip.ejs', {
+			var renderForm = can.view.render(window.HOPECFG.APP_ROOT + '/articles/views/snippet-filmstrip.ejs', {
 				data: snippetInfo
 			});
 
@@ -1804,7 +1804,7 @@ steal(
 			ev.preventDefault();
 			var el = $('#filmstrip-frames-list-id');
 			var ind = $(el).children('li').length;
-			el.append(can.view.render('//app/articles/views/inline-filmstrip-frame.ejs', {
+			el.append(can.view.render(window.HOPECFG.APP_ROOT + '/articles/views/inline-filmstrip-frame.ejs', {
 				item: null,
 				index: ind
 			}));
@@ -2105,7 +2105,7 @@ steal(
 			$(el).empty();
 			FilmstripFrame.getRelated(self.article.id, function(data) {
 				$.each(data, function(i, f) {
-					el.append(can.view.render('//app/articles/views/inline-filmstrip-frame.ejs', {
+					el.append(can.view.render(window.HOPECFG.APP_ROOT + '/articles/views/inline-filmstrip-frame.ejs', {
                         item: f,
                         index: i
                 	}));
