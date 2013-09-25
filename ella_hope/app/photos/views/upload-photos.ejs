@@ -8,7 +8,7 @@
 	<input type="hidden" name="id" id="id" <%= photo.id ? "value=" + photo.id : "" %> />
 
 	<% if (this.photo && this.photo.attr('id')) { %>
-		<%== can.view.render( '//app/photos/views/photo.ejs', {
+		<%== can.view.render( window.HOPECFG.APP_ROOT + '/photos/views/photo.ejs', {
 			photo: photo,
 			isPlaceholder: false
 		}) %>
@@ -28,7 +28,7 @@
 				</select>
 			</div>
 
-			<%== can.view.render('//app/photos/views/photo.ejs', {
+			<%== can.view.render(window.HOPECFG.APP_ROOT + '/photos/views/photo.ejs', {
 				photo: {},
 				isPlaceholder: true
 			}) %>

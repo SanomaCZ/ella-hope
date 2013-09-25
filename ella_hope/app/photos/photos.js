@@ -1,21 +1,21 @@
 steal(
 	//'./css/search_result.css'
-	'//app/models/models.js'
+	window.HOPECFG.APP_ROOT + '/models/models.js'
 	, './upload-photos.js'
 	, './photos.css'
-	, '//app/resources/js/bootstrap.min.js'
-	, '//app/resources/js/date.js'	// date parse
-	, '//app/resources/js/bootstrap-datepicker.js'	// datepicker js
-	, '//app/resources/css/bootstrap-datepicker.css'	// datepicker css
-	, '//app/resources/js/bootstrap-timepicker.js'	// timepicker js
-	, '//app/resources/css/bootstrap-timepicker.css'	// timepicker css
-	, '//app/resources/js/jquery.chosen.js'	// select list js
-	, '//app/resources/css/jquery.chosen.css'	// select list css
-	, '//app/resources/js/jquery.cookie.js'
+	, window.HOPECFG.APP_ROOT + '/resources/js/bootstrap.min.js'
+	, window.HOPECFG.APP_ROOT + '/resources/js/date.js'	// date parse
+	, window.HOPECFG.APP_ROOT + '/resources/js/bootstrap-datepicker.js'	// datepicker js
+	, window.HOPECFG.APP_ROOT + '/resources/css/bootstrap-datepicker.css'	// datepicker css
+	, window.HOPECFG.APP_ROOT + '/resources/js/bootstrap-timepicker.js'	// timepicker js
+	, window.HOPECFG.APP_ROOT + '/resources/css/bootstrap-timepicker.css'	// timepicker css
+	, window.HOPECFG.APP_ROOT + '/resources/js/jquery.chosen.js'	// select list js
+	, window.HOPECFG.APP_ROOT + '/resources/css/jquery.chosen.css'	// select list css
+	, window.HOPECFG.APP_ROOT + '/resources/js/jquery.cookie.js'
 	, '../articles/list-filter.js'
 ).then(Photos = can.Control({
 		defaults: {
-			initView: "//app/photos/views/init.ejs",
+			initView: window.HOPECFG.APP_ROOT + "/photos/views/init.ejs",
 			dateOptions: {	// https://github.com/eternicode/bootstrap-datepicker
 				format: 'yyyy-mm-dd',
 				weekStart: 1,
@@ -154,7 +154,7 @@ steal(
 				var items = self.modelClass.findAll(data)
 			}
 
-			can.view('//app/photos/views/list-photos.ejs', {
+			can.view(window.HOPECFG.APP_ROOT + '/photos/views/list-photos.ejs', {
 				photos: items
 			}).then(function (frag) {
 				$("#inner-content").html(frag);

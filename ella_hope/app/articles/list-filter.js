@@ -1,6 +1,6 @@
 steal(
-	'//app/resources/js/jquery.chosen.js'
-	, '//app/resources/css/jquery.chosen.css'
+	window.HOPECFG.APP_ROOT + '/resources/js/jquery.chosen.js'
+	, window.HOPECFG.APP_ROOT + '/resources/css/jquery.chosen.css'
 
 ).then(ListFilter = can.Control({
 		defaults: {

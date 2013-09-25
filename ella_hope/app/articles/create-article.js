@@ -1,12 +1,12 @@
 steal(
-	'//app/resources/plugins/markitup/jquery.markitup.js'
-	, '//app/resources/plugins/markitup/sets/markdown/set.js'
-	, '//app/resources/plugins/markitup/skins/markitup/style.css'
-	, '//app/resources/plugins/markitup/sets/markdown/style.css'
-	, '//app/resources/js/slug.js'
-	, '//app/resources/js/jquery-ui/jquery-ui-1.10.2.custom.min.js'
-	, '//app/resources/css/jquery-ui/cupertino/jquery-ui-1.10.2.custom.min.css'
-	, '//app/resources/js/ajax-chosen.js'	// https://github.com/meltingice/ajax-chosen
+	window.HOPECFG.APP_ROOT + '/resources/plugins/markitup/jquery.markitup.js'
+	, window.HOPECFG.APP_ROOT + '/resources/plugins/markitup/sets/markdown/set.js'
+	, window.HOPECFG.APP_ROOT + '/resources/plugins/markitup/skins/markitup/style.css'
+	, window.HOPECFG.APP_ROOT + '/resources/plugins/markitup/sets/markdown/style.css'
+	, window.HOPECFG.APP_ROOT + '/resources/js/slug.js'
+	, window.HOPECFG.APP_ROOT + '/resources/js/jquery-ui/jquery-ui-1.10.2.custom.min.js'
+	, window.HOPECFG.APP_ROOT + '/resources/css/jquery-ui/cupertino/jquery-ui-1.10.2.custom.min.css'
+	, window.HOPECFG.APP_ROOT + '/resources/js/ajax-chosen.js'	// https://github.com/meltingice/ajax-chosen
 )
 .then(
 
@@ -131,7 +131,7 @@ steal(
 			});
 
 			// render article form
-			can.view( '//app/articles/views/create-article.ejs', {
+			can.view(window.HOPECFG.APP_ROOT + '/articles/views/create-article.ejs', {
 				article: this.article,
 				drafts: Draft.findAll({limit: 0}),
 				states: this.options.articleStates,
@@ -832,6 +832,7 @@ steal(
 				draft = $selected.data('article'),
 				label = $selected.data('label'),
 				urlDelete = $selected.data('url-delete');
+			console.log(urlDelete)
 
 			el.siblings('.selected-draft')
 				.append(label)
@@ -1329,7 +1330,7 @@ steal(
 				}
 			}
 
-			var renderForm = can.view.render('//app/articles/views/snippet-wikipage.ejs', {
+			var renderForm = can.view.render(window.HOPECFG.APP_ROOT + '/articles/views/snippet-wikipage.ejs', {
 				data: snippetInfo
 			});
 
@@ -1365,7 +1366,7 @@ steal(
 				}
 			}
 
-			var renderForm = can.view.render('//app/articles/views/snippet-gallery.ejs', {
+			var renderForm = can.view.render(window.HOPECFG.APP_ROOT + '/articles/views/snippet-gallery.ejs', {
 				data: snippetInfo
 			});
 
@@ -1383,6 +1384,7 @@ steal(
 					if ('meta' in data) {
 						data = data.data;
 					}
+
 					var results = [];
 
 					$.each(data, function (i, val) {
@@ -1419,6 +1421,7 @@ steal(
 					if ('meta' in data) {
 						data = data.data;
 					}
+
 					var results = [];
 
 					$.each(data, function (i, val) {
@@ -1480,7 +1483,7 @@ steal(
 			}
 
 			// render list
-			can.view( '//app/articles/views/list-photos.ejs', {
+			can.view( window.HOPECFG.APP_ROOT + '/articles/views/list-photos.ejs', {
 				photos: Photo.findAll(setFilter),
 				data: data
 			} ).then(function( frag ){
@@ -1733,7 +1736,7 @@ steal(
 			el.empty();
 
 			$.each(photos, function(i, photo){
-				el.append(can.view.render('//app/articles/views/inline-gallery-item.ejs', {
+				el.append(can.view.render(window.HOPECFG.APP_ROOT + '/articles/views/inline-gallery-item.ejs', {
 					photo: photo
 				}));
 			});
@@ -1879,7 +1882,7 @@ steal(
 
 			if (snippetInfo.type == 'photos.photo') {
 				// render photo form
-				can.view( '//app/articles/views/list-photos-item.ejs', {
+				can.view( window.HOPECFG.APP_ROOT + '/articles/views/list-photos-item.ejs', {
 					photo: Photo.findOne( { id: snippetInfo.lookup_value } ),
 					data: snippetInfo,
 					insideArticle: true
@@ -2023,7 +2026,7 @@ steal(
 			var self = this;
 			ev.preventDefault();
 
-			var renderForm = can.view.render('//app/articles/views/inline-side-category.ejs', {
+			var renderForm = can.view.render(window.HOPECFG.APP_ROOT + '/articles/views/inline-side-category.ejs', {
 				listing: new Listing()
 			});
 

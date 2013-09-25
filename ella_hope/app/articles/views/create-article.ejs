@@ -112,7 +112,7 @@
 		<h3><%= $.t('articles.side_categories')%></h3>
 		<div id="side_categories" class="row">
 			<% $.each(listings || [], function(i, g) { %>
-				<%== can.view.render('//app/articles/views/inline-side-category.ejs', {
+				<%== can.view.render(window.HOPECFG.APP_ROOT + '/articles/views/inline-side-category.ejs', {
 					listing: new Listing(g)
 				}) %>
 			<% }) %>
@@ -203,7 +203,7 @@
 					<label class="control-label"><%= $.t('articles.chosen_items')%></label>
 					<ul id="chosen-recent-photos" class="connectedSortable">
 						<% $.each(galleryitem || [], function(i, g) { %>
-							<%== can.view.render('//app/articles/views/inline-gallery-item.ejs', {
+							<%== can.view.render(window.HOPECFG.APP_ROOT + '/articles/views/inline-gallery-item.ejs', {
 								item: g,
 								photo: g.photo
 							}) %>
@@ -257,6 +257,7 @@
 			<div class="span4 pull-left" style="margin-left: 0">
 				<label class="control-label"><%= $.t('articles.chosen_items')%></label>
 				<ul id="chosen-related-articles" class="connectedSortable">
+					<% console.log(relatedArticles) %>
 					<% $.each(relatedArticles || [], function(i, a) { %>
 						<li data-resource-id="<%= a.id %>" data-related-id="<%= a.related_id %>">
 

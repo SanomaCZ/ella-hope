@@ -1,8 +1,8 @@
 // file upload - http://jquery.malsup.com/form/
 steal(
-	'//app/resources/js/file-upload/jquery.form.js'
-	, '//app/resources/plugins/jcrop/js/jquery.Jcrop.js'
-	, '//app/resources/plugins/jcrop/css/jquery.Jcrop.css'
+	window.HOPECFG.APP_ROOT + '/resources/js/file-upload/jquery.form.js'
+	, window.HOPECFG.APP_ROOT + '/resources/plugins/jcrop/js/jquery.Jcrop.js'
+	, window.HOPECFG.APP_ROOT + '/resources/plugins/jcrop/css/jquery.Jcrop.css'
 )
 .then(
 
@@ -45,7 +45,7 @@ steal(
 			}
 
 			// render article form
-			self.element.html(can.view( '//app/photos/views/upload-photos.ejs', {
+			self.element.html(can.view( window.HOPECFG.APP_ROOT + '/photos/views/upload-photos.ejs', {
 				photo: this.photo
 			}));
 
@@ -259,7 +259,7 @@ steal(
 		createNewImage: function (file, defaults) {
 			// append new image
 			// we need to do this because ajaxChosen needs to be initialized on each input separately
-			var image = can.view('//app/photos/views/photo.ejs', {
+			var image = can.view(window.HOPECFG.APP_ROOT + '/photos/views/photo.ejs', {
 				file: file,
 				photo: defaults,
 				isPlaceholder: false

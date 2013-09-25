@@ -24,7 +24,7 @@ steal(
 		 */
 		init : function(el, options){
 
-			this.element.html(can.view('//app/navbar/views/init.ejs', this.options));
+			this.element.html(can.view(window.HOPECFG.APP_ROOT + '/navbar/views/init.ejs', this.options));
 
 			// let the main app.js know that this control is ready
 			// necessary for init route listening
