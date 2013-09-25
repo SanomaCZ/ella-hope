@@ -45,7 +45,6 @@ steal(
 					url: BASE_URL + '/galleryitem/?gallery__id=' + galleryID + '&order_by=order',
 					type: 'GET',
 					async: false,
-
 					dataType: "json",
 					success: function(data) {
 						if ('meta' in data) {

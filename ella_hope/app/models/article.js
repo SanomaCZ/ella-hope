@@ -123,7 +123,7 @@ steal(
 				$.ajax({
 					url: BASE_URL + '/related/?publishable__id=' + articleID,
 					type: 'GET',
-					//async: true,
+					async: false,
 					dataType: "json",
 					success: function(data) {
 						if ('meta' in data) {

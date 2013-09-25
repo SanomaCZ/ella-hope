@@ -156,7 +156,8 @@ steal(
 						type: 'GET',
 						url: BASE_URL + '/category/?',
 						jsonTermKey: 'title__icontains',
-						dataType: 'json'
+						dataType: 'json',
+						async: false
 					}, function (data) {
 						if ('meta' in data) {
 							data = data.data;
@@ -177,7 +178,8 @@ steal(
 					type: 'GET',
 					url: BASE_URL+'/author/?',
 					jsonTermKey: 'name__icontains',
-					dataType: 'json'
+					dataType: 'json',
+					async: false
 				}, function (data) {
 					if ('meta' in data) {
 						data = data.data;
@@ -198,7 +200,8 @@ steal(
 					type: 'GET',
 					url: BASE_URL+'/source/?',
 					jsonTermKey: 'name__icontains',
-					dataType: 'json'
+					dataType: 'json',
+					async: false
 				}, function (data) {
 					if ('meta' in data) {
 						data = data.data;
@@ -220,7 +223,8 @@ steal(
 						type: 'GET',
 						url: BASE_URL + '/tag/?',
 						jsonTermKey: 'name__icontains',
-						dataType: 'json'
+						dataType: 'json',
+						async: false
 					}, function (data) {
 						if ('meta' in data) {
 							data = data.data;
@@ -632,7 +636,7 @@ steal(
 
 				// scroll to first error
 				$('html, body').animate({
-					scrollTop: $('.control-group.error').eq(0).offset().top - 50
+					scrollTop: $('.control-group.error:first').offset().top - 50
 				}, 500);
 			}
 		},
@@ -1343,7 +1347,8 @@ steal(
 					type: 'GET',
 					url: BASE_URL + '/wikipage/?',
 					jsonTermKey: 'title__icontains',
-					dataType: 'json'
+					dataType: 'json',
+					async: false
 				}, function (data) {
 					if ('meta' in data) {
 						data = data.data;
@@ -1379,7 +1384,8 @@ steal(
 					type: 'GET',
 					url: BASE_URL + '/gallery/?',
 					jsonTermKey: 'title__icontains',
-					dataType: 'json'
+					dataType: 'json',
+					async: false
 				}, function (data) {
 					if ('meta' in data) {
 						data = data.data;
@@ -2038,7 +2044,8 @@ steal(
 				type: 'GET',
 				url: BASE_URL + '/category/?',
 				jsonTermKey: 'title__icontains',
-				dataType: 'json'
+				dataType: 'json',
+				async: false
 			}, function (data) {
 				if ('meta' in data) {
 					data = data.data;
