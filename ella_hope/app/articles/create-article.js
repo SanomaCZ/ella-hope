@@ -39,7 +39,7 @@ steal(
 					{name:'Link', key:'L', openWith:'[', closeWith:']([![Url:!:http://]!] "[![Title]!]")', placeHolder:'Your text to link here...' },
                     {name:'Wiki', key: 'W', closeWith: function (markItUp) { return ArticleCreate.prototype.insertWikiRef(markItUp.textarea); }, className: 'markItUpwikiRef'}
 					, {name:'Gallery', key: 'G', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertGalleryRef(markItUp.textarea); }, className: 'markItUpGalleryRef'}
-					, {name:'InfoBox', key: 'X', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertInfoboxRef(markItUp.textarea); }, className: 'markItUpInfoboxRef'}
+					, {name:'InfoBox', key: 'Y', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertInfoboxRef(markItUp.textarea); }, className: 'markItUpInfoboxRef'}
 					, {name:'EditorsTip', key: 'T', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertEditorsTipRef(markItUp.textarea); }, className: 'markItUpEditorsTipRef'}
 					, {name:'RelatedBox', key: 'R', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertRelatedBoxRef(markItUp.textarea); }, className: 'markItUpRelatedBoxRef'}
 					
@@ -836,7 +836,6 @@ steal(
 				draft = $selected.data('article'),
 				label = $selected.data('label'),
 				urlDelete = $selected.data('url-delete');
-			console.log(urlDelete)
 
 			el.siblings('.selected-draft')
 				.append(label)
