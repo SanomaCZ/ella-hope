@@ -1,4 +1,4 @@
-<li data-resource-id="<% if (item !== null) { %><%= item.id %><% } %>" class="row">
+<li data-resource-id="<% if (item !== null) { %><%= item.id %><% } %>" data-filmstrip-frame-index-li="<%= index %>" class="row">
 	<i class="icon-remove pull-right remove-filmstrip-frame"></i>
 	<h4 class="bordered"><%= $.t('articles.frame_number')%> <%= index + 1 %></h4>
 

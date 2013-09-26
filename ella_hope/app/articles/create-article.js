@@ -1810,7 +1810,8 @@ steal(
 		'.add-filmstrip-frame click': function(el, ev) {
 			ev.preventDefault();
 			var el = $('#filmstrip-frames-list-id');
-			var ind = $(el).children('li').length;
+			var ind = parseInt($(el).children('li:last').attr('data-filmstrip-frame-index-li')) + 1;
+			if (isNaN(ind)) ind = 0;
 			el.append(can.view.render(window.HOPECFG.APP_ROOT + '/articles/views/inline-filmstrip-frame.ejs', {
 				item: null,
 				index: ind
@@ -2100,10 +2101,12 @@ steal(
 			var items = $(el).children('li');
 			var framesForSave = [];
 			for (var i = 0; i < items.length; i++) {
-				var frame = self.fillFilmstripFrameItem($(items[i]), i);
+				var elLiFrame = $(items[i]);
+				var ind = $(elLiFrame).attr('data-filmstrip-frame-index-li');
+				var frame = self.fillFilmstripFrameItem(elLiFrame, ind);
 				framesForSave.push(frame);
 				if (frame.errors()) {
-					this.showErrors(frame, null, 'filmstrip-frame-content' + i);
+					this.showErrors(frame, null, 'filmstrip-frame-content' + ind);
 					return false;
 				}
 			}
