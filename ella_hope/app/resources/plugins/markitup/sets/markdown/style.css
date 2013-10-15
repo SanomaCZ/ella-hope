@@ -53,26 +53,28 @@
 	background-image:url(images/preview.png);
 }
 
-.markItUp .markItUpButton13.markItUpwikiRef a{
-	background-image:url('images/wiki.png');
-}
-
-.markItUp .markItUpButton14.markItUpGalleryRef a{
+.markItUp .markItUpButton13.markItUpGalleryRef a{
 	background-image:url('images/gallery.png');
 }
 
-.markItUp .markItUpButton15.markItUpInfoboxRef a{
+.markItUp .markItUpButton14.markItUpInfoboxRef a{
         background-image:url('images/infobox.png');
 }
 
-.markItUp .markItUpButton16.markItUpEditorsTipRef a{
+.markItUp .markItUpButton15.markItUpEditorsTipRef a{
         background-image:url('images/editorstip.png');
 }
 
-.markItUp .markItUpButton17.markItUpRelatedBoxRef a{
+.markItUp .markItUpButton16.markItUpRelatedBoxRef a{
         background-image:url('images/related.png');
 }
 
-.markItUp .markItUpButton18.markItUpFilmstripRef a{
+.markItUp .markItUpFilmstripRef a{
         background-image:url('images/filmstrip.png');
+}
+.markItUp .markItUpwikiRef a{
+	background-image:url('images/wiki.png');
+}
+.markItUp .markItUpArticleRef a{
+        background-image:url('images/article.png');
 }

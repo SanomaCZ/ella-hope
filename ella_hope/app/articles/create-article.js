@@ -36,13 +36,12 @@ steal(
 					{separator:'---------------' },
 					//{name:'Picture', key:'P', replaceWith:'![[![Alternative text]!]]([![Url:!:http://]!] "[![Title]!]")'},
 					{name:'Picture', key:'P', closeWith:function(markItUp) { return ArticleCreate.prototype.insertPhoto(); }},
-					{name:'Link', key:'L', openWith:'[', closeWith:']([![Url:!:http://]!] "[![Title]!]")', placeHolder:'Your text to link here...' },
-                    {name:'Wiki', key: 'W', closeWith: function (markItUp) { return ArticleCreate.prototype.insertWikiRef(markItUp.textarea); }, className: 'markItUpwikiRef'}
+					{name:'Link', key:'L', openWith:'[', closeWith:']([![Url:!:http://]!] "[![Title]!]")', placeHolder:'Your text to link here...' }
 					, {name:'Gallery', key: 'G', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertGalleryRef(markItUp.textarea); }, className: 'markItUpGalleryRef'}
 					, {name:'InfoBox', key: 'Y', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertInfoboxRef(markItUp.textarea); }, className: 'markItUpInfoboxRef'}
 					, {name:'EditorsTip', key: 'T', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertEditorsTipRef(markItUp.textarea); }, className: 'markItUpEditorsTipRef'}
 					, {name:'RelatedBox', key: 'R', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertRelatedBoxRef(markItUp.textarea); }, className: 'markItUpRelatedBoxRef'}
-					
+					, {name:'Article', closeWith: function (markItUp) { return ArticleCreate.prototype.insertArticleRef(markItUp.textarea); }, className: 'markItUpArticleRef'}
 					//{separator:'---------------'},
 					//{name:'Quotes', openWith:'> '},
 					//{name:'Code Block / Code', openWith:'(!(\t|!|`)!)', closeWith:'(!(`)!)'},
@@ -67,7 +66,8 @@ steal(
 		init: function() {
 			if (USER !== undefined && USER.auth_tree.articles !== undefined && USER.auth_tree.articles.filmstrip) 
 				this.options.markitupSettings.markupSet.push({name:'Filmstrip', key: 'F', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertFilmstripRef(markItUp.textarea); }, className: 'markItUpFilmstripRef'});
-
+			if (USER !== undefined && USER.auth_tree.articles !== undefined && USER.auth_tree.articles.wikipage)
+				this.options.markitupSettings.markupSet.push({name:'Wiki', key: 'W', closeWith: function (markItUp) { return ArticleCreate.prototype.insertWikiRef(markItUp.textarea); }, className: 'markItUpwikiRef'});
 			// show draft or article
 			if (this.options.type == 'draft') {
 				this.draft = this.options.article;
@@ -1288,6 +1288,12 @@ steal(
 					'title:' + params.item_title,
 					'{% endbox %}'
 				]
+			} else if (contentType == 'articles.article') {
+				var snippetData = [
+					'{% box inline for ' + contentType + ' with pk ' + params.id + ' %}',
+					'title:' + params.item_title,
+					'{% endbox %}'
+				]
 			} else if (contentType == 'filmstrips.filmstrip') {
 				var snippetData = [
 					'{% box inline for ' + contentType + ' with pk ' + params.id + ' %}',
@@ -1386,6 +1392,44 @@ steal(
 					jsonTermKey: 'title__icontains',
 					dataType: 'json',
 					async: false
+
+				}, function (data) {
+					if ('meta' in data) {
+						data = data.data;
+					}
+
+					var results = [];
+
+					$.each(data, function (i, val) {
+						results.push({ value: val.id, text: val.title });
+					});
+
+					return results;
+				});
+		},
+
+		insertArticleRef: function (el, snippetInfo) {
+			snippetInfo = snippetInfo || {
+				snippetPosition: {
+					start: $(el).getCursorPosition()
+					, end: $(el).getCursorPosition()
+				}
+			}
+
+			var renderForm = can.view.render(window.HOPECFG.APP_ROOT + '/articles/views/snippet-article.ejs', {
+				data: snippetInfo
+			});
+
+			var boxSnippet = $(el).closest('.js-textrea-box').find('.box-snippet');
+
+			boxSnippet
+				.empty()
+				.append(renderForm)
+				.find(".item-name").ajaxChosen({
+					type: 'GET',
+					url: BASE_URL + '/article/?',
+					jsonTermKey: 'title__icontains',
+					dataType: 'json'
 
 				}, function (data) {
 					if ('meta' in data) {
@@ -1918,6 +1962,12 @@ steal(
 					self.insertFilmstripRef(el, snippetInfo)
 				})
 			}
+			else if (snippetInfo.type == 'articles.article') {
+				Article.findOne({id: snippetInfo.lookup_value}, function(instance) {
+					snippetInfo.lookup_object = instance;
+					self.insertArticleRef(el, snippetInfo)
+				})
+			}
 		},
 
 		/**
@@ -2004,7 +2054,7 @@ steal(
 				snippetObject = snippetBox.find('tr:first').data('photo');
 			} else if (boxType == 'ella_wikipages.wikipage') {
 				snippetObject = params.slug
-			} else if (boxType == 'ella_galleries.gallery' || boxType == 'filmstrips.filmstrip') {
+			} else if (boxType == 'ella_galleries.gallery' || boxType == 'filmstrips.filmstrip' || boxType == 'articles.article') {
 				snippetObject = params.id;
 			}
 
