@@ -1295,14 +1295,15 @@ steal(
 					'{% endbox %}'
 				]
 			} else if (contentType == 'photos.photo') {
+				// for now detail can not be set in form (list-photos-item.ejs) 
 				var snippetData = [
 					"{% box inline_" + params.size + "_" + params.format + " for " + contentType + " with pk " + object.id + " %}",
-					params.align === 'none' ? "" : "align:"+params.align,
-					'show_title:' + (params.title ? 1 : 0),
-					'show_description:' + (params.description ? 1 : 0),
-					'show_authors:' + (params.authors ? 1 : 0),
-					'show_source:' + (params.source ? 1 : 0),
-					'show_detail:' + (params.detail ? 1 : 0),
+					params.photo_align === 'none' ? "" : "align:"+params.photo_align,
+					'show_title:' + (params.photo_title ? 1 : 0),
+					'show_description:' + (params.photo_description ? 1 : 0),
+					'show_authors:' + (params.photo_authors ? 1 : 0),
+					'show_source:' + (params.photo_source ? 1 : 0),
+					'show_detail:' + (params.photo_detail ? 1 : 0),
 					"{% endbox %} "
 					]
 			} else {

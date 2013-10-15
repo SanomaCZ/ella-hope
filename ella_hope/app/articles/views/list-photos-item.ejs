@@ -30,21 +30,24 @@
 
 				<table>
 					<tr>
-						<td><label for="resizable"><input type="checkbox" name="resizable" value="1"
+						<td><label for="photo_resizable"><input type="checkbox" name="photo_resizable" value="1"
 							<%= data.show_resizable == 1 ? 'checked=checked' : ''  %> />&nbsp;<%= $.t('photos.resizable') %></label>
 						</td>
-						<td><label for="author"><input type="checkbox" name="authors" value="1"
+						<td><label for="photo_authors"><input type="checkbox" name="photo_authors" value="1"
 							<%= data.show_authors == 1 ? 'checked=checked' : ''  %> />&nbsp;<%= $.t('photos.authors') %></label></td>
 					</tr>
 					<tr>
-						<td><label for="description"><input type="checkbox" name="description" value="1" <%= data.show_description == 1 ? 'checked=checked' : ''  %>/>&nbsp;<%= $.t('photos.description') %></label></td>
-						<td><label for="source"><input type="checkbox" name="source" value="1" <%= data.show_source == 1 ? 'checked=checked' : ''  %>/>&nbsp;<%= $.t('photos.source') %></label></td>
+						<td><label for="photo_description"><input type="checkbox" name="photo_description" value="1" <%= data.show_description == 1 ? 'checked=checked' : ''  %>/>&nbsp;<%= $.t('photos.description') %></label></td>
+						<td><label for="photo_source"><input type="checkbox" name="photo_source" value="1" <%= data.show_source == 1 ? 'checked=checked' : ''  %>/>&nbsp;<%= $.t('photos.source') %></label></td>
+					</tr>
+					<tr>
+						<td><label for="photo_title"><input type="checkbox" name="photo_title" value="1" <%= data.show_title == 1 ? 'checked=checked' : ''  %>/>&nbsp;<%= $.t('photos.title') %></label></td>
 					</tr>
 				</table>
 
-				<label for="align">
+				<label for="photo_align">
 					<%= $.t('Align')%>:&nbsp;
-					<select class="span2" name="align">
+					<select class="span2" name="photo_align">
 						<option value="none" <%= data.align == 'none' ? "selected=selected" : '' %>><%= $.t('photos.none')%></option>
 						<option value="right" <%= data.align == 'right' ? "selected=selected" : '' %>><%= $.t('photos.right')%></option>
 						<option value="left" <%= data.align == 'left' ? "selected=selected" : '' %>><%= $.t('photos.left')%></option>

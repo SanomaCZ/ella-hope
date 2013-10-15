@@ -30,7 +30,7 @@ steal(
 				return $.ajax({
 					url: BASE_URL + '/filmstrip/',
 					type: 'POST',
-					async: true,
+					async: false,
 					dataType: 'json',
 					contentType: 'application/json',	// this is necessary
 					data: JSON.stringify(attrs)	// JSON.stringify is necessary, it also escapes newline chars
@@ -41,7 +41,7 @@ steal(
 				return $.ajax({
 					url: BASE_URL + '/filmstrip/' + id + '/',
 					type: 'PATCH',
-					async: true,
+					async: false,
 					dataType: 'json',
 					contentType: 'application/json',
 					data: JSON.stringify(attrs)
