@@ -124,11 +124,13 @@ steal(
 				// important part of image, based on uploader's crop
 				if (jQuery.isNumeric(self.photo.important_top) && jQuery.isNumeric(self.photo.important_left) &&
 					jQuery.isNumeric(self.photo.important_bottom) && jQuery.isNumeric(self.photo.important_bottom)) {
-					var x = self.photo.important_left,
-						y = self.photo.important_top,
-						x2 = self.photo.important_right,
-						y2 = self.photo.important_bottom;
-
+				
+		        var cnf = self.photo.width/(window.HOPECFG.PREVIEW_WIDTH);
+		        var x = Math.round(self.photo.important_left/cnf),
+								y = Math.round(self.photo.important_top/cnf),
+								x2 = Math.round(self.photo.important_right/cnf),
+								y2 = Math.round(self.photo.important_bottom/cnf);
+                        
 					// we need to wait till image is loaded so we can get real dimensions
 					// EDIT: we don't need real dimensions, Jcrop can handle this for us
 					//$('.photo-preview').load(function(){
@@ -385,16 +387,23 @@ steal(
 					important_left = $(this).find('input[name=important_left]').val(),
 					important_bottom = $(this).find('input[name=important_bottom]').val(),
 					important_right = $(this).find('input[name=important_right]').val();
+          
+        // here we get real width of uploaded image:
+        var img1 = new Image();
+          
+        var img_el = $(this).find(".photo-preview").find('img');
+        img1.src = img_el.attr('src');
+        var originalWidth = img1.width;
 
-				important_top = important_top ? parseInt(important_top, 10) : null;
-				important_left = important_left ? parseInt(important_left, 10) : null;
-				important_bottom = important_bottom ? parseInt(important_bottom, 10) : null;
-				important_right = important_right ? parseInt(important_right, 10) : null;
+        var coef = originalWidth/(window.HOPECFG.PREVIEW_WIDTH);
+
+				important_top = important_top ? parseInt(important_top*coef, 10) : null;
+				important_left = important_left ? parseInt(important_left*coef, 10) : null;
+				important_bottom = important_bottom ? parseInt(important_bottom*coef, 10) : null;
+				important_right = important_right ? parseInt(important_right*coef, 10) : null;
 
 				var source = $(this).find('.photo-source').val();
 				source = source ? source : null;
-
-				//var title = encodeURIComponent($(this).find('.title').val());
 				var title = encodeURIComponent($(this).find('.title').val());
 
 				objects[objects.length] = {
@@ -574,10 +583,13 @@ steal(
 			// convert crop coordinates from preview image size to original image size
 			if (values.important_top && values.important_left &&
 				values.important_bottom && values.important_right) {
-				properValues.important_top = Math.round(values.important_top);
-				properValues.important_left = Math.round(values.important_left);
-				properValues.important_bottom = Math.round(values.important_bottom);
-				properValues.important_right = Math.round(values.important_right);
+				
+        var cof = values.orig_width/(window.HOPECFG.PREVIEW_WIDTH);
+        
+        properValues.important_top = Math.round(values.important_top*cof);
+				properValues.important_left = Math.round(values.important_left*cof);
+				properValues.important_bottom = Math.round(values.important_bottom*cof);
+				properValues.important_right = Math.round(values.important_right*cof);
 			}
 
 			// source is not required, but it should not be sent if it's empty

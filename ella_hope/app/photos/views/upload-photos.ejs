@@ -6,6 +6,8 @@
 
 	<input type="hidden" name="MAX_FILE_SIZE" value="50000000"/>
 	<input type="hidden" name="id" id="id" <%= photo.id ? "value=" + photo.id : "" %> />
+  <input type="hidden" name="orig_width" id="orig_width" <%= photo.width ? "value=" + photo.width : "" %> />
+  <input type="hidden" name="orig_height" id="orig_height" <%= photo.height ? "value=" + photo.height : "" %> />
 
 	<% if (this.photo && this.photo.attr('id')) { %>
 		<%== can.view.render( window.HOPECFG.APP_ROOT + '/photos/views/photo.ejs', {

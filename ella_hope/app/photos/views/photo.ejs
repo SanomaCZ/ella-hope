@@ -10,7 +10,9 @@
 		<input type="hidden" name="important_right" value="<%= photo ? photo.important_right : '' %>"/>
 		<input type="hidden" name="important_bottom" value="<%= photo ? photo.important_bottom : '' %>"/>
 		<input type="hidden" name="important_left" value="<%= photo ? photo.important_left : '' %>"/>
-		<input type="hidden" name="rotate" value="0"/>
+		<input type="hidden" name="orig_width" id="orig_width" <%= photo.width ? "value=" + photo.width : "" %> />
+    <input type="hidden" name="orig_height" id="orig_height" <%= photo.height ? "value=" + photo.height : "" %> />
+    <input type="hidden" name="rotate" value="0"/>
 
 		<div class="control-group row">
 			<label class="control-label" for="source"><%= $.t('photos.source')%></label>

@@ -45,5 +45,6 @@ var HOPE_VERSION = "";
 		APP_ROOT: '//app' + HOPE_VERSION
 		, COOKIE_FILTER: 'HOPE_filter_form'
 		, RAVEN_DSN: false
+		, PREVIEW_WIDTH: 550
 	}
 })();
