@@ -17,6 +17,13 @@ steal(
 				//<%= $.t('The end date can not be less then the start date') %>
 			},
 			findAll: function (params, success, error) {
+				
+				if (error == null) {
+                    error = function(data, textStatus, jqXHR) {
+					    alert("Error: findAll " + "/" + data.status + " / " + jqXHR);
+					} 
+				}
+				
 				return $.ajax({
 					url: BASE_URL + '/article/',
 					data: params,
@@ -132,6 +139,9 @@ steal(
 							//backward compatibility for datasource w/o metadata
 							res = data;
 						}
+					},
+					error: function(data, textStatus, jqXHR) {
+					    alert("Error: Related articles" + " / "  + data.status + " / " + jqXHR);
 					}
 				})
 				return res;

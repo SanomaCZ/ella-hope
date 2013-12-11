@@ -21,6 +21,13 @@ steal(
 			},
 
 			findAll: function (params, success, error) {
+				
+				if (error == null) {
+                    error = function(data, textStatus, jqXHR) {
+					    alert("Error: findAll " + "/" + data.status + " / " + jqXHR);
+					} 
+				}				
+				
 				return $.ajax({
 					url: BASE_URL + '/photo/',
 					data: params,

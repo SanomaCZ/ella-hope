@@ -179,7 +179,11 @@ steal(
 					url: BASE_URL+'/author/?',
 					jsonTermKey: 'name__icontains',
 					dataType: 'json',
-					async: false
+					async: false,
+					error: function () {
+                    // simply ignore this error
+                    alert("401");
+                    },
 				}, function (data) {
 					if ('meta' in data) {
 						data = data.data;
@@ -2248,6 +2252,15 @@ steal(
 			this.stopAutosave();
 
 			can.Control.prototype.destroy.call( this );
-		}
+		},
+		
+		/** 
+		* error box
+		*/
+        errorBox: function (text) {
+            alert(text);
+        },
+
+		
 	})
 );

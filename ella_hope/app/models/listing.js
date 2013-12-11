@@ -1,6 +1,7 @@
 steal(
 	'can/model',
 	function($) {
+
 		Listing = can.Model({
 			init : function(){
 				this.validate("publish_from", function (val){

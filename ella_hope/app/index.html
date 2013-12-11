@@ -49,6 +49,13 @@
 		filmstrips: true
 	};
 
+$(document).ajaxError(function(e, xhr, settings, exception) {
+    if(xhr.status==401) {
+        alert("err 401");
+    } 
+});
+
+
 </script>
 <script type='text/javascript' src='../steal/steal.js?app'></script>
 

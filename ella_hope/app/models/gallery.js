@@ -1,6 +1,7 @@
 steal(
 	'can/model',
 	function ($) {
+
 		/**
 		 * gallery inherits from Article model
 		 * it's basically the same, except galleryitem can be added only to gallery
