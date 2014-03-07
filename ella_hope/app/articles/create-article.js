@@ -64,10 +64,14 @@ steal(
 		photoPaginator: null,
 
 		init: function() {
-			if (USER !== undefined && USER.auth_tree.articles !== undefined && USER.auth_tree.articles.filmstrip) 
-				this.options.markitupSettings.markupSet.push({name:'Filmstrip', key: 'F', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertFilmstripRef(markItUp.textarea); }, className: 'markItUpFilmstripRef'});
-			if (USER !== undefined && USER.auth_tree.articles !== undefined && USER.auth_tree.articles.wikipage)
-				this.options.markitupSettings.markupSet.push({name:'Wiki', key: 'W', closeWith: function (markItUp) { return ArticleCreate.prototype.insertWikiRef(markItUp.textarea); }, className: 'markItUpwikiRef'});
+			if (USER !== undefined && USER.auth_tree.articles !== undefined && USER.auth_tree.articles.filmstrip) {
+				var opt = {name:'Filmstrip', key: 'F', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertFilmstripRef(markItUp.textarea); }, className: 'markItUpFilmstripRef'};
+				this.addToArrayUnique(this.options.markitupSettings.markupSet, opt, "name");
+			}
+			if (USER !== undefined && USER.auth_tree.articles !== undefined && USER.auth_tree.articles.wikipage) {
+				var opt = {name:'Wiki', key: 'W', closeWith: function (markItUp) { return ArticleCreate.prototype.insertWikiRef(markItUp.textarea); }, className: 'markItUpwikiRef'};
+				this.addToArrayUnique(this.options.markitupSettings.markupSet, opt, "name");
+			}
 			// show draft or article
 			if (this.options.type == 'draft') {
 				this.draft = this.options.article;
@@ -82,6 +86,14 @@ steal(
 
 			// initialize autosave
 			// this.initAutosave(this.options.autosaveInterval);
+		},
+
+		addToArrayUnique: function(testedArray, item, attr) {
+			for (var ind in testedArray) {
+				var it = testedArray[ind];
+				if (typeof it === typeof item && it[attr] == item[attr]) return;
+			}
+			testedArray.push(item);
 		},
 
 		/**
