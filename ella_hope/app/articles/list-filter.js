@@ -10,6 +10,7 @@ steal(
 			, transformator: {
 				title: 'title__icontains'
 				, author: 'authors__id'
+				, tag: 'tags__id'
 				, category: 'category__id'
 				, publish_from: 'publish_from__gte'
 				, publish_until: 'publish_from__lte'
@@ -105,7 +106,7 @@ steal(
 				var results = [];
 
 				$.each(data, function (i, val) {
-					results.push({ value: val.resource_uri, text: val.name });
+					results.push({ value: val.id, text: val.name });
 				});
 
 				return results;

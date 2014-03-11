@@ -208,11 +208,7 @@ steal(
 			data.limit = this.paginator.attr('limit');
 			data.offset = this.paginator.attr('offset');
 
-			if (data.tag) {
-				var items = self.modelClass.getArticlesByTag({tags: [data.tag]})
-			} else {
-				var items = self.modelClass.findAll(data)
-			}
+			var items = self.modelClass.findAll(data)
 
 			can.view(window.HOPECFG.APP_ROOT + '/articles/views/list-articles.ejs', {
 				articles: items
