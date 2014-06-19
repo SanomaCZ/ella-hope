@@ -33,7 +33,7 @@ steal(
 			lang = 'en';
 		*/
 		// temporary language fixed settings
-		var lang = 'en';
+		var lang = 'cz';
 
 		// jsperanto initialization - translations
 		// when translations are ready, we can initialize modules which then may be translated
