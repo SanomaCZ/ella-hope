@@ -3,260 +3,186 @@
 </div>
 
 <div class="formbg">
-	<form class="article">
+	<form class="article row">
+		<div class="col-sm-9">
 
-		<% if (article.id) { %>
-			<input type="hidden" name="id" id="id" value="<%= article.id  %>" />
-		<% } %>
-
-		<div class="control-group row">
-			<label class="control-label required" for="title"><%= $.t('articles.title')%></label>
-			<div class="controls">
-				<input class="title" type="text" name="title" id="title" placeholder="<%= $.t('articles.add_title')%>"
-				value="<%= article.attr('title') %>" >
-				<span class="help-inline"></span>
-			</div>
-		</div>
-
-		<div class="control-group row">
-			<label class="control-label required" for="slug"><%= $.t('articles.slug')%></label>
-			<div class="controls">
-				<div class="input-append">
-					<input class="slug" type="text" name="slug" id="slug" placeholder="<%= $.t('articles.slug_press')%>" value="<%= article.attr('slug') %>" >
-					<button class="btn btn-normal slug-from-title"><%= $.t('articles.slug_from_title')%></button>
+			<!-- title -->
+			<div class="form-group control-group">
+				<label class="control-label required" for="title"><%= $.t('articles.title')%></label>
+				<input class="title form-control" type="text" name="title" id="title" placeholder="<%= $.t('articles.add_title')%>"
+					value="<%= article.attr('title') %>" >
+					<p class="help-inline"></p>
+			</div><!-- /title -->
+			
+			<!-- slug + category -->
+			<div class="form-group control-group row">
+				<div class="col-sm-5">
+					<div class="form-group">
+						<label class="control-label required" for="slug"><%= $.t('articles.slug')%></label>
+						<div class="input-group">
+							<input class="slug form-control" type="text" name="slug" id="slug" placeholder="<%= $.t('articles.slug_press')%>" value="<%= article.attr('slug') %>" >
+							<div class="input-group-btn">
+								<button class="btn btn-default btn-normal slug-from-title"><%= $.t('articles.slug_from_title')%></button>
+							</div>
+						</div>
+						<p class="help-inline"></p>
+					</div>
 				</div>
-				<span class="help-inline"></span>
-			</div>
-		</div>
+				<div class="col-sm-7">
+					<label class="control-label required" for="category"><%= $.t('articles.category')%></label>
+					<div class="controls">
+						<select name="category" id="category" data-placeholder="<%= $.t('articles.choose_category')%>" class="category">
+							<option></option>
+							<% if (article.category) { %>
+								<% var c = article.category; %>
+								<option value="<%= c.resource_uri %>" selected="selected"><%= c.full_title %></option>
+							<% } %>
+						</select>
+						<p class="help-inline"></p>
+					</div>
+				</div>
 
-		<div class="control-group row">
-			<label class="control-label required" for="category"><%= $.t('articles.category')%></label>
-			<div class="controls">
-				<select name="category" id="category" data-placeholder="<%= $.t('articles.choose_category')%>" class="category">
-					<option></option>
-					<% if (article.category) { %>
-						<% var c = article.category; %>
-						<option value="<%= c.resource_uri %>" selected="selected"><%= c.full_title %></option>
-					<% } %>
-				</select>
-				<span class="help-inline"></span>
-			</div>
-		</div>
-
-		<div class="control-group row">
-			<label class="control-label required" for="authors"><%= $.t('articles.authors')%></label>
-			<div class="controls">
-				<select name="authors[]" data-placeholder="<%= $.t('articles.choose_authors')%>" class="authors-article authors" multiple="multiple">
-					<option></option>
-					<% if (article.authors) { %>
-						<% for (var i = 0; i < article.authors.length; i++) { %>
-							<% var a = article.authors[i]; %>
-							<option value="<%= a.resource_uri %>" selected="selected"><%= a.name %></option>
-						<% } %>
-					<% } %>
-				</select>
-				<span class="help-inline"></span>
-				<button class="btn btn-normal add-author-articles"><%= $.t('articles.add_new_author')%></button>
-			</div>
-		</div>
-
-		<% if (this.model !== 'filmstrips') { %>
-			<div class="control-group row js-textrea-box">
+			</div><!-- /.slug + category -->
+			
+			<!-- author -->
+			<div class="form-group control-group row">
+				<div class="col-sm-5">
+					<div class="form-group">
+						<label class="control-label required" for="authors"><%= $.t('articles.authors')%></label>
+						<div class="controls">
+							<select name="authors[]" data-placeholder="<%= $.t('articles.choose_authors')%>" class="authors-article authors" multiple="multiple">
+								<option></option>
+								<% if (article.authors) { %>
+									<% for (var i = 0; i < article.authors.length; i++) { %>
+										<% var a = article.authors[i]; %>
+										<option value="<%= a.resource_uri %>" selected="selected"><%= a.name %></option>
+									<% } %>
+								<% } %>
+							</select>
+							<button class="btn btn-default btn-normal add-author-articles"><%= $.t('articles.add_new_author')%></button>
+						</div>
+						<p class="help-inline"></p>
+					</div>
+				</div><!-- /.col-sm-5 -->
+				
+				<div class="col-sm-6">
+					<label class="control-label" for="source"><%= $.t('articles.source')%></label>
+					<div class="control-group">
+						<select name="source" id="source" data-placeholder="<%= $.t('articles.choose_source')%>" class="btn btn-default article-source source">
+							<option></option>
+							<% if (article.source) { %>
+								<% var s = article.source; %>
+								<option value="<%= s.resource_uri %>" selected="selected"><%= s.name %></option>
+							<% } %>
+						</select>
+							<button class="btn btn-default btn-normal add-source" data-target="article-source"><%= $.t('articles.add_new_source')%></button>
+					</div>
+					<p class="help-inline"></p>
+				</div>
+				
+			</div><!-- /.author -->
+			
+			<!-- textarea -->
+			<% if (this.model !== 'filmstrips') { %>
+			<div class="form-group control-group js-textrea-box clearfix">
 				<% if (this.model === 'galleries') { %>
 					<label class="control-label" for="content"><%= $.t('articles.content') %></label>
 				<% } else { %>
 					<label class="control-label required" for="content"><%= $.t('articles.content') %></label>
 				<% } %>
-				<div class="controls pull-left">
-					<textarea class="content" rows="10" name="content" placeholder="<%= $.t('articles.add_content')%>"><%= article.content %></textarea>
-					<span class="help-inline"></span>
+				<div class="controls">
+					<textarea class="content form-control" rows="12" name="content" placeholder="<%= $.t('articles.add_content')%>"><%= article.content %></textarea>
+					<p class="help-inline"></p>
 				</div>
 				<div class="box-snippet hero-unit pull-right"></div>
 			</div>
-		<% } %>
-
-		<div class="js-datepicker-group row">
-			<div class="span4 pull-left" style="margin-left: 0">
-				<label class="control-label required" for="publish_from"><%= $.t('articles.publish_from')%></label>
+			<% } %><!-- /.textarea -->
+			
+			<!-- Description -->
+			<div class="form-group control-group js-textrea-box">
+				<label class="control-label" for="description"><%= $.t('articles.description')%></label>
 				<div class="controls">
-					<div class="input-append">
-						<input class="span2 publish_from datepicker-default" type="text" autocomplete="on" name="publish_from_date" id="publish_from" value="<%= article.publish_from_date %>" />
-						<button class="btn set-date-now" data-target-date="publish_from_date"><%= $.t('articles.today') %></button>
-					</div>
-					<div class="input-append">
-						<input type="text" class="timepicker-default span1 publish_from" autocomplete="on" name="publish_from_time" id="publish_from_time" value="<%= article.publish_from_time %>" />
-						<button class="btn set-datetime-now" data-target-date="publish_from_date" data-target-time="publish_from_time"><%= $.t('articles.now') %></button>
-					</div>
-					<span class="help-inline"></span>
+					<textarea class="form-control description" name="description" id="description" placeholder="<%= $.t('articles.add_description')%>"><%= article.description %></textarea>
+					<p class="help-inline"></p>
 				</div>
-			</div>
-			<div class="span4 pull-left">
-				<label class="control-label" for="publish_to"><%= $.t('articles.publish_to')%></label>
-				<div class="controls">
-					<div class="input-append">
-						<input class="span2 publish_to datepicker-default" type="text" name="publish_to_date" id="publish_to" value="<%= article.publish_to_date %>" />
-						<button class="btn btn-normal set-date-now" data-target-date="publish_to_date"><%= $.t('articles.today') %></button>
-					</div>
-					<div class="input-append">
-						<input type="text" class="timepicker-default span1" name="publish_to_time" id="publish_to_time" value="<%= article.publish_to_time %>" />
-						<button class="btn btn-normal set-datetime-now" data-target-date="publish_to_date"
-							data-target-time="publish_to_time"><%= $.t('articles.now') %></button>
-					</div>
-					<span class="help-inline"></span>
-				</div>
-			</div>
-		</div>
-
-		<!-- non-required fields -->
-
-		<h3><%= $.t('articles.side_categories')%></h3>
-		<div id="side_categories" class="row">
-			<% $.each(listings || [], function(i, g) { %>
-				<%== can.view.render(window.HOPECFG.APP_ROOT + '/articles/views/inline-side-category.ejs', {
-					listing: new Listing(g)
-				}) %>
-			<% }) %>
-		</div>
-
-		<div class="control-group row">
-			<button class="btn add-side-category">
-				<i class="icon icon-plus"></i>
-				<%= $.t('add another side category') %>
-			</button>
-		</div>
-
-		<div class="control-group row">
-			<label class="control-label" for="source"><%= $.t('articles.source')%></label>
-			<div class="controls">
-				<select name="source" id="source" data-placeholder="<%= $.t('articles.choose_source')%>" class="article-source source">
-					<option></option>
-					<% if (article.source) { %>
-						<% var s = article.source; %>
-						<option value="<%= s.resource_uri %>" selected="selected"><%= s.name %></option>
-					<% } %>
-				</select>
-				<span class="help-inline"></span>
-				<button class="btn btn-normal add-source" data-target="article-source"><%= $.t('articles.add_new_source')%></button>
-			</div>
-		</div>
-
-		<div class="control-group row" id="photos-preview"></div>
-
-		<div class="control-group row js-textrea-box">
-			<label class="control-label" for="description"><%= $.t('articles.description')%></label>
-			<div class="controls pull-left">
-				<textarea class="description" name="description" id="description" placeholder="<%= $.t('articles.add_description')%>"><%= article.description %></textarea>
-				<span class="help-inline"></span>
-			</div>
-			<div class="box-snippet hero-unit pull-right"></div>
-		</div>
-
-		<div class="control-group row">
-			<label class="control-label" for="photo"><%= $.t('articles.photo')%></label>
-			<div class="controls photo">
-				<%
-				var titlePhotoInserted = false;
-				if (article.photo && article.photo.public_url) {
-					titlePhotoInserted = true;
-				} %>
-				<div class="title-photo-empty" <%= titlePhotoInserted === false ? '' : 'style=display:none' %>>
-					<button class="btn btn-normal add-photo"><%= $.t('articles.add_photo')%></button>
-				</div>
-				<div class="title-photo" <%= titlePhotoInserted === true ? '' : 'style=display:none' %>>
-					<img src="<%= article.photo ? article.photo.public_url : '' %>" />
-					<button class="btn btn-normal remove-photo"><%= $.t('articles.remove_photo')%></button>
-				</div>
-				<input type="hidden" name="photo" value="<%= article.photo ? article.photo.resource_uri : '' %>" />
-				<span class="help-inline"></span>
-			</div>
-		</div>
-
-		<div class="control-group row">
-			<label class="control-label" for="tags"><%= $.t('articles.tags')%></label>
-			<div class="controls">
-				<select name="tags[]" data-placeholder="<%= $.t('articles.choose_tags')%>" class="article-tags span8" multiple>
-					<% if (article.tags) { %>
-						<% for (var i = 0; i < article.tags.length; i++) { %>
-							<% var t = article.tags[i]; %>
-							<% if (t.main_tag !== true) { %>
-								<option value="<%= t.resource_uri %>" selected="selected"><%= t.name %></option>
+				<div class="box-snippet hero-unit pull-right"></div>
+			</div><!-- /Description -->
+			
+			<!-- Tags + Main tag -->
+			<div class="form-group control-group row">
+				
+				<!-- Tags -->
+				<div class="tags col-sm-6">
+					<label class="control-label" for="tags"><%= $.t('articles.tags')%></label>
+					<div class="controls">
+						<select name="tags[]" data-placeholder="<%= $.t('articles.choose_tags')%>" class="article-tags span8" multiple>
+							<% if (article.tags) { %>
+								<% for (var i = 0; i < article.tags.length; i++) { %>
+									<% var t = article.tags[i]; %>
+									<% if (t.main_tag !== true) { %>
+										<option value="<%= t.resource_uri %>" selected="selected"><%= t.name %></option>
+									<% } %>
+								<% } %>
 							<% } %>
-						<% } %>
-					<% } %>
-				</select>
-				<span class="help-inline"></span>
-				<button class="btn btn-normal add-tag-articles" data-target="article-tags"><%= $.t('articles.add_new_tag')%></button>
+						</select>
+						<button class="btn btn-default btn-normal add-tag-articles" data-target="article-tags"><%= $.t('articles.add_new_tag')%></button>
+					</div>
+					<span class="help-inline"></span>
+				</div><!-- /Tags -->
+				
+				<!-- Main Tag -->
+				<div class="control-group col-sm-6">
+					<label class="control-label" for="main_tag"><%= $.t('articles.main_tag')%></label>
+					<div class="controls">
+						<select name="main_tag" data-placeholder="<%= $.t('articles.choose_tag')%>" class="article-main-tag">
+							<option></option>
+							<% if (article.tags) { %>
+								<% for (var i = 0; i < article.tags.length; i++){ %>
+									<% var t = article.tags[i]; %>
+									<% if (t.main_tag === true) { %>
+										<option value="<%= t.resource_uri %>" selected="selected"><%= t.name %></option>
+									<% } %>
+								<% } %>
+							<% } %>
+						</select>
+						<button class="btn btn-default btn-normal add-main-tag-articles" data-target="article-main-tag"><%= $.t('articles.add_new_tag')%></button>
+						<span class="help-inline"></span>
+					</div>
+				</div><!-- /.Main tag -->
+
+			</div><!-- /Tags + Main tag -->
+			
+			<div class="form-group">
+			
+			<label><%= $.t('articles.side_categories')%></label>
+			<div class="control-group">
+				<button class="btn btn-default add-side-category">
+					<i class="icon icon-plus"></i>
+					<%= $.t('add another side category') %>
+				</button>
 			</div>
-		</div>
-
-		<% if (this.model === 'galleries') { %>
-			<div id="gallery-items" class="control-group row hero-unit">
-				<h4><%= $.t('articles.gallery_items')%></h4>
-				<% if (!article.id) { %>
-					<div class="unsaved-article row">
-						<label class="label label-warning">
-							<%= $.t('articles.save_before_adding')%>
-						</label>
-					</div>
-				<% } %>
-				<div class="span4 pull-left" style="margin-left: 0">
-					<label class="control-label"><%= $.t('articles.chosen_items')%></label>
-					<ul id="chosen-recent-photos" class="connectedSortable">
-						<% $.each(galleryitem || [], function(i, g) { %>
-							<%== can.view.render(window.HOPECFG.APP_ROOT + '/articles/views/inline-gallery-item.ejs', {
-								item: g,
-								photo: g.photo
-							}) %>
-						<% }); %>
-					</ul>
-				</div>
-
-				<div class="span4 pull-left" style="margin-left: 0">
-					<label><%= $.t('articles.available_items')%></label>
-					<ul id="found-recent-photos" class="connectedSortable">
-					</ul>
-					<button type="button" class="btn js-add-ALL-the-items" style="width:100%">
-						<span class="icon icon-backward"></span>
-						<%= $.t('Add ALL the items') %>
-					</button>
-				</div>
-
-				<div class="span2 pull-left">
-					<label>&nbsp;</label>
-					<div class="control-group row" style="margin:0">
-						<button class="btn btn-normal get-recent-photos"><%= $.t('articles.get_recent_photos')%></button>
-					</div>
-					&nbsp;
-					<p>or</p>
-					<div class="control-group row">
-						<div class="input-append">
-							<input type="text" class="span2 pull-left related-name" name="related-name" placeholder="<%= $.t('articles.find_by_name') %>" />
-							<button class="btn related-name-action photos-action"><%= $.t('articles.find')%></button>
-						</div>
-					</div>
-				</div>
+			<div id="side_categories">
+				<% $.each(listings || [], function(i, g) { %>
+					<%== can.view.render(window.HOPECFG.APP_ROOT + '/articles/views/inline-side-category.ejs', {
+						listing: new Listing(g)
+					}) %>
+				<% }) %>
 			</div>
-		<% } %>
-
-		<% if (this.model === 'filmstrips') { %>
-			<%== can.view.render(window.HOPECFG.APP_ROOT + '/articles/views/filmstrip-frames.ejs', {
-					article: article,
-					filmstripframes: filmstripframes
-			}) %>
-		<% } %>
-
-		<div class="control-group row hero-unit">
-			<h4><%= $.t('articles.related_articles')%></h4>
+			</div>
+			
+			<div class="form-group related row">
+			
+			<strong class="col-sm-12"><%= $.t('articles.related_articles')%></strong>
 			<% if (!article.id) { %>
-				<div class="unsaved-article row">
+				<div class="unsaved-article col-sm-12">
 					<label class="label label-warning">
 						<%= $.t('articles.save_before_adding')%>
 					</label>
 				</div>
 			<% } %>
-			<div class="span4 pull-left" style="margin-left: 0">
+			<div class="col-sm-5">
 				<label class="control-label"><%= $.t('articles.chosen_items')%></label>
-				<ul id="chosen-related-articles" class="connectedSortable">
+				<ul id="chosen-related-articles" class="connectedSortable bg-warning">
 					<% console.log(relatedArticles) %>
 					<% $.each(relatedArticles || [], function(i, a) { %>
 						<li data-resource-id="<%= a.id %>" data-related-id="<%= a.related_id %>">
@@ -267,115 +193,98 @@
 				</ul>
 			</div>
 
-			<div class="span4 pull-left" style="margin-left: 0">
+			<div class="col-sm-4">
 				<label><%= $.t('articles.available_items')%></label>
-				<ul id="found-related-articles" class="connectedSortable">
+				<ul id="found-related-articles" class="connectedSortable founded">
 				</ul>
 			</div>
 
-			<div class="span2 pull-left">
+			<div class="col-sm-3">
 				<label>&nbsp;</label>
 				<div class="control-group row" style="margin:0">
-					<button class="btn btn-normal get-related-articles" title="<%= $.t('articles.relation_is_evaluated_by_tags') %>">
+					<button class="btn btn-default btn-normal get-related-articles" title="<%= $.t('articles.relation_is_evaluated_by_tags') %>">
 						<%= $.t('articles.get_related_articles')%>
 					</button>
 				</div>
 				&nbsp;
 				<p>or</p>
-				<div class="input-append">
-					<input type="text" class="span2 pull-left related-name" name="related-name" placeholder="<%= $.t('articles.find_by_name') %>" />
-					<button class="btn related-name-action articles-action"><%= $.t('articles.find')%></button>
+				<div class="input-group">
+					<input type="text" class="form-control related-name" name="related-name" placeholder="<%= $.t('articles.find_by_name') %>" />
+					<div class="input-group-btn">
+						<button class="btn btn-default related-name-action articles-action"><%= $.t('articles.find')%></button>
+					</div>
 				</div>
 			</div>
 		</div>
-
-		<div class="control-group row">
-			<label class="control-label" for="main_tag"><%= $.t('articles.main_tag')%></label>
-			<div class="controls">
-				<select name="main_tag" data-placeholder="<%= $.t('articles.choose_tag')%>" class="article-main-tag">
-					<option></option>
-					<% if (article.tags) { %>
-						<% for (var i = 0; i < article.tags.length; i++){ %>
-							<% var t = article.tags[i]; %>
-							<% if (t.main_tag === true) { %>
-								<option value="<%= t.resource_uri %>" selected="selected"><%= t.name %></option>
-							<% } %>
-						<% } %>
-					<% } %>
-				</select>
-				<span class="help-inline"></span>
-				<button class="btn btn-normal add-tag-articles" data-target="article-main-tag"><%= $.t('articles.add_new_tag')%></button>
-			</div>
-		</div>
-
-		<div class="control-group row">
-			<label class="control-label"><%= $.t('articles.display_options')%></label>
-
-			<label class="checkbox pull-left">
-				<input class="commercial" type="checkbox" name="commercial" <%= article.commercial ? 'checked=checked' : '' %> value="true" /> <%= $.t('articles.commercial')%>
-				<span class="help-inline"></span>
-			</label>
-
-			<div class="clearfix"></div>
-
-			<label class="checkbox pull-left">
-				<% if (article.app_data && article.app_data.ella && article.app_data.ella.without_photo === true) { %>
-					<input class="photo-displayed" type="checkbox" name="without_photo" checked="checked" value="true" />
-				<% } else { %>
-					<input class="photo-displayed" type="checkbox" name="without_photo" value="true" />
+			
+					<% if (this.model === 'galleries') { %>
+			<div id="gallery-items" class="form-group galleries row">
+				<strong class="col-sm-12"><%= $.t('articles.gallery_items')%></strong>
+				<% if (!article.id) { %>
+					<div class="unsaved-article row">
+						<label class="label label-warning">
+							<%= $.t('articles.save_before_adding')%>
+						</label>
+					</div>
 				<% } %>
-				<%= $.t('articles.article_without_photo')%>
-				<span class="help-inline"></span>
-			</label>
+				<div class="col-sm-5">
+					<label class="control-label"><%= $.t('articles.chosen_items')%></label>
+					<ul id="chosen-recent-photos" class="connectedSortable media-list">
+						<% $.each(galleryitem || [], function(i, g) { %>
+							<%== can.view.render(window.HOPECFG.APP_ROOT + '/articles/views/inline-gallery-item.ejs', {
+								item: g,
+								photo: g.photo
+							}) %>
+						<% }); %>
+					</ul>
+				</div>
 
-			<div class="clearfix"></div>
+				<div class="col-sm-4">
+					<label><%= $.t('articles.available_items')%></label>
+					<ul id="found-recent-photos" class="connectedSortable">
+					</ul>
+					<button type="button" class="btn btn-default js-add-ALL-the-items" style="width:100%">
+						<span class="icon icon-backward"></span>
+						<%= $.t('Add ALL the items') %>
+					</button>
+				</div>
 
-			<label class="checkbox pull-left">
-				<input class="article-parameter" disabled="disabled" type="checkbox" name="article-parameter" <%= article.article_parameter ? 'checked=checked' : '' %> value="true" /> <%= $.t('Article parameter')%>
-				<span class="help-inline"></span>
-			</label>
-		</div>
-
-		<div class="control-group row">
-			<label class="control-label" for="state"><%= $.t('articles.enable_comments')%></label>
-			<div class="controls">
-				<select name="enable_comments" data-placeholder="<%= $.t('articles.article_comments')%>" class="enable_comments">
-					<option></option>
-					<% $.each(comments || [], function(i, comment){ %>
-						<option value="<%= comment %>" <%= (article.enable_comments == comment) ? "selected=selected" : "" %>>
-							<%= comment %>
-						</option>
-					<% }) %>
-				</select>
-				<span class="help-inline"></span>
+				<div class="col-sm-3">
+					<label>&nbsp;</label>
+					<div class="control-group row" style="margin:0">
+						<button class="btn btn-default btn-normal get-recent-photos"><%= $.t('articles.get_recent_photos')%></button>
+					</div>
+					&nbsp;
+					<p>or</p>
+					<div class="input-group">
+						<input type="text" class="form-control related-name" name="related-name" placeholder="<%= $.t('articles.find_by_name') %>" />
+						<div class="input-group-btn">
+							<button class="btn btn-default related-name-action photos-action"><%= $.t('articles.find')%></button>
+						</div>
+					</div>
+				</div>
 			</div>
-		</div>
+		<% } %>
+			
+		<% if (article.id) { %>
+			<input type="hidden" name="id" id="id" value="<%= article.id  %>" />
+		<% } %>
 
-		<div class="control-group row">
-			<label class="control-label" for="state"><%= $.t('articles.state')%></label>
-			<div class="controls">
-				<select name="state" id="state" data-placeholder="<%= $.t('articles.choose_state')%>" class="chzn-select state">
-					<% $.each(states || [], function(i, state){ %>
-						<option value="<%= state %>" <%= (article.state == state) ? "selected=selected" : "" %>>
-							<%= state %>
-						</option>
-					<% }) %>
-				</select>
-				<span class="help-inline"></span>
-			</div>
-		</div>
+		<!-- non-required fields -->
+		<div class="control-group row" id="photos-preview"></div>
 
-		<div class="control-group row">
-			<label class="control-label" for="static"><%= $.t('articles.static')%></label>
-			<div class="controls">
-				<input class="static" type="checkbox" name="static" id="static" <%= article.static ? 'checked=checked' : '' %> value="true" />
-				<span class="help-inline"></span>
-			</div>
-		</div>
 
-	</form>
-
-	<div class="form-buttons span2">
+			<% if (this.model === 'filmstrips') { %>
+				<%== can.view.render(window.HOPECFG.APP_ROOT + '/articles/views/filmstrip-frames.ejs', {
+						article: article,
+						filmstripframes: filmstripframes
+				}) %>
+			<% } %>
+			
+		</div><!-- /.col-sm-9 -->
+		
+		<div class="col-sm-3">
+				<div class="form-group control-group">
 		<% if (drafts.length) { %>
 			<a class="btn btn-warning draft-select">
 				<%= $.t('articles.drafts_templates')%>
@@ -391,143 +300,306 @@
 		<a href="javascript://" class="btn btn-primary article-save" data-stay="true"><%= $.t('articles.save_only')%></a>
 		<a href="javascript://" class="btn btn-primary article-save"><%= $.t('articles.save_and_leave')%></a>
 	</div>
+			<div class="js-datepicker-group form-group control-group">
+			<div>
+				<label class="control-label required" for="publish_from"><%= $.t('articles.publish_from')%></label>
+				<div class="input-group">
+						<input class="form-control publish_from datepicker-default" type="text" autocomplete="on" name="publish_from_date" id="publish_from" value="<%= article.publish_from_date %>" />
+					<div class="input-group-btn">
+						<button class="btn btn-default set-date-now" data-target-date="publish_from_date"><%= $.t('articles.today') %></button>
+					</div>
+				</div>
+				<div class="input-group">
+						<input type="text" class="form-control timepicker-default span1 publish_from" autocomplete="on" name="publish_from_time" id="publish_from_time" value="<%= article.publish_from_time %>" />
+					<div class="input-group-btn">
+						<button class="btn btn-default set-datetime-now" data-target-date="publish_from_date" data-target-time="publish_from_time"><%= $.t('articles.now') %></button>
+					</div>
+				</div>
+					<p class="help-inline"></p>
+				</div>
+			</div>
+			
+			<!-- Pubslish dated -->
+			<div class="control-group form-group control-group">
+				<label class="control-label" for="publish_to"><%= $.t('articles.publish_to')%></label>
+				<div class="input-group">
+					<input class="form-control publish_to datepicker-default" type="text" name="publish_to_date" id="publish_to" value="<%= article.publish_to_date %>" />
+					<div class="input-group-btn">
+					<button class="btn btn-default btn-normal set-date-now" data-target-date="publish_to_date"><%= $.t('articles.today') %></button>
+					</div>
+				</div>
+				<div class="input-group">
+					<input type="text" class="form-control timepicker-default span1" name="publish_to_time" id="publish_to_time" value="<%= article.publish_to_time %>" />
+					<div class="input-group-btn">
+					<button class="btn btn-default btn-normal set-datetime-now" data-target-date="publish_to_date"
+						data-target-time="publish_to_time"><%= $.t('articles.now') %></button>
+					</div>
+				</div>
+				<p class="help-inline"></p>
+			</div><!-- Pubslish date -->
+			
+			<!-- Article photo -->
+			<div class="control-group form-group control-group">
+				<label class="control-label" for="photo"><%= $.t('articles.photo')%></label>
+				<div class="controls photo">
+					<%
+					var titlePhotoInserted = false;
+					if (article.photo && article.photo.public_url) {
+						titlePhotoInserted = true;
+					} %>
+					<div class="title-photo-empty" <%= titlePhotoInserted === false ? '' : 'style=display:none' %>>
+						<button class="btn btn-default btn-normal add-photo"><%= $.t('articles.add_photo')%></button>
+					</div>
+					<div class="title-photo" <%= titlePhotoInserted === true ? '' : 'style=display:none' %>>
+						<img src="<%= article.photo ? article.photo.public_url : '' %>" />
+						<button class="btn btn-default  btn-normal remove-photo"><%= $.t('articles.remove_photo')%></button>
+					</div>
+					<input type="hidden" name="photo" value="<%= article.photo ? article.photo.resource_uri : '' %>" />
+					<p class="help-inline"></p>
+				</div>
+			</div><!-- /Article photo -->
 
-</div>
+			
+			<div class="form-group control-group">
+
+				<label class="control-label"><%= $.t('articles.display_options')%></label>
+					
+				<div class="checkbox">
+					<label>
+						<input class="commercial" type="checkbox" name="commercial" <%= article.commercial ? 'checked=checked' : '' %> value="true" /> <%= $.t('articles.commercial')%>
+					</label>
+					<p class="help-inline"></p>
+				</div>
+	
+				<div class="checkbox">
+					<label>
+						<% if (article.app_data && article.app_data.ella && article.app_data.ella.without_photo === true) { %>
+							<input class="photo-displayed" type="checkbox" name="without_photo" checked="checked" value="true" />
+						<% } else { %>
+							<input class="photo-displayed" type="checkbox" name="without_photo" value="true" />
+						<% } %>
+						<%= $.t('articles.article_without_photo')%>
+					</label>
+					<p class="help-inline"></p>
+				</div>
+				
+				<div class="checkbox">
+					<label>
+						<input class="article-parameter" disabled="disabled" type="checkbox" name="article-parameter" <%= article.article_parameter ? 'checked=checked' : '' %> value="true" /> <%= $.t('Article parameter')%>
+					</label>
+					<p class="help-inline"></p>
+				</div>
+				
+				<div class="checkbox">
+					<label class="control-label" for="static">
+						<input class="static" type="checkbox" name="static" id="static" <%= article.static ? 'checked=checked' : '' %> value="true" />
+						<%= $.t('articles.static')%></label>
+					<p class="help-inline"></p>
+				</div>
+
+			</div>
+
+		<div class="form-group control-group">
+			<label class="control-label" for="state"><%= $.t('articles.enable_comments')%></label>
+			<div class="controls">
+				<select name="enable_comments" data-placeholder="<%= $.t('articles.article_comments')%>" class="enable_comments">
+					<option></option>
+					<% $.each(comments || [], function(i, comment){ %>
+						<option value="<%= comment %>" <%= (article.enable_comments == comment) ? "selected=selected" : "" %>>
+							<%= comment %>
+						</option>
+					<% }) %>
+				</select>
+				<p class="help-inline"></p>
+			</div>
+		</div>
+
+		<div class="form-group control-group">
+			<label class="control-label" for="state"><%= $.t('articles.state')%></label>
+			<div class="controls">
+				<select name="state" id="state" data-placeholder="<%= $.t('articles.choose_state')%>" class="chzn-select state">
+					<% $.each(states || [], function(i, state){ %>
+						<option value="<%= state %>" <%= (article.state == state) ? "selected=selected" : "" %>>
+							<%= state %>
+						</option>
+					<% }) %>
+				</select>
+				<p class="help-inline"></p>
+			</div>
+		</div>
+
+
+					
+					
+		</div><!-- /.col-sm-3 -->
+
+	</form>
+</div><!-- /.formbg -->
 
 <!-- modal dialogs -->
 
-<div class="modal hide fade author-modal-articles" tabindex="-1" role="dialog" aria-labelledby="author-modal-articles" aria-hidden="true" style="display: none; ">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		<h3 id="author-modal-articles"><%= $.t('articles.add_new_author') %></h3>
-	</div>
-	<div class="modal-body">
-		<form>
-			<label for="name"><%= $.t('articles.name') %></label>
-			<input type="text" name="name" />
-
-			<label for="slug"><%= $.t('articles.slug') %></label>
-			<div class="input-append">
-			    <input type="text" name="slug" />
-			    <button class="btn btn-normal slug-from-name"><%= $.t('articles.slug_from_name')%></button>
+<!-- Modal - author -->
+<div class="modal fade author-modal-articles" tabindex="-1" role="dialog" aria-labelledby="author-modal-articles" aria-hidden="true" style="display: none; ">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h3 id="author-modal-articles"><%= $.t('articles.add_new_author') %></h3>
 			</div>
-		</form>
-	</div>
-	<div class="modal-footer">
-		<button class="btn close-author" data-dismiss="modal"><%= $.t('articles.close') %></button>
-		<button class="btn btn-primary insert-author"><%= $.t('articles.insert') %></button>
-	</div>
-</div>
-
-<div id="photos-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="photos-modal" aria-hidden="true" style="display: none; ">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		<h3 id="photos-modal-label"><%= $.t('articles.insert_image') %></h3>
-	</div>
-	<div class="modal-body">
-		<form class="filter">
-			<input type="text" name="title"/>
-			<input type="submit" class="btn" value="<%= $.t('filter') %>"/>
-		</form>
-
-		<div class="control-group">
-			<button class="btn btn-primary new-photo"><%= $.t('articles.new_photo') %></button>
+			<div class="modal-body">
+				<form>
+					<label for="name"><%= $.t('articles.name') %></label>
+					<input type="text" name="name" />
+		
+					<label for="slug"><%= $.t('articles.slug') %></label>
+					<div class="input-append">
+					    <input type="text" name="slug" />
+					    <button class="btn btn-normal slug-from-name"><%= $.t('articles.slug_from_name')%></button>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button class="btn close-author" data-dismiss="modal"><%= $.t('articles.close') %></button>
+				<button class="btn btn-primary insert-author"><%= $.t('articles.insert') %></button>
+			</div>
 		</div>
-
-		<div class="photos-list"></div>
-	</div>
-	<div class="modal-footer">
-		<button data-dismiss="modal" aria-hidden="true" class="btn close-photo"><%= $.t('articles.close') %></button>
-		<button class="btn btn-primary insert-photo"><%= $.t('articles.insert') %></button>
 	</div>
 </div>
+<!-- /Modal - author -->
 
-<div class="modal hide fade source-modal-articles" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		<h3 id="myModalLabel"><%= $.t('articles.add_new_source') %></h3>
-	</div>
-	<div class="modal-body">
-		<form>
-			<label for="name"><%= $.t('articles.name')%>
-				<input type="text" name="name" />
-			</label>
-			<label for="url"><%= $.t('articles.url')%>
-				<input type="text" name="url" />
-			</label>
-		</form>
-	</div>
-	<div class="modal-footer">
-		<button class="btn close-source" data-dismiss="modal"><%= $.t('articles.close') %></button>
-		<button class="btn btn-primary insert-source"><%= $.t('articles.insert') %></button>
+<!-- Modal - photos -->
+<div id="photos-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="photos-modal" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h3 id="photos-modal-label"><%= $.t('articles.insert_image') %></h3>
+			</div>
+			<div class="modal-body">
+				<form class="filter input-group form-group">
+					<input type="text" name="title" class="form-control">
+					<div class="input-group-btn">
+						<input type="submit" class="btn" value="<%= $.t('filter') %>"/>
+					</div>
+				</form>
+		
+				<div class="control-group form-group clearfix">
+					<button class="btn btn-default pull-right new-photo"><%= $.t('articles.new_photo') %></button>
+				</div>
+		
+				<div class="photos-list"></div>
+			</div>
+			<div class="modal-footer">
+				<button data-dismiss="modal" aria-hidden="true" class="btn close-photo"><%= $.t('articles.close') %></button>
+				<button class="btn btn-primary insert-photo"><%= $.t('articles.insert') %></button>
+			</div>
+		</div>
 	</div>
 </div>
+<!-- /Modal - photos -->
 
-<div class="modal hide fade tag-modal-articles" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		<h3 id="myModalLabel"><%= $.t('articles.add_new_tag') %></h3>
-	</div>
-	<div class="modal-body">
-		<form>
-			<label for="name"><%= $.t('articles.name')%></label>
-			<input type="text" name="name" />
-
-			<label for="author-slug"><%= $.t('articles.slug')%></label>
-			<input type="text" name="slug" />
-
-			<button class="btn btn-normal slug-from-name"><%= $.t('articles.slug_from_name')%></button>
-		</form>
-	</div>
-	<div class="modal-footer">
-		<button class="btn close-tag" data-dismiss="modal"><%= $.t('articles.close') %></button>
-		<button class="btn btn-primary insert-tag"><%= $.t('articles.insert') %></button>
+<!-- Modal - source -->
+<div class="modal fade source-modal-articles" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="source-modal-articles" aria-hidden="true">×</button>
+				<h3 id="myModalLabel"><%= $.t('articles.add_new_source') %></h3>
+			</div>
+			<div class="modal-body">
+				<form>
+					<label for="name"><%= $.t('articles.name')%>
+						<input type="text" name="name" />
+					</label>
+					<label for="url"><%= $.t('articles.url')%>
+						<input type="text" name="url" />
+					</label>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button class="btn close-source" data-dismiss="modal"><%= $.t('articles.close') %></button>
+				<button class="btn btn-primary insert-source"><%= $.t('articles.insert') %></button>
+			</div>
+		</div>
 	</div>
 </div>
+<!-- /Modal - source -->
 
-<div id="draft-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		<h3 id="myModalLabel"><%= $.t('articles.drafts_templates') %></h3>
+<!-- Modal - tags -->
+<div class="modal fade tag-modal-articles" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h3 id="myModalLabel"><%= $.t('articles.add_new_tag') %></h3>
+			</div>
+			<div class="modal-body">
+				<form>
+					<label for="name"><%= $.t('articles.name')%></label>
+					<input type="text" name="name" />
+		
+					<label for="author-slug"><%= $.t('articles.slug')%></label>
+					<input type="text" name="slug" />
+		
+					<button class="btn btn-normal slug-from-name"><%= $.t('articles.slug_from_name')%></button>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button class="btn close-tag" data-dismiss="modal"><%= $.t('articles.close') %></button>
+				<button class="btn btn-primary insert-tag"><%= $.t('articles.insert') %></button>
+			</div>
+		</div>
 	</div>
-	<div class="modal-body">
-		<% if (drafts.length) { %>
-			<table class="table">
-				<tr>
-					<th><%= $.t('ID')%></th>
-					<th><%= $.t('articles.title')%></th>
-					<th><%= $.t('articles.created')%></th>
-					<th><%= $.t('articles.action')%></th>
-				</tr>
-				<% $.each(drafts, function(i, draft){ %>
-					<tr>
-					<%
-					var timestamp = Date.parse(draft.timestamp);
-					var draftDate = timestamp.toString('yyyy-MM-dd');
-					var draftTime = timestamp.toString('HH:mm');
-					var label = draft.data.title + ' (' + draftDate + ' ' + draftTime + ')';
+</div>
+<!-- /Modal - tags -->
 
-					var editUrl = can.route.url({ page: 'articles', action: 'edit-draft', id: draft.id });
-					var deleteUrl = can.route.url({ page: 'articles', action: 'delete-draft', id: draft.id });
-					%>
-						<td><%= draft.id %></td>
-						<td><%= draft.data.title %></td>
-						<td><%= draftDate %> <%= draftTime %></td>
-						<td>
-							<!-- Edit -->
-							<a <%= (el) -> el.data( 'article', draft ) %> href="<%= editUrl %>" class="btn btn-normal edit-draft">
-								<%= $.t('Edit');%> <i class="icon-pencil"></i>
-							</a>
-
-							<!-- Delete -->
-							<a <%= (el) -> el.data( 'article', draft ) %> href="javascript://" class="btn btn-normal btn-danger delete" data-confirm="<%= $.t('articles.confirm_delete_draft') %>"><%= $.t('articles.delete');%> <i class="icon-trash icon-white"></i></a>
-						</td>
-					</tr>
-				<% }) %>
-			</table>
-		<% } %>
-	</div>
-	<div class="modal-footer">
-		<button class="btn close-draft" data-dismiss="modal"><%= $.t('articles.close') %></button>
+<div id="draft-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h3 id="myModalLabel"><%= $.t('articles.drafts_templates') %></h3>
+			</div>
+			<div class="modal-body">
+				<% if (drafts.length) { %>
+					<table class="table">
+						<tr>
+							<th><%= $.t('ID')%></th>
+							<th><%= $.t('articles.title')%></th>
+							<th><%= $.t('articles.created')%></th>
+							<th><%= $.t('articles.action')%></th>
+						</tr>
+						<% $.each(drafts, function(i, draft){ %>
+							<tr>
+							<%
+							var timestamp = Date.parse(draft.timestamp);
+							var draftDate = timestamp.toString('yyyy-MM-dd');
+							var draftTime = timestamp.toString('HH:mm');
+							var label = draft.data.title + ' (' + draftDate + ' ' + draftTime + ')';
+		
+							var editUrl = can.route.url({ page: 'articles', action: 'edit-draft', id: draft.id });
+							var deleteUrl = can.route.url({ page: 'articles', action: 'delete-draft', id: draft.id });
+							%>
+								<td><%= draft.id %></td>
+								<td><%= draft.data.title %></td>
+								<td><%= draftDate %> <%= draftTime %></td>
+								<td>
+									<!-- Edit -->
+									<a <%= (el) -> el.data( 'article', draft ) %> href="<%= editUrl %>" class="btn btn-normal edit-draft">
+										<%= $.t('Edit');%> <i class="icon-pencil"></i>
+									</a>
+		
+									<!-- Delete -->
+									<a <%= (el) -> el.data( 'article', draft ) %> href="javascript://" class="btn btn-normal btn-danger delete" data-confirm="<%= $.t('articles.confirm_delete_draft') %>"><%= $.t('articles.delete');%> <i class="icon-trash icon-white"></i></a>
+								</td>
+							</tr>
+						<% }) %>
+					</table>
+				<% } %>
+			</div>
+			<div class="modal-footer">
+				<button class="btn close-draft" data-dismiss="modal"><%= $.t('articles.close') %></button>
+			</div>
+		</div>
 	</div>
 </div>

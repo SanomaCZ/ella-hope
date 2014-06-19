@@ -2,27 +2,30 @@
 	title = item.title;
 	description = item.text;
 	%>
-	<li <%= (el) -> el.data('photo-uri', item.photo.resource_uri) %> data-resource-id="<%= item.id %>" data-order="<%= item.order %>" class="row">
+	<li <%= (el) -> el.data('photo-uri', item.photo.resource_uri) %> data-resource-id="<%= item.id %>" data-order="<%= item.order %>" class="media">
 <% } else {
 	title = photo.title;
 	description = photo.description;
 	%>
-	<li data-photo-uri="<%= photo.resource_uri %>" class="row">
+	<li data-photo-uri="<%= photo.resource_uri %>" class="media">
 <% } %>
-	<i class="icon-remove pull-right remove-recent-photo"></i>
-	<div class="pull-left">
-		<img style="height:60px" src="<%= photo.public_url %>" />
-	</div>
+	<i class="icon-remove glyphicon glyphicon-remove pull-right remove-recent-photo"></i>
+
+	<a class="pull-left">
+		<img style="width: 80px" src="<%= photo.public_url %>" class="thumbnail">
+	</a>
+	<div class="media-body">
 	<div data-label="<%= title %>" data-attr="title" class="photo-title">
 		<span class="value">
 			<%= title %>
 		</span>
-		<i  class="icon-pencil change-galleryitem-label"  title="<%= $.t('galleries.change_title') %>"></i>
+		<i  class="icon-pencil glyphicon glyphicon-pencil change-galleryitem-label"  title="<%= $.t('galleries.change_title') %>"></i>
 	</div>
 	<div data-label="<%= description %>" data-attr="text" class="photo-description">
 		<span class="value">
 			<%= description %>
 		</span>
-		<i class="icon-pencil change-galleryitem-label" title="<%= $.t('galleries_change_description') %>"></i>
+		<i class="icon-pencil glyphicon glyphicon-pencil change-galleryitem-label" title="<%= $.t('galleries_change_description') %>"></i>
+	</div>
 	</div>
 </li>

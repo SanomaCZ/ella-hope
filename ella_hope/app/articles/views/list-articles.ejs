@@ -7,9 +7,9 @@
 			<th><%= $.t('articles.title') %></th>
 			<th><%= $.t('articles.photo') %></th>
 			<th><%= $.t('articles.category') %></th>
+			<th><%= $.t('articles.action') %></th>
 			<th><%= $.t('articles.publish_from') %></th>
 			<th><%= $.t('articles.state') %></th>
-			<th><%= $.t('articles.action') %></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -29,40 +29,36 @@
 				}
 
 			var timestamp = Date.parse(article.publish_from);
-			var articleDate = timestamp.toString('yyyy-MM-dd');
+			var articleDate = timestamp.toString('dd.MM.yyyy');
 			var articleTime = timestamp.toString('HH:mm');
 			%>
 			<tr>
 				<td class="article-state <%= article.state %>" title="<%= article.state %>">&nbsp;</td>
-				<td><a href="<%== editUrl %>"><%= article.title %></a></td>
+				<td class="article-title"><a href="<%== editUrl %>"><%= article.title %></a></td>
 				<td>
 					<% if (article.photo && article.photo.public_url) { %>
-					    <div class="thumbnail">
-						    <img src="<%= article.photo.public_url %>" style="height:40px;" />
-						</div>
+						<img src="<%= article.photo.public_url %>" style="height:55px;" class="thumbnail"/>
 					<% } %>
 				</td>
-				<td><%= article.category.title %></td>
-				<td><%= articleDate %> <%= articleTime %></td>
-				<td><%= article.state %></td>
+				<td><span class="label label-default"><%= article.category.title %></span></td>
 				<td>
 					<div class="btn-group">
-						<!-- Preview -->
-						<a <%= (el) -> el.data('article', article) %> href="#" class="btn btn-mini preview-article">
-							<%= $.t('Preview');%> <i class="icon-eye-open"></i>
-						</a>
-
 						<!-- Edit -->
-						<a <%= (el) -> el.data( 'article', article ) %> href="<%= editUrl %>" class="btn btn-mini edit-article">
-							<%= $.t('Edit');%> <i class="icon-pencil"></i>
+						<a <%= (el) -> el.data( 'article', article ) %> href="<%= editUrl %>" class="btn btn-sm btn-default edit-article">
+							<!--<%= $.t('Edit ');%>--> <i class="glyphicon glyphicon-pencil"></i>
 						</a>
-
+						<!-- Preview -->
+						<a <%= (el) -> el.data('article', article) %> href="#" class="btn btn-sm btn-default preview-article">
+							<!--<%= $.t('Preview ');%>--> <i class="glyphicon glyphicon-eye-open"></i>
+						</a>
 						<!-- Delete -->
-						<a <%= (el) -> el.data( 'article', article ) %> href="javascript://" class="btn btn-mini btn-danger delete" data-confirm="<%= $.t('articles.confirm_delete_article') %>">
-							<%= $.t('Delete');%> <i class="icon-trash icon-white"></i>
+						<a <%= (el) -> el.data( 'article', article ) %> href="javascript://" class="btn btn-sm btn-default delete" data-confirm="<%= $.t('articles.confirm_delete_article') %>">
+							<!--<%= $.t('Delete ');%>--> <i class="glyphicon glyphicon-trash"></i>
 						</a>
 					</div>
 				</td>
+				<td><b><%= articleDate %></b> <%= articleTime %></td>
+				<td><%= article.state %></td>
 			</tr>
 		<% } ) %>
 	</tbody>
