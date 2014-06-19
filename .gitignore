@@ -4,6 +4,9 @@ __pycache__
 
 # project files
 media/
+ella_hope/app/resources/vendor/
+ella_hope/app/resources/less/
+ella_hope/app/resources/fonts/
 
 # files created by server
 *.db
