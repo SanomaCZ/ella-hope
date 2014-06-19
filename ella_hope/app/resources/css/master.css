@@ -5506,6 +5506,7 @@ textarea.upload-image .chzn-container .chzn-choices .search-field {
   -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
   transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
   width: auto !important;
+  display: inline-block;
 }
 .filter-advanced .chzn-container .chzn-single + .chzn-drop input:focus,
 .formbg .chzn-container .chzn-single + .chzn-drop input:focus,
@@ -5553,6 +5554,7 @@ textarea.upload-image .chzn-container .chzn-single + .chzn-drop input {
 .formbg .btn-default,
 .upload-image .btn-default {
   vertical-align: bottom;
+  display: inline-block;
 }
 .filter-advanced .add-tag-articles,
 .formbg .add-tag-articles,

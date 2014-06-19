@@ -284,26 +284,27 @@
 		</div><!-- /.col-sm-9 -->
 		
 		<div class="col-sm-3">
-				<div class="form-group control-group">
-		<% if (drafts.length) { %>
-			<a class="btn btn-warning draft-select">
-				<%= $.t('articles.drafts_templates')%>
-			</a>
-		<% } %>
-
-		<a href="javascript://" class="btn btn-info autosave"
-			data-normal="<%= $.t('articles.quicksave')%>"
-			data-saving="<%= $.t('articles.saving')%>">
-			<%= $.t('articles.quicksave')%>
-		</a>
-		<a href="javascript://" class="btn btn-info preview"><%= $.t('articles.preview')%></a>
-		<a href="javascript://" class="btn btn-primary article-save" data-stay="true"><%= $.t('articles.save_only')%></a>
-		<a href="javascript://" class="btn btn-primary article-save"><%= $.t('articles.save_and_leave')%></a>
-	</div>
+			<div class="form-group control-group">
+				<div class="form-group">
+					<a href="javascript://" class="btn btn-primary article-save" data-stay="true"><%= $.t('articles.save_only')%></a>
+					<a href="javascript://" class="btn btn-primary article-save"><%= $.t('articles.save_and_leave')%></a>
+				</div>
+				<% if (drafts.length) { %>
+					<a class="btn btn-warning draft-select">
+						<%= $.t('articles.drafts_templates')%>
+					</a>
+				<% } %>
+				<a href="javascript://" class="btn btn-info autosave"
+					data-normal="<%= $.t('articles.quicksave')%>"
+					data-saving="<%= $.t('articles.saving')%>">
+					<%= $.t('articles.quicksave')%>
+				</a>
+				<a href="javascript://" class="btn btn-info preview"><%= $.t('articles.preview')%></a>
+		</div>
 			<div class="js-datepicker-group form-group control-group">
 			<div>
 				<label class="control-label required" for="publish_from"><%= $.t('articles.publish_from')%></label>
-				<div class="input-group">
+				<div class="input-group form-group">
 						<input class="form-control publish_from datepicker-default" type="text" autocomplete="on" name="publish_from_date" id="publish_from" value="<%= article.publish_from_date %>" />
 					<div class="input-group-btn">
 						<button class="btn btn-default set-date-now" data-target-date="publish_from_date"><%= $.t('articles.today') %></button>
@@ -322,7 +323,7 @@
 			<!-- Pubslish dated -->
 			<div class="control-group form-group control-group">
 				<label class="control-label" for="publish_to"><%= $.t('articles.publish_to')%></label>
-				<div class="input-group">
+				<div class="input-group form-group">
 					<input class="form-control publish_to datepicker-default" type="text" name="publish_to_date" id="publish_to" value="<%= article.publish_to_date %>" />
 					<div class="input-group-btn">
 					<button class="btn btn-default btn-normal set-date-now" data-target-date="publish_to_date"><%= $.t('articles.today') %></button>
@@ -439,7 +440,8 @@
 <!-- modal dialogs -->
 
 <!-- Modal - author -->
-<div class="modal fade author-modal-articles" tabindex="-1" role="dialog" aria-labelledby="author-modal-articles" aria-hidden="true" style="display: none; ">
+<div class="modal fade author-modal-articles" tabindex="-1" role="dialog" aria-labelledby="author-modal-articles" aria-hidden="true"
+>
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -499,11 +501,11 @@
 <!-- /Modal - photos -->
 
 <!-- Modal - source -->
-<div class="modal fade source-modal-articles" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
+<div class="modal fade source-modal-articles" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="source-modal-articles" aria-hidden="true">×</button>
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 				<h3 id="myModalLabel"><%= $.t('articles.add_new_source') %></h3>
 			</div>
 			<div class="modal-body">
@@ -526,7 +528,7 @@
 <!-- /Modal - source -->
 
 <!-- Modal - tags -->
-<div class="modal fade tag-modal-articles" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
+<div class="modal fade tag-modal-articles" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -553,7 +555,7 @@
 </div>
 <!-- /Modal - tags -->
 
-<div id="draft-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
+<div id="draft-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
