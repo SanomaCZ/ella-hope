@@ -5887,3 +5887,6 @@ a.chzn-single:focus {
 .chzn-single[href]:focus {
   background-color: #ec971f;
 }
+.remove-filmstrip-frame {
+  cursor: pointer;
+}
