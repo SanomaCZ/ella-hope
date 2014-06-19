@@ -17,44 +17,35 @@
 
 	<% } else { %>
 
-	<div class="hero-unit">
-		<div class="defaults">
 			<h3>
 				<%= $.t('photos.default_values')%>
 			</h3>
-			<div class="row">
-				<select name="filename_default">
-					<option value=""><%= $.t('photos.use_filename')%></option>
-					<option value="title"><%= $.t('photos.title');%></option>
-					<option value="description"><%= $.t('photos.description');%></option>
-				</select>
-			</div>
+
+			<select name="filename_default" class="form-control form-group">
+				<option value=""><%= $.t('photos.use_filename')%></option>
+				<option value="title"><%= $.t('photos.title');%></option>
+				<option value="description"><%= $.t('photos.description');%></option>
+			</select>
 
 			<%== can.view.render(window.HOPECFG.APP_ROOT + '/photos/views/photo.ejs', {
 				photo: {},
 				isPlaceholder: true
 			}) %>
-		</div>
-	</div>
 
-	<div class="hero-unit">
-		<div class="row">
-			<div>
-				<label for="image"><%= $.t('photos.file')%></label>
-			</div>
+
+		<div class="form-group">
+			<label for="image"><%= $.t('photos.file')%></label>
 			<input type="file" id="file" name="attached_object" multiple/>
 		</div>
-	</div>
 
 	<h3>
 		<%= $.t('photos.chosen_images')%>
 	</h3>
 	<div id="images"></div>
 
-	<div class="row">
-		<div class="progress progress-striped active">
-			<div class="bar" style="width:0%;"></div>
-		</div>
+
+	<div class="progress progress-striped active">
+		<div class="bar" style="width:0%;"></div>
 	</div>
 
 	<div class="alert response_msg" style="display:none">

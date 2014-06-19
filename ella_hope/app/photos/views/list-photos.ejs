@@ -14,20 +14,22 @@
 			%>
 			<tr>
 				<td>
-				    <a class="thumbnail" href="<%== editUrl %>">
-				        <img style="height:60px;" src="<%= photo.public_url %>" />
+				    <a href="<%== editUrl %>">
+				        <img style="width:120px;" src="<%= photo.public_url %>" class="thumbnail" >
 				    </a>
 				</td>
 				<td><a href="<%== editUrl %>"><%= photo.title %></a></td>
 				<td><%= photo.description %></td>
 				<td>
-					<!-- Edit -->
-					<a <%= (el) -> el.data( 'photo', photo ) %> href="<%= editUrl %>" class="btn btn-mini edit-photo">
-						<%= $.t('photos.edit');%> <i class="icon-pencil"></i>
-					</a>
-
-					<!-- Delete -->
-					<a <%= (el) -> el.data( 'photo', photo ) %> href="javascript://" class="btn btn-mini btn-danger delete" data-confirm="<%= $.t('photos.confirm_delete_photo') %>"><%= $.t('photos.delete');%> <i class="icon-trash icon-white"></i></a>
+					<div class="btn-group" style="min-width: 80px;">
+						<!-- Edit -->
+						<a <%= (el) -> el.data( 'photo', photo ) %> href="<%= editUrl %>" class="btn btn-sm btn-default edit-photo" title="<%= $.t('photos.edit');%>">
+							<i class="glyphicon glyphicon-pencil"></i>
+						</a>
+	
+						<!-- Delete -->
+						<a <%= (el) -> el.data( 'photo', photo ) %> href="javascript://" class="btn btn-sm btn-default delete" data-confirm="<%= $.t('photos.confirm_delete_photo') %>" title="<%= $.t('photos.delete');%>"><i class="glyphicon glyphicon-remove"></i></a>
+					</div>
 				</td>
 			</tr>
 		<% } ) %>
