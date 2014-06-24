@@ -151,7 +151,7 @@ steal(
 					type: 'POST',
 					async: true,
 					data: JSON.stringify({
-						publishable: "/admin-api/article/" + articleID + "/",
+						publishable: "/admin-api/publishable/" + articleID + "/",
 						related: "/admin-api/article/" + relatedID + "/"
 					}),
 					dataType: 'json',

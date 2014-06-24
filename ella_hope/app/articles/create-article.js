@@ -661,7 +661,7 @@ steal(
 		 */
 		save_listing: function(wrapper) {
 			var listingAttrs = {
-				publishable: this.article.resource_uri
+				publishable: "/admin-api/publishable/" + this.article.id + "/"
 				, category: $(wrapper).find('select[name=listing_category]').val()
 				, commercial: $(wrapper).find('input[name=listing_commercial]').is(':checked')
 			};
