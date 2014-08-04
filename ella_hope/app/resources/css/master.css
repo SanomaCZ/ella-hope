@@ -5659,7 +5659,8 @@ a.help-inline:hover {
 .error .input-group input,
 .error label + input,
 .error .chzn-search input,
-.error .search-field {
+.error .search-field,
+.error input.form-control {
   border: 1px solid #a94442 !important;
 }
 #inner-content .table tr:hover {
@@ -5889,4 +5890,22 @@ a.chzn-single:focus {
 }
 .remove-filmstrip-frame {
   cursor: pointer;
+}
+.overlay {
+  background: #000;
+  opacity: 90;
+  filter: alpha(opacity=9000);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 100;
+  text-align: center;
+  padding-top: 100px;
+}
+.overlay i {
+  font-size: 40px;
+  color: #0b521b;
+}
+.overlay h1 {
+  color: #ccc;
 }

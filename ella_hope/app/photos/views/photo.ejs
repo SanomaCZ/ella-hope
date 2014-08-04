@@ -17,7 +17,7 @@
 		<div class="form-group control-group">
 			<label class="control-label" for="source"><%= $.t('photos.source')%></label>
 
-			<div class="controls">
+			<div class="control-group">
 				<select name="source" data-placeholder="<%= $.t('photos.choose_source')%>"
 						class="photo-source source">
 					<option></option>
@@ -32,13 +32,14 @@
 			</div>
 		</div>
 
-		<div class="form-group control-group">
-			<label class="control-label" for="title"><%= $.t('photos.title')%></label>
+		<div class="form-group">
+			<label class="control-label <%= isPlaceholder ? '' : 'required' %>" for="title"><%= $.t('photos.title')%></label>
 			<div class="control-group">
-			<input class="form-control title" type="text" id="title" name="title" placeholder="<%= $.t('photos.add_title')%>" value="<%= photo.title %>"/>
+				<input class="form-control title" type="text" id="title" name="title" placeholder="<%= $.t('photos.add_title')%>" value="<%= photo.title %>"/>
+				<p class="help-inline"></p>
 			</div>
-			<span class="help-inline"></span>
 		</div>
+
 		<div class="form-group">
 			<label class="control-label <%= isPlaceholder ? '' : 'required' %>" for="authors">
 				<%= $.t('photos.authors')%>

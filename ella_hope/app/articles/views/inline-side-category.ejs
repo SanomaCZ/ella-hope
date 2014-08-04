@@ -25,92 +25,84 @@
 
 		%>
 
-				<div class="form-group clearfix">
-					<div class="col-sm-6">
-						<label class="control-label required"><%= $.t('articles.side_category')%></label>
-						<div class="control-group">
-							<select data-id="<%= listing.id %>" name="<%= listing.prefix %>_category" class="listing_category" data-placeholder="<%= $.t('articles.choose_side_category')%>">
-									<option></option>
-									<% if (listing.category) { %>
-											<option value="<%= listing.category.resource_uri %>" selected="selected"><%= listing.category.full_title %></option>
-									<% } %>
-							</select>
-						</div>
-						<span class="help-inline"></span>
-						
-					</div>
-					<div class="col-sm-5">
-						<div class="checkbox">
-							<label class="checkbox">
-								<input type="checkbox" name="<%= listing.prefix %>_commercial" <%= listing.commercial ? 'checked=checked' : '' %> value="true" />
-								<%= $.t('articles.side_category_commercial')%>
-							</label>
-						</div>						
-					</div>
-				</div>
-		<div class="form-group clearfix">
-
-				<div class="col-sm-6 form-group">
-		<div class="js-datepicker-group">
-				<div class="control-group">
-						<label class="control-label required" for="listing_publish_from"><%= $.t('articles.side_category_publish_from')%></label>
-
-						<div class="controls">
-								<div class="form-group input-group">
-										<input class="form-control publish_from datepicker-default" type="text" name="<%= listing.prefix %>_publish_from_date" value="<%= publish_from_date %>"/>
-										<div class="input-group-btn">
-											<button class="btn btn-default btn-normal set-date-now" data-target-date="listing_publish_from_date">
-													<%= $.t('articles.today') %>
-											</button>
-										</div>
-								</div>
-								<div class="input-group">
-									<input type="text" class="form-control timepicker-default span1 listing_publish_from" name="<%= listing.prefix %>_publish_from_time" value="<%= publish_from_time %>"/>
-									<div class="input-group-btn">
-										<button class="btn btn-default btn-normal set-datetime-now" data-target-date="listing_publish_from_date" data-target-time="listing_publish_from_time">
-											<%= $.t('articles.now') %>
-										</button>
-									</div>
-								</div>
-								<span class="help-inline"></span>
-						</div>
-				</div>
-				
+	<div class="form-group clearfix">
+		<div class="col-sm-6 control-group">
+			<label class="control-label required"><%= $.t('articles.side_category')%></label>
+			<div class="">
+				<select data-id="<%= listing.id %>" name="<%= listing.prefix %>_category" class="listing_category" data-placeholder="<%= $.t('articles.choose_side_category')%>">
+						<option></option>
+						<% if (listing.category) { %>
+								<option value="<%= listing.category.resource_uri %>" selected="selected"><%= listing.category.full_title %></option>
+						<% } %>
+				</select>
+			</div>
+			<p class="help-inline"></p>
 		</div>
-				</div>
+		<div class="col-sm-5 control-group">
+			<div class="checkbox">
+				<label class="checkbox">
+					<input type="checkbox" name="<%= listing.prefix %>_commercial" <%= listing.commercial ? 'checked=checked' : '' %> value="true" />
+					<%= $.t('articles.side_category_commercial')%>
+				</label>
+			</div>
+		</div>
+	</div>
 				
-				<div class="col-sm-5 form-group">
+		<div class="form-group js-datepicker-group clearfix">
 
+			<div class="col-sm-6 control-group form-group">
 
-								<label class="control-label" for="listing_publish_to"><%= $.t('articles.side_category_publish_to')%></label>
-
-								<div class="form-group controls">
-										<div class="input-group form-group">
-												<input class="form-control publish_to datepicker-default" type="text" name="<%= listing.prefix %>_publish_to_date" value="<%= publish_to_date %>"/>
-												<div class="input-group-btn">
-													<button class="btn btn-default btn-normal set-date-now" data-target-date="listing_publish_to_date">
-															<%= $.t('articles.today') %>
-													</button>
-												</div>
-										</div>
-										<div class="input-group">
-											<input type="text" class="form-control timepicker-default span1 listing_publish_to" name="<%= listing.prefix %>_publish_to_time" value="<%= publish_to_time %>"/>
-											<div class="input-group-btn">
-												<button class="btn btn-default btn-normal set-datetime-now" data-target-date="listing_publish_to_date" data-target-time="listing_publish_to_time">
-														<%= $.t('articles.now') %>
-												</button>
-											</div>
-										</div>
-										<span class="help-inline"></span>
+				<label class="control-label required" for="listing_publish_from"><%= $.t('articles.side_category_publish_from')%></label>
+				<div class="controls">
+						<div class="form-group input-group">
+								<input class="form-control <%= listing.prefix %>_publish_from datepicker-default js_publish_from_listing_date" type="text" name="<%= listing.prefix %>_publish_from_date" value="<%= publish_from_date %>"/>
+								<div class="input-group-btn">
+									<button class="btn btn-default btn-normal set-date-now" data-target-date="listing_publish_from_date">
+											<%= $.t('articles.today') %>
+									</button>
 								</div>
-										<div class="">
-											 <button class="btn btn-info pull-right js-copy-dates-from-publishable">
-											 	<%= $.t('articles.copy_dates') %>
-											 </button>
-									 </div>
-						
-
+						</div>
+						<div class="input-group">
+							<input type="text" class="form-control <%= listing.prefix %>_publish_from timepicker-default span1 js_publish_from_listing_time" name="<%= listing.prefix %>_publish_from_time" value="<%= publish_from_time %>"/>
+							<div class="input-group-btn">
+								<button class="btn btn-default btn-normal set-datetime-now" data-target-date="listing_publish_from_date" data-target-time="listing_publish_from_time">
+									<%= $.t('articles.now') %>
+								</button>
+							</div>
+						</div>
+						<p class="help-inline"></p>
 				</div>
+
+			</div>
+				
+			<div class="col-sm-5 control-group form-group">
+				<label class="control-label" for="listing_publish_to"><%= $.t('articles.side_category_publish_to')%></label>
+
+				<div class="controls form-group">
+					<div class="input-group form-group">
+							<input class="form-control <%= listing.prefix %>_publish_to datepicker-default" type="text" name="<%= listing.prefix %>_publish_to_date" value="<%= publish_to_date %>"/>
+							<div class="input-group-btn">
+								<button class="btn btn-default btn-normal set-date-now" data-target-date="listing_publish_to_date">
+										<%= $.t('articles.today') %>
+								</button>
+							</div>
+					</div>
+					<div class="input-group">
+						<input type="text" class="form-control <%= listing.prefix %>_publish_to timepicker-default span1 listing_publish_to" name="<%= listing.prefix %>_publish_to_time" value="<%= publish_to_time %>"/>
+						<div class="input-group-btn">
+							<button class="btn btn-default btn-normal set-datetime-now" data-target-date="listing_publish_to_date" data-target-time="listing_publish_to_time">
+									<%= $.t('articles.now') %>
+							</button>
+						</div>
+					</div>
+				</div><!-- /.form-group controls -->
+				<p class="help-inline"></p>
+				<div class="">
+					<button class="btn btn-info js-copy-dates-from-publishable">
+						<%= $.t('articles.copy_dates') %>
+					</button>
+				</div>
+			</div><!-- /.col-sm-5 -->
 
 		</div>
 

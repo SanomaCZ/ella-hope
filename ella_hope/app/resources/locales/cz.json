@@ -112,7 +112,11 @@
 		"filmstrip_frames": "Frames",
 		"frame_number": "Frame number",
 		"add_filmstrip_frame": "Add frame",
-		"copy_dates": "copy from base publication"
+		"copy_dates": "copy from base publication",
+		"empty_field": "Toto pole nemůže být prázdné",
+		"slug_not_valid": "Neplatný slug",
+		"date_not_valid": "Datum musí být menší než datum publikace",
+		"wrong_publish_date": "Nesprávný datum publikace"
 	},
 	"gallaries": {
 		"change_title": "Change photo's title",

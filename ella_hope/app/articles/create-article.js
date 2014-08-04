@@ -268,17 +268,17 @@ steal(
 
 						if (isTo.test(inputName) && $(this).val()) {
 							var toVal = $(this).val();
-							var fromVal = wrapper.find('input[name*=_from_].datepicker-default').val()
+							var fromVal = wrapper.find('input[name*=_from].datepicker-default').val()
 						} else if (isFrom.test(inputName) && $(this).val()) {
 							var fromVal = $(this).val();
-							var toVal = wrapper.find('input[name*=_to_].datepicker-default').val()
+							var toVal = wrapper.find('input[name*=_to].datepicker-default').val()
 						} else {
 							fromVal = toVal = 0;
 						}
 
 						if (toVal && fromVal > toVal) {
-							wrapper.find('.help-inline').html($.t('fix chronology of items')).show();
-
+							console.log(toVal);
+							wrapper.find('.help-inline').html($.t('articles.wrong_publish_date')).show();
 						} else {
 							wrapper.find('.help-inline').html("").hide();
 						}
@@ -640,6 +640,10 @@ steal(
 
 			if (errors) {
 				$.each(errors, function (e) {
+					console.log(idSelector);
+					console.log(input_prefix);
+					console.log(e);
+					console.log(nested_block);
 						$(idSelector ? '#' + idSelector : '.' + input_prefix + e, nested_block)
 						.closest('.control-group')
 						.addClass('error')
@@ -650,6 +654,8 @@ steal(
 				$('html, body').animate({
 					scrollTop: $('.control-group.error:first').offset().top - 50
 				}, 500);
+				
+				$('.help-inline').show();
 			}
 		},
 
@@ -2135,7 +2141,6 @@ steal(
 					}
 				});
 			sideCats.find('.timepicker-default').timepicker(self.options.timeOptions);
-
 		},
 
 		'.js-remove-item click': function(el, ev) {

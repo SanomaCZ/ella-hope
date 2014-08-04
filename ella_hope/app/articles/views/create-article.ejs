@@ -16,7 +16,7 @@
 			
 			<!-- slug + category -->
 			<div class="form-group control-group row">
-				<div class="col-sm-5">
+				<div class="col-sm-5 control-group">
 					<div class="form-group">
 						<label class="control-label required" for="slug"><%= $.t('articles.slug')%></label>
 						<div class="input-group">
@@ -28,7 +28,7 @@
 						<p class="help-inline"></p>
 					</div>
 				</div>
-				<div class="col-sm-7">
+				<div class="col-sm-7 control-group">
 					<label class="control-label required" for="category"><%= $.t('articles.category')%></label>
 					<div class="controls">
 						<select name="category" id="category" data-placeholder="<%= $.t('articles.choose_category')%>" class="category">
@@ -44,9 +44,9 @@
 
 			</div><!-- /.slug + category -->
 			
-			<!-- author -->
-			<div class="form-group control-group row">
-				<div class="col-sm-5">
+			<!-- author + source -->
+			<div class="form-group row">
+				<div class="col-sm-5 control-group">
 					<div class="form-group">
 						<label class="control-label required" for="authors"><%= $.t('articles.authors')%></label>
 						<div class="controls">
@@ -65,7 +65,7 @@
 					</div>
 				</div><!-- /.col-sm-5 -->
 				
-				<div class="col-sm-6">
+				<div class="col-sm-6 control-group">
 					<label class="control-label" for="source"><%= $.t('articles.source')%></label>
 					<div class="control-group">
 						<select name="source" id="source" data-placeholder="<%= $.t('articles.choose_source')%>" class="btn btn-default article-source source">
@@ -81,7 +81,17 @@
 				</div>
 				
 			</div><!-- /.author -->
-			
+
+			<!-- Description -->
+			<div class="form-group control-group js-textrea-box">
+				<label class="control-label" for="description"><%= $.t('articles.description')%></label>
+				<div class="controls">
+					<textarea class="form-control description" name="description" id="description" placeholder="<%= $.t('articles.add_description')%>"><%= article.description %></textarea>
+					<p class="help-inline"></p>
+				</div>
+				<div class="box-snippet hero-unit pull-right"></div>
+			</div><!-- /Description -->
+
 			<!-- textarea -->
 			<% if (this.model !== 'filmstrips') { %>
 			<div class="form-group control-group js-textrea-box clearfix">
@@ -97,16 +107,6 @@
 				<div class="box-snippet hero-unit pull-right"></div>
 			</div>
 			<% } %><!-- /.textarea -->
-			
-			<!-- Description -->
-			<div class="form-group control-group js-textrea-box">
-				<label class="control-label" for="description"><%= $.t('articles.description')%></label>
-				<div class="controls">
-					<textarea class="form-control description" name="description" id="description" placeholder="<%= $.t('articles.add_description')%>"><%= article.description %></textarea>
-					<p class="help-inline"></p>
-				</div>
-				<div class="box-snippet hero-unit pull-right"></div>
-			</div><!-- /Description -->
 			
 			<!-- Tags + Main tag -->
 			<div class="form-group control-group row">
@@ -301,36 +301,36 @@
 				</a>
 				<a href="javascript://" class="btn btn-info preview"><%= $.t('articles.preview')%></a>
 		</div>
-			<div class="js-datepicker-group form-group control-group">
-			<div>
+		
+		<div class="js-datepicker-group">
+			<div class="form-group control-group">
 				<label class="control-label required" for="publish_from"><%= $.t('articles.publish_from')%></label>
 				<div class="input-group form-group">
-						<input class="form-control publish_from datepicker-default" type="text" autocomplete="on" name="publish_from_date" id="publish_from" value="<%= article.publish_from_date %>" />
+						<input class="form-control publish_from datepicker-default js_publish_from_date" type="text" autocomplete="on" name="publish_from_date" id="publish_from" value="<%= article.publish_from_date %>" />
 					<div class="input-group-btn">
 						<button class="btn btn-default set-date-now" data-target-date="publish_from_date"><%= $.t('articles.today') %></button>
 					</div>
 				</div>
 				<div class="input-group">
-						<input type="text" class="form-control timepicker-default span1 publish_from" autocomplete="on" name="publish_from_time" id="publish_from_time" value="<%= article.publish_from_time %>" />
+					<input type="text" class="form-control timepicker-default span1 publish_from js_publish_from_time" autocomplete="on" name="publish_from_time" id="publish_from_time" value="<%= article.publish_from_time %>" />
 					<div class="input-group-btn">
 						<button class="btn btn-default set-datetime-now" data-target-date="publish_from_date" data-target-time="publish_from_time"><%= $.t('articles.now') %></button>
 					</div>
 				</div>
-					<p class="help-inline"></p>
-				</div>
+				<p class="help-inline"></p>
 			</div>
 			
 			<!-- Pubslish dated -->
-			<div class="control-group form-group control-group">
+			<div class="form-group control-group">
 				<label class="control-label" for="publish_to"><%= $.t('articles.publish_to')%></label>
 				<div class="input-group form-group">
-					<input class="form-control publish_to datepicker-default" type="text" name="publish_to_date" id="publish_to" value="<%= article.publish_to_date %>" />
+					<input class="form-control publish_to datepicker-default js_publish_to_date" type="text" name="publish_to_date" id="publish_to" value="<%= article.publish_to_date %>" />
 					<div class="input-group-btn">
 					<button class="btn btn-default btn-normal set-date-now" data-target-date="publish_to_date"><%= $.t('articles.today') %></button>
 					</div>
 				</div>
 				<div class="input-group">
-					<input type="text" class="form-control timepicker-default span1" name="publish_to_time" id="publish_to_time" value="<%= article.publish_to_time %>" />
+					<input type="text" class="form-control timepicker-default js_publish_to_time" name="publish_to_time" id="publish_to_time" value="<%= article.publish_to_time %>" />
 					<div class="input-group-btn">
 					<button class="btn btn-default btn-normal set-datetime-now" data-target-date="publish_to_date"
 						data-target-time="publish_to_time"><%= $.t('articles.now') %></button>
@@ -338,7 +338,8 @@
 				</div>
 				<p class="help-inline"></p>
 			</div><!-- Pubslish date -->
-			
+		</div>
+		
 			<!-- Article photo -->
 			<div class="control-group form-group control-group">
 				<label class="control-label" for="photo"><%= $.t('articles.photo')%></label>
@@ -360,7 +361,21 @@
 				</div>
 			</div><!-- /Article photo -->
 
-			
+			<!-- State -->
+			<div class="form-group control-group">
+				<label class="control-label" for="state"><%= $.t('articles.state')%></label>
+				<div class="controls">
+					<select name="state" id="state" data-placeholder="<%= $.t('articles.choose_state')%>" class="chzn-select state">
+						<% $.each(states || [], function(i, state){ %>
+							<option value="<%= state %>" <%= (article.state == state) ? "selected=selected" : "" %>>
+								<%= state %>
+							</option>
+						<% }) %>
+					</select>
+					<p class="help-inline"></p>
+				</div>
+			</div>
+
 			<div class="form-group control-group">
 
 				<label class="control-label"><%= $.t('articles.display_options')%></label>
@@ -415,23 +430,6 @@
 			</div>
 		</div>
 
-		<div class="form-group control-group">
-			<label class="control-label" for="state"><%= $.t('articles.state')%></label>
-			<div class="controls">
-				<select name="state" id="state" data-placeholder="<%= $.t('articles.choose_state')%>" class="chzn-select state">
-					<% $.each(states || [], function(i, state){ %>
-						<option value="<%= state %>" <%= (article.state == state) ? "selected=selected" : "" %>>
-							<%= state %>
-						</option>
-					<% }) %>
-				</select>
-				<p class="help-inline"></p>
-			</div>
-		</div>
-
-
-					
-					
 		</div><!-- /.col-sm-3 -->
 
 	</form>
