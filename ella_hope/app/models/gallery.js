@@ -18,6 +18,12 @@ steal(
 					});
 				})
 
+				self.validate("slug", function (val){
+					if (!val.match(/^[a-z0-9-]+$/)) {
+						return $.t('articles.slug_not_valid');
+					}
+				});
+
 				// TODO - compare dates se that publish_from is not later then publish_to
 				//<%= $.t('The end date can not be less then the start date') %>
 			},
