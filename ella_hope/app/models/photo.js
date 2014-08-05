@@ -3,11 +3,11 @@ steal(
 	function ($) {
 		Photo = can.Model({
 			init: function () {
-				// this.validate("title", function (val){
-				// 	if (val === null || val === '') {
-				// 		return $.t('This field can not be empty');
-				// 	}
-				// });
+				this.validate("title", function (val){
+					if (val === null || val === '') {
+						return $.t('This field can not be empty');
+					}
+				});
 				// this.validate("source", function (val){
 				// 	if (val === null || val === '') {
 				// 		return $.t('This field can not be empty');
@@ -27,7 +27,7 @@ steal(
 					traditional: true,
 					type: 'GET',
 					async: true,
-					dataType: "json",
+					dataType: "json", 
 					success: success,
 					error: error
 				});

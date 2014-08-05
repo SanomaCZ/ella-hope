@@ -2,30 +2,35 @@
 	<h1><%= this.model %></h1>
 </div>
 
-<a href="<%= can.route.url({ page: 'photos', action: 'new-photos' })%>" class="btn btn-primary">
-	<%= $.t('photos.new_photo') %>
-</a>
-<a href="<%= can.route.url({ page: 'photos', action: 'new-videos' })%>" class="btn btn-primary">
-	<%= $.t('photos.new_video') %>
-</a>
-
-<form class="form-horizontal list-filter" id="filter">
+<form class="form-inline list-filter clearfix" id="filter">
+	<div class="pull-left">
+		<a href="<%= can.route.url({ page: 'photos', action: 'new-photos' })%>" class="btn btn-success">
+			<%= $.t('photos.new_photo') %>
+		</a>
+		<a href="<%= can.route.url({ page: 'photos', action: 'new-videos' })%>" class="btn btn-success">
+			<%= $.t('photos.new_video') %>
+		</a>
+	</div>
+	<div class="pull-right">
+		<div class="input-group">
+			<input type="text" name="title" class="input-medium form-control" placeholder="<%= $.t('search by title') %>" />
+			<div class="input-group-btn">
+				<button type="submit" class="btn btn-default filter-items"><%= $.t('articles.search')%></button>
+			</div>
+		</div><!-- /.input-group -->
+		<button type="button" class="btn btn-default toggle-advanced <%= ($.cookie(window.HOPECFG.COOKIE_FILTER) == 'true') ? 'dropup' : 'dropdown' %>">
+			<span class="label-show"><%= $.t('Show advanced') %></span>
+			<span class="label-hide"><%= $.t('Hide advanced') %></span>
+			<span class="caret"></span>
+		</button>
+		<button type="button" class="btn btn-danger reset-filter">
+			<%= $.t('articles.reset_filter'); %>
+		</button>
+	</div>
+	
 	<div class="filter-basic controls-row">
 		<div class="pull-right">
-			&nbsp; &nbsp;
-			<button type="button" class="btn toggle-advanced <%= ($.cookie(window.HOPECFG.COOKIE_FILTER) == 'true') ? 'dropup' : 'dropdown' %>">
-				<span class="label-show"><%= $.t('Show advanced') %></span>
-				<span class="label-hide"><%= $.t('Hide advanced') %></span>
-				<span class="caret"></span>
-			</button>
-			<button type="button" class="btn btn-inverse reset-filter">
-				<%= $.t('articles.reset_filter'); %>
-			</button>
-		</div>
 
-		<div class="input-append pull-right">
-			<input type="text" name="title" class="input-medium" placeholder="<%= $.t('search by title') %>" />
-			<button type="submit" class="btn filter-items"><%= $.t('articles.search')%></button>
 		</div>
 	</div>
 
@@ -48,7 +53,7 @@
 <div id="inner-content"></div>
 
 <div class="pagination pagination-centered">
-	<ul>
+	<ul class="pagination">
 		<li><a href="#" class="prev"><%= $.t('common.prev') %></a></li>
 		<li class="current"><a></a></li>
 		<li><a href="#" class="next"><%= $.t('common.next') %></a></li>

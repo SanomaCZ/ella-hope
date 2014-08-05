@@ -8,11 +8,16 @@ steal(
 				$.each(self.prototype.required, function () {
 					self.validate(this, function (val) {
 						if (val === null || val === '') {
-							return $.t('This field can not be empty');
+							return $.t('articles.empty_field');
 						}
 					});
 				})
 
+				self.validate("slug", function (val){
+					if (!val.match(/^[a-z0-9-]+$/)) {
+						return $.t('articles.slug_not_valid');
+					}
+				});
 				// TODO - compare dates se that publish_from is not later then publish_to
 				//<%= $.t('The end date can not be less then the start date') %>
 			},
@@ -180,9 +185,10 @@ steal(
 					error: error
 				});
 			}
-
+			
 		}, {
 			required: ['content', 'category', 'title', 'slug', 'authors', 'publish_from']
 		});
 	}
+	
 );

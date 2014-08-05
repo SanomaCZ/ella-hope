@@ -1,19 +1,24 @@
-<div class="navbar-inner">
-	<div class="container">
-		<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+
+	<div class="container-fluid">
+		<div class="navbar-header">
+		
+		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#js-navbar">
+			<span class="sr-only">Toggle navigation</span>
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
-		</a>
-		<a class="brand" href="<%== can.route.url({ page: 'dashboard' }); %>">
+		</button>
+		
+		<a class="brand navbar-brand" href="<%== can.route.url({ page: 'dashboard' }); %>">
 			<% if (BACKEND_NAME !== undefined || BACKEND_NAME) { %>
 				<%= BACKEND_NAME %>
 			<% } else { %>
 				<%= $.t('project.unknown') %>
 			<% } %>
 		</a>
-		<div class="nav-collapse">
-			<ul class="nav">
+	</div>
+		<div class="collapse navbar-collapse" id="js-navbar" role="navigation">
+			<ul class="nav navbar-nav">
 				<li class="dashboard"><%== can.route.link( $.t('navigation.home'), { page: 'dashboard' }, {}, false); %></li>
 
 				<% if (USER.auth_tree.articles) { %>
@@ -64,5 +69,3 @@
 		</div><!--/.nav-collapse -->
 		<div id="load-state" class="pull-right"></div>
 	</div>
-
-</div>

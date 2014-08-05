@@ -1,27 +1,27 @@
 <div class="row" id="login">
-	<div class="alert alert-error" id="login-error">
+	<div class="alert alert-danger" id="login-error">
 		<a class="close" data-dismiss="alert">×</a>
 		<strong><%= $.t('login.error') %>: </strong><%= $.t('login.wrong_user_pass') %>
 	</div>
 
 	<div class="login-form">
 		<h2><%= $.t('login.login') %></h2>
-		<form>
+		<form class="form-horizontal">
 			<fieldset>
-				<div class="clearfix">
-					<input type="text" placeholder="<%= $.t('login.username')%>" name="username" required="required">
+				<div class="clearfix" style="margin-bottom: 10px;">
+					<input type="text" class="form-control" placeholder="<%= $.t('login.username')%>" name="username" required="required">
 				</div>
-				<div class="clearfix">
-					<input type="password" placeholder="<%= $.t('login.password')%>" name="password" required="required">
+				<div class="clearfix" style="margin-bottom: 10px;">
+					<input type="password" class="form-control" placeholder="<%= $.t('login.password')%>" name="password" required="required">
 				</div>
-				<div class="clearfix">
-					<select id="api_url" name="api_url" required="required">
+				<div class="clearfix" style="margin-bottom: 10px;">
+					<select id="api_url" name="api_url" required="required" style="margin-bottom: 10px;">
 						<% list(this.api_url, function(data) { %>
 							<option value="<%= data.url %>"><%= data.name %></option>
 						<% }) %>
 						<option value="0"><%= $.t('login.other') %></option>
 					</select>
-					<input type="text" name="api_url_custom" id="api_url_custom" placeholder="<%= $.t('login.enter_url')%>" disabled="disabled" />
+					<input type="text" class="form-control" name="api_url_custom" id="api_url_custom" placeholder="<%= $.t('login.enter_url')%>" disabled="disabled" />
 				</div>
 				<button class="btn btn-primary" type="submit" id="submit"><%= $.t('login.sign_in') %></button>
 			</fieldset>

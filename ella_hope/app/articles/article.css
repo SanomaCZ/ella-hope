@@ -19,13 +19,12 @@
 .article-state.deleted {
 	background-color: red !important;
 }
-
+/*
 .markItUpEditor {
 	background: #fff !important;
 	border: none !important;
 	font: 13px "Helvetica Neue", Helvetica, Arial !important;
-	padding: 5px !important;
-}
+}*/
 
 #photos-modal {
 	left: 3%;
@@ -56,9 +55,6 @@ button.add-author, button.add-tag {
 	display: none;
 }
 
-.title-photo  img {
-	max-height: 100px;
-}
 
 .title-photo-img img {
 	max-height: 100px;
@@ -117,7 +113,7 @@ button.add-author, button.add-tag {
 .formbg {
 	background-color: #f9f9f9;
 	border: 1px solid #ccc;
-	padding: 55px;
+	padding: 20px;
 }
 
 .hero-unit {
@@ -131,11 +127,6 @@ button.add-author, button.add-tag {
 	text-align: right;
 }
 
-.form-buttons a {
-	display: block;
-	width: 90px;
-	margin: 10px 0;
-}
 
 .toggle-advanced.dropdown .label-hide {
 	display: none;
@@ -155,7 +146,6 @@ img.max200 {
 }
 
 .remove-filmstrip-frame {
-	margin-right: 40%;
 	margin-top: 10px;
 	
 }
