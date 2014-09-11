@@ -1781,7 +1781,7 @@ steal(
 			ev.preventDefault();
 
 			// name that should be searched
-			var search = el.siblings('input[name=related-name]').val();
+			var search = el.parent().siblings('input[name=related-name]').val();
 
 			// search in title
 			var data = {
@@ -1789,7 +1789,6 @@ steal(
 				, 'excluded_ids': self.getAssignedPhotos(true)
 				, 'order_by': '-id'
 			};
-
 			Photo.findAll(data, function(photos){
 				self.renderRecentPhotos(photos);
 			});
