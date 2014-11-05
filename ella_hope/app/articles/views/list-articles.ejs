@@ -36,8 +36,8 @@
 				<td class="article-state <%= article.state %>" title="<%= article.state %>">&nbsp;</td>
 				<td class="article-title"><a href="<%== editUrl %>"><%= article.title %></a></td>
 				<td>
-					<% if (article.photo && article.photo.public_url) { %>
-						<img src="<%= article.photo.public_url %>" style="height:55px;" class="thumbnail"/>
+					<% if (article.photo && article.photo.thumbnail_url) { %>
+						<img src="<%= article.photo.thumbnail_url %>" style="height:55px;" class="thumbnail"/>
 					<% } %>
 				</td>
 				<td><span class="label label-default"><%= article.category.title %></span></td>
