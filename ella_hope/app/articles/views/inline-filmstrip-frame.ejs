@@ -14,7 +14,7 @@
 				<button class="btn btn-default add-filmstrip-frame-photo" data-filmstrip-frame-index="<%= index %>" ><%= $.t('articles.add_photo')%></button>
 			</div>
 			<div class="title-photo<%= index %> title-photo-img" <%= titlePhotoInserted === true ? '' : 'style=display:none' %>>
-				<img src="<%= item && item.photo ? item.photo.public_url : '' %>" />
+				<img src="<%= item && item.photo ? item.photo.thumbnail_url : '' %>" />
 				<button class="btn btn-default remove-filmstrip-frame-photo" data-filmstrip-frame-index="<%= index %>"><%= $.t('articles.remove_photo')%></button>
 			</div>
 			<input type="hidden" name="photo<%= index %>" value="<%= item && item.photo ? item.photo.resource_uri : '' %>" />
