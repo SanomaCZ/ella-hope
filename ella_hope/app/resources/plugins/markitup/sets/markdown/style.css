@@ -78,3 +78,9 @@
 .markItUp .markItUpArticleRef a{
         background-image:url('images/article.png');
 }
+.markItUp .markItUpSuperscript a{
+        background-image:url('images/superscript.png');
+}
+.markItUp .markItUpSubscript a{
+        background-image:url('images/subscript.png');
+}

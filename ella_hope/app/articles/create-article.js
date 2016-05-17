@@ -42,6 +42,8 @@ steal(
 					, {name:'EditorsTip', key: 'T', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertEditorsTipRef(markItUp.textarea); }, className: 'markItUpEditorsTipRef'}
 					, {name:'RelatedBox', key: 'R', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertRelatedBoxRef(markItUp.textarea); }, className: 'markItUpRelatedBoxRef'}
 					, {name:'Article', closeWith: function (markItUp) { return ArticleCreate.prototype.insertArticleRef(markItUp.textarea); }, className: 'markItUpArticleRef'}
+					, {name:'Superscript', openWith:'<sup>', closeWith:'</sup>', placeHolder:'Your superscript text here...', className: 'markItUpSuperscript'}
+					, {name:'Subscript', openWith:'<sub>', closeWith:'</sub>', placeHolder:'Your subscript text here...', className: 'markItUpSubscript'}
 					//{separator:'---------------'},
 					//{name:'Quotes', openWith:'> '},
 					//{name:'Code Block / Code', openWith:'(!(\t|!|`)!)', closeWith:'(!(`)!)'},
