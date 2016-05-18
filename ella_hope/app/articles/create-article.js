@@ -29,6 +29,9 @@ steal(
 					{name:'Bold', key:'B', openWith:'**', closeWith:'**'},
 					{name:'Italic', key:'I', openWith:'*', closeWith:'*'},
 					{separator:'---------------' },
+					{name:'Superscript', openWith:'<sup>', closeWith:'</sup>', placeHolder:'Your superscript text here...', className: 'markItUpSuperscript'},
+					{name:'Subscript', openWith:'<sub>', closeWith:'</sub>', placeHolder:'Your subscript text here...', className: 'markItUpSubscript'},
+					{separator:'---------------' },
 					{name:'Bulleted List', openWith:'- ' },
 					{name:'Numeric List', openWith:function(markItUp) {
 						return markItUp.line+'. ';
@@ -42,8 +45,6 @@ steal(
 					, {name:'EditorsTip', key: 'T', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertEditorsTipRef(markItUp.textarea); }, className: 'markItUpEditorsTipRef'}
 					, {name:'RelatedBox', key: 'R', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertRelatedBoxRef(markItUp.textarea); }, className: 'markItUpRelatedBoxRef'}
 					, {name:'Article', closeWith: function (markItUp) { return ArticleCreate.prototype.insertArticleRef(markItUp.textarea); }, className: 'markItUpArticleRef'}
-					, {name:'Superscript', openWith:'<sup>', closeWith:'</sup>', placeHolder:'Your superscript text here...', className: 'markItUpSuperscript'}
-					, {name:'Subscript', openWith:'<sub>', closeWith:'</sub>', placeHolder:'Your subscript text here...', className: 'markItUpSubscript'}
 					//{separator:'---------------'},
 					//{name:'Quotes', openWith:'> '},
 					//{name:'Code Block / Code', openWith:'(!(\t|!|`)!)', closeWith:'(!(`)!)'},
@@ -1321,7 +1322,7 @@ steal(
 					'{% endbox %}'
 				]
 			} else if (contentType == 'photos.photo') {
-				// for now detail can not be set in form (list-photos-item.ejs) 
+				// for now detail can not be set in form (list-photos-item.ejs)
 				var snippetData = [
 					"{% box inline_" + params.size + "_" + params.format + " for " + contentType + " with pk " + object.id + " %}",
 					params.photo_align === 'none' ? "" : "align:"+params.photo_align,
