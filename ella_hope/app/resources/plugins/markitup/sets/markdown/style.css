@@ -83,3 +83,6 @@
 .markItUp .markItUpArticleRef a{
         background-image:url('images/article.png');
 }
+.markItUp .markItUpTable a{
+        background-image:url('images/table.png');
+}

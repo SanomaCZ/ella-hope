@@ -45,6 +45,7 @@ steal(
 					, {name:'EditorsTip', key: 'T', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertEditorsTipRef(markItUp.textarea); }, className: 'markItUpEditorsTipRef'}
 					, {name:'RelatedBox', key: 'R', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertRelatedBoxRef(markItUp.textarea); }, className: 'markItUpRelatedBoxRef'}
 					, {name:'Article', closeWith: function (markItUp) { return ArticleCreate.prototype.insertArticleRef(markItUp.textarea); }, className: 'markItUpArticleRef'}
+					, {name:'Table', closeWith:function(markItUp) { return ArticleCreate.prototype.insertTable(markItUp.textarea); }, className: 'markItUpTable'}
 					//{separator:'---------------'},
 					//{name:'Quotes', openWith:'> '},
 					//{name:'Code Block / Code', openWith:'(!(\t|!|`)!)', closeWith:'(!(`)!)'},
@@ -1531,6 +1532,50 @@ steal(
 			var result = '\n[[[related\n' + '### Mohlo by vás zajímat\n\n' + 'place content here' + '\n\n]]]\n\n';
 			self.insertStaticBoxRef(el, result);
 		},
+
+        getIntValueFromUser: function (message, errorMessage, maxIter, defaultValue) {
+            var maxIter = typeof maxIter !== 'undefined' ? maxIter : 3;
+            var defaultValue = typeof defaultValue !== 'undefined' ? defaultValue : 5;
+            var value = null;
+            var counter = 0;
+
+            while (value == null || counter == maxIter) {
+                value = prompt(message);
+                try {
+                    value = parseInt(value);
+                }
+                catch(err) {
+                    alert(errorMessage);
+                    value = null;
+                }
+                maxIter++;
+            }
+
+            if (value == null) {
+                alert($.t("Value was set to") + ' ' + defaultValue);
+                value = defaultValue;
+            }
+            return value
+        },
+
+        insertTable: function (el) {
+            var self = this;
+            var errorMessage = $.t("Value must be number and greater than 0");
+            var rows = self.getIntValueFromUser($.t("Enter number of rows :"), errorMessage);
+            var columns = self.getIntValueFromUser($.t("Enter number of columns :"), errorMessage);
+
+            var result = '\n[[[table]]]\n\n';
+            for (i = 0; i < rows; i++) {
+                result += '<tr>';
+                for (j = 0; j < columns; j++) {
+                    result += '<td> place content here... </td>';
+                    if (j == columns - 1) result += '</tr>\n';
+                }
+            }
+            result += '\n[[[/table]]]\n';
+
+            self.insertStaticBoxRef(el, result);
+        },
 
 		/**
 		 * render photos in dialog so that user can choose photo
