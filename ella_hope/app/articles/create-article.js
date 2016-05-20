@@ -36,6 +36,7 @@ steal(
 					{name:'Numeric List', openWith:function(markItUp) {
 						return markItUp.line+'. ';
 					}},
+					{name:'Table', closeWith:function(markItUp) { return ArticleCreate.prototype.insertTable(markItUp.textarea); }, className: 'markItUpTable'},
 					{separator:'---------------' },
 					//{name:'Picture', key:'P', replaceWith:'![[![Alternative text]!]]([![Url:!:http://]!] "[![Title]!]")'},
 					{name:'Picture', key:'P', closeWith:function(markItUp) { return ArticleCreate.prototype.insertPhoto(); }},
@@ -45,7 +46,6 @@ steal(
 					, {name:'EditorsTip', key: 'T', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertEditorsTipRef(markItUp.textarea); }, className: 'markItUpEditorsTipRef'}
 					, {name:'RelatedBox', key: 'R', closeWith: function (markItUp) {  return ArticleCreate.prototype.insertRelatedBoxRef(markItUp.textarea); }, className: 'markItUpRelatedBoxRef'}
 					, {name:'Article', closeWith: function (markItUp) { return ArticleCreate.prototype.insertArticleRef(markItUp.textarea); }, className: 'markItUpArticleRef'}
-					, {name:'Table', closeWith:function(markItUp) { return ArticleCreate.prototype.insertTable(markItUp.textarea); }, className: 'markItUpTable'}
 					//{separator:'---------------'},
 					//{name:'Quotes', openWith:'> '},
 					//{name:'Code Block / Code', openWith:'(!(\t|!|`)!)', closeWith:'(!(`)!)'},
