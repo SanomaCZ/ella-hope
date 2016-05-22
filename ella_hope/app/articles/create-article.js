@@ -1540,15 +1540,12 @@ steal(
             var counter = 0;
 
             while (value == null || counter == maxIter) {
-                value = prompt(message);
-                try {
-                    value = parseInt(value);
-                }
-                catch(err) {
+                value = parseInt(prompt(message));
+                if (isNaN(value)) {
                     alert(errorMessage);
                     value = null;
                 }
-                maxIter++;
+                counter++;
             }
 
             if (value == null) {
@@ -1563,12 +1560,18 @@ steal(
             var errorMessage = $.t("Value must be number and greater than 0");
             var rows = self.getIntValueFromUser($.t("Enter number of rows :"), errorMessage);
             var columns = self.getIntValueFromUser($.t("Enter number of columns :"), errorMessage);
+            var firstRowHeader = confirm($.t("Is the first row header?"));
+            var firstColumnHeader = confirm($.t("Is the first column header?"));
 
             var result = '\n[[[table]]]\n\n';
             for (i = 0; i < rows; i++) {
                 result += '<tr>';
                 for (j = 0; j < columns; j++) {
-                    result += '<td> place content here... </td>';
+                    var tagName = 'td';
+                    if ((firstRowHeader && i == 0) || (firstColumnHeader && j == 0)) {
+                        tagName = 'th';
+                    }
+                    result += '<' + tagName + '>' + ' place content here... ' + '</' + tagName + '>';
                     if (j == columns - 1) result += '</tr>\n';
                 }
             }
