@@ -1533,33 +1533,26 @@ steal(
 			self.insertStaticBoxRef(el, result);
 		},
 
-        getIntValueFromUser: function (message, errorMessage, maxIter, defaultValue) {
-            var maxIter = typeof maxIter !== 'undefined' ? maxIter : 3;
-            var defaultValue = typeof defaultValue !== 'undefined' ? defaultValue : 5;
+        getPositiveIntValueFromUser: function (message, errorMessage) {
             var value = null;
-            var counter = 0;
 
-            while (value == null || counter == maxIter) {
-                value = parseInt(prompt(message));
-                if (isNaN(value)) {
-                    alert(errorMessage);
-                    value = null;
-                }
-                counter++;
-            }
+            value = parseInt(prompt(message));
 
-            if (value == null) {
-                alert($.t("Value was set to") + ' ' + defaultValue);
-                value = defaultValue;
-            }
+            if (isNaN(value) || value < 1) alert(errorMessage);
+
             return value
         },
 
         insertTable: function (el) {
             var self = this;
             var errorMessage = $.t("Value must be number and greater than 0");
-            var rows = self.getIntValueFromUser($.t("Enter number of rows :"), errorMessage);
-            var columns = self.getIntValueFromUser($.t("Enter number of columns :"), errorMessage);
+
+            var rows = self.getPositiveIntValueFromUser($.t("Enter number of rows :"), errorMessage);
+            if (isNaN(rows)) return self.insertStaticBoxRef(el, '');
+
+            var columns = self.getPositiveIntValueFromUser($.t("Enter number of columns :"), errorMessage);
+            if (isNaN(columns)) return self.insertStaticBoxRef(el, '');
+
             var firstRowHeader = confirm($.t("Is the first row header?"));
             var firstColumnHeader = confirm($.t("Is the first column header?"));
 
@@ -1571,7 +1564,7 @@ steal(
                     if ((firstRowHeader && i == 0) || (firstColumnHeader && j == 0)) {
                         tagName = 'th';
                     }
-                    result += '<' + tagName + '>' + ' place content here... ' + '</' + tagName + '>';
+                    result += '<' + tagName + '>' + ' text for row ' + (i + 1) + ' : ' + 'column ' + (j + 1) + ' ... ' + '</' + tagName + '>';
                     if (j == columns - 1) result += '</tr>\n';
                 }
             }
