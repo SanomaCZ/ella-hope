@@ -116,7 +116,12 @@
 		"empty_field": "Toto pole nemůže být prázdné",
 		"slug_not_valid": "Neplatný slug",
 		"date_not_valid": "Datum musí být menší než datum publikace",
-		"wrong_publish_date": "Nesprávný datum publikace"
+		"wrong_publish_date": "Nesprávný datum publikace",
+		"insert_table_error_input": "Hodnota musí být číslo větší než 0",
+		"insert_table_rows_number": "Kolik má mít tabulka řádků?",
+		"insert_table_columns_number": "Kolik má mít tabulka sloupců?",
+		"insert_table_first_row_header": "Chcete, aby první řádek byl hlavička?",
+		"insert_table_first_column_header": "Chcete, aby první sloupec byl hlavička?"
 	},
 	"gallaries": {
 		"change_title": "Change photo's title",

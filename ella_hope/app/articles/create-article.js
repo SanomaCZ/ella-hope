@@ -1545,16 +1545,16 @@ steal(
 
         insertTable: function (el) {
             var self = this;
-            var errorMessage = $.t("Value must be number and greater than 0");
+            var errorMessage = $.t("articles.insert_table_error_input");
 
-            var rows = self.getPositiveIntValueFromUser($.t("Enter number of rows :"), errorMessage);
+            var rows = self.getPositiveIntValueFromUser($.t("articles.insert_table_rows_number"), errorMessage);
             if (isNaN(rows)) return self.insertStaticBoxRef(el, '');
 
-            var columns = self.getPositiveIntValueFromUser($.t("Enter number of columns :"), errorMessage);
+            var columns = self.getPositiveIntValueFromUser($.t("articles.insert_table_columns_number"), errorMessage);
             if (isNaN(columns)) return self.insertStaticBoxRef(el, '');
 
-            var firstRowHeader = confirm($.t("Is the first row header?"));
-            var firstColumnHeader = confirm($.t("Is the first column header?"));
+            var firstRowHeader = confirm($.t("articles.insert_table_first_row_header"));
+            var firstColumnHeader = confirm($.t("articles.insert_table_first_column_header"));
 
             var result = '\n[[[table]]]\n\n';
             for (i = 0; i < rows; i++) {
