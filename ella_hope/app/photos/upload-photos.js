@@ -474,6 +474,7 @@ steal(
 					el.find('.progress .bar').css('width', percentComplete+'%');
 				},
 				success: function() {
+					
 					setTimeout(function(){
 						// empty file input so that new files can be chosen
 						self.clearFileInput();
@@ -491,6 +492,12 @@ steal(
 						.show()
 						.addClass('alert-success')
 						.find('span').html($.t('<strong>Well done!</strong> Photo uploaded.'));
+
+					self.removeFileInput();
+					$('.add-another-photo')
+						.on( "click", function() {
+							window.location = window.location.pathname + window.location.hash;
+						}).show();
 				},
 
 				error: function(xhr, error) {
@@ -696,6 +703,10 @@ steal(
 
 		clearFileInput: function() {
 			$('#file').replaceWith('<input type="file" id="file" name="attached_object" multiple />');
+		},
+
+		removeFileInput: function() {
+			$('#file').remove();
 		},
 
 		/**
