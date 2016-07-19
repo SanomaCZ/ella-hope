@@ -1761,12 +1761,13 @@ steal(
 			ev.preventDefault();
 
 			var self = this;
-			var search = el.siblings('input[name=related-name]').val();
+			var search = el.closest('.input-group').find('input[name=related-name]').val();
 
 			// search in title
 			var data = {
 				"title__icontains": search,
-				'excluded_ids': self.getRelatedIds(true)
+				'excluded_ids': self.getRelatedIds(true),
+				'limit': 50
 			};
 
 			Article.findAll(data, function (articles) {
