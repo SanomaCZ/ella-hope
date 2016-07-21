@@ -79,6 +79,19 @@ steal(
 
 			destroy: 'DELETE ' + BASE_URL + '/article/{id}/',
 
+			findForRelated: function (params, success, error) {
+				return $.ajax({
+					url: BASE_URL + '/publishable/',
+					data: params,
+					traditional: true,
+					type: 'GET',
+					async: true,
+					dataType: "json",
+					success: success,
+					error: error
+				});
+			},
+
 			/**
 			 * get articles by tags
 			 * $server/admin-api/tag/related/article/100;101;106/
@@ -157,7 +170,7 @@ steal(
 					async: true,
 					data: JSON.stringify({
 						publishable: "/admin-api/publishable/" + articleID + "/",
-						related: "/admin-api/article/" + relatedID + "/"
+						related: "/admin-api/publishable/" + relatedID + "/"
 					}),
 					dataType: 'json',
 					contentType: 'application/json',

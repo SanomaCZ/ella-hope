@@ -315,6 +315,8 @@ steal(
 						Article.addRelatedArticle(articleID, receivedID, function(data){
 							// add resource_uri to the element so we know what to delete (if needed)
                             el.data('resource-id', data.id).append('<i class="icon-remove pull-right remove-related"></i>');
+						}, function () {
+							alert($.t("articles.add_related_error"));
 						});
 					}
 				}).disableSelection();
@@ -1770,10 +1772,12 @@ steal(
 				'limit': 50
 			};
 
-			Article.findAll(data, function (articles) {
+			Article.findForRelated(data, function (articles) {
 				// empty list with articles if there are any
 				$('#found-related-articles').empty();
 
+				//articles from ajax contains two keys: data, meta
+				articles = articles.data;
 				$.each(articles, function (i, article) {
 					$('#found-related-articles').append('<li data-related-id="'+article.id+'">'+article.title+'</li>');
 				});

@@ -156,3 +156,11 @@ img.max200 {
 	margin-left: -40px;
 	padding-right: 100px;
 }
+
+#chosen-related-articles {
+	overflow-x: auto;
+}
+
+#found-related-articles {
+	overflow: auto;
+}

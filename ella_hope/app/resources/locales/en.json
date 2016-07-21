@@ -117,7 +117,8 @@
 		"insert_table_rows_number": "Enter number of rows :",
 		"insert_table_columns_number": "Enter number of columns :",
 		"insert_table_first_row_header": "Is the first row header?",
-		"insert_table_first_column_header": "Is the first column header?"
+		"insert_table_first_column_header": "Is the first column header?",
+		"add_related_error": "Adding item to related failed"
 	},
 	"gallaries": {
 		"change_title": "Change photo's title",

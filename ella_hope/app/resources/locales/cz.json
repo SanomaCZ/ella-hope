@@ -121,7 +121,8 @@
 		"insert_table_rows_number": "Kolik má mít tabulka řádků?",
 		"insert_table_columns_number": "Kolik má mít tabulka sloupců?",
 		"insert_table_first_row_header": "Chcete, aby první řádek byl hlavička?",
-		"insert_table_first_column_header": "Chcete, aby první sloupec byl hlavička?"
+		"insert_table_first_column_header": "Chcete, aby první sloupec byl hlavička?",
+		"add_related_error": "Položku se nepodařilo přidat mezi související"
 	},
 	"gallaries": {
 		"change_title": "Change photo's title",
