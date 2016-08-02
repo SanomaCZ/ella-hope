@@ -118,7 +118,10 @@
 		"insert_table_columns_number": "Enter number of columns :",
 		"insert_table_first_row_header": "Is the first row header?",
 		"insert_table_first_column_header": "Is the first column header?",
-		"add_related_error": "Adding item to related failed"
+		"add_related_error": "Adding item to related failed",
+		"save_indefinite_error": "Error occured, try reload page or try again later.",
+		"save_correct_errors": "Please correct errors",
+		"save_general_errors": "General"
 	},
 	"gallaries": {
 		"change_title": "Change photo's title",

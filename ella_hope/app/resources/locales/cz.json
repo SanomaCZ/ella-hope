@@ -122,7 +122,10 @@
 		"insert_table_columns_number": "Kolik má mít tabulka sloupců?",
 		"insert_table_first_row_header": "Chcete, aby první řádek byl hlavička?",
 		"insert_table_first_column_header": "Chcete, aby první sloupec byl hlavička?",
-		"add_related_error": "Položku se nepodařilo přidat mezi související"
+		"add_related_error": "Položku se nepodařilo přidat mezi související",
+		"save_indefinite_error": "Došlo k neočekávané chybě, Prosím obnovte stránku a pokud to nepomůže, tak akci opakujte později.",
+		"save_correct_errors": "Prosím opravte níže uvedené chyby",
+		"save_general_errors": "Obecné"
 	},
 	"gallaries": {
 		"change_title": "Change photo's title",

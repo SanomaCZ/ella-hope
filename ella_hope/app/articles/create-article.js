@@ -628,10 +628,42 @@ steal(
 				}
 
 			}, function (xhr) {
-				alert('Error occured, try again later.');
+				// try to parse and display validation errors from server
+				if (xhr.status == 400) {
+					try {
+						var data = JSON.parse(xhr.responseText);
+					}
+					catch(err) {
+						alert($.t("articles.save_indefinite_error"));
+						return false;
+					}
+
+					var model = self.options.model.slice(0, -1)
+					if (data.hasOwnProperty(model)) {
+						var msg = $.t("articles.save_correct_errors") + ":\n";
+						for (var prop in data[model]) {
+							var niceProperty = prop == "__all__" ? $.t("articles.save_general_errors"): prop;
+							msg += "\t" + niceProperty + ":\n";
+							var errors_data = data[model][prop];
+							if (errors_data instanceof Array) {
+								for (var i in errors_data) {
+									msg += "\t\t" + errors_data[i] + "\n";
+								}
+							}
+							else {
+								msg += "\t\t" + errors_data + "\n";
+							}
+
+						}
+						alert(msg);
+						return false;
+					}
+				}
+				alert($.t("articles.save_indefinite_error"));
+
 				return false;
 			});
-			
+
 			return true;
 		},
 
