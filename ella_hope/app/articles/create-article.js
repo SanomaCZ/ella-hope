@@ -494,7 +494,7 @@ steal(
 		 * are filled correctly
 		 * @return {[type]} [description]
 		 */
-		save: function(cb) {
+		save: function(cb, elemFromAction) {
 
 			var autosaveLink = $('a.autosave'),
 				buttonNormalText = autosaveLink.data('normal'),
@@ -518,7 +518,7 @@ steal(
 			}, 2000);
 
 			// try to save the article and handle errors if there are any
-			var errors = this.createArticle(cb);
+			var errors = this.createArticle(cb, elemFromAction);
 
 			if (errors === true) {
 				// there are no errors
@@ -535,7 +535,7 @@ steal(
 		 * create article model from form values
 		 * @return {[type]} [description]
 		 */
-		createArticle: function(cb) {
+		createArticle: function(cb, elemFromAction) {
 			var self = this,
 				form = $('form.article'),
 				values = form.serialize();
@@ -626,8 +626,10 @@ steal(
 				//TODO: ifs are not good, please refactor code and use something
 				//as multiple inheritence
 				if (self.options.model === 'filmstrips' && self.article.id) {
-					return self.saveFilmstripFrames();
+					self.saveFilmstripFrames();
 				}
+				if (elemFromAction !== undefined)
+					self.redirectToList(elemFromAction);
 
 			}, function (xhr) {
 				var errorBlock = self.clearGeneralErrors();
@@ -661,6 +663,13 @@ steal(
 			return true;
 		},
 
+		redirectToList: function(el) {
+			// redirect to list
+			if (!$(el).data('stay')) {
+				var page = this.options.model === 'articles' ? 'articles' : this.options.model === 'filmstrips' ? 'filmstrips' : 'galleries';
+				can.route.attr({page: page}, true);
+			}
+		},
 		clearGeneralErrors: function(errorBlock) {
 			var errorBlock = errorBlock !== undefined ? errorBlock : $(this.generalErrorsSelector);
 			errorBlock.empty();
@@ -827,7 +836,7 @@ steal(
 
 			ev.stopPropagation();
 
-			var errors = this.save();
+			var errors = this.save(null, el);
 
 			if (errors === true) {
 				this.setGallerySaveTimeout(0);
@@ -835,11 +844,6 @@ steal(
 				// stop autosave when leaving article
 				this.stopAutosave();
 
-				// redirect to list
-				if (!$(el).data('stay')) {
-					var page = this.options.model === 'articles' ? 'articles' : this.options.model === 'filmstrips' ? 'filmstrips' : 'galleries';
-					can.route.attr({page: page}, true);
-				}
 			}
 			else {
 				this.showErrors(this.article);
