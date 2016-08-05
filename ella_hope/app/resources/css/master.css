@@ -5909,3 +5909,28 @@ a.chzn-single:focus {
 .overlay h1 {
   color: #ccc;
 }
+#general-errors h3 {
+  color: #a94442;
+}
+#general-errors h4 {
+  margin-left: 20px;
+  
+}
+#general-errors h4 span{
+  color: #a94442;
+  
+}
+#general-errors ul {
+  list-style: none;
+  padding:0;
+  margin-left: 40px;
+  color: #a94442;
+}
+#general-errors ul li{
+  padding-left: 1em;
+  text-indent: -.7em;
+}
+#general-errors ul li:before{
+  content: "■ ";
+  color: black;
+}

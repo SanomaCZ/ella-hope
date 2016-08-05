@@ -66,6 +66,7 @@ steal(
 		autosaveTimer: null,	// timer for autosave, we need this to stop timer
 		listFilter: null,
 		photoPaginator: null,
+		generalErrorsSelector: "#general-errors",
 
 		init: function() {
 			if (USER !== undefined && USER.auth_tree.articles !== undefined && USER.auth_tree.articles.filmstrip) {
@@ -609,6 +610,7 @@ steal(
 
 			var success = true;
 			this.article.save(function () {
+				self.clearGeneralErrors();
 
 				if (cb) {
 					cb()
@@ -628,6 +630,8 @@ steal(
 				}
 
 			}, function (xhr) {
+				var errorBlock = self.clearGeneralErrors();
+
 				// try to parse and display validation errors from server
 				if (xhr.status == 400) {
 					try {
@@ -635,29 +639,19 @@ steal(
 					}
 					catch(err) {
 						alert($.t("articles.save_indefinite_error"));
+						console.log(err);
+						console.log(xhr.responseText);
 						return false;
 					}
 
 					var model = self.options.model.slice(0, -1)
-					if (data.hasOwnProperty(model)) {
-						var msg = $.t("articles.save_correct_errors") + ":\n";
-						for (var prop in data[model]) {
-							var niceProperty = prop == "__all__" ? $.t("articles.save_general_errors"): prop;
-							msg += "\t" + niceProperty + ":\n";
-							var errors_data = data[model][prop];
-							if (errors_data instanceof Array) {
-								for (var i in errors_data) {
-									msg += "\t\t" + errors_data[i] + "\n";
-								}
-							}
-							else {
-								msg += "\t\t" + errors_data + "\n";
-							}
 
-						}
-						alert(msg);
-						return false;
-					}
+					if (data.hasOwnProperty(model))
+						return self.renderGeneralErrors(data[model], errorBlock);
+
+				}
+				else {
+					console.log(xhr.status);
 				}
 				alert($.t("articles.save_indefinite_error"));
 
@@ -665,6 +659,23 @@ steal(
 			});
 
 			return true;
+		},
+
+		clearGeneralErrors: function(errorBlock) {
+			var errorBlock = errorBlock !== undefined ? errorBlock : $(this.generalErrorsSelector);
+			errorBlock.empty();
+			return errorBlock;
+		},
+
+		renderGeneralErrors: function(data, errorBlock) {
+			var errorBlock = errorBlock !== undefined ? errorBlock : $(this.generalErrorsSelector);
+			var generalErrors = can.view.render(window.HOPECFG.APP_ROOT + '/articles/views/general-errors.ejs', {
+				data: data
+			});
+
+			errorBlock.html(generalErrors);
+			return true;
+			
 		},
 
 		/**

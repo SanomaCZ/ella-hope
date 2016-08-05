@@ -1,0 +1,21 @@
+<h3> <%= $.t("articles.save_correct_errors") %>:</h3>
+
+<% for (var prop in data) { %>
+	<% var niceProperty = prop == "__all__" ? $.t("articles.save_general_errors"): prop; %>
+	<% var errors_data = data[prop]; %>
+
+	<h4><%= niceProperty %><span>:</span><h4>
+
+	<% if (errors_data instanceof Array) { %>
+		<% for (var i in errors_data) { %>
+			<ul>
+				<li><%= errors_data[i] %></li>
+			</ul>
+		<% } %>
+	<% } else { %>
+		<ul>
+			<li><%= errors_data %></li>
+		</ul>
+	<% } %>
+
+<% } %>
