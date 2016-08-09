@@ -193,7 +193,7 @@ steal(
 				// ajax autocomplete for author
 				$('.authors-article').ajaxChosen({
 					type: 'GET',
-					url: BASE_URL+'/author/?',
+					url: BASE_URL+'/author/?order_by=name',
 					jsonTermKey: 'name__icontains',
 					dataType: 'json',
 					async: false
