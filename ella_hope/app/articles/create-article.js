@@ -2307,7 +2307,7 @@ steal(
 			return item
 		},
 
-		'.js-copy-dates-from-publishable click': function(el, ev) {
+		'.js-copy-base-publication click': function(el, ev) {
 
 			ev.preventDefault();
 
@@ -2316,6 +2316,12 @@ steal(
 			var publishFromTimeVal = $('#publish_from_time').attr('value');
 			var publishToVal = $('#publish_to').attr('value');
 			var publishToTimeVal = $('#publish_to_time').attr('value');
+			var category = $('#category');
+			var categoryParent = category.parent();
+			var categoryValue = category.val();
+			var categorySelectOptions = category.children();
+			var categoryHTMLValue = categoryParent.find('.chzn-single').html();
+			var categorySearchVal = categoryParent.find('.chzn-search').children('input:text')[0].getAttribute('value');
 
 			var categoryListing = $(mainDiv).find('select[name=listing_category]');
 			var publishFromListing = $(mainDiv).find('input[name=listing_publish_from_date]');
@@ -2327,6 +2333,20 @@ steal(
 			publishFromTimeListing.attr('value', publishFromTimeVal);
 			publishToListing.attr('value', publishToVal);
 			publishToTimeListing.attr('value', publishToTimeVal);
+
+			var values = {};
+			categoryListing.children().each(function () {
+				var val = $(this).attr('value');
+				values[val] = val;
+			});
+			categorySelectOptions.each(function() {
+				if (!($(this).attr('value') in values))
+					categoryListing.append($(this).clone()).trigger('liszt:updated');
+			})
+			$(mainDiv).find('.chzn-single').html(categoryHTMLValue);
+			$(mainDiv).find('.chzn-search').children('input:text')[0].setAttribute('value', categorySearchVal);
+			if (categoryValue) categoryListing.val(categoryValue);
+			
 		},
 
 		/**

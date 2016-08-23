@@ -99,6 +99,7 @@
 		"action": "Action",
 		"confirm_delete_draft": "Are you sure you want to delete the draft?",
 		"confirm_delete_article": "Are you sure you want to delete the article?",
+		"copy_base_publication": "Zkopírovat ze základní publikace objektu",
 		"delete": "Delete",
 		"new_article": "New article",
 		"new_gallery": "New gallery",
