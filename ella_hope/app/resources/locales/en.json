@@ -113,6 +113,7 @@
 		"frame_number": "Frame number",
 		"add_filmstrip_frame": "Add frame",
 		"copy_base_publication": "copy from base publication",
+		"copy_base_publication_category_question": "Do you want copy category from base publication too?",
 		"insert_table_error_input": "Value must be number and greater than 0",
 		"insert_table_rows_number": "Enter number of rows :",
 		"insert_table_columns_number": "Enter number of columns :",

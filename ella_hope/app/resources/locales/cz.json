@@ -100,6 +100,7 @@
 		"confirm_delete_draft": "Are you sure you want to delete the draft?",
 		"confirm_delete_article": "Are you sure you want to delete the article?",
 		"copy_base_publication": "Zkopírovat ze základní publikace objektu",
+		"copy_base_publication_category_question": "Chcete zkopírovat také kategorii ze základní publikace?",
 		"delete": "Delete",
 		"new_article": "New article",
 		"new_gallery": "New gallery",

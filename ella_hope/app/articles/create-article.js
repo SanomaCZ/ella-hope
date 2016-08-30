@@ -2316,25 +2316,34 @@ steal(
 			var publishFromTimeVal = $('#publish_from_time').attr('value');
 			var publishToVal = $('#publish_to').attr('value');
 			var publishToTimeVal = $('#publish_to_time').attr('value');
-			var category = $('#category');
-			var categoryParent = category.parent();
-			var categoryValue = category.val();
-			var categorySelectOptions = category.children();
-			var categoryHTMLValue = categoryParent.find('.chzn-single').html();
-			var categorySearchVal = categoryParent.find('.chzn-search').children('input:text')[0].getAttribute('value');
 
-			var categoryListing = $(mainDiv).find('select[name=listing_category]');
 			var publishFromListing = $(mainDiv).find('input[name=listing_publish_from_date]');
 			var publishFromTimeListing = $(mainDiv).find('input[name=listing_publish_from_time]');
 			var publishToListing = $(mainDiv).find('input[name=listing_publish_to_date]');
 			var publishToTimeListing = $(mainDiv).find('input[name=listing_publish_to_time]');
+			var copyCategory = confirm($.t('articles.copy_base_publication_category_question'));
 
 			publishFromListing.attr('value', publishFromVal);
 			publishFromTimeListing.attr('value', publishFromTimeVal);
 			publishToListing.attr('value', publishToVal);
 			publishToTimeListing.attr('value', publishToTimeVal);
 
+			if (copyCategory) {
+				this.copyCategoryPublication(mainDiv);
+			}
+			
+		},
+
+		copyCategoryPublication: function(mainDiv) {
+			var category = $('#category');
+			var categoryParent = category.parent();
+			var categoryValue = category.val();
+			var categorySelectOptions = category.children();
+			var categoryHTMLValue = categoryParent.find('.chzn-single').html();
+			var categorySearchVal = categoryParent.find('.chzn-search').children('input:text')[0].getAttribute('value');
+			var categoryListing = $(mainDiv).find('select[name=listing_category]');
 			var values = {};
+
 			categoryListing.children().each(function () {
 				var val = $(this).attr('value');
 				values[val] = val;
@@ -2346,7 +2355,6 @@ steal(
 			$(mainDiv).find('.chzn-single').html(categoryHTMLValue);
 			$(mainDiv).find('.chzn-search').children('input:text')[0].setAttribute('value', categorySearchVal);
 			if (categoryValue) categoryListing.val(categoryValue);
-			
 		},
 
 		/**
