@@ -5,7 +5,6 @@
 		<input type="hidden" name="<%= listing.prefix %>_id" value="<%= listing.id %>"/>
 
 		<%
-
 		var publish_from_date;
 		var publish_from_time;
 		var publish_to_date;
@@ -36,6 +35,8 @@
 						<% } %>
 				</select>
 			</div>
+			<% if (listing.category) { %><div class="category_slug" style="display: none;"><%= listing.category.slug %></div><% } %>
+
 			<p class="help-inline"></p>
 		</div>
 		<div class="col-sm-5 control-group">

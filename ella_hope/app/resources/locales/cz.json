@@ -19,6 +19,8 @@
 		"next": "Následující"
 	},
 	"articles": {
+	    "title_too_short_seznamcz": "Článek nesplňuje minimální délku nadpisu pro umístění na Seznam.cz",
+	    "desc_too_short_seznamcz": "Článek nesplňuje minimální délku popisku pro umístění na Seznam.cz",
 		"articles": "Články",
 		"galleries": "Galleries",
 		"filmstrips": "Filmstrips",

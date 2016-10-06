@@ -18,6 +18,24 @@ steal(
 						return $.t('articles.slug_not_valid');
 					}
 				});
+
+				self.validate("title", function (val) {
+					var listings = $(".category_slug");
+					for (i = 0; i<listings.length; i++) {
+						if (listings[i].innerHTML == "seznamcz") {
+							if (val.length < 40) {return $.t('articles.title_too_short_seznamcz');}
+						}
+					}
+				});
+
+				self.validate("description", function (val) {
+					var listings = $(".category_slug");
+					for (i = 0; i<listings.length; i++) {
+						if (listings[i].innerHTML == "seznamcz") {
+							if (val.length < 160) {return $.t('articles.desc_too_short_seznamcz');}
+						}
+					}
+				});
 				// TODO - compare dates se that publish_from is not later then publish_to
 				//<%= $.t('The end date can not be less then the start date') %>
 			},
