@@ -196,13 +196,13 @@
 		"unknown": "No name"
 	},
 	"login": {
-		"error": "Error",
-		"wrong_user_pass": "Wrong username or password.",
-		"login": "Login",
-		"username": "Username",
-		"password": "Password",
-		"other": "Other...",
-		"sign_in": "Sign In",
-		"enter_url": "Enter url without ending /"
+		"error": "Chyba",
+		"wrong_user_pass": "Špatné uživatelské jméno nebo heslo",
+		"login": "Přihlášení",
+		"username": "Uživatelské jméno",
+		"password": "Heslo",
+		"other": "Jiné...",
+		"sign_in": "Přihlásit",
+		"enter_url": "Vložte URL bez koncového lomítka /"
 	}
 }
