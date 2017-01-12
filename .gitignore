@@ -14,3 +14,4 @@ nohup.out
 # IDE files
 .project
 .pydevproject
+.idea
