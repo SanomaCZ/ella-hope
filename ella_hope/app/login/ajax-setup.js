@@ -23,11 +23,13 @@ $.ajaxSetup({
  * @return {[type]}           [description]
  */
 $(document).ajaxError(function(e, xhr, settings, exception) {
-	if (xhr.status == 401) {
-		//console.log('ERROR - login needed');
-		$('body').trigger('show-login');
-	}
-	else {
+	if (xhr.status == 401 || xhr.status == 403) {
+		if ($('div#login').length == 1) {
+			// do nothing, cause we are already see login
+		} else {
+			$('body').trigger('show-login');
+		}
+	} else {
 		//console.log('ajax error ' + xhr.status);
 	}
 });
